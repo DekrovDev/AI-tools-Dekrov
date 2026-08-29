@@ -160,5 +160,36 @@
       "https://openrouter.ai/",
       "https://github.com/OpenRouterTeam"
     ]
+  },
+  {
+    "id": "groq-is-the-premier-neocloud-for-fast-inference",
+    "name": "Groq is the premier neocloud for fast inference",
+    "category": "hosting",
+    "description": "Groq is the premier neocloud for fast inference. One fully integrated platform for infrastructure, inference, and control. Millions of developers run trillions of tokens on Groq every week.",
+    "bestFor": [],
+    "strengths": [],
+    "gettingStarted": [],
+    "usageNotes": [],
+    "url": "https://groq.com/",
+    "domain": "groq.com",
+    "favicon": "https://groq.com/favicon.ico",
+    "platforms": [],
+    "pricing": "paid",
+    "priceDetails": "Paid plans",
+    "tags": [
+      "agent"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [],
+    "github": "",
+    "docs": "",
+    "addedAt": "2026-08-29",
+    "updatedAt": "2026-08-29",
+    "lastVerifiedAt": "2026-08-29",
+    "sources": [
+      "https://groq.com/"
+    ]
   }
 ]
