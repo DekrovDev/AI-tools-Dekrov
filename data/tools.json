@@ -452,5 +452,85 @@
     "sources": [
       "https://docs.flutter.dev/ai/antigravity-cli"
     ]
+  },
+  {
+    "id": "grok-build",
+    "name": "Grok Build",
+    "category": "coding-agents",
+    "description": "A terminal-native AI coding agent from xAI that can plan, develop, and deploy applications from natural language prompts. It supports interactive TUI, headless scripting, and embedding via the Agent Client Protocol (ACP).",
+    "bestFor": [
+      "Professional software engineers",
+      "Complex codebase tasks",
+      "End-to-end edit-run-test loops",
+      "Automated scripts and CI/CD pipelines"
+    ],
+    "strengths": [
+      "Supports custom model endpoints compatible with OpenAI API",
+      "Can operate in an interactive TUI, headlessly, or via ACP",
+      "Open-sourced CLI harness for developer inspection",
+      "Can coordinate workflows with up to 1,024 parallel agents",
+      "Compatible with Claude Code's configuration files (.claude/) for easier migration"
+    ],
+    "gettingStarted": [
+      "Install via curl on macOS/Linux: `curl -fsSL https://x.ai/cli/install.sh | bash`",
+      "Install via PowerShell on Windows: `irm https://x.ai/cli/install.ps1 | iex`",
+      "Authenticate by opening a browser on first launch, or set `XAI_API_KEY` environment variable",
+      "Start a session with `grok` in a project directory"
+    ],
+    "usageNotes": [
+      "Grok Build is available to SuperGrok and X Premium subscribers",
+      "Plan Mode maps out changes step-by-step for review before any code is written",
+      "User data retention for training is opt-in and off by default",
+      "Version 1.0 introduced expanded command-approval prompts for enhanced security",
+      "Created apps can be published with a unique `grok.me` domain"
+    ],
+    "url": "https://x.ai/build",
+    "domain": "x.ai",
+    "favicon": "https://x.ai/favicon.ico",
+    "platforms": [
+      "web",
+      "desktop",
+      "mobile",
+      "cli",
+      "vscode"
+    ],
+    "pricing": "paid",
+    "priceDetails": "Available on SuperGrok and X Premium plans",
+    "tags": [
+      "coding agent",
+      "AI",
+      "xAI",
+      "CLI",
+      "developer tool",
+      "autonomous",
+      "agentic"
+    ],
+    "install": "curl -fsSL https://x.ai/cli/install.sh | bash",
+    "start": "grok",
+    "commands": [
+      {
+        "label": "Explain current codebase",
+        "command": "grok -p \"Explain this codebase\""
+      },
+      {
+        "label": "Headless operation with JSON output",
+        "command": "grok -p \"Your prompt\" --output-format streaming-json"
+      }
+    ],
+    "models": [
+      "Grok 4.5",
+      "Grok 4.6",
+      "Custom OpenAI-compatible models"
+    ],
+    "github": "https://github.com/xai-org/grok-build",
+    "docs": "https://docs.x.ai/build/overview",
+    "addedAt": "2026-08-29",
+    "updatedAt": "2026-08-29",
+    "lastVerifiedAt": "2026-08-29",
+    "sources": [
+      "https://x.ai/build",
+      "https://github.com/xai-org/grok-build",
+      "https://docs.x.ai/build/overview"
+    ]
   }
 ]
