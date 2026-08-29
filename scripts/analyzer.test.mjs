@@ -27,6 +27,7 @@ import {
   looksLikeSubmission,
   parseVerifiedMetadata,
   parseVerifiedComment,
+  verifiedMetadataFromComments,
   canonicalUrl,
   parseIssueSubmission,
   validateTool,
@@ -196,12 +197,22 @@ test("detects platforms, category, pricing, tags and models conservatively", asy
   const category = detectCategory(text, categoriesAllowed);
   assert.equal(category, "coding-agents");
   assert.ok(categoriesAllowed.includes(category));
+  // "research assistant" must prefer research over the generic chat-llm rule.
+  assert.equal(detectCategory("research assistant for literature search and papers", categoriesAllowed), "research");
+  assert.equal(detectCategory("a chat assistant for everyday questions", categoriesAllowed), "chat-llm");
 
   const pricing = detectPricing("Free plan available", "Pro plan is $20/month");
   assert.equal(pricing.pricing, "freemium");
   assert.equal(detectPricing("100% free forever").pricing, "free");
   assert.equal(detectPricing("Pay per token, usage-based pricing").pricing, "usage-based");
   assert.deepEqual(detectPricing("We do not publish pricing publicly"), {});
+  // "free trial" is not a free tier: trial + paid must stay paid, not freemium.
+  const trial = detectPricing("Start with a free trial", "Then paid plans from $10/month");
+  assert.equal(trial.pricing, "paid");
+  assert.notEqual(trial.pricing, "freemium");
+  assert.deepEqual(detectPricing("Free trial for 14 days"), {});
+  // Real free tiers still work next to paid plans.
+  assert.equal(detectPricing("Free plan for everyone", "Pro at $20/month").pricing, "freemium");
 
   const tags = detectTags(text, platforms);
   assert.ok(tags.includes("coding"));
@@ -405,6 +416,25 @@ test("parseVerifiedMetadata ignores malformed blocks", () => {
   assert.equal(parseVerifiedMetadata("### Verified metadata\nnot json"), null);
   assert.equal(parseVerifiedMetadata("### Verified metadata\n{\"sources\": \"nope\"}"), null);
   assert.equal(parseVerifiedMetadata("no metadata here"), null);
+});
+
+test("verified metadata is trusted only from github-actions[bot] comments", () => {
+  const marker =
+    "<!-- ai-dekrov-verified-metadata -->\n```json\n{\"lastVerifiedAt\":\"2026-08-29\",\"sources\":[\"https://cursor.com/\"]}\n```";
+  const botComment = { user: { login: "github-actions[bot]", type: "Bot" }, body: marker };
+  const spoofedUser = { user: { login: "evil-user", type: "User" }, body: marker };
+  const noUser = { body: marker };
+  // A user comment carrying the same marker must be ignored.
+  assert.deepEqual(verifiedMetadataFromComments([spoofedUser]), null);
+  assert.deepEqual(verifiedMetadataFromComments([noUser]), null);
+  // A bot comment with the marker is trusted; order does not matter.
+  assert.deepEqual(verifiedMetadataFromComments([spoofedUser, botComment]), {
+    lastVerifiedAt: "2026-08-29",
+    sources: ["https://cursor.com/"]
+  });
+  // A bot comment without the marker is not trusted.
+  assert.deepEqual(verifiedMetadataFromComments([{ user: { login: "github-actions[bot]", type: "Bot" }, body: "nothing relevant" }]), null);
+  assert.deepEqual(verifiedMetadataFromComments([]), null);
 });
 
 // ---------------------------------------------------------------------------

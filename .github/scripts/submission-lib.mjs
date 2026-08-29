@@ -80,6 +80,18 @@ export function parseVerifiedComment(commentBody = "") {
   if (!match) return null;
   return parseVerifiedMetadata(`### Verified metadata\n${match[1]}`);
 }
+// Only comments authored by the GitHub Actions bot count as verification
+// metadata. User-created comments that happen to carry the same marker (or
+// spoof its JSON) must be ignored.
+export function verifiedMetadataFromComments(comments = []) {
+  for (const comment of comments) {
+    if (!comment || !comment.user) continue;
+    if (comment.user.login !== "github-actions[bot]" || comment.user.type !== "Bot") continue;
+    const meta = parseVerifiedComment(comment.body || "");
+    if (meta) return meta;
+  }
+  return null;
+}
 export function normalizeName(value = "") { return value.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim(); }
 export function isSimilarName(a, b) { const first = normalizeName(a); const second = normalizeName(b); if (!first || !second) return false; if (first === second || first.includes(second) || second.includes(first)) return true; const left = new Set(first.split(" ")); const right = new Set(second.split(" ")); const common = [...left].filter((word) => right.has(word)).length; return common / Math.max(left.size, right.size) >= 0.8; }
 

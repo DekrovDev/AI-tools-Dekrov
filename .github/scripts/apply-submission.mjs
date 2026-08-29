@@ -1,7 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { readFile, writeFile } from "node:fs/promises";
-import { readJson, parseIssueSubmission, parseVerifiedComment, validateTool, findDuplicates } from "./submission-lib.mjs";
+import { readJson, parseIssueSubmission, verifiedMetadataFromComments, validateTool, findDuplicates } from "./submission-lib.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const args = Object.fromEntries(process.argv.slice(2).reduce((pairs, value, index, values) => index % 2 === 0 ? [...pairs, [value.replace(/^--/, ""), values[index + 1]]] : pairs, []));
@@ -32,12 +32,10 @@ async function readVerifiedMetadata(event) {
     });
     if (!response.ok) return null;
     const comments = await response.json();
-    for (const comment of comments || []) {
-      const meta = parseVerifiedComment(comment.body || "");
-      if (meta) return meta;
-    }
+    // Only github-actions[bot] comments are trusted; user comments carrying
+    // the same marker are ignored (see verifiedMetadataFromComments).
+    return verifiedMetadataFromComments(comments || []);
   } catch {
     return null;
   }
-  return null;
 }

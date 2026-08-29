@@ -304,8 +304,10 @@ export function detectCategory(text, allowed) {
   const rules = [
     ["coding-agents", /\b(coding agent|coding assistant|code agent|ai agent for coding|codebase navigation|write code)\b/],
     ["orchestration", /\b(orchestrat|multi-agent|agent workflows?|workflow automation|agent team)\b/],
-    ["chat-llm", /\b(chatbot|chat (bot|interface|assistant|model)|language model|llm|conversational ai|assistant)\b/],
+    // research comes before chat-llm so "research assistant" is not swallowed
+    // by the generic chat/assistant rule.
     ["research", /\b(research assistant|academic research|literature search|paper[ -]?review|find papers)\b/],
+    ["chat-llm", /\b(chatbot|chat (bot|interface|assistant|model)|language model|llm|conversational ai|assistant)\b/],
     ["audio", /\b(audio|voice|speech|transcri|text-to-speech|tts|music generation|podcast)\b/],
     ["dev-tools", /\b(developer tool|sdk|api|middleware|devops|testing framework|observability|code review tool)\b/],
     ["hosting", /\b(hosting|deploy|deployment|infrastructure|serverless|cloud platform|web host)\b/]
@@ -319,13 +321,17 @@ export function detectCategory(text, allowed) {
 export function detectPricing(homeText, pricingText = "") {
   const all = `${homeText} ${pricingText}`.toLowerCase();
   if (!all) return {};
-  const hasFree = /\bfree\b/.test(all);
+  // A "free tier" means a permanently free option, not a "free trial": trial
+  // wording alone must never turn a paid product into freemium.
+  const hasFreeTier =
+    /\b(?:free (?:plan|tier|version|forever)|100% free|free for|starts? free|start for free)\b/.test(all) ||
+    (/\bfree\b/.test(all) && !/\b(?:free trial|try free|trial)\b/.test(all));
   const hasPaid = /\/month|\/year|per (user|seat|project|month|year)|\$\s?\d+/.test(all) || /\b(paid|pro|business|enterprise) plans?\b/.test(all);
   const usageBased = /\b(pay-as-you-go|pay as you go|per token|per request|per api|usage-based|usage based|metered)\b/.test(all);
   const priceMatch = all.match(/\$\s?\d+(?:\.\d+)?\s*\/\s*(?:month|year|mo|yr)/);
   if (usageBased) return { pricing: "usage-based", priceDetails: priceMatch ? priceMatch[0] : "" };
-  if (hasFree && hasPaid) return { pricing: "freemium", priceDetails: priceMatch ? priceMatch[0] : "" };
-  if (hasFree && !hasPaid) return { pricing: "free", priceDetails: "" };
+  if (hasFreeTier && hasPaid) return { pricing: "freemium", priceDetails: priceMatch ? priceMatch[0] : "" };
+  if (hasFreeTier && !hasPaid) return { pricing: "free", priceDetails: "" };
   if (hasPaid) return { pricing: "paid", priceDetails: priceMatch ? priceMatch[0] : "Paid plans" };
   return {};
 }
