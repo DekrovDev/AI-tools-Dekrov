@@ -99,5 +99,66 @@
       "https://cursor.com/docs",
       "https://cursor.com/download"
     ]
+  },
+  {
+    "id": "openrouter",
+    "name": "OpenRouter",
+    "category": "coding-agents",
+    "description": "The unified interface for every model. Find the best models & prices for your prompts",
+    "bestFor": [
+      "AI-assisted software development"
+    ],
+    "strengths": [
+      "Terminal workflow support",
+      "Supports 6 detected models"
+    ],
+    "gettingStarted": [
+      "Install with: npm install @openrouter/sdk",
+      "Open the official setup documentation for verified next steps."
+    ],
+    "usageNotes": [
+      "Use from a terminal or command-line workflow."
+    ],
+    "url": "https://openrouter.ai/",
+    "domain": "openrouter.ai",
+    "favicon": "https://openrouter.ai/favicon/glyph.png",
+    "platforms": [
+      "cli",
+      "api"
+    ],
+    "pricing": "usage-based",
+    "priceDetails": "",
+    "tags": [
+      "coding",
+      "agent",
+      "research",
+      "audio",
+      "cli",
+      "api"
+    ],
+    "install": "npm install @openrouter/sdk",
+    "start": "",
+    "commands": [],
+    "models": [
+      "opus-5",
+      "gemini-3.7",
+      "gpt-5.6",
+      "qwen",
+      "qwen3",
+      "deepseek-v4"
+    ],
+    "github": "https://github.com/OpenRouterTeam",
+    "docs": "https://openrouter.ai/docs/quickstart",
+    "addedAt": "2026-08-29",
+    "updatedAt": "2026-08-29",
+    "lastVerifiedAt": "2026-08-29",
+    "sources": [
+      "https://openrouter.ai/?ref=openrouter.com",
+      "https://openrouter.ai/models?order=pricing-low-to-high",
+      "https://openrouter.ai/docs/quickstart",
+      "https://openrouter.ai/blog/tutorials/video-generation-api/",
+      "https://openrouter.ai/",
+      "https://github.com/OpenRouterTeam"
+    ]
   }
 ]
