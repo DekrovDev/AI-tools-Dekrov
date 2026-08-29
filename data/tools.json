@@ -333,5 +333,71 @@
       "https://windsurf.com/",
       "https://docs.windsurf.com/"
     ]
+  },
+  {
+    "id": "google-antigravity",
+    "name": "Google Antigravity",
+    "category": "coding-agents",
+    "description": "Google's agent-first software development platform that evolved from an AI-powered IDE to an orchestration suite for managing autonomous AI agents, including a desktop app, CLI, and SDK .",
+    "bestFor": [
+      "Building and managing AI agents for software development",
+      "Developers wanting to orchestrate multi-agent workflows",
+      "Developers seeking an agentic coding tool integrated with Google's ecosystem"
+    ],
+    "strengths": [
+      "Multi-agent parallel orchestration with artifact-based verification",
+      "Support for multiple models including Gemini and Claude from the free tier",
+      "Deep integration with Google ecosystem (AI Studio, Firebase, Android)"
+    ],
+    "gettingStarted": [
+      "Download the Google Antigravity desktop application from the official website",
+      "Sign in with a Google account",
+      "Open an existing project or start a new one in the chat interface"
+    ],
+    "usageNotes": [
+      "Antigravity CLI (agy) replaces the legacy Gemini CLI",
+      "The platform has a free tier with generous limits, but heavier use may require a paid Google AI subscription",
+      "The desktop app is a standalone application with a chat-first interface, distinct from the Antigravity IDE"
+    ],
+    "url": "https://antigravity.google/",
+    "domain": "antigravity.google",
+    "favicon": "",
+    "platforms": [
+      "desktop",
+      "cli",
+      "vscode",
+      "api"
+    ],
+    "pricing": "freemium",
+    "priceDetails": "Free tier available; Google AI Pro at $19.99/mo and Google AI Ultra at $100/mo offer increased limits",
+    "tags": [
+      "ai-agent",
+      "code-generation",
+      "multi-agent",
+      "orchestration",
+      "google",
+      "gemini",
+      "ide"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [
+      "Gemini 3.5 Flash",
+      "Gemini 3.1 Pro",
+      "Gemini 3 Flash",
+      "Claude Sonnet 4.6",
+      "Claude Opus 4.6",
+      "gpt-oss-120b"
+    ],
+    "github": "",
+    "docs": "https://antigravity.google/docs",
+    "addedAt": "2026-08-29",
+    "updatedAt": "2026-08-29",
+    "lastVerifiedAt": "2026-08-29",
+    "sources": [
+      "https://antigravity.google/",
+      "https://antigravity.google/docs"
+    ]
   }
 ]
