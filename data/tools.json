@@ -1,1 +1,44 @@
-[]
+[
+  {
+    "id": "aider",
+    "name": "Aider",
+    "category": "coding-agents",
+    "description": "aider is AI pair programming in your terminal",
+    "url": "https://aider.chat/",
+    "domain": "aider.chat",
+    "favicon": "https://aider.chat/favicon.ico",
+    "platforms": [
+      "cli",
+      "web"
+    ],
+    "pricing": "free",
+    "priceDetails": "",
+    "tags": [
+      "coding",
+      "llm",
+      "open-source",
+      "cli",
+      "web"
+    ],
+    "install": "python -m pip install aider-install",
+    "start": "",
+    "commands": [],
+    "models": [
+      "claude-3.7",
+      "deepseek-r1",
+      "gpt-4o",
+      "gemini"
+    ],
+    "github": "https://github.com/Aider-AI/aider",
+    "docs": "https://aider.chat/docs/",
+    "addedAt": "2026-08-29",
+    "updatedAt": "2026-08-29",
+    "lastVerifiedAt": "2026-08-29",
+    "sources": [
+      "https://aider.chat/",
+      "https://aider.chat/docs/",
+      "https://aider.chat/docs/install.html",
+      "https://github.com/Aider-AI/aider"
+    ]
+  }
+]
