@@ -40,5 +40,64 @@
       "https://aider.chat/docs/install.html",
       "https://github.com/Aider-AI/aider"
     ]
+  },
+  {
+    "id": "ai-coding-agent-for-building-ambitious-software",
+    "name": "AI Coding Agent for Building Ambitious Software",
+    "category": "coding-agents",
+    "description": "Built to make you extraordinarily productive, agents turn ideas into code. Accelerate development by handing off tasks to Cursor.",
+    "bestFor": [
+      "AI-assisted software development"
+    ],
+    "strengths": [
+      "Terminal workflow support",
+      "Supports 7 detected models"
+    ],
+    "gettingStarted": [
+      "Open the official setup documentation for verified next steps."
+    ],
+    "usageNotes": [
+      "Use from a terminal or command-line workflow."
+    ],
+    "url": "https://cursor.com/",
+    "domain": "cursor.com",
+    "favicon": "https://cursor.com/marketing-static/favicon-light.ico",
+    "platforms": [
+      "cli",
+      "desktop"
+    ],
+    "pricing": "usage-based",
+    "priceDetails": "",
+    "tags": [
+      "coding",
+      "agent",
+      "research",
+      "llm",
+      "cli",
+      "desktop"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [
+      "grok-4.6",
+      "gpt-5.6",
+      "gpt-5",
+      "gemini",
+      "gemini-3.1",
+      "gemini-3.7",
+      "grok-4.5"
+    ],
+    "github": "",
+    "docs": "https://cursor.com/docs",
+    "addedAt": "2026-08-29",
+    "updatedAt": "2026-08-29",
+    "lastVerifiedAt": "2026-08-29",
+    "sources": [
+      "https://cursor.com/",
+      "https://cursor.com/pricing",
+      "https://cursor.com/docs",
+      "https://cursor.com/download"
+    ]
   }
 ]
