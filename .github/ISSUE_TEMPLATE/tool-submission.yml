@@ -1,0 +1,48 @@
+name: Tool submission
+description: Suggest a new tool or an update to an existing catalog entry.
+title: "[Tool]: "
+labels: ["tool-submission", "pending"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for contributing to AI-Dekrov. Submit factual information only. The JSON is checked automatically and is reviewed before it can appear in the public catalog.
+  - type: dropdown
+    id: submission_type
+    attributes:
+      label: Submission type
+      options:
+        - new
+        - update
+    validations:
+      required: true
+  - type: input
+    id: existing_tool_id
+    attributes:
+      label: Existing tool ID
+      description: Required for an update. Leave empty for a new tool.
+      placeholder: cursor
+    validations:
+      required: false
+  - type: textarea
+    id: tool_json
+    attributes:
+      label: Tool JSON
+      description: Paste the validated JSON from AI-Dekrov. Do not use Markdown code fences.
+      placeholder: '{ "id": "tool-name", "name": "Tool Name", ... }'
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Optional source links, correction details, or context for moderators.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: I confirm that the information is factual and the tool can be publicly listed.
+          required: true

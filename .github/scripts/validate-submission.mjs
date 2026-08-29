@@ -1,0 +1,23 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { writeFile } from "node:fs/promises";
+import { readJson, parseIssueSubmission, validateTool, findDuplicates } from "./submission-lib.mjs";
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
+const args = Object.fromEntries(process.argv.slice(2).reduce((pairs, value, index, values) => index % 2 === 0 ? [...pairs, [value.replace(/^--/, ""), values[index + 1]]] : pairs, []));
+const event = await readJson(args.event);
+const schema = await readJson(path.join(root, "data/tool-schema.json"));
+const tools = await readJson(path.join(root, "data/tools.json"));
+const submission = parseIssueSubmission(event.issue.body || "");
+const errors = [];
+if (!["new", "update"].includes(submission.type)) errors.push("Submission type must be new or update.");
+if (submission.type === "update" && !submission.existingToolId) errors.push("Existing tool ID is required for an update.");
+if (submission.type === "new" && submission.existingToolId) errors.push("Existing tool ID must be empty for a new submission.");
+let raw = null; try { raw = JSON.parse(submission.json); } catch { errors.push("Tool JSON is not valid JSON."); }
+const checked = raw ? validateTool(raw, schema) : { errors: [], tool: null }; errors.push(...checked.errors);
+const existing = tools.find((tool) => tool.id === submission.existingToolId);
+if (submission.type === "update" && !existing) errors.push("Existing tool ID does not exist.");
+const duplicates = checked.tool ? findDuplicates(checked.tool, tools, submission.type === "update" ? submission.existingToolId : "") : [];
+if (duplicates.length) errors.push(`Possible duplicate: ${duplicates.map((item) => `${item.id} (${item.reasons.join(", ")})`).join("; ")}.`);
+const result = { valid: errors.length === 0, errors, duplicates, submission, tool: checked.tool, existing };
+await writeFile(args.output, JSON.stringify(result, null, 2));

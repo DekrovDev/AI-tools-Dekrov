@@ -1,0 +1,41 @@
+name: Create PR for approved submission
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  create-pr:
+    if: github.event.label.name == 'approved' && contains(github.event.issue.labels.*.name, 'tool-submission')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Apply approved submission
+        run: node .github/scripts/apply-submission.mjs --event "$GITHUB_EVENT_PATH" --output "$RUNNER_TEMP/pr-result.json"
+      - name: Create branch and pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RESULT_PATH: ${{ runner.temp }}/pr-result.json
+        run: |
+          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync(process.env.RESULT_PATH)); fs.writeFileSync(process.env.RUNNER_TEMP + '/pr-title.txt', r.title); fs.writeFileSync(process.env.RUNNER_TEMP + '/pr-body.md', r.body);"
+          branch="submission/issue-${{ github.event.issue.number }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add data/tools.json
+          git commit -m "${{ github.event.issue.number }}: apply approved tool submission"
+          git push origin "$branch"
+          gh pr create --base "${{ github.event.repository.default_branch }}" --head "$branch" --title "$(cat "$RUNNER_TEMP/pr-title.txt")" --body-file "$RUNNER_TEMP/pr-body.md"
+      - name: Comment with pull request
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number, body: 'An approval PR was created. This submission will appear in the public catalog only after that PR is manually merged.' });
