@@ -38,7 +38,7 @@ export function parseArgs(argv) {
   return args;
 }
 
-export function buildCanonicalBody(tool, context, verified) {
+export function buildCanonicalBody(tool, context) {
   const json = JSON.stringify(tool, null, 2);
   return [
     "### Submission type",
@@ -51,16 +51,26 @@ export function buildCanonicalBody(tool, context, verified) {
     json,
     "",
     "### Context",
-    context ? context : "_No response_",
-    "",
-    "### Verified metadata",
-    JSON.stringify(verified, null, 2)
+    context ? context : "_No response_"
   ].join("\n");
 }
 
 export function buildVerifiedMetadata(pages, today) {
   const sources = [...new Set(pages.map((page) => page.url))];
   return { lastVerifiedAt: today, sources };
+}
+
+// The verified metadata is posted as a bot comment instead of living in the
+// user-editable issue body, so contributors cannot spoof lastVerifiedAt or
+// sources by editing the Issue (see parseVerifiedComment).
+export function buildVerifiedComment(verified) {
+  return [
+    "<!-- ai-dekrov-verified-metadata -->",
+    "Verified metadata for this submission (created by Smart Add):",
+    "```json",
+    JSON.stringify(verified, null, 2),
+    "```"
+  ].join("\n");
 }
 
 export function foundList(tool, pages) {
@@ -264,7 +274,7 @@ export async function runSmartAdd({ title, body, authorAssociation, tools, schem
   const errors = checked.errors;
   const today = new Date().toISOString().slice(0, 10);
   const verified = buildVerifiedMetadata(pages, today);
-  const canonicalBody = buildCanonicalBody(checked.tool || candidate, context, verified);
+  const canonicalBody = buildCanonicalBody(checked.tool || candidate, context);
   const hasIssues = errors.length > 0 || duplicates.length > 0;
   const comment = buildAnalysisComment({ tool: checked.tool || candidate, warnings, duplicates, errors, pages, context });
 
@@ -273,6 +283,7 @@ export async function runSmartAdd({ title, body, authorAssociation, tools, schem
     convert: true,
     comment,
     canonicalBody,
+    verifiedComment: buildVerifiedComment(verified),
     title: `[Tool] ${candidate.name}`,
     labels: ["tool-submission", hasIssues ? "needs-changes" : "pending"],
     errors,

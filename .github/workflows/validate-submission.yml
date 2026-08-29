@@ -10,7 +10,9 @@ permissions:
 
 jobs:
   validate:
-    if: contains(github.event.issue.labels.*.name, 'tool-submission')
+    # Detect by body as well as by label: on a fresh repository the custom
+    # labels may not exist yet, and issue forms cannot apply missing labels.
+    if: (github.event.issue.body != null && contains(github.event.issue.body, '### Tool JSON')) || contains(github.event.issue.labels.*.name, 'tool-submission')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,6 +33,10 @@ jobs:
           script: |
             const fs = require('fs');
             const result = JSON.parse(fs.readFileSync(process.env.RESULT_PATH, 'utf8'));
+            if (result.skip) {
+              console.log('Not a tool submission; nothing to do.');
+              return;
+            }
             const details = result.valid
               ? 'Submission is valid and is now **pending** moderation.'
               : `Submission needs changes:\n${result.errors.map(error => `- ${error}`).join('\n')}`;

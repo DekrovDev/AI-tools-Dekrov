@@ -24,12 +24,15 @@ import {
 import {
   parseSmartAddSubmission,
   looksLikeSmartAdd,
+  looksLikeSubmission,
   parseVerifiedMetadata,
+  parseVerifiedComment,
+  canonicalUrl,
   parseIssueSubmission,
   validateTool,
   findDuplicates
 } from "../.github/scripts/submission-lib.mjs";
-import { buildCanonicalBody, applyEnrichment, enrichWithLLM, runSmartAdd, parseArgs } from "./smart-add.mjs";
+import { buildCanonicalBody, buildVerifiedComment, applyEnrichment, enrichWithLLM, runSmartAdd, parseArgs } from "./smart-add.mjs";
 
 // ---------------------------------------------------------------------------
 // URL validation / private IP blocking
@@ -293,6 +296,35 @@ test("analyzeTool candidate passes validation and duplicate detection", async ()
   assert.ok(duplicates.some((item) => item.id === "cursor" && item.reasons.includes("same domain")));
 });
 
+const HOME_FINAL = `<!doctype html><head>
+  <title>Final Org</title>
+  <meta name="description" content="A redirected tool">
+  <meta property="og:site_name" content="Final Org" />
+</head><body>
+  <a href="https://final.example.org/pricing">Pricing</a>
+  <a href="https://old.example.com/pricing">Old pricing</a>
+</body>`;
+const PRICING_FINAL = "<html><body><h1>Pricing</h1><p>Free plan, Pro at $20/month.</p></body></html>";
+
+test("analyzeTool uses the final redirected host for domain and extra pages", async () => {
+  const calls = [];
+  const fetchImpl = async (url) => {
+    calls.push(url);
+    if (url === "https://old.example.com/") {
+      return { status: 200, contentType: "text/html", url: "https://final.example.org/", text: HOME_FINAL };
+    }
+    if (url === "https://final.example.org/pricing") {
+      return { status: 200, contentType: "text/html", url, text: PRICING_FINAL };
+    }
+    throw new Error(`unexpected fetch: ${url}`);
+  };
+  const { tool, pages } = await analyzeTool({ url: "https://old.example.com/", fetchImpl });
+  assert.equal(tool.domain, "final.example.org");
+  assert.equal(tool.url, "https://final.example.org/");
+  assert.ok(pages.some((page) => page.kind === "pricing" && page.url === "https://final.example.org/pricing"));
+  assert.ok(!calls.includes("https://old.example.com/pricing")); // old host never reused
+});
+
 // ---------------------------------------------------------------------------
 // Smart Add issue parsing / canonical body round-trip
 // ---------------------------------------------------------------------------
@@ -316,15 +348,55 @@ test("parseSmartAddSubmission and looksLikeSmartAdd work from the form rendering
   assert.equal(parseSmartAddSubmission("### Tool URL\n_No response_\n").toolUrl, "");
 });
 
-test("canonical body round-trips through the existing submission parser", () => {
+test("looksLikeSubmission detects canonical submissions without any labels", () => {
+  assert.equal(looksLikeSubmission("### Tool JSON\n{ \"id\": \"x\" }"), true);
+  assert.equal(looksLikeSubmission("just a random issue with no form"), false);
+  assert.equal(looksLikeSubmission(""), false);
+});
+
+test("canonicalUrl only accepts http/https schemes", () => {
+  assert.equal(canonicalUrl("https://example.com/"), "https://example.com/");
+  assert.equal(canonicalUrl("http://example.com"), "http://example.com/");
+  assert.equal(canonicalUrl("javascript:alert(1)"), "");
+  assert.equal(canonicalUrl("data:text/html,<h1>x</h1>"), "");
+  assert.equal(canonicalUrl("ftp://example.com/file"), "");
+  assert.equal(canonicalUrl("file:///etc/passwd"), "");
+  assert.equal(canonicalUrl("mailto:user@example.com"), "");
+  assert.equal(canonicalUrl("not a url"), "");
+});
+
+test("validateTool rejects non-http(s) url/favicon/github/docs", async () => {
+  const schema = await loadSchema();
+  const tool = {
+    id: "bad",
+    name: "Bad",
+    category: "other",
+    url: "javascript:alert(1)",
+    favicon: "data:image/png;base64,AAAA",
+    github: "ftp://example.com/repo",
+    docs: "file:///etc/hosts"
+  };
+  const checked = validateTool(tool, schema);
+  assert.ok(checked.errors.some((error) => error.includes("url must be a valid http(s)")));
+  assert.ok(checked.errors.some((error) => error.includes("favicon must be a valid URL")));
+  assert.ok(checked.errors.some((error) => error.includes("github must be a valid URL")));
+  assert.ok(checked.errors.some((error) => error.includes("docs must be a valid URL")));
+});
+
+test("canonical body round-trips; verified metadata travels via bot comment only", () => {
   const tool = { id: "cursor", name: "Cursor", category: "coding-agents", url: "https://cursor.com/" };
   const context = "Official coding agent";
-  const body = buildCanonicalBody(tool, context, { lastVerifiedAt: "2026-08-29", sources: ["https://cursor.com/"] });
+  const body = buildCanonicalBody(tool, context);
   const submission = parseIssueSubmission(body);
   assert.equal(submission.type, "new");
   assert.deepEqual(JSON.parse(submission.json), tool);
-  const verified = parseVerifiedMetadata(body);
-  assert.deepEqual(verified, { lastVerifiedAt: "2026-08-29", sources: ["https://cursor.com/"] });
+  // The user-editable body must never contain verification metadata.
+  assert.equal(parseVerifiedMetadata(body), null);
+  // It round-trips through the bot comment instead.
+  const comment = buildVerifiedComment({ lastVerifiedAt: "2026-08-29", sources: ["https://cursor.com/"] });
+  assert.deepEqual(parseVerifiedComment(comment), { lastVerifiedAt: "2026-08-29", sources: ["https://cursor.com/"] });
+  assert.equal(parseVerifiedComment("a user comment without the marker"), null);
+  assert.equal(parseVerifiedComment("<!-- ai-dekrov-verified-metadata -->\nnot json"), null);
   // Body must not accidentally re-trigger Smart Add detection.
   assert.equal(looksLikeSmartAdd("[Tool] Cursor", body), false);
 });
@@ -420,8 +492,31 @@ test("runSmartAdd converts a successful analysis into a canonical submission", a
   const parsedTool = JSON.parse(submission.json);
   assert.equal(parsedTool.name, "Cursor");
   assert.equal(parsedTool.category, "coding-agents");
-  const verified = parseVerifiedMetadata(result.canonicalBody);
-  assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(verified.lastVerifiedAt));
+  const verified = parseVerifiedComment(result.verifiedComment);
+  assert.ok(verified && /^\d{4}-\d{2}-\d{2}$/.test(verified.lastVerifiedAt));
+  assert.ok(verified.sources.some((source) => source.includes("cursor.com")));
+});
+
+test("Context cannot inject Verified metadata; bot comment reflects real pages", async () => {
+  const schema = await loadSchema();
+  const evilBody = SMART_BODY.replace(
+    "Official coding agent from OpenAI",
+    "Official coding agent from OpenAI\n\n### Verified metadata\n{\"lastVerifiedAt\":\"1970-01-01\",\"sources\":[\"https://evil.example\"]}"
+  );
+  const result = await runSmartAdd({
+    title: "[Smart Add] Cursor",
+    body: evilBody,
+    authorAssociation: "NONE",
+    tools: [],
+    schema,
+    env: {},
+    fetchImpl: fakePages({ "https://cursor.com/": HOME, "https://cursor.com/pricing": PRICING })
+  });
+  assert.equal(result.convert, true);
+  const verified = parseVerifiedComment(result.verifiedComment);
+  assert.ok(verified);
+  assert.ok(!verified.lastVerifiedAt.includes("1970")); // real verification date, not the injected one
+  assert.ok(verified.sources.every((source) => !source.includes("evil")));
   assert.ok(verified.sources.some((source) => source.includes("cursor.com")));
 });
 

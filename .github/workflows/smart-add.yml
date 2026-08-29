@@ -47,4 +47,9 @@ jobs:
             if (result.convert && result.canonicalBody) {
               await github.rest.issues.update({ owner, repo, issue_number, title: result.title, body: result.canonicalBody });
               await github.rest.issues.setLabels({ owner, repo, issue_number, labels: result.labels });
+              // Verified metadata lives in a bot comment (not the editable
+              // Issue body) so contributors cannot spoof it.
+              if (result.verifiedComment) {
+                await github.rest.issues.createComment({ owner, repo, issue_number, body: result.verifiedComment });
+              }
             }

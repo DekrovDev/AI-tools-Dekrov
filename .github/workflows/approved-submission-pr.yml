@@ -20,6 +20,8 @@ jobs:
           node-version: 24
       - name: Apply approved submission
         run: node .github/scripts/apply-submission.mjs --event "$GITHUB_EVENT_PATH" --output "$RUNNER_TEMP/pr-result.json"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Create branch and pull request
         env:
           GH_TOKEN: ${{ github.token }}

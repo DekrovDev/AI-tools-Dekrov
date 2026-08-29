@@ -435,7 +435,9 @@ export async function analyzeTool({ url, context = "", maxPages = MAX_TOTAL_PAGE
   usePage(homepageUrl, "home", homepage.text);
 
   const homeTokens = firstMeta(homepage.text, ["og:site_name", "og:title", "twitter:title"]) || firstTitle(homepage.text);
-  const domain = startUrl.hostname.replace(/^www\./, "");
+  // Use the FINAL (post-redirect) host for the domain and for the same-host
+  // check on additional pages, never the originally entered hostname.
+  const domain = new URL(homepageUrl).hostname.replace(/^www\./, "");
   const ogUrl = firstMeta(homepage.text, ["og:url"]);
   const canonical = ogUrl && /^https?:/i.test(ogUrl) ? ogUrl : homepageUrl;
 

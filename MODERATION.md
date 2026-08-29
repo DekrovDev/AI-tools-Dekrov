@@ -2,7 +2,7 @@
 
 ## Smart Add submissions
 
-Smart Add Issues arrive through the `smart-add.yml` form. The Smart Add Action analyzes the tool, validates it, and rewrites the Issue into the canonical submission format below, so moderation is identical to manual submissions. It embeds a `### Verified metadata` block (sources and `lastVerifiedAt`); the approval step reads it so verified public sources and the verification date survive into the catalog record. The `### Verified metadata` block is machine-readable and must not be edited by hand.
+Smart Add Issues arrive through the `smart-add.yml` form. The Smart Add Action analyzes the tool, validates it, and rewrites the Issue into the canonical submission format below, so moderation is identical to manual submissions. Verified sources and the verification date are posted as a bot-created Issue comment (marked `ai-dekrov-verified-metadata`), not in the editable Issue body, so contributors cannot spoof them; the approval step reads that comment so verified public sources and `lastVerifiedAt` survive into the catalog record.
 
 ## States
 

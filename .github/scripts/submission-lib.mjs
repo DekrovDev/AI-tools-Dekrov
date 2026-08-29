@@ -1,7 +1,21 @@
 import { readFile } from "node:fs/promises";
 
 export async function readJson(path) { return JSON.parse(await readFile(path, "utf8")); }
-export function canonicalUrl(value = "") { try { const url = new URL(value); url.hash = ""; url.search = ""; url.hostname = url.hostname.toLowerCase(); url.pathname = url.pathname.replace(/\/$/, "") || "/"; return url.href; } catch { return ""; } }
+export function canonicalUrl(value = "") {
+  try {
+    const url = new URL(value);
+    // Only http(s) counts as a usable URL; anything else (javascript:, data:,
+    // ftp:, file:, mailto:, ...) must not pass backend validation.
+    if (!["http:", "https:"].includes(url.protocol)) return "";
+    url.hash = "";
+    url.search = "";
+    url.hostname = url.hostname.toLowerCase();
+    url.pathname = url.pathname.replace(/\/$/, "") || "/";
+    return url.href;
+  } catch {
+    return "";
+  }
+}
 export function domainFromUrl(value = "") { try { return new URL(value).hostname.replace(/^www\./, "").toLowerCase(); } catch { return ""; } }
 export function section(body = "", label) {
   const header = `### ${label}`;
@@ -31,6 +45,12 @@ export function looksLikeSmartAdd(title = "", body = "") {
   const b = body || "";
   return t.startsWith("[Smart Add]") || /### Tool URL/.test(b);
 }
+// Whether an issue body contains a canonical tool submission (### Tool JSON).
+// Lets the validation workflow run on a fresh repository where the custom
+// labels may not exist yet (issue forms cannot apply missing labels).
+export function looksLikeSubmission(body = "") {
+  return /### Tool JSON/.test(body || "");
+}
 // Parses the optional machine-readable verification block that Smart Add
 // embeds so the approval step can carry lastVerifiedAt/sources forward.
 export function parseVerifiedMetadata(body = "") {
@@ -49,6 +69,16 @@ export function parseVerifiedMetadata(body = "") {
     meta.sources = [...new Set(data.sources.filter((value) => typeof value === "string" && canonicalUrl(value)))].slice(0, 20);
   }
   return Object.keys(meta).length ? meta : null;
+}
+// Verified metadata is delivered in a bot-created issue comment (marker
+// ai-dekrov-verified-metadata), never in the user-editable issue body, so
+// contributors cannot spoof lastVerifiedAt or sources. This parses that
+// comment; returns null for anything that does not look like it.
+export function parseVerifiedComment(commentBody = "") {
+  if (!(commentBody || "").includes("ai-dekrov-verified-metadata")) return null;
+  const match = commentBody.match(/```(?:json)?\s*([\s\S]*?)```/);
+  if (!match) return null;
+  return parseVerifiedMetadata(`### Verified metadata\n${match[1]}`);
 }
 export function normalizeName(value = "") { return value.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim(); }
 export function isSimilarName(a, b) { const first = normalizeName(a); const second = normalizeName(b); if (!first || !second) return false; if (first === second || first.includes(second) || second.includes(first)) return true; const left = new Set(first.split(" ")); const right = new Set(second.split(" ")); const common = [...left].filter((word) => right.has(word)).length; return common / Math.max(left.size, right.size) >= 0.8; }

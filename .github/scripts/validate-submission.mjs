@@ -1,14 +1,22 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { writeFile } from "node:fs/promises";
-import { readJson, parseIssueSubmission, validateTool, findDuplicates } from "./submission-lib.mjs";
+import { readJson, parseIssueSubmission, looksLikeSubmission, validateTool, findDuplicates } from "./submission-lib.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const args = Object.fromEntries(process.argv.slice(2).reduce((pairs, value, index, values) => index % 2 === 0 ? [...pairs, [value.replace(/^--/, ""), values[index + 1]]] : pairs, []));
 const event = await readJson(args.event);
 const schema = await readJson(path.join(root, "data/tool-schema.json"));
 const tools = await readJson(path.join(root, "data/tools.json"));
-const submission = parseIssueSubmission(event.issue.body || "");
+const body = event.issue.body || "";
+// Safe no-op for issues that are not canonical tool submissions. This lets the
+// workflow trigger without relying on labels that may not exist yet in a fresh
+// repository.
+if (!looksLikeSubmission(body)) {
+  await writeFile(args.output, JSON.stringify({ skip: true }));
+  process.exit(0);
+}
+const submission = parseIssueSubmission(body);
 const errors = [];
 if (!["new", "update"].includes(submission.type)) errors.push("Submission type must be new or update.");
 if (submission.type === "update" && !submission.existingToolId) errors.push("Existing tool ID is required for an update.");
