@@ -598,5 +598,82 @@
       "https://github.com/features/copilot",
       "https://docs.github.com/en/copilot"
     ]
+  },
+  {
+    "id": "opencode",
+    "name": "OpenCode",
+    "category": "coding-agents",
+    "description": "An open-source, terminal-first AI coding agent that acts as an interface between the user and various large language models. It provides tools for file management, shell access, and project planning to automate coding tasks .",
+    "bestFor": [
+      "Developers who want a model-agnostic coding assistant",
+      "Users preferring a terminal-based or lightweight development environment",
+      "Developers seeking a local-first, privacy-focused AI tool for coding",
+      "Automating complex coding tasks with a plan/build workflow"
+    ],
+    "strengths": [
+      "Model-agnostic, supporting over 75 providers including Anthropic, OpenAI, Google, DeepSeek, and local models via Ollama",
+      "Terminal-based TUI, desktop app (beta), and VS Code extension",
+      "Local-first operation, with code and conversation history stored locally by default",
+      "Offers a unique Plan/Build mode to plan changes before executing them"
+    ],
+    "gettingStarted": [
+      "Ensure Node.js (version 18 or higher) is installed",
+      "Install OpenCode using the install script: `curl -fsSL https://opencode.ai/install | bash`, or via npm: `npm install -g opencode-ai`",
+      "Navigate to your project directory: `cd /path/to/your/project`",
+      "Set an API key as an environment variable (e.g., `export ANTHROPIC_API_KEY=your-key-here`) or configure it interactively",
+      "Start OpenCode: `opencode`"
+    ],
+    "usageNotes": [
+      "It acts as a client for AI models, requiring users to bring their own API keys or use a provider like Pioneer",
+      "Uses a dual-mode workflow: 'Plan' mode (asks for permission before edits) and 'Build' mode (can read, write, and execute commands)",
+      "The `/connect` command is used to set up AI providers",
+      "Uses `AGENTS.md` file in the project root for persistent context about project structure and coding patterns",
+      "Supports `/undo` and `/redo` commands for version management"
+    ],
+    "url": "https://opencode.ai/",
+    "domain": "opencode.ai",
+    "favicon": "",
+    "platforms": [
+      "cli",
+      "desktop",
+      "vscode"
+    ],
+    "pricing": "free",
+    "priceDetails": "OpenCode itself is free and open-source; users pay for their own API usage from chosen model providers .",
+    "tags": [
+      "ai-coding-agent",
+      "open-source",
+      "terminal",
+      "model-agnostic",
+      "local-first",
+      "coding-assistant"
+    ],
+    "install": "npm install -g opencode-ai",
+    "start": "opencode",
+    "commands": [
+      {
+        "label": "Connect AI Provider",
+        "command": "/connect"
+      },
+      {
+        "label": "List Available Models",
+        "command": "/models"
+      }
+    ],
+    "models": [
+      "Claude",
+      "GPT",
+      "Gemini",
+      "DeepSeek",
+      "Ollama"
+    ],
+    "github": "",
+    "docs": "",
+    "addedAt": "2026-08-29",
+    "updatedAt": "2026-08-29",
+    "lastVerifiedAt": "2026-08-29",
+    "sources": [
+      "https://opencode.ai/"
+    ]
   }
 ]
