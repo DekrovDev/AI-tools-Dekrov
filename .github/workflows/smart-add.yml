@@ -1,0 +1,50 @@
+name: Smart Add analysis
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  analyze:
+    if: (github.event.issue.title != null && startsWith(github.event.issue.title, '[Smart Add]')) || (github.event.issue.body != null && contains(github.event.issue.body, '### Tool URL'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Run Smart Add analysis
+        run: node scripts/smart-add.mjs --event "$GITHUB_EVENT_PATH" --output "$RUNNER_TEMP/smart-add-result.json"
+        env:
+          AI_PROVIDER_BASE_URL: ${{ vars.AI_PROVIDER_BASE_URL }}
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          AI_MODEL: ${{ vars.AI_MODEL }}
+      - name: Ensure required labels exist
+        run: node .github/scripts/ensure-labels.mjs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Comment and convert submission
+        uses: actions/github-script@v7
+        env:
+          RESULT_PATH: ${{ runner.temp }}/smart-add-result.json
+        with:
+          script: |
+            const fs = require('fs');
+            const result = JSON.parse(fs.readFileSync(process.env.RESULT_PATH, 'utf8'));
+            if (result.skip) {
+              console.log('Not a Smart Add issue; nothing to do.');
+              return;
+            }
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            if (result.comment) {
+              await github.rest.issues.createComment({ owner, repo, issue_number, body: result.comment });
+            }
+            if (result.convert && result.canonicalBody) {
+              await github.rest.issues.update({ owner, repo, issue_number, title: result.title, body: result.canonicalBody });
+              await github.rest.issues.setLabels({ owner, repo, issue_number, labels: result.labels });
+            }

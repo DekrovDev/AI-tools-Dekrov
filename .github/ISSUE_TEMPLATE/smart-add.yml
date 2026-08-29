@@ -1,0 +1,34 @@
+name: Smart Add
+description: Let GitHub analyze an official tool URL and prepare a submission for review.
+title: "[Smart Add] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Paste an official tool URL. GitHub Actions will analyze it, prepare a schema-valid submission, and open it for moderator review.
+
+        **Nothing is published automatically.** A moderator reviews every submission before it can become a pull request.
+  - type: input
+    id: tool_url
+    attributes:
+      label: Tool URL
+      description: Official website URL.
+      placeholder: https://example.com
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Optional. Anything that helps understand the tool.
+      placeholder: Official coding agent from OpenAI
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: I confirm this is a real tool with an official public website.
+          required: true

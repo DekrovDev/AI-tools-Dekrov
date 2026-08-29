@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "add-tool": "node scripts/add-tool.mjs"
+    "add-tool": "node scripts/add-tool.mjs",
+    "test": "node --test scripts/*.test.mjs"
   }
 }

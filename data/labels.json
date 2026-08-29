@@ -1,0 +1,13 @@
+[
+  { "name": "tool-submission", "color": "0e8a16", "description": "Proposed tool change for validation and review." },
+  { "name": "pending", "color": "fef2c0", "description": "Validated submission waiting for moderator review." },
+  { "name": "needs-changes", "color": "fbca04", "description": "Submission needs changes before it can be approved." },
+  { "name": "approved", "color": "0e8a16", "description": "Approved submission ready to create a pull request." },
+  { "name": "rejected", "color": "b60205", "description": "Submission will not be published." },
+  { "name": "duplicate", "color": "d4c5f9", "description": "Submission duplicates an existing entry." },
+  { "name": "insufficient-information", "color": "d93f0b", "description": "Submission lacks enough verifiable information." },
+  { "name": "invalid-tool", "color": "5319e7", "description": "Submission does not describe a real tool." },
+  { "name": "dead-project", "color": "ededed", "description": "The project appears abandoned or unavailable." },
+  { "name": "spam", "color": "e4e669", "description": "Submission is spam or abuse." },
+  { "name": "other", "color": "c5def5", "description": "Another moderation outcome." }
+]

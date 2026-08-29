@@ -37,11 +37,19 @@ Each tool has a readable hash URL such as `#/tools/tool-id`. Its detail page can
 
 The **Suggest a tool** dialog has three modes. It prepares a submission instead of changing the catalog directly. Closing the dialog clears unfinished data.
 
-### Quick Add
+### Smart Add
 
-Paste a tool URL and choose **Prepare details**. The browser safely derives what it can without reading the external page: URL, domain, a suggested favicon URL, a suggested name, and the Web platform. Review and complete the result in Manual mode.
+The default mode. Paste an official tool URL and optionally add context, then click **Analyze on GitHub**. The site opens the Smart Add Issue Form with the URL (and context) prefilled; it never fetches the target page in the browser and needs no CORS proxy or GitHub token.
 
-Quick Add does not fetch third-party pages in the browser, so it remains reliable on GitHub Pages without CORS workarounds.
+Once the Issue is submitted, the Smart Add Action runs on GitHub:
+
+1. safely downloads the homepage (and up to three obviously useful official pages such as pricing, docs, or getting started);
+2. extracts name, description, canonical URL, domain, favicon, platforms, category, pricing, tags, commands, models, GitHub, and docs — using the schema as the single source of truth for allowed values;
+3. optionally enriches the candidate with an external LLM for trusted contributors only (disabled by default, never required);
+4. validates the result with the same validation logic as any submission and checks duplicates;
+5. leaves a **Smart Add analysis** comment, then converts the Issue into the canonical `tool-submission` format with `tool-submission` + `pending` (or `needs-changes`) labels.
+
+The converted Issue behaves exactly like a manual submission: moderators review it, and the `approved` label creates the usual pull request. Nothing is published automatically.
 
 ### Manual
 
@@ -71,7 +79,7 @@ For a fuller metadata analysis, the owner can run:
 npm run add-tool -- https://example.com
 ```
 
-The local Node.js script downloads a public page and attempts to find metadata, favicon, GitHub/docs links, platforms, commands, and relevant tags. It shows a preview, asks for category and pricing, and writes to canonical `data/tools.json` only after confirmation.
+The local Node.js script downloads a public page and attempts to find metadata, favicon, GitHub/docs links, platforms, commands, and relevant tags. It shows a preview, asks for category and pricing, and writes to canonical `data/tools.json` only after confirmation. It shares the same analysis core (`scripts/analyzer.mjs`) as the Smart Add Action.
 
 ## Data storage
 

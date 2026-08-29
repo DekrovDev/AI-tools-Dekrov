@@ -5,10 +5,10 @@ AI-Dekrov is a public catalog. Its canonical database is [`data/tools.json`](dat
 ## Suggest a new tool
 
 1. Open [AI-Dekrov](https://ai.dekrov.com) and click **Suggest a tool**.
-2. Prepare the data with Quick Add, Manual, or JSON Import / AI Prompt Builder.
-3. Review the preview. If a likely duplicate appears, use **Suggest an update** on the existing entry instead.
-4. Click **Copy JSON and open GitHub Issue**.
-5. Sign in to GitHub, choose `new` in the Issue Form, paste the copied JSON into **Tool JSON**, and submit.
+2. Choose **Smart Add** and paste an official tool URL (optional context is welcome). Click **Analyze on GitHub** — the site opens the Smart Add Issue Form with the URL prefilled.
+3. Review and submit the Issue. The Smart Add Action downloads the page, extracts metadata, optionally enriches it, validates the result, checks duplicates, and converts the Issue into a normal `tool-submission` with the same validation and moderation flow.
+   - No GitHub tokens, APIs, or browser scraping are involved in the site itself — it stays a fully static GitHub Pages project.
+4. You can also prepare the data manually: Manual or JSON Import / AI Prompt Builder, then **Copy JSON and open GitHub Issue**.
 
 The validation Action comments on the Issue and assigns either `pending` or `needs-changes`.
 
@@ -31,7 +31,7 @@ The validation Action comments on the Issue and assigns either `pending` or `nee
 
 ## Moderation labels
 
-Create these labels in the GitHub repository before enabling public submissions:
+The required labels are defined in [`data/labels.json`](data/labels.json). The validation and Smart Add workflows create any missing labels automatically, so a fresh repository works without manual setup:
 
 - `tool-submission`
 - `pending`

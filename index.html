@@ -83,15 +83,15 @@
       <div class="tool-form">
         <div class="dialog-header"><div><p class="kicker">NEW SUBMISSION</p><h2 id="tool-dialog-title">Suggest a tool</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button></div>
         <div class="add-mode-tabs" role="tablist" aria-label="Submission method">
-          <button class="add-mode-tab is-active" type="button" data-add-mode="quick" role="tab" aria-selected="true">Quick Add</button>
+          <button class="add-mode-tab is-active" type="button" data-add-mode="smart" role="tab" aria-selected="true">Smart Add</button>
           <button class="add-mode-tab" type="button" data-add-mode="manual" role="tab" aria-selected="false">Manual</button>
           <button class="add-mode-tab" type="button" data-add-mode="json" role="tab" aria-selected="false">JSON Import</button>
         </div>
-        <form class="add-panel" id="quick-add-form" data-add-panel="quick">
-          <p class="add-panel-copy">Paste a link. We will prefill the URL, domain, favicon, and a suggested name, then you can review it in the editor.</p>
-          <label class="form-field form-field-wide"><span>Tool URL</span><input id="quick-url" name="quick-url" type="url" required placeholder="https://..." /></label>
-          <div class="dialog-actions"><button class="button button-primary" type="submit">Prepare details</button></div>
-          <p class="importer-hint">For a complete local page analysis: <code>npm run add-tool -- &lt;url&gt;</code></p>
+        <form class="add-panel" id="smart-add-form" data-add-panel="smart">
+          <p class="add-panel-copy">Paste an official tool URL. GitHub will analyze it and prepare a submission for review. Nothing is published automatically.</p>
+          <label class="form-field form-field-wide"><span>Tool URL *</span><input id="smart-url" name="smart-url" type="url" required placeholder="https://..." /></label>
+          <label class="form-field form-field-wide"><span>Context (optional)</span><textarea id="smart-context" rows="2" placeholder="For example: Official coding agent from OpenAI"></textarea></label>
+          <div class="dialog-actions"><button class="button button-primary" type="submit">Analyze on GitHub</button></div>
         </form>
         <form class="add-panel" id="tool-form" data-add-panel="manual" hidden>
           <p class="add-panel-copy">Review the fields and add only what is genuinely needed.</p>

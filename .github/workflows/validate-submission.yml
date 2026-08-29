@@ -19,6 +19,10 @@ jobs:
           node-version: 24
       - name: Validate structured submission
         run: node .github/scripts/validate-submission.mjs --event "$GITHUB_EVENT_PATH" --output "$RUNNER_TEMP/submission-result.json"
+      - name: Ensure required labels exist
+        run: node .github/scripts/ensure-labels.mjs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Comment validation result and set moderation state
         uses: actions/github-script@v7
         env:

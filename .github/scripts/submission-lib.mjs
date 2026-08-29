@@ -11,10 +11,44 @@ export function section(body = "", label) {
   const nextHeader = afterHeader.search(/\r?\n### /);
   return (nextHeader === -1 ? afterHeader : afterHeader.slice(0, nextHeader)).trim();
 }
-function emptyResponse(value) { return /^_?no response_?$/i.test(value.trim()) ? "" : value.trim(); }
+export function emptyResponse(value) { return /^_?no response_?$/i.test(value.trim()) ? "" : value.trim(); }
 export function parseIssueSubmission(body) {
   const json = emptyResponse(section(body, "Tool JSON")).replace(/^```(?:json)?\s*|\s*```$/g, "").trim();
   return { type: emptyResponse(section(body, "Submission type")).toLowerCase(), existingToolId: emptyResponse(section(body, "Existing tool ID")), json };
+}
+// Parses a Smart Add issue (see smart-add.yml). Fields are rendered as
+// Markdown sections in the issue body using the same mechanism as the
+// canonical tool-submission form.
+export function parseSmartAddSubmission(body) {
+  return {
+    toolUrl: emptyResponse(section(body, "Tool URL")),
+    context: emptyResponse(section(body, "Context"))
+  };
+}
+// Whether an issue looks like a Smart Add request (no manual label required).
+export function looksLikeSmartAdd(title = "", body = "") {
+  const t = (title || "").trim();
+  const b = body || "";
+  return t.startsWith("[Smart Add]") || /### Tool URL/.test(b);
+}
+// Parses the optional machine-readable verification block that Smart Add
+// embeds so the approval step can carry lastVerifiedAt/sources forward.
+export function parseVerifiedMetadata(body = "") {
+  const raw = section(body, "Verified metadata");
+  if (!raw) return null;
+  let data;
+  try {
+    data = JSON.parse(raw.replace(/^```(?:json)?\s*|\s*```$/g, "").trim());
+  } catch {
+    return null;
+  }
+  if (!data || typeof data !== "object" || Array.isArray(data)) return null;
+  const meta = {};
+  if (typeof data.lastVerifiedAt === "string" && /^\d{4}-\d{2}-\d{2}$/.test(data.lastVerifiedAt)) meta.lastVerifiedAt = data.lastVerifiedAt;
+  if (Array.isArray(data.sources)) {
+    meta.sources = [...new Set(data.sources.filter((value) => typeof value === "string" && canonicalUrl(value)))].slice(0, 20);
+  }
+  return Object.keys(meta).length ? meta : null;
 }
 export function normalizeName(value = "") { return value.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim(); }
 export function isSimilarName(a, b) { const first = normalizeName(a); const second = normalizeName(b); if (!first || !second) return false; if (first === second || first.includes(second) || second.includes(first)) return true; const left = new Set(first.split(" ")); const right = new Set(second.split(" ")); const common = [...left].filter((word) => right.has(word)).length; return common / Math.max(left.size, right.size) >= 0.8; }

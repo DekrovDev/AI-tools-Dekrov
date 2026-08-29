@@ -17,11 +17,13 @@ Browse trusted links, supported platforms, pricing, install commands, and short 
 
 Click **Suggest a tool** on the website and choose the fastest option:
 
-- **Quick Add** starts with a URL and pre-fills dependable details.
+- **Smart Add** starts with an official tool URL. GitHub Actions analyzes the page (and a few official pages like pricing or docs), builds a schema-valid tool record, checks it, and prepares a moderated submission automatically.
 - **Manual** is a full editor for entering the tool details yourself.
 - **JSON Import** includes an AI Prompt Builder: use an external model to prepare schema-valid JSON, validate it here, then submit it for review.
 
-Suggestions are checked for valid JSON, URLs, enums, IDs, and potential duplicates. A moderator reviews the result before it can become a pull request. Nothing is published automatically.
+Smart Add, Manual, and JSON Import all produce the same kind of submission. Submissions are checked for valid JSON, URLs, enums, IDs, and potential duplicates. A moderator reviews the result before it can become a pull request. Nothing is published automatically.
+
+For a deeper local analysis, the repository owner can run `npm run add-tool -- <url>`, which downloads the page, shows a preview, and writes to `data/tools.json` only after confirmation.
 
 You can also use the [GitHub submission form](https://github.com/DekrovDev/AI-tools-Dekrov/issues/new?template=tool-submission.yml).
 
