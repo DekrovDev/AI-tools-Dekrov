@@ -399,5 +399,58 @@
       "https://antigravity.google/",
       "https://antigravity.google/docs"
     ]
+  },
+  {
+    "id": "antigravity-cli",
+    "name": "Antigravity CLI",
+    "category": "coding-agents",
+    "description": "A terminal-based interface (TUI) for the Antigravity 2.0 agentic coding assistant, designed to help build, modify, test, and release Flutter applications, replacing the legacy Gemini CLI .",
+    "bestFor": [
+      "Flutter and Dart developers seeking a terminal-based AI coding assistant for building and releasing applications",
+      "Users migrating from the legacy Gemini CLI"
+    ],
+    "strengths": [
+      "Terminal-based user interface (TUI) for a coding assistant",
+      "Supports automatic migration of settings from the legacy Gemini CLI",
+      "Respects workspace rules files like AGENTS.md for custom coding guidelines"
+    ],
+    "gettingStarted": [
+      "Install using one of the following commands: curl -fsSL https://antigravity.google/install.sh | bash (macOS/Linux), irm https://antigravity.google/install.ps1 | iex (Windows PowerShell), or winget install Google.AntigravityCLI (Windows Command Prompt)",
+      "Verify installation by running: agy --version",
+      "The first run will automatically check for and migrate settings from an existing Gemini CLI configuration"
+    ],
+    "usageNotes": [
+      "Replaces the legacy Gemini CLI for Dart and Flutter development",
+      "Supports local rules from .agents/skills/ or AGENTS.md, and maintains backward compatibility with GEMINI.md",
+      "Global settings and MCP server configurations are stored in ~/.antigravity/ (e.g., ~/.antigravity/mcp_config.json)"
+    ],
+    "url": "https://docs.flutter.dev/ai/antigravity-cli",
+    "domain": "docs.flutter.dev",
+    "favicon": "",
+    "platforms": [
+      "cli"
+    ],
+    "pricing": "free",
+    "priceDetails": "",
+    "tags": [
+      "cli",
+      "dart",
+      "flutter",
+      "coding-agent",
+      "tui",
+      "google"
+    ],
+    "install": "curl -fsSL https://antigravity.google/install.sh | bash",
+    "start": "agy",
+    "commands": [],
+    "models": [],
+    "github": "",
+    "docs": "https://docs.flutter.dev/ai/antigravity-cli",
+    "addedAt": "2026-08-29",
+    "updatedAt": "2026-08-29",
+    "lastVerifiedAt": "2026-08-29",
+    "sources": [
+      "https://docs.flutter.dev/ai/antigravity-cli"
+    ]
   }
 ]
