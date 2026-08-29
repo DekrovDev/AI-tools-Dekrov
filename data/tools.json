@@ -263,5 +263,75 @@
       "https://github.com/cerebras",
       "https://inference-docs.cerebras.ai"
     ]
+  },
+  {
+    "id": "windsurf",
+    "name": "Windsurf",
+    "category": "coding-agents",
+    "description": "An agentic AI-powered IDE developed by Codeium, featuring the Cascade AI assistant for deep codebase context awareness, multi-file editing, and task execution .",
+    "bestFor": [
+      "Developers seeking an AI-first IDE experience with an integrated agentic assistant",
+      "Teams wanting a collaborative AI coding environment with centralized billing",
+      "Users who prefer a visual editor over a terminal-based workflow",
+      "Developers working on context-heavy tasks requiring persistent awareness across sessions"
+    ],
+    "strengths": [
+      "Cascade agentic system providing real-time awareness and 'Flows' for persistent context",
+      "Automatic rule discovery and memory system for customizing AI behavior",
+      "Largest free tier among comparable AI coding tools",
+      "Integration of Devin's capabilities, such as DeepWiki for codebase understanding"
+    ],
+    "gettingStarted": [
+      "Navigate to the official Windsurf website and download the installer for your platform (e.g., Windows, macOS)",
+      "Install and launch the Windsurf IDE",
+      "Open a project or create a new one",
+      "Press Cmd/Ctrl+L or click the Cascade icon to open the AI assistant panel"
+    ],
+    "usageNotes": [
+      "Cascade offers three primary modes: 'Code' for autonomous changes, 'Plan' for multi-step planning, and 'Ask' for read-only analysis",
+      "Pricing is subscription-based with a quota system that replaced monthly credits. Free, Pro ($20/month), Teams ($40/seat/month), and Max ($200/month) plans are available",
+      "Quotas refresh daily/weekly, and unlimited Tab autocomplete does not consume quota",
+      "The tool is a proprietary standalone IDE, not a VS Code fork, so it has a smaller extension ecosystem",
+      "Features like Memories and Rules allow for persistent customization and context"
+    ],
+    "url": "https://windsurf.com/",
+    "domain": "windsurf.com",
+    "favicon": "https://windsurf.com/favicon.ico",
+    "platforms": [
+      "desktop",
+      "vscode"
+    ],
+    "pricing": "freemium",
+    "priceDetails": "Free, Pro (estimated $20/mo), Teams ($40/seat/mo), Max ($200/mo)",
+    "tags": [
+      "AI IDE",
+      "agentic",
+      "coding assistant",
+      "Cascade",
+      "Codeium"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [
+      "SWE-1.5",
+      "Claude Sonnet 4.6",
+      "GPT-5.4",
+      "GPT-5.3-Codex",
+      "GPT-5.2",
+      "Gemini Pro",
+      "Opus 4.6",
+      "Haiku",
+      "Flash"
+    ],
+    "github": "",
+    "docs": "https://docs.windsurf.com/",
+    "addedAt": "2026-08-29",
+    "updatedAt": "2026-08-29",
+    "lastVerifiedAt": "2026-08-29",
+    "sources": [
+      "https://windsurf.com/",
+      "https://docs.windsurf.com/"
+    ]
   }
 ]
