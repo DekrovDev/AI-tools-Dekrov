@@ -1,7 +1,6 @@
 const CATEGORY_META = {
   "coding-agents": { label: "Кодинг-агенты", short: "Кодинг", color: "#d2f25b" }, orchestration: { label: "Оркестрация", short: "Агенты", color: "#c2a5ff" },
   "chat-llm": { label: "Чат / LLM", short: "Чат / LLM", color: "#8db7ff" }, research: { label: "Исследования", short: "Исследования", color: "#ffb26b" },
-  image: { label: "Изображения", short: "Изображения", color: "#ff8585" }, video: { label: "Видео", short: "Видео", color: "#c2a5ff" },
   audio: { label: "Аудио", short: "Аудио", color: "#8db7ff" }, "dev-tools": { label: "Dev tools", short: "Dev tools", color: "#d2f25b" },
   hosting: { label: "Хостинг / Инфра", short: "Хостинг", color: "#ffb26b" }, other: { label: "Другое", short: "Другое", color: "#98a0ad" }
 };

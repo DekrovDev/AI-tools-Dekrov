@@ -4,7 +4,7 @@
   "properties": {
     "id": { "type": "string", "required": true, "pattern": "kebab-case", "description": "Stable kebab-case identifier" },
     "name": { "type": "string", "required": true, "description": "Official tool name" },
-    "category": { "type": "string", "required": true, "enum": ["coding-agents", "orchestration", "chat-llm", "research", "image", "video", "audio", "dev-tools", "hosting", "other"] },
+    "category": { "type": "string", "required": true, "enum": ["coding-agents", "orchestration", "chat-llm", "research", "audio", "dev-tools", "hosting", "other"] },
     "description": { "type": "string", "description": "Short factual description" },
     "url": { "type": "string", "required": true, "format": "uri", "description": "Official public URL" },
     "domain": { "type": "string", "description": "Website domain without protocol" },

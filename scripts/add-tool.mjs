@@ -151,7 +151,7 @@ function detectPlatforms(text) {
 }
 
 function detectTags(text, platforms) {
-  const definitions = [["coding", /\b(coding|codebase|programming|developer)\b/], ["agent", /\b(agent|autonomous)\b/], ["research", /\b(research|paper|citation)\b/], ["image", /\b(image|photo|illustration)\b/], ["video", /\b(video|film)\b/], ["audio", /\b(audio|voice|speech)\b/], ["llm", /\b(llm|language model)\b/], ["open-source", /\bopen source\b/]];
+  const definitions = [["coding", /\b(coding|codebase|programming|developer)\b/], ["agent", /\b(agent|autonomous)\b/], ["research", /\b(research|paper|citation)\b/], ["audio", /\b(audio|voice|speech)\b/], ["llm", /\b(llm|language model)\b/], ["open-source", /\bopen source\b/]];
   return [...new Set([...platforms, ...definitions.filter(([, pattern]) => pattern.test(text)).map(([tag]) => tag)])];
 }
 
