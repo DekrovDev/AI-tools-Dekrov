@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0f1115" />
-    <meta name="description" content="AI-Dekrov — мой склад AI-инструментов" />
+    <meta name="description" content="AI-Dekrov — a public catalog of AI tools" />
     <title>AI-Dekrov</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,13 +14,13 @@
   <body>
     <div class="app-shell">
       <header class="topbar">
-        <a class="brand" href="#/" aria-label="AI-Dekrov: главная">
+        <a class="brand" href="#/" aria-label="AI-Dekrov home">
           <span class="brand-mark" aria-hidden="true">✦</span>
           <span>AI-Dekrov</span>
         </a>
         <div class="topbar-actions">
-          <button class="add-tool-button" id="add-tool-button" type="button"><span data-icon="plus"></span> Предложить инструмент</button>
-          <button class="icon-button" id="info-button" type="button" aria-label="О проекте" title="О проекте"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 10.5v5M12 7.5h.01"/></svg></button>
+          <button class="add-tool-button" id="add-tool-button" type="button"><span data-icon="plus"></span> Suggest a tool</button>
+          <button class="icon-button" id="info-button" type="button" aria-label="About the project" title="About the project"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 10.5v5M12 7.5h.01"/></svg></button>
           <button class="icon-button" id="theme-toggle" type="button" aria-label="Switch to light theme" title="Toggle theme"></button>
           <button class="mobile-menu-button icon-button" id="mobile-menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false"></button>
         </div>
@@ -30,46 +30,46 @@
         <aside class="sidebar" id="sidebar">
           <div class="sidebar-inner">
             <nav aria-label="Main navigation">
-              <a class="nav-item is-active" href="#/" data-nav="all"><span class="nav-icon" data-icon="grid"></span><span>Все инструменты</span><span class="nav-count" id="all-count">0</span></a>
-              <a class="nav-item" href="#/favorites" data-nav="favorites"><span class="nav-icon" data-icon="star"></span><span>Избранное</span><span class="nav-count" id="favorites-count">0</span></a>
+              <a class="nav-item is-active" href="#/" data-nav="all"><span class="nav-icon" data-icon="grid"></span><span>All tools</span><span class="nav-count" id="all-count">0</span></a>
+              <a class="nav-item" href="#/favorites" data-nav="favorites"><span class="nav-icon" data-icon="star"></span><span>Favorites</span><span class="nav-count" id="favorites-count">0</span></a>
             </nav>
 
             <nav class="category-nav" id="category-navigation" aria-label="Categories" hidden>
-              <p class="eyebrow">Категории</p>
+              <p class="eyebrow">Categories</p>
               <div id="category-links"></div>
             </nav>
           </div>
         </aside>
 
         <main class="main-content">
-          <section class="hero" id="catalog-view"><div><p class="kicker">AI-DEKROV</p><h1>Мой склад AI-инструментов</h1></div></section>
+          <section class="hero" id="catalog-view"><div><p class="kicker">AI-DEKROV</p><h1>My AI tools library</h1></div></section>
 
           <section class="toolbar" aria-label="Search and filters">
             <label class="search-box" for="search-input">
               <span data-icon="search"></span>
-              <input id="search-input" type="search" placeholder="Поиск по инструментам, тегам и заметкам..." autocomplete="off" />
+              <input id="search-input" type="search" placeholder="Search tools, tags, and notes..." autocomplete="off" />
             </label>
             <div class="filter-row">
               <div class="filter-group" id="category-filters" aria-label="Category filters"></div>
             </div>
             <div class="advanced-filters" id="advanced-filters">
-              <div class="select-field"><label for="pricing-filter">Цена</label><select id="pricing-filter"><option value="">Любая</option><option value="free">Бесплатно</option><option value="mid">Средне</option><option value="expensive">Дорого</option></select></div>
-              <div class="select-field"><label for="platform-filter">Платформа</label><select id="platform-filter"><option value="">Любая</option><option value="web">Web</option><option value="desktop">Desktop</option><option value="cli">CLI</option><option value="vscode">VS Code</option><option value="api">API</option></select></div>
-              <button class="clear-button inline-clear-button" id="clear-filters" type="button" hidden>Сбросить</button>
+              <div class="select-field"><label for="pricing-filter">Price</label><select id="pricing-filter"><option value="">Any</option><option value="free">Free</option><option value="mid">Mid-range</option><option value="expensive">Expensive</option></select></div>
+              <div class="select-field"><label for="platform-filter">Platform</label><select id="platform-filter"><option value="">Any</option><option value="web">Web</option><option value="desktop">Desktop</option><option value="cli">CLI</option><option value="vscode">VS Code</option><option value="api">API</option></select></div>
+              <button class="clear-button inline-clear-button" id="clear-filters" type="button" hidden>Clear</button>
             </div>
           </section>
 
           <section class="results-head">
-            <div><h2 id="results-title">Все инструменты</h2><span class="results-count" id="results-count">0</span></div>
-            <label class="sort-control" for="sort-select">Сортировка <select id="sort-select"><option value="recent">Недавно добавленные</option><option value="name">По названию</option><option value="category">По категории</option></select></label>
+            <div><h2 id="results-title">All tools</h2><span class="results-count" id="results-count">0</span></div>
+            <label class="sort-control" for="sort-select">Sort <select id="sort-select"><option value="recent">Recently added</option><option value="name">By name</option><option value="category">By category</option></select></label>
           </section>
 
           <section class="tools-grid" id="tools-grid" aria-live="polite"></section>
           <section class="empty-state" id="empty-state" hidden>
             <div class="empty-icon" data-icon="search"></div>
-            <h2>Инструментов пока нет</h2>
+            <h2>No tools yet</h2>
             <p></p>
-            <button class="button button-primary" id="empty-action" type="button">Добавить инструмент</button>
+            <button class="button button-primary" id="empty-action" type="button">Suggest a tool</button>
           </section>
 
           <section class="detail-view" id="detail-view" hidden></section>
@@ -80,67 +80,67 @@
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <dialog class="tool-dialog" id="tool-dialog" aria-labelledby="tool-dialog-title">
       <div class="tool-form">
-        <div class="dialog-header"><div><p class="kicker">НОВАЯ ЗАПИСЬ</p><h2 id="tool-dialog-title">Добавить инструмент</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Закрыть">×</button></div>
-        <div class="add-mode-tabs" role="tablist" aria-label="Способ добавления">
+        <div class="dialog-header"><div><p class="kicker">NEW SUBMISSION</p><h2 id="tool-dialog-title">Suggest a tool</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button></div>
+        <div class="add-mode-tabs" role="tablist" aria-label="Submission method">
           <button class="add-mode-tab is-active" type="button" data-add-mode="quick" role="tab" aria-selected="true">Quick Add</button>
           <button class="add-mode-tab" type="button" data-add-mode="manual" role="tab" aria-selected="false">Manual</button>
           <button class="add-mode-tab" type="button" data-add-mode="json" role="tab" aria-selected="false">JSON Import</button>
         </div>
         <form class="add-panel" id="quick-add-form" data-add-panel="quick">
-          <p class="add-panel-copy">Вставь ссылку. Мы подставим URL, домен, favicon и предложим название — затем проверь данные в редакторе.</p>
-          <label class="form-field form-field-wide"><span>URL инструмента</span><input id="quick-url" name="quick-url" type="url" required placeholder="https://..." /></label>
-          <div class="dialog-actions"><button class="button button-primary" type="submit">Подготовить данные</button></div>
-          <p class="importer-hint">Для полного анализа страницы локально: <code>npm run add-tool -- &lt;url&gt;</code></p>
+          <p class="add-panel-copy">Paste a link. We will prefill the URL, domain, favicon, and a suggested name, then you can review it in the editor.</p>
+          <label class="form-field form-field-wide"><span>Tool URL</span><input id="quick-url" name="quick-url" type="url" required placeholder="https://..." /></label>
+          <div class="dialog-actions"><button class="button button-primary" type="submit">Prepare details</button></div>
+          <p class="importer-hint">For a complete local page analysis: <code>npm run add-tool -- &lt;url&gt;</code></p>
         </form>
         <form class="add-panel" id="tool-form" data-add-panel="manual" hidden>
-          <p class="add-panel-copy">Проверь поля и дополни только то, что действительно нужно.</p>
+          <p class="add-panel-copy">Review the fields and add only what is genuinely needed.</p>
           <div class="form-grid">
-          <label class="form-field form-field-wide"><span>Название *</span><input name="name" required maxlength="80" placeholder="Например, Cursor" /></label>
-          <label class="form-field"><span>Категория *</span><select name="category" required></select></label>
-          <label class="form-field"><span>Цена</span><select name="pricing"></select></label>
-          <label class="form-field form-field-wide"><span>Короткое описание</span><textarea name="description" rows="3" maxlength="300" placeholder="Что это и зачем тебе нужно"></textarea></label>
-          <label class="form-field form-field-wide"><span>Ссылка</span><input name="url" type="url" placeholder="https://..." /></label>
-          <label class="form-field"><span>Домен</span><input name="domain" placeholder="cursor.com" /></label>
+          <label class="form-field form-field-wide"><span>Name *</span><input name="name" required maxlength="80" placeholder="For example, Cursor" /></label>
+          <label class="form-field"><span>Category *</span><select name="category" required></select></label>
+          <label class="form-field"><span>Price</span><select name="pricing"></select></label>
+          <label class="form-field form-field-wide"><span>Short description</span><textarea name="description" rows="3" maxlength="300" placeholder="What it is and why it is useful"></textarea></label>
+          <label class="form-field form-field-wide"><span>Website</span><input name="url" type="url" placeholder="https://..." /></label>
+          <label class="form-field"><span>Domain</span><input name="domain" placeholder="cursor.com" /></label>
           <label class="form-field"><span>Favicon / logo URL</span><input name="favicon" type="url" placeholder="https://.../favicon.ico" /></label>
-          <fieldset class="form-field form-field-wide"><legend>Платформы</legend><div class="platform-options"><label><input type="checkbox" name="platforms" value="web" /> Web</label><label><input type="checkbox" name="platforms" value="desktop" /> Desktop</label><label><input type="checkbox" name="platforms" value="cli" /> CLI</label><label><input type="checkbox" name="platforms" value="vscode" /> VS Code</label><label><input type="checkbox" name="platforms" value="api" /> API</label></div></fieldset>
-          <label class="form-field form-field-wide"><span>Теги</span><input name="tags" placeholder="coding, cli, research" /></label>
-          <label class="form-field"><span>Установка</span><input name="install" placeholder="npm install ..." /></label>
-          <label class="form-field"><span>Запуск</span><input name="start" placeholder="команда запуска" /></label>
-          <label class="form-field form-field-wide"><span>Модели</span><input name="models" placeholder="Через запятую, если нужно" /></label>
+          <fieldset class="form-field form-field-wide"><legend>Platforms</legend><div class="platform-options"><label><input type="checkbox" name="platforms" value="web" /> Web</label><label><input type="checkbox" name="platforms" value="desktop" /> Desktop</label><label><input type="checkbox" name="platforms" value="cli" /> CLI</label><label><input type="checkbox" name="platforms" value="vscode" /> VS Code</label><label><input type="checkbox" name="platforms" value="api" /> API</label></div></fieldset>
+          <label class="form-field form-field-wide"><span>Tags</span><input name="tags" placeholder="coding, cli, research" /></label>
+          <label class="form-field"><span>Install</span><input name="install" placeholder="npm install ..." /></label>
+          <label class="form-field"><span>Start</span><input name="start" placeholder="start command" /></label>
+          <label class="form-field form-field-wide"><span>Models</span><input name="models" placeholder="Comma-separated, if relevant" /></label>
           <label class="form-field"><span>GitHub</span><input name="github" type="url" placeholder="https://github.com/..." /></label>
-          <label class="form-field"><span>Документация</span><input name="docs" type="url" placeholder="https://.../docs" /></label>
-          <label class="form-field form-field-wide"><span>Личная заметка (не публикуется)</span><textarea name="notes" rows="4" placeholder="Это поле не попадёт в публичное предложение"></textarea></label>
+          <label class="form-field"><span>Documentation</span><input name="docs" type="url" placeholder="https://.../docs" /></label>
+          <label class="form-field form-field-wide"><span>Personal note (not published)</span><textarea name="notes" rows="4" placeholder="This field is not included in public submissions"></textarea></label>
           </div>
-          <div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>Отмена</button><button class="button button-primary" type="submit">Добавить инструмент</button></div>
+          <div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>Cancel</button><button class="button button-primary" type="submit">Prepare submission</button></div>
         </form>
         <form class="add-panel" id="json-import-form" data-add-panel="json" hidden>
-          <p class="add-panel-copy">Попроси любую внешнюю AI-модель подготовить JSON по схеме ниже. Встроенного AI API нет: всё работает на статическом сайте.</p>
+          <p class="add-panel-copy">Ask any external AI model to prepare JSON using the schema below. There is no built-in AI API: everything works on this static site.</p>
           <div class="prompt-builder">
-            <label class="form-field form-field-wide"><span>URL инструмента</span><input id="prompt-url" type="url" placeholder="https://..." /></label>
-            <label class="form-field form-field-wide"><span>Контекст (необязательно)</span><textarea id="prompt-context" rows="2" placeholder="Например: нужен для VS Code и локальных CLI-проектов"></textarea></label>
+            <label class="form-field form-field-wide"><span>Tool URL</span><input id="prompt-url" type="url" placeholder="https://..." /></label>
+            <label class="form-field form-field-wide"><span>Context (optional)</span><textarea id="prompt-context" rows="2" placeholder="For example: needed for VS Code and local CLI projects"></textarea></label>
             <label class="form-field form-field-wide"><span>AI Prompt</span><textarea id="ai-prompt" rows="11" readonly spellcheck="false"></textarea></label>
-            <div class="prompt-actions"><button class="button button-secondary" id="copy-ai-prompt" type="button">Copy AI prompt</button><button class="button button-secondary" id="reset-json-import" type="button">Сбросить</button></div>
+            <div class="prompt-actions"><button class="button button-secondary" id="copy-ai-prompt" type="button">Copy AI prompt</button><button class="button button-secondary" id="reset-json-import" type="button">Reset</button></div>
           </div>
-          <label class="form-field form-field-wide"><span>JSON от AI</span><textarea id="json-import-input" name="json-import" rows="12" spellcheck="false" placeholder='{ "id": "tool-name", "name": "Tool name", ... }'></textarea></label>
+          <label class="form-field form-field-wide"><span>JSON from AI</span><textarea id="json-import-input" name="json-import" rows="12" spellcheck="false" placeholder='{ "id": "tool-name", "name": "Tool name", ... }'></textarea></label>
           <div class="validation-errors" id="json-errors" role="alert" hidden></div>
           <div class="json-preview" id="json-preview" hidden></div>
-          <div class="dialog-actions"><button class="button button-secondary" type="button" id="json-validate">Проверить JSON</button><button class="button button-secondary" type="button" id="json-edit-manual" hidden>Редактировать</button><button class="button button-primary" type="button" id="json-import-confirm" hidden>Подготовить предложение</button></div>
+          <div class="dialog-actions"><button class="button button-secondary" type="button" id="json-validate">Validate JSON</button><button class="button button-secondary" type="button" id="json-edit-manual" hidden>Edit</button><button class="button button-primary" type="button" id="json-import-confirm" hidden>Prepare submission</button></div>
         </form>
         <section class="add-panel submission-review" id="submission-review" data-add-panel="review" hidden>
-          <p class="add-panel-copy">Проверь данные перед отправкой. Предложение не появится в каталоге сразу: сначала оно пройдёт модерацию.</p>
+          <p class="add-panel-copy">Review the data before submitting. A proposal does not appear in the catalog immediately: it is moderated first.</p>
           <div class="json-preview" id="submission-preview"></div>
           <div class="duplicate-warning" id="duplicate-warning" hidden></div>
           <div class="submission-instructions" id="submission-instructions"></div>
-          <div class="dialog-actions"><button class="button button-secondary" type="button" id="submission-edit">Вернуться к редактированию</button><button class="button button-primary" type="button" id="submission-open-issue">Скопировать JSON и открыть GitHub Issue</button></div>
+          <div class="dialog-actions"><button class="button button-secondary" type="button" id="submission-edit">Back to editing</button><button class="button button-primary" type="button" id="submission-open-issue">Copy JSON and open GitHub Issue</button></div>
         </section>
       </div>
     </dialog>
     <dialog class="tool-dialog info-dialog" id="info-dialog" aria-labelledby="info-dialog-title">
       <div class="tool-form">
-        <div class="dialog-header"><div><p class="kicker">О ПРОЕКТЕ</p><h2 id="info-dialog-title">AI-Dekrov</h2></div><button class="icon-button" type="button" data-close-info aria-label="Закрыть">×</button></div>
+        <div class="dialog-header"><div><p class="kicker">ABOUT</p><h2 id="info-dialog-title">AI-Dekrov</h2></div><button class="icon-button" type="button" data-close-info aria-label="Close">×</button></div>
         <div class="info-content">
-          <p>Личный склад AI-инструментов: место, где можно сохранять сервисы, агенты, модели и команды, чтобы быстро находить нужное.</p>
-          <p>Добавляй инструменты через кнопку в шапке, отмечай избранное и используй поиск с фильтрами.</p>
+          <p>A public AI tools library: a place to discover and return to useful services, agents, models, and commands.</p>
+          <p>Suggest tools using the button in the header, save favorites, and use search and filters to find what you need.</p>
           <div class="info-links">
             <a class="button button-primary" href="https://dekrov.com" target="_blank" rel="noreferrer">dekrov.com <span aria-hidden="true">↗</span></a>
             <a class="button button-secondary" href="https://github.com/DekrovDev" target="_blank" rel="noreferrer">GitHub · DekrovDev <span aria-hidden="true">↗</span></a>

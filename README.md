@@ -1,40 +1,39 @@
 # AI-Dekrov
 
-**[Открыть каталог →](https://ai.dekrov.com)**
+**[Open the catalog →](https://ai.dekrov.com)**
 
-AI-Dekrov — открытый каталог AI-инструментов: сервисов, coding agents, моделей, CLI, приложений и платформ, которые стоит знать и к которым удобно возвращаться.
+AI-Dekrov is a public catalog of useful AI tools: services, coding agents, models, CLIs, desktop applications, and platforms worth knowing about.
 
-Здесь можно быстро найти нужный инструмент, посмотреть официальные ссылки, платформы, цену, команды установки и краткое описание — без лишнего шума.
+Browse trusted links, supported platforms, pricing, install commands, and short factual descriptions without unnecessary noise.
 
-## Что есть в каталоге
+## Explore the catalog
 
-- поиск по названию, описанию, тегам и категориям;
-- категории для coding agents, LLM, research, audio, dev tools, hosting и другого;
-- фильтры по цене и платформам: Web, Desktop, CLI, VS Code и API;
-- избранное и тема интерфейса, сохранённые только в браузере;
-- отдельная страница каждого инструмента с официальными ссылками и командами.
+- Search by name, description, tag, category, platform, or model.
+- Filter by price and platform: Web, Desktop, CLI, VS Code, and API.
+- Save favorites and your theme preference in your own browser.
+- Open a dedicated page for every tool, with its official links and commands.
 
-## Предложить инструмент
+## Suggest a tool
 
-На сайте нажми **«Предложить инструмент»** и выбери удобный способ:
+Click **Suggest a tool** on the website and choose the fastest option:
 
-- **Quick Add** — вставь URL и быстро заполни карточку;
-- **Manual** — заполни данные вручную;
-- **JSON Import** — используй AI Prompt Builder, чтобы внешняя модель подготовила JSON по схеме.
+- **Quick Add** starts with a URL and pre-fills dependable details.
+- **Manual** is a full editor for entering the tool details yourself.
+- **JSON Import** includes an AI Prompt Builder: use an external model to prepare schema-valid JSON, validate it here, then submit it for review.
 
-Перед публикацией каждое предложение проходит проверку: валидность данных, ссылки, формат идентификатора и возможные дубликаты. После модерации создаётся Pull Request, который проверяется и мержится вручную.
+Suggestions are checked for valid JSON, URLs, enums, IDs, and potential duplicates. A moderator reviews the result before it can become a pull request. Nothing is published automatically.
 
-Можно также открыть [форму предложения на GitHub](https://github.com/DekrovDev/AI-tools-Dekrov/issues/new?template=tool-submission.yml).
+You can also use the [GitHub submission form](https://github.com/DekrovDev/AI-tools-Dekrov/issues/new?template=tool-submission.yml).
 
-## Принципы каталога
+## Principles
 
-- Только реальные инструменты и проверяемые официальные ссылки.
-- Неизвестные данные остаются пустыми — ничего не придумывается.
-- Публичный каталог хранится в репозитории и одинаков для всех.
-- Предложения не публикуются автоматически.
+- Entries should describe real tools and use verifiable official sources.
+- Unknown information stays empty rather than being invented.
+- The public catalog lives in this repository and is the same for every visitor.
+- Personal notes are never included in public submissions.
 
-## Проект
+## Project
 
-Сайт работает как статический проект на GitHub Pages. Исходный код и публичные данные находятся в этом репозитории.
+AI-Dekrov is a static GitHub Pages project. Its public data and source code live in this repository.
 
-Сделано Dekrov — [dekrov.com](https://dekrov.com) · [GitHub](https://github.com/DekrovDev)
+Made by Dekrov — [dekrov.com](https://dekrov.com) · [GitHub](https://github.com/DekrovDev)

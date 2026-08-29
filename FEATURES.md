@@ -1,153 +1,82 @@
-# AI-Dekrov: функции сайта
+# AI-Dekrov feature guide
 
-AI-Dekrov — личный склад AI-инструментов. Здесь можно сохранять сервисы, coding agents, модели, CLI-команды и полезные ссылки, а затем быстро находить их через поиск и фильтры.
+AI-Dekrov is a static, public AI tools catalog. Its purpose is to make useful tools easy to discover, compare, and return to.
 
-## Главный экран
+## Catalog and navigation
 
-На главной странице показаны все добавленные инструменты. У каждой карточки есть название, категория, краткое описание, теги, цена, ссылка на подробную страницу и кнопка избранного.
+The main screen lists every published tool. Each card includes a name, category, description, tags, price, a detail link, and a favorite button.
 
-Карточка открывает подробную страницу инструмента по ссылке вида `#/tools/<id>`.
+Tools are grouped into these categories:
 
-## Поиск
+- Coding agents
+- Orchestration
+- Chat / LLM
+- Research
+- Audio
+- Dev tools
+- Hosting / Infrastructure
+- Other
 
-Поиск находится в верхней части каталога. Он ищет одновременно по:
+Categories appear in the navigation only when they contain at least one published tool.
 
-- названию;
-- описанию;
-- категории;
-- тегам;
-- платформам;
-- моделям;
-- личной заметке.
+## Search, filters, and sorting
 
-Для быстрого перехода в поиск работает `Ctrl + K` на Windows/Linux и `Cmd + K` на macOS.
+Search looks through names, descriptions, categories, tags, platforms, models, and notes. Use `Ctrl + K` on Windows/Linux or `Cmd + K` on macOS to focus search.
 
-## Категории
+The catalog can be filtered by price and platform, then sorted by recently added, name, or category. Clear appears next to the filters whenever a search or filter is active.
 
-Инструменты группируются по категориям. Категории появляются в боковом меню автоматически, только когда в них есть хотя бы один инструмент.
+## Favorites and theme
 
-Доступные категории:
+Visitors can favorite tools and switch between light and dark themes. These preferences are stored only in that visitor's browser and do not change the public catalog.
 
-- Кодинг-агенты;
-- Оркестрация;
-- Чат / LLM;
-- Исследования;
-- Аудио;
-- Dev tools;
-- Хостинг / Инфра;
-- Другое.
+## Tool pages
 
-Категорию можно открыть из бокового меню или выбрать под строкой поиска.
+Each tool has a readable hash URL such as `#/tools/tool-id`. Its detail page can show an official website, price, platforms, install and start commands, additional commands, supported models, documentation, GitHub, tags, and a domain.
 
-## Фильтры и сортировка
+## Suggesting a tool
 
-Под поиском доступны фильтры:
-
-- цена: «Бесплатно», «Средне», «Дорого»;
-- платформа: Web, Desktop, CLI, VS Code или API.
-
-Кнопка «Сбросить» появляется рядом с фильтрами, если хотя бы один фильтр или поисковый запрос активен.
-
-Сортировка позволяет показать записи по дате добавления, названию или категории.
-
-## Избранное
-
-Звёздочка на карточке или подробной странице добавляет инструмент в избранное. Раздел «Избранное» находится в боковом меню.
-
-Избранное сохраняется только в текущем браузере.
-
-## Подробная страница инструмента
-
-Подробная страница показывает все заполненные данные:
-
-- официальный сайт;
-- цена и платформы;
-- личная заметка;
-- команды установки и запуска с кнопкой копирования;
-- модели;
-- GitHub и документацию;
-- теги и домен.
-
-Если поле не заполнено, оно не перегружает страницу.
-
-## Предложение инструмента
-
-Кнопка «Предложить инструмент» открывает три режима. Она не добавляет запись в каталог напрямую: после preview пользователь создаёт GitHub Issue для модерации. Если закрыть окно через «Отмена», крестик, Escape или клик по фону, весь незавершённый черновик очищается.
+The **Suggest a tool** dialog has three modes. It prepares a submission instead of changing the catalog directly. Closing the dialog clears unfinished data.
 
 ### Quick Add
 
-Вставь URL инструмента и нажми «Подготовить данные». Сайт безопасно подставит то, что можно получить без внешнего запроса из браузера:
+Paste a tool URL and choose **Prepare details**. The browser safely derives what it can without reading the external page: URL, domain, a suggested favicon URL, a suggested name, and the Web platform. Review and complete the result in Manual mode.
 
-- URL;
-- домен;
-- предполагаемый favicon URL;
-- предложенное имя из домена;
-- платформу Web.
-
-После этого откроется Manual, где данные можно проверить и дополнить. Quick Add не пытается читать чужую страницу из браузера, поэтому не ломается на GitHub Pages из-за CORS.
+Quick Add does not fetch third-party pages in the browser, so it remains reliable on GitHub Pages without CORS workarounds.
 
 ### Manual
 
-Это подробный ручной редактор. В нём можно заполнить:
+Use the full editor for the name, category, price, description, URLs, platforms, tags, commands, models, GitHub, documentation, and an optional personal note.
 
-- название, категорию и цену;
-- описание, сайт, домен и favicon/logo URL;
-- платформы и теги;
-- команды установки и запуска;
-- модели;
-- GitHub и документацию;
-- личную заметку.
+The personal note is never included in a public submission.
 
-После проверки открывается экран submission preview. Сайт копирует JSON и открывает официальную GitHub Issue Form; для отправки нужен GitHub account. Предложение появляется в каталоге только после проверки, approval PR и ручного merge.
+### JSON Import and AI Prompt Builder
 
-### JSON Import + AI Prompt Builder
+Enter a URL and optional context. The site builds a prompt from [`data/tool-schema.json`](data/tool-schema.json), so the schema does not need to be copied or maintained in multiple places.
 
-Этот режим нужен, когда информацию об инструменте удобнее собрать внешней AI-моделью.
+Copy the prompt into an external AI model, paste the returned JSON back into the site, validate it, review the readable preview, and edit it if necessary. The prompt requires one valid JSON object with no Markdown or explanations, only allowed enum values, empty values for unknown facts, a kebab-case ID, and an empty `notes` value.
 
-Рабочий порядок:
+## Public submission and moderation
 
-1. Вставь URL и, при желании, дополнительный контекст.
-2. Сайт создаст готовый prompt.
-3. Нажми `Copy AI prompt`.
-4. Отправь prompt в ChatGPT, DeepSeek, Gemini или другую модель.
-5. Вставь полученный JSON в поле «JSON от AI».
-6. Нажми «Проверить JSON».
-7. Сайт покажет ошибки либо отформатирует JSON и покажет preview.
-8. При необходимости нажми «Редактировать», чтобы открыть данные в Manual.
-9. Нажми «Подготовить предложение», затем скопируй JSON и отправь его через GitHub Issue Form.
+After review, the site copies the JSON and opens the official GitHub Issue Form. A GitHub account is required to submit it.
 
-Prompt требует от AI вернуть только валидный JSON без Markdown и объяснений, не придумывать неизвестные данные, соблюдать доступные enum-значения и оставить `notes` пустым. Личную заметку заполняет только пользователь.
+The validation Action checks JSON, schema, URLs, enum values, IDs, and possible duplicates by ID, URL, domain, and similar name. It leaves a result comment on the Issue.
 
-## Локальный Node.js importer
+Moderators use `pending`, `needs-changes`, `approved`, `rejected`, and `duplicate` states. Adding the `approved` label creates a reviewable pull request with the proposed change, but never merges it automatically.
 
-Для более полного автоматического анализа страницы есть локальная команда:
+Each tool detail page also includes **Suggest an update**, which opens an update submission bound to the existing tool ID. See [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`MODERATION.md`](MODERATION.md) for the complete workflow.
+
+## Local owner importer
+
+For a fuller metadata analysis, the owner can run:
 
 ```bash
 npm run add-tool -- https://example.com
 ```
 
-Она запускается на компьютере владельца, а не на GitHub Pages. Скрипт скачивает публичную страницу и пытается найти metadata, favicon, GitHub/docs-ссылки, платформы, команды и теги. Затем он показывает preview, просит уточнить категорию и цену и сохраняет запись в canonical `data/tools.json` только после подтверждения.
+The local Node.js script downloads a public page and attempts to find metadata, favicon, GitHub/docs links, platforms, commands, and relevant tags. It shows a preview, asks for category and pricing, and writes to canonical `data/tools.json` only after confirmation.
 
-Если PowerShell блокирует команду `npm`, используй `npm.cmd run add-tool -- https://example.com`.
+## Data storage
 
-## Хранение данных
+[`data/tools.json`](data/tools.json) is the one public catalog database. GitHub Pages publishes the same merged data to every visitor.
 
-[`data/tools.json`](data/tools.json) в репозитории — единственная public database. После merge в основную ветку GitHub Pages публикует одинаковый каталог для всех посетителей.
-
-`localStorage` используется только для темы, избранного, UI-предпочтений и незавершённых черновиков. Он никогда не хранит опубликованные инструменты.
-
-## Схема данных
-
-[`data/tool-schema.json`](data/tool-schema.json) — единый источник структуры инструмента. Из него строятся enum-значения формы, проверка JSON Import и AI prompt. GitHub Action использует ту же схему для Issue submissions. Это защищает сайт от расхождения между формой, prompt и валидатором.
-
-## Модерация и обновления
-
-GitHub Action проверяет каждый submission: JSON, schema, URL, enum-значения, id и возможные дубликаты по id, URL, домену и похожему названию. Результат виден комментарием в Issue.
-
-Модератор использует состояния `pending`, `needs-changes`, `approved`, `rejected` и `duplicate`. Label `approved` создаёт Pull Request с изменением `data/tools.json`, но никогда не делает merge автоматически.
-
-На подробной странице инструмента есть «Предложить изменение». Она создаёт update submission с привязкой к существующему tool id. Подробнее: [`CONTRIBUTING.md`](CONTRIBUTING.md) и [`MODERATION.md`](MODERATION.md).
-
-## Тема и информация о проекте
-
-В шапке есть переключатель светлой/тёмной темы. Кнопка информации открывает краткое описание проекта и ссылки на [dekrov.com](https://dekrov.com) и [GitHub DekrovDev](https://github.com/DekrovDev).
+`localStorage` is used only for theme, favorites, UI preferences, and unfinished drafts. It never stores published tools.

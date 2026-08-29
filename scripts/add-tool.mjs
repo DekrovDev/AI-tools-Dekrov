@@ -35,7 +35,7 @@ try {
   console.log("\nPreview:\n");
   console.log(JSON.stringify(tool, null, 2));
   const confirm = (await rl.question("\nAdd this tool to data/tools.json? [y/N] ")).trim().toLowerCase();
-  if (!["y", "yes", "д", "да"].includes(confirm)) {
+  if (!["y", "yes"].includes(confirm)) {
     console.log("Nothing was written.");
     process.exit(0);
   }
@@ -160,10 +160,7 @@ function friendlyName(value, domain) {
   return cleaned || domain.split(".")[0];
 }
 
-function slugify(value) {
-  const transliteration = { а: "a", б: "b", в: "v", г: "g", д: "d", е: "e", ё: "e", ж: "zh", з: "z", и: "i", й: "y", к: "k", л: "l", м: "m", н: "n", о: "o", п: "p", р: "r", с: "s", т: "t", у: "u", ф: "f", х: "h", ц: "ts", ч: "ch", ш: "sh", щ: "sch", ъ: "", ы: "y", ь: "", э: "e", ю: "yu", я: "ya" };
-  return value.toLowerCase().split("").map((letter) => transliteration[letter] ?? letter).join("").normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "tool";
-}
+function slugify(value) { return value.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "tool"; }
 
 function extractTool(url, html) {
   const domain = url.hostname.replace(/^www\./, "");
