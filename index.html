@@ -52,17 +52,20 @@
           </section>
 
           <section class="toolbar" aria-label="Search and filters">
-            <div class="toolbar-primary">
+            <div class="toolbar-top">
               <label class="search-box" for="search-input">
                 <span data-icon="search"></span>
                 <input id="search-input" type="search" placeholder="Search tools, tags, and notes..." autocomplete="off" />
               </label>
+              <label class="sort-control" for="sort-select"><span>Sort by</span><select id="sort-select"><option value="recent">Recently added</option><option value="name">By name</option><option value="category">By category</option></select></label>
+            </div>
+            <div class="toolbar-filters">
+              <span class="filter-label">Filter</span>
+              <div class="filter-group" id="category-filters" aria-label="Category filters"></div>
               <div class="select-field"><label for="pricing-filter">Price</label><select id="pricing-filter"><option value="">Any</option></select></div>
               <div class="select-field"><label for="platform-filter">Platform</label><select id="platform-filter"><option value="">Any</option></select></div>
-              <label class="sort-control" for="sort-select"><span>Sort</span><select id="sort-select"><option value="recent">Recently added</option><option value="name">By name</option><option value="category">By category</option></select></label>
               <button class="clear-button inline-clear-button" id="clear-filters" type="button" hidden>Clear</button>
             </div>
-            <div class="filter-row"><div class="filter-group" id="category-filters" aria-label="Category filters"></div></div>
           </section>
 
           <section class="results-head">
