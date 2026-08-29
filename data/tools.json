@@ -191,5 +191,77 @@
     "sources": [
       "https://groq.com/"
     ]
+  },
+  {
+    "id": "cerebras",
+    "name": "Cerebras",
+    "category": "chat-llm",
+    "description": "Cerebras provides ultra-fast AI inference and training through its wafer-scale chip architecture and cloud platform, supporting leading open-source models.",
+    "bestFor": [
+      "Developers needing high-speed AI inference",
+      "Enterprises requiring low-latency model deployment",
+      "AI researchers training large language models"
+    ],
+    "strengths": [
+      "World's fastest AI inference, up to 15x faster than GPU-based systems",
+      "Wafer-scale architecture unifies compute, memory, and bandwidth on a single chip",
+      "OpenAI-compatible API with Python and TypeScript SDKs",
+      "Supports models from leading open-source families including Llama, Qwen, and DeepSeek"
+    ],
+    "gettingStarted": [
+      "Sign up at cloud.cerebras.ai",
+      "Generate an API key from the Cerebras platform",
+      "Make your first API call using the OpenAI-compatible endpoint"
+    ],
+    "usageNotes": [
+      "Cerebras Inference offers a free trial with $5 in credits after account creation",
+      "Developer tier pay-per-token pricing starts at $0.35 per million input tokens and $0.75 per million output tokens for GPT OSS 120B",
+      "Playground allows testing models and prompts directly in the browser without code",
+      "Supports tool/function calling, structured outputs, and streaming responses",
+      "Available through partner clouds including AWS Marketplace and Hugging Face"
+    ],
+    "url": "https://www.cerebras.ai/",
+    "domain": "www.cerebras.ai",
+    "favicon": "",
+    "platforms": [
+      "web",
+      "vscode",
+      "api"
+    ],
+    "pricing": "freemium",
+    "priceDetails": "Free tier with $5 credits; Developer tier pay-per-token from $0.35/M input tokens; Pro $50/month; Enterprise custom pricing",
+    "tags": [
+      "AI inference",
+      "wafer-scale",
+      "large language models",
+      "cloud computing",
+      "AI training"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [
+      "GPT OSS 120B",
+      "Gemma 4 31B",
+      "Llama 3.1 8B",
+      "Llama 3.3 70B",
+      "Qwen 3 32B",
+      "Qwen 3 235B Instruct",
+      "Kimi K2.6",
+      "GLM 5.1",
+      "GLM 4.7",
+      "DeepSeek",
+      "Cerebras-GPT (111M to 13B parameters)"
+    ],
+    "github": "https://github.com/cerebras",
+    "docs": "https://inference-docs.cerebras.ai",
+    "addedAt": "2026-08-29",
+    "updatedAt": "2026-08-29",
+    "lastVerifiedAt": "2026-08-29",
+    "sources": [
+      "https://www.cerebras.ai/",
+      "https://github.com/cerebras",
+      "https://inference-docs.cerebras.ai"
+    ]
   }
 ]
