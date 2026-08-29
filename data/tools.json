@@ -532,5 +532,71 @@
       "https://github.com/xai-org/grok-build",
       "https://docs.x.ai/build/overview"
     ]
+  },
+  {
+    "id": "github-copilot",
+    "name": "GitHub Copilot",
+    "category": "coding-agents",
+    "description": "An AI-powered coding assistant developed by GitHub that provides code completions and chat-based support to help developers write code faster and more efficiently .",
+    "bestFor": [
+      "Code completion and autocomplete suggestions",
+      "Code explanation and debugging via chat",
+      "Generating unit tests and boilerplate code",
+      "Pull request assistance and code reviews"
+    ],
+    "strengths": [
+      "Integrates with popular IDEs such as Visual Studio Code, JetBrains, Visual Studio, and more",
+      "Offers multi-model support, including access to models from Anthropic and OpenAI",
+      "Supports agentic workflows for autonomous code editing and task completion"
+    ],
+    "gettingStarted": [
+      "Install the GitHub Copilot extension for your preferred IDE (e.g., Visual Studio Code, JetBrains, Vim/Neovim, Eclipse, Xcode)",
+      "Sign up for an individual plan or request access through an organization",
+      "Start using Copilot by typing code in your IDE to see autocomplete suggestions, or open the Copilot Chat interface"
+    ],
+    "usageNotes": [
+      "Features and availability depend on the subscription plan (Free, Pro, Pro+, Business, Enterprise)",
+      "Copilot Free offers limited access; some features like GitHub Skills and PR summaries are not included",
+      "Paid plans provide expanded model access, agentic workflows, and enterprise-grade features"
+    ],
+    "url": "https://github.com/features/copilot",
+    "domain": "github.com",
+    "favicon": "https://github.githubassets.com/favicons/favicon.png",
+    "platforms": [
+      "vscode",
+      "desktop",
+      "browser-extension",
+      "cli",
+      "api"
+    ],
+    "pricing": "freemium",
+    "priceDetails": "Free plan available; paid plans start at approximately $10/month",
+    "tags": [
+      "AI coding assistant",
+      "code completion",
+      "agentic workflow",
+      "pair programming"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [
+      "OpenAI GPT",
+      "GPT-Codex",
+      "Anthropic Claude",
+      "Anthropic Opus",
+      "Anthropic Haiku",
+      "Gemini Flash",
+      "Gemini Pro"
+    ],
+    "github": "https://github.com/features/copilot",
+    "docs": "https://docs.github.com/en/copilot",
+    "addedAt": "2026-08-29",
+    "updatedAt": "2026-08-29",
+    "lastVerifiedAt": "2026-08-29",
+    "sources": [
+      "https://github.com/features/copilot",
+      "https://docs.github.com/en/copilot"
+    ]
   }
 ]
