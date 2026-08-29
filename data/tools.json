@@ -103,7 +103,7 @@
   {
     "id": "openrouter",
     "name": "OpenRouter",
-    "category": "coding-agents",
+    "category": "dev-tools",
     "description": "The unified interface for every model. Find the best models & prices for your prompts",
     "bestFor": [
       "AI-assisted software development"
@@ -126,8 +126,8 @@
       "cli",
       "api"
     ],
-    "pricing": "usage-based",
-    "priceDetails": "",
+    "pricing": "freemium",
+    "priceDetails": "25+ free models · Free tier available · Paid models are pay-as-you-go",
     "tags": [
       "coding",
       "agent",
