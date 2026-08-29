@@ -160,5 +160,88 @@
       "https://openrouter.ai/",
       "https://github.com/OpenRouterTeam"
     ]
+  },
+  {
+    "id": "groq",
+    "name": "Groq",
+    "category": "chat-llm",
+    "description": "Groq is an AI inference platform that provides fast, low-latency access to large language models via its custom Language Processing Unit (LPU) silicon and the GroqCloud API.",
+    "bestFor": [
+      "Developers seeking fast, low-latency LLM inference",
+      "Teams needing scalable, cost-effective AI deployment",
+      "Organizations requiring on-premise or private cloud AI solutions"
+    ],
+    "strengths": [
+      "Industry-leading tokens-per-second performance",
+      "OpenAI-compatible API for easy migration",
+      "Custom-built LPU for deterministic, low-latency inference",
+      "Competitive per-token pricing",
+      "Flexible deployment options (public, private, co-cloud, on-premise)"
+    ],
+    "gettingStarted": [
+      "Visit console.groq.com/keys to create an API key.",
+      "Set the GROQ_API_KEY environment variable in your terminal: export GROQ_API_KEY=<your-api-key-here>.",
+      "Install the Groq Python library: pip install groq.",
+      "Make your first chat completion request using the Python client or a tool like curl."
+    ],
+    "usageNotes": [
+      "Free tier is rate-limited (e.g., around 30 requests per minute, 6,000 tokens per minute on most models).",
+      "Paid Developer Tier offers higher rate limits (up to 10x the free tier), batch processing at a 25% discount, and access to the Flex Tier.",
+      "The Flex Tier (beta) provides 10x rate limits on selected models with on-demand processing.",
+      "Enterprise tier offers custom models, regional endpoints, dedicated support, and LoRA fine-tuning.",
+      "Compound is an agentic AI system available on GroqCloud that integrates web search, code execution, browser automation, and Wolfram Alpha."
+    ],
+    "url": "https://groq.com/",
+    "domain": "groq.com",
+    "favicon": "",
+    "platforms": [
+      "web",
+      "api"
+    ],
+    "pricing": "freemium",
+    "priceDetails": "Free tier available. Paid Developer Tier offers pay-as-you-go token-based pricing. Input token prices range from $0.05 per million tokens (Llama 3.1 8B) to $0.59 per million tokens (Llama 3.3 70B), with output tokens at $0.08 to $0.79 per million.",
+    "tags": [
+      "AI inference",
+      "LPU",
+      "large language models",
+      "API",
+      "cloud",
+      "neocloud"
+    ],
+    "install": "pip install groq",
+    "start": "",
+    "commands": [
+      {
+        "label": "Set API key",
+        "command": "export GROQ_API_KEY=<your-api-key-here>"
+      },
+      {
+        "label": "Python chat completion",
+        "command": "from groq import Groq; client = Groq(api_key=os.environ.get(\"GROQ_API_KEY\")); chat_completion = client.chat.completions.create(messages=[{\"role\": \"user\", \"content\": \"Explain the importance of fast language models\"}], model=\"llama-3.3-70b-versatile\"); print(chat_completion.choices[0].message.content)"
+      }
+    ],
+    "models": [
+      "Llama 3 8B",
+      "Llama 3 70B",
+      "Llama 3.1 8B",
+      "Llama 3.1 70B",
+      "Llama 3.1 405B",
+      "Llama 3.3 70B",
+      "Llama 4 Scout",
+      "DeepSeek R1 Distill Llama 70B",
+      "Whisper Large v3",
+      "Orpheus",
+      "GPT OSS"
+    ],
+    "github": "https://github.com/groq/groq-python",
+    "docs": "https://console.groq.com/docs",
+    "addedAt": "2026-08-29",
+    "updatedAt": "2026-08-29",
+    "lastVerifiedAt": "2026-08-29",
+    "sources": [
+      "https://groq.com/",
+      "https://github.com/groq/groq-python",
+      "https://console.groq.com/docs"
+    ]
   }
 ]
