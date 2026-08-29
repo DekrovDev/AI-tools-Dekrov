@@ -744,5 +744,88 @@
       "https://github.com/cline/cline",
       "https://docs.cline.ai"
     ]
+  },
+  {
+    "id": "kilo-code",
+    "name": "Kilo Code",
+    "category": "coding-agents",
+    "description": "An open-source AI coding agent that works in VS Code, JetBrains IDEs, and the CLI, enabling natural language code generation, editing, debugging, and automation with access to over 500 AI models.",
+    "bestFor": [
+      "Developers seeking an open-source, model-agnostic coding agent",
+      "Teams wanting to avoid vendor lock-in and pay model providers directly",
+      "Users who work across multiple IDEs (VS Code, JetBrains) and the CLI",
+      "Cost-conscious teams wanting to switch between models based on task complexity"
+    ],
+    "strengths": [
+      "Open-source and MIT-licensed with over 25,000 GitHub stars",
+      "Supports 500+ AI models with zero markup on provider costs, allowing mid-task model switching",
+      "Works across multiple surfaces: VS Code, JetBrains, CLI, web, and Slack",
+      "Offers specialized agent modes (Plan, Code, Debug, Ask) with an Orchestrator for subagent delegation",
+      "Trusted by teams at Meta, Amazon, and Airbnb"
+    ],
+    "gettingStarted": [
+      "Install the Kilo Code extension from the VS Code Marketplace .",
+      "Install the plugin from the JetBrains Marketplace or search for 'Kilo Code' in Settings → Plugins .",
+      "For CLI: Run `npm install -g @kilocode/cli` or use `curl -fsSL https://kilo.ai/cli/install | bash` .",
+      "Create an account and connect an AI provider via a bring-your-own-key or use Kilo's built-in provider ."
+    ],
+    "usageNotes": [
+      "Features an inline autocomplete with ghost-text suggestions",
+      "Supports autonomous mode for CI/CD pipelines using the `--auto` flag",
+      "Project context can be stored in an `AGENTS.md` file for continuity",
+      "Supports Model Context Protocol (MCP) servers for extended functionality"
+    ],
+    "url": "https://kilo.ai/",
+    "domain": "kilo.ai",
+    "favicon": "",
+    "platforms": [
+      "vscode",
+      "cli",
+      "web",
+      "desktop"
+    ],
+    "pricing": "freemium",
+    "priceDetails": "Free tier for the open-source extension with BYOK models; Kilo Pass managed inference starts at $19 per month . Teams plan at $15 per user per month .",
+    "tags": [
+      "open-source",
+      "ai-coding-agent",
+      "vscode",
+      "jetbrains",
+      "cli",
+      "multi-model",
+      "byok",
+      "autonomous",
+      "code-generation",
+      "debugging"
+    ],
+    "install": "npm install -g @kilocode/cli",
+    "start": "kilo",
+    "commands": [
+      {
+        "label": "Run with autonomous mode",
+        "command": "kilo run --auto \"run tests and fix any failures\""
+      }
+    ],
+    "models": [
+      "Claude 4.6 Sonnet",
+      "Claude Opus 4.7",
+      "GPT-5.5",
+      "Gemini 3.1 Pro Preview",
+      "Qwen 3.6",
+      "Kimi K2.5",
+      "MiMo V2",
+      "DeepSeek",
+      "Ollama"
+    ],
+    "github": "https://github.com/Kilo-Org/kilocode",
+    "docs": "https://docs.kilo.ai",
+    "addedAt": "2026-08-29",
+    "updatedAt": "2026-08-29",
+    "lastVerifiedAt": "2026-08-29",
+    "sources": [
+      "https://kilo.ai/",
+      "https://github.com/Kilo-Org/kilocode",
+      "https://docs.kilo.ai"
+    ]
   }
 ]
