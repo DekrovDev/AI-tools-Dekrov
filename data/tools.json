@@ -827,5 +827,84 @@
       "https://github.com/Kilo-Org/kilocode",
       "https://docs.kilo.ai"
     ]
+  },
+  {
+    "id": "openhands",
+    "name": "OpenHands",
+    "category": "coding-agents",
+    "description": "An open-source autonomous software engineering agent that can read an issue, write code, run tests, debug failures, and submit a pull request within a sandboxed environment . It functions as a self-hosted developer control center for running and automating coding agents and automations .",
+    "bestFor": [
+      "Autonomous completion of well-scoped software engineering tasks",
+      "Teams seeking transparency and control over their AI coding agent",
+      "Running various AI agents (OpenHands, Claude Code, Codex, Gemini) via a unified interface"
+    ],
+    "strengths": [
+      "MIT licensed open-source platform",
+      "Flexibility to bring your own LLM (BYOK)",
+      "Ability to self-host locally, in Docker, on VMs, or in the cloud",
+      "High autonomous capability for end-to-end issue resolution"
+    ],
+    "gettingStarted": [
+      "Ensure prerequisites are met: Node.js 22.12.x or later and `uv`",
+      "Install the Agent Canvas globally using npm: `npm install -g @openhands/agent-canvas`",
+      "Start the local stack with the command: `agent-canvas`"
+    ],
+    "usageNotes": [
+      "The agent operates in a sandboxed Docker environment with access to a terminal, code editor, browser, and file system by default .",
+      "Can be run directly on the host machine without a sandbox, but this gives the agent full filesystem access .",
+      "Supports integrations with third-party services like Slack, GitHub, Notion, and Linear for automations .",
+      "Supports the Agent-Client Protocol (ACP), allowing it to run other compatible agents .",
+      "A hosted SaaS version (app.all-hands.dev) is available with a free tier that uses your own API keys ."
+    ],
+    "url": "https://www.openhands.dev/",
+    "domain": "openhands.dev",
+    "favicon": "",
+    "platforms": [
+      "cli",
+      "web"
+    ],
+    "pricing": "free",
+    "priceDetails": "Freemium. Self-hosted open-source core is free (MIT). A free SaaS tier is available with BYOK or at-cost model pricing. Enterprise plans with features like RBAC and SSO are quote-based .",
+    "tags": [
+      "autonomous",
+      "open-source",
+      "agent",
+      "software-development",
+      "byok",
+      "docker"
+    ],
+    "install": "npm install -g @openhands/agent-canvas",
+    "start": "agent-canvas",
+    "commands": [
+      {
+        "label": "Start full local stack",
+        "command": "agent-canvas"
+      },
+      {
+        "label": "Start frontend only",
+        "command": "agent-canvas --frontend-only"
+      },
+      {
+        "label": "Start backend only",
+        "command": "agent-canvas --backend-only"
+      }
+    ],
+    "models": [
+      "Claude",
+      "GPT-4o",
+      "Gemini",
+      "Llama",
+      "Qwen"
+    ],
+    "github": "https://github.com/OpenHands/OpenHands",
+    "docs": "https://docs.openhands.dev/",
+    "addedAt": "2026-08-29",
+    "updatedAt": "2026-08-29",
+    "lastVerifiedAt": "2026-08-29",
+    "sources": [
+      "https://www.openhands.dev/",
+      "https://github.com/OpenHands/OpenHands",
+      "https://docs.openhands.dev/"
+    ]
   }
 ]
