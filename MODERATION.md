@@ -16,6 +16,6 @@
 - The description and tags are factual.
 - URLs, commands, price and platforms are supported by the provided sources.
 - The submission is not a duplicate.
-- No personal notes, verification claims or untrusted system metadata are included.
+- No untrusted verification claims or system metadata are included.
 
 When the `approved` label is applied, GitHub Actions creates a branch and Pull Request. Review the diff, request changes if needed, and merge manually. GitHub Pages receives the updated `data/tools.json` after the merged commit is deployed.

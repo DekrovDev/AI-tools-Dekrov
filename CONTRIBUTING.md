@@ -26,7 +26,7 @@ The validation Action comments on the Issue and assigns either `pending` or `nee
 - HTTP(S) URLs;
 - lowercase kebab-case ID;
 - duplicate ID, canonical URL, domain, and very similar name;
-- an empty `notes` field;
+- no personal or browser-only fields;
 - no generated system fields.
 
 ## Moderation labels

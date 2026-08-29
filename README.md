@@ -30,7 +30,7 @@ You can also use the [GitHub submission form](https://github.com/DekrovDev/AI-to
 - Entries should describe real tools and use verifiable official sources.
 - Unknown information stays empty rather than being invented.
 - The public catalog lives in this repository and is the same for every visitor.
-- Personal notes are never included in public submissions.
+- Personal notes live only in the current browser and are never included in public data or submissions.
 
 ## Project
 

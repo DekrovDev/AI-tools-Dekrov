@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -53,8 +54,8 @@
               <div class="filter-group" id="category-filters" aria-label="Category filters"></div>
             </div>
             <div class="advanced-filters" id="advanced-filters">
-              <div class="select-field"><label for="pricing-filter">Price</label><select id="pricing-filter"><option value="">Any</option><option value="free">Free</option><option value="mid">Mid-range</option><option value="expensive">Expensive</option></select></div>
-              <div class="select-field"><label for="platform-filter">Platform</label><select id="platform-filter"><option value="">Any</option><option value="web">Web</option><option value="desktop">Desktop</option><option value="cli">CLI</option><option value="vscode">VS Code</option><option value="api">API</option></select></div>
+              <div class="select-field"><label for="pricing-filter">Price</label><select id="pricing-filter"><option value="">Any</option></select></div>
+              <div class="select-field"><label for="platform-filter">Platform</label><select id="platform-filter"><option value="">Any</option></select></div>
               <button class="clear-button inline-clear-button" id="clear-filters" type="button" hidden>Clear</button>
             </div>
           </section>
@@ -98,18 +99,18 @@
           <label class="form-field form-field-wide"><span>Name *</span><input name="name" required maxlength="80" placeholder="For example, Cursor" /></label>
           <label class="form-field"><span>Category *</span><select name="category" required></select></label>
           <label class="form-field"><span>Price</span><select name="pricing"></select></label>
+          <label class="form-field"><span>Price details</span><input name="priceDetails" maxlength="80" placeholder="e.g. $20/month" /></label>
           <label class="form-field form-field-wide"><span>Short description</span><textarea name="description" rows="3" maxlength="300" placeholder="What it is and why it is useful"></textarea></label>
-          <label class="form-field form-field-wide"><span>Website</span><input name="url" type="url" placeholder="https://..." /></label>
+          <label class="form-field form-field-wide"><span>Website *</span><input name="url" type="url" required placeholder="https://..." /></label>
           <label class="form-field"><span>Domain</span><input name="domain" placeholder="cursor.com" /></label>
           <label class="form-field"><span>Favicon / logo URL</span><input name="favicon" type="url" placeholder="https://.../favicon.ico" /></label>
-          <fieldset class="form-field form-field-wide"><legend>Platforms</legend><div class="platform-options"><label><input type="checkbox" name="platforms" value="web" /> Web</label><label><input type="checkbox" name="platforms" value="desktop" /> Desktop</label><label><input type="checkbox" name="platforms" value="cli" /> CLI</label><label><input type="checkbox" name="platforms" value="vscode" /> VS Code</label><label><input type="checkbox" name="platforms" value="api" /> API</label></div></fieldset>
+          <fieldset class="form-field form-field-wide"><legend>Platforms</legend><div class="platform-options"><label><input type="checkbox" name="platforms" value="web" /> Web</label><label><input type="checkbox" name="platforms" value="desktop" /> Desktop</label><label><input type="checkbox" name="platforms" value="mobile" /> Mobile</label><label><input type="checkbox" name="platforms" value="browser-extension" /> Browser extension</label><label><input type="checkbox" name="platforms" value="cli" /> CLI</label><label><input type="checkbox" name="platforms" value="vscode" /> VS Code</label><label><input type="checkbox" name="platforms" value="api" /> API</label></div></fieldset>
           <label class="form-field form-field-wide"><span>Tags</span><input name="tags" placeholder="coding, cli, research" /></label>
           <label class="form-field"><span>Install</span><input name="install" placeholder="npm install ..." /></label>
           <label class="form-field"><span>Start</span><input name="start" placeholder="start command" /></label>
           <label class="form-field form-field-wide"><span>Models</span><input name="models" placeholder="Comma-separated, if relevant" /></label>
           <label class="form-field"><span>GitHub</span><input name="github" type="url" placeholder="https://github.com/..." /></label>
           <label class="form-field"><span>Documentation</span><input name="docs" type="url" placeholder="https://.../docs" /></label>
-          <label class="form-field form-field-wide"><span>Personal note (not published)</span><textarea name="notes" rows="4" placeholder="This field is not included in public submissions"></textarea></label>
           </div>
           <div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>Cancel</button><button class="button button-primary" type="submit">Prepare submission</button></div>
         </form>

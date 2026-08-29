@@ -21,17 +21,17 @@ Categories appear in the navigation only when they contain at least one publishe
 
 ## Search, filters, and sorting
 
-Search looks through names, descriptions, categories, tags, platforms, models, and notes. Use `Ctrl + K` on Windows/Linux or `Cmd + K` on macOS to focus search.
+Search looks through names, descriptions, categories, tags, platforms, models, and personal notes stored in the current browser. Use `Ctrl + K` on Windows/Linux or `Cmd + K` on macOS to focus search.
 
-The catalog can be filtered by price and platform, then sorted by recently added, name, or category. Clear appears next to the filters whenever a search or filter is active.
+The catalog can be filtered by price and platform, then sorted by recently added, name, or category. Price uses the factual options Free, Freemium, Paid, and Usage-based, with optional details such as `$20/month` or `Pay per token`. Clear appears next to the filters whenever a search or filter is active.
 
 ## Favorites and theme
 
-Visitors can favorite tools and switch between light and dark themes. These preferences are stored only in that visitor's browser and do not change the public catalog.
+Visitors can favorite tools, keep personal notes, and switch between light and dark themes. These preferences are stored only in that visitor's browser and do not change the public catalog.
 
 ## Tool pages
 
-Each tool has a readable hash URL such as `#/tools/tool-id`. Its detail page can show an official website, price, platforms, install and start commands, additional commands, supported models, documentation, GitHub, tags, and a domain.
+Each tool has a readable hash URL such as `#/tools/tool-id`. Its detail page can show an official website, price and price details, platforms, install and start commands, additional commands, supported models, documentation, GitHub, tags, a domain, public dates, and source links. The browser title and description update for the active category, Favorites, and each tool page.
 
 ## Suggesting a tool
 
@@ -45,15 +45,13 @@ Quick Add does not fetch third-party pages in the browser, so it remains reliabl
 
 ### Manual
 
-Use the full editor for the name, category, price, description, URLs, platforms, tags, commands, models, GitHub, documentation, and an optional personal note.
-
-The personal note is never included in a public submission.
+Use the full editor for the name, category, price, specific price details, description, URLs, platforms, tags, commands, models, GitHub, and documentation. Website is required because every public tool needs an official public URL.
 
 ### JSON Import and AI Prompt Builder
 
 Enter a URL and optional context. The site builds a prompt from [`data/tool-schema.json`](data/tool-schema.json), so the schema does not need to be copied or maintained in multiple places.
 
-Copy the prompt into an external AI model, paste the returned JSON back into the site, validate it, review the readable preview, and edit it if necessary. The prompt requires one valid JSON object with no Markdown or explanations, only allowed enum values, empty values for unknown facts, a kebab-case ID, and an empty `notes` value.
+Copy the prompt into an external AI model, paste the returned JSON back into the site, validate it, review the readable preview, and edit it if necessary. The prompt requires one valid JSON object with no Markdown or explanations, only allowed enum values, empty values for unknown facts, and a kebab-case ID.
 
 ## Public submission and moderation
 
@@ -79,4 +77,4 @@ The local Node.js script downloads a public page and attempts to find metadata, 
 
 [`data/tools.json`](data/tools.json) is the one public catalog database. GitHub Pages publishes the same merged data to every visitor.
 
-`localStorage` is used only for theme, favorites, UI preferences, and unfinished drafts. It never stores published tools.
+`localStorage` is used only for theme, favorites, personal notes, UI preferences, and unfinished drafts. It never stores published tools.

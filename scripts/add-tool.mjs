@@ -145,6 +145,8 @@ function detectPlatforms(text) {
   if (/\b(vs\s?code|visual studio code)\b/.test(content)) platforms.push("vscode");
   if (/\b(cli|command[- ]line|terminal)\b|\b(?:npm|pnpm|pip|brew|cargo) install\b/.test(content)) platforms.push("cli");
   if (/\b(desktop app|desktop application|download for (mac|windows|linux)|windows app|mac app)\b/.test(content)) platforms.push("desktop");
+  if (/\b(mobile app|ios app|android app|iphone|ipad|google play|app store)\b/.test(content)) platforms.push("mobile");
+  if (/\b(browser extension|chrome extension|firefox add-?on|edge add-?on|safari extension)\b/.test(content)) platforms.push("browser-extension");
   if (/\b(api reference|developer api|rest api|graphql api)\b/.test(content)) platforms.push("api");
   if (/\b(web app|in your browser|sign in|try online)\b/.test(content)) platforms.push("web");
   return platforms;
@@ -172,13 +174,14 @@ function extractTool(url, html) {
   const docs = links.find((link) => /docs?|documentation|guides?/i.test(`${link.href} ${link.text}`))?.href || "";
   const codes = extractCodeBlocks(html);
   const platforms = detectPlatforms(`${title} ${description} ${stripHtml(html)}`);
-  return { id: slugify(friendlyName(title, domain)), name: friendlyName(title, domain), category: "other", description, url: canonical, domain, favicon: firstFavicon(html, url.href), platforms, pricing: "", tags: detectTags(`${title} ${description} ${stripHtml(html)}`, platforms), install: getInstallCommand(codes), start: getStartCommand(html), commands: [], notes: "", models: [], github, docs };
+  return { id: slugify(friendlyName(title, domain)), name: friendlyName(title, domain), category: "other", description, url: canonical, domain, favicon: firstFavicon(html, url.href), platforms, pricing: "", priceDetails: "", tags: detectTags(`${title} ${description} ${stripHtml(html)}`, platforms), install: getInstallCommand(codes), start: getStartCommand(html), commands: [], models: [], github, docs };
 }
 
 async function completeTool(tool) {
   console.log("Found metadata (leave a prompt blank to keep its current value):");
   tool.category = await choose("Category", tool.category, CATEGORY_IDS);
   tool.pricing = await choose("Pricing", tool.pricing, PRICING_IDS);
+  tool.priceDetails = await ask("Price details", tool.priceDetails);
   tool.tags = splitList(await ask("Tags", tool.tags.join(", ")));
   return tool;
 }
