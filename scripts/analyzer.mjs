@@ -255,8 +255,39 @@ export function findLinks(html, base) {
 
 export function extractCodeBlocks(html) {
   return [...html.matchAll(/<(?:pre|code)\b[^>]*>([\s\S]*?)<\/(?:pre|code)>/gi)]
-    .map((match) => stripHtml(match[1]))
+    .map((match) => normalizeCode(match[1]))
     .filter((value) => value && value.length < 240);
+}
+// Preserves separate commands/lines inside a code block so that multi-line
+// install steps are not collapsed into one invalid command.
+function normalizeCode(raw) {
+  const text = String(raw || "").replace(/<[^>]+>/g, "");
+  return text
+    .split(/\r?\n/)
+    .map((line) => decodeHtml(line).replace(/[ \t]+/g, " ").trim())
+    .filter((line) => line.length)
+    .join("\n");
+}
+
+function collapseInline(html) {
+  return decodeHtml(String(html || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ")).trim();
+}
+
+// Fallback description when the page has no usable meta description: prefer the
+// first substantial heading, then the first paragraph, skipping obvious
+// navigation boilerplate.
+function deriveTagline(html) {
+  const text = String(html || "");
+  const boilerplate = /^(home|menu|about|contact|pricing|docs|support|login|log in|sign in|get started|features|search)\b/i;
+  for (const tag of ["h1", "h2"]) {
+    const match = text.match(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, "i"));
+    const value = match ? collapseInline(match[1]) : "";
+    if (value.length >= 20 && value.length <= 260 && !boilerplate.test(value)) return value;
+  }
+  const paragraph = text.match(/<p\b[^>]*>([\s\S]*?)<\/p>/i);
+  const value = paragraph ? collapseInline(paragraph[1]) : "";
+  if (value.length >= 30 && value.length <= 260 && !boilerplate.test(value)) return value;
+  return "";
 }
 
 // ---------------------------------------------------------------------------
@@ -295,14 +326,18 @@ export function detectPlatforms(text, allowed) {
   markIf(content, platforms, "mobile", /\b(mobile app|ios app|android app|iphone|ipad|google play|app store)\b/);
   markIf(content, platforms, "browser-extension", /\b(browser extension|chrome extension|firefox add-?on|edge add-?on|safari extension)\b/);
   markIf(content, platforms, "api", /\b(api reference|developer api|rest api|graphql api|return an? api)\b/);
-  markIf(content, platforms, "web", /\b(web app|in your browser|sign in|try online|browser)\b/);
+  // A website/docs/"copy to browser" mention is not a web app. Require real
+  // hosted-app signals before labelling anything as Web.
+  markIf(content, platforms, "web", /\b(web app|web application|web interface|online (?:app|editor|tool)|runs? in (?:a|your|the)? ?browser|in-browser|no (?:install|download) (?:needed|required)|try (?:it )?online)\b/);
   return [...platforms].filter((platform) => allowed.includes(platform));
 }
 
 export function detectCategory(text, allowed) {
   const content = text.toLowerCase();
   const rules = [
-    ["coding-agents", /\b(coding agent|coding assistant|code agent|ai agent for coding|codebase navigation|write code)\b/],
+    // Coding/pair-programming/terminal-coding signals must win over the generic
+    // chat/assistant rule for tools like Aider.
+    ["coding-agents", /\b(coding agent|coding assistant|code agent|ai agent for coding|pair programming|pair program|programming in (?:a|your) terminal|edit(?:ing|s)? (?:your )?(?:code|codebase)|codebase editing|write(?:ing)? code|code editing assistant|ai coding)\b/],
     ["orchestration", /\b(orchestrat|multi-agent|agent workflows?|workflow automation|agent team)\b/],
     // research comes before chat-llm so "research assistant" is not swallowed
     // by the generic chat/assistant rule.
@@ -343,7 +378,9 @@ export function detectTags(text, allowedPlatforms) {
     ["coding", /\b(coding|codebase|programming|developer)\b/],
     ["agent", /\b(agent|autonomous)\b/],
     ["research", /\b(research|paper|citation)\b/],
-    ["audio", /\b(audio|voice|speech)\b/],
+    // Voice "input"/"voice-to-code" as an optional feature is not an audio
+    // product; keep audio signals specific.
+    ["audio", /\b(audio|speech|text-to-speech|tts|music|podcast|transcri|voice (?:assistant|notes?|recording|commands))\b/],
     ["llm", /\b(llm|language model)\b/],
     ["open-source", /\bopen source\b/]
   ];
@@ -352,19 +389,31 @@ export function detectTags(text, allowedPlatforms) {
   return [...tags];
 }
 
-const MODEL_PATTERN = /\b(gpt-4(?:\.\d+)?o?(?:-mini)?|gpt-5(?:\.\d+)?|claude[- ][0-9a-z.-]+|gemini(?: (?:exp |flash |pro )?)?[0-9.]*|llama[- ][0-9.]+|mistral[- ][a-z0-9.-]+|deepseek[- ][a-z0-9.-]+|qwen\d*(?:-[-a-z0-9]*)?|grok[- ]?[0-9a-z.-]*|sonnet-4[.0-9]*|haiku-[0-9.]+|opus-[0-9.]+)\b/gi;
+// Only well-known model families/versions count. Provider prefixes, CLI flag
+// fragments and API-key examples (deepseek-aider, deepseek---api-key, ...) must
+// not be read as model names.
+const MODEL_PATTERN = /\b(gpt-4(?:\.\d+)?o?(?:-mini)?|gpt-5(?:\.\d+)?|claude[- ][0-9][0-9a-z.-]*|gemini(?: (?:exp |flash |pro )?)?[0-9.]*|llama[- ][0-9.]+|mistral[- ][a-z0-9][a-z0-9.-]*|deepseek[- ](?:r1|r2|v\d|chat|coder|reasoner)(?:[-.][a-z0-9]+)?|qwen\d*(?:-[-a-z0-9]*)?|grok[- ]?[0-9.]+|sonnet-4[.0-9]*|haiku-[0-9.]+|opus-[0-9.]+)\b/gi;
 
 export function detectModels(text) {
   const matches = text.match(MODEL_PATTERN);
   if (!matches) return [];
   const cleaned = [...new Set(matches.map((value) => value.trim().replace(/\s+/g, "-").toLowerCase()))]
     .filter((value) => value.length <= 40 && /^[a-z0-9.-]+$/.test(value))
+    .filter((value) => !value.includes("---") && !/(^|-)(api|key)(-|$)/i.test(value) && !/-(aider|ollama|cli)$/.test(value))
     .slice(0, 12);
   return cleaned;
 }
 
+const INSTALL_COMMAND_RE = /\b(?:npm|pnpm|yarn|bun|pipx?|uv tool|brew|cargo|go)\s+(?:install|add|get)\b/i;
+
+// Returns a single valid install command (the first install line of the first
+// matching code block), not an amalgamation of several commands.
 function getInstallCommand(codes) {
-  return codes.find((code) => /\b(?:npm|pnpm|yarn|bun|pipx?|uv tool|brew|cargo|go)\s+(?:install|add|get)\b/i.test(code)) || "";
+  for (const code of codes) {
+    const line = String(code || "").split(/\r?\n/).map((item) => item.trim()).find((item) => INSTALL_COMMAND_RE.test(item));
+    if (line) return line;
+  }
+  return "";
 }
 
 function getStartCommand(rawText) {
@@ -467,7 +516,14 @@ export async function analyzeTool({ url, context = "", maxPages = MAX_TOTAL_PAGE
 
   const fullHtml = rawTexts.join("\n");
   const fullText = stripHtml(fullHtml);
-  const description = firstMeta(homepage.text, ["description", "og:description", "twitter:description"]);
+  let description = firstMeta(homepage.text, ["description", "og:description", "twitter:description"]);
+  if (!description) {
+    for (const raw of rawTexts.slice(1)) {
+      description = firstMeta(raw, ["description", "og:description", "twitter:description"]);
+      if (description) break;
+    }
+  }
+  if (!description) description = deriveTagline(homepage.text);
   const links = findLinks(homepage.text, homepageUrl);
   const githubLink = links.find((link) => {
     try {

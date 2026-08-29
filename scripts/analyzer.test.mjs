@@ -336,6 +336,52 @@ test("analyzeTool uses the final redirected host for domain and extra pages", as
   assert.ok(!calls.includes("https://old.example.com/pricing")); // old host never reused
 });
 
+// Aider-like fixture: no meta description, terminal pair-programming copy, a
+// multi-line install block, voice/browser mentions and model fragments.
+const AIDER_HOME = `<!doctype html><html><head>
+  <title>Aider | AI pair programming in your terminal</title>
+  <meta property="og:site_name" content="Aider" />
+  <link rel="icon" href="/favicon.png">
+</head><body>
+  <a href="https://aider.chat/docs/">Documentation</a>
+  <a href="https://github.com/Aider-AI/aider">GitHub</a>
+  <a href="https://aider.chat/docs/install.html">Installation</a>
+  <h1>Aider is AI pair programming in your terminal</h1>
+  <p>Aider lets you pair program with LLMs to edit code in your local git repo. It is open source and works with gpt-4o, claude-3.7 sonnet and deepseek-r1.</p>
+  <p>Talk to it with your voice for voice-to-code, or copy results into a browser web chat. Configure deepseek-aider, deepseek-ollama or deepseek---api-key in the command line.</p>
+  <pre>
+python -m pip install aider-install
+aider-install
+  </pre>
+  <pre>
+pip install aider
+  </pre>
+</body></html>`;
+
+test("aider-like page: coding-agents, no web/audio noise, clean install/models/description", async () => {
+  const { tool } = await analyzeTool({
+    url: "https://aider.chat/",
+    fetchImpl: fakePages({
+      "https://aider.chat/": AIDER_HOME,
+      "https://aider.chat/docs/": "<html><body><h1>Documentation</h1><p>Read the docs.</p></body></html>",
+      "https://aider.chat/docs/install.html": "<html><body><h1>Install</h1><p>Install Aider.</p></body></html>"
+    })
+  });
+  assert.equal(tool.category, "coding-agents");
+  assert.ok(tool.platforms.includes("cli"));
+  assert.ok(!tool.platforms.includes("web"));
+  assert.ok(tool.tags.includes("coding"));
+  assert.ok(!tool.tags.includes("audio"));
+  assert.equal(tool.install, "python -m pip install aider-install");
+  assert.ok(tool.description.length >= 20 && tool.description.includes("pair programming"));
+  assert.ok(tool.models.includes("gpt-4o"));
+  assert.ok(tool.models.includes("claude-3.7"));
+  assert.ok(tool.models.includes("deepseek-r1"));
+  assert.ok(!tool.models.includes("deepseek-aider"));
+  assert.ok(!tool.models.includes("deepseek-ollama"));
+  assert.ok(!tool.models.includes("deepseek---api-key"));
+});
+
 // ---------------------------------------------------------------------------
 // Smart Add issue parsing / canonical body round-trip
 // ---------------------------------------------------------------------------
