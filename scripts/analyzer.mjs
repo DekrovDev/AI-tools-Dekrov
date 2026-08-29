@@ -538,26 +538,27 @@ export async function analyzeTool({ url, context = "", maxPages = MAX_TOTAL_PAGE
   const name = friendlyName(homeTokens, domain);
   const platforms = detectPlatforms(`${homeTokens} ${description} ${fullText}`, allowedPlatforms);
   const pricingInfo = detectPricing(`${homeTokens} ${description} ${rawTexts[0]}`, pricingTexts.join(" "));
+  const profile = detailProfile({ category: detectCategory(`${homeTokens} ${description} ${fullText}`, allowedCategories), platforms, pricing: pricingInfo.pricing || "", tags: detectTags(`${homeTokens} ${description} ${fullText}`, platforms), install: getInstallCommand(codes), start: getStartCommand(fullHtml), docs: docsLink?.href || "", models: detectModels(fullText) });
   const tool = {
     id: slugify(name),
     name,
-    category: detectCategory(`${homeTokens} ${description} ${fullText}`, allowedCategories),
+    category: profile.category,
     description,
-    bestFor: [],
-    strengths: [],
-    gettingStarted: [],
-    usageNotes: [],
+    bestFor: profile.bestFor,
+    strengths: profile.strengths,
+    gettingStarted: profile.gettingStarted,
+    usageNotes: profile.usageNotes,
     url: canonical,
     domain,
     favicon: firstFavicon(homepage.text, homepageUrl),
     platforms,
     pricing: pricingInfo.pricing || "",
     priceDetails: pricingInfo.priceDetails || "",
-    tags: detectTags(`${homeTokens} ${description} ${fullText}`, platforms),
-    install: getInstallCommand(codes),
-    start: getStartCommand(fullHtml),
+    tags: profile.tags,
+    install: profile.install,
+    start: profile.start,
     commands: [],
-    models: detectModels(fullText),
+    models: profile.models,
     github: githubLink?.href || "",
     docs: docsLink?.href || ""
   };
@@ -569,3 +570,5 @@ export async function analyzeTool({ url, context = "", maxPages = MAX_TOTAL_PAGE
   const contextOut = (context || "").trim();
   return { tool, warnings, pages, context: contextOut };
 }
+
+function detailProfile({ category, platforms, pricing, tags, install, start, docs, models }) { const bestFor = []; if (category === "coding-agents") bestFor.push("AI-assisted software development"); else if (category === "research") bestFor.push("Research and information work"); else if (category === "audio") bestFor.push("Audio and speech workflows"); const strengths = []; if (tags.includes("open-source")) strengths.push("Open-source"); if (platforms.includes("cli")) strengths.push("Terminal workflow support"); if (models.length) strengths.push(`Supports ${models.length} detected model${models.length === 1 ? "" : "s"}`); if (pricing === "free") strengths.push("Free to use"); const gettingStarted = []; if (install) gettingStarted.push(`Install with: ${install}`); if (start) gettingStarted.push(`Start with: ${start}`); if (docs) gettingStarted.push("Open the official setup documentation for verified next steps."); const usageNotes = []; if (platforms.includes("cli")) usageNotes.push("Use from a terminal or command-line workflow."); if (platforms.includes("web")) usageNotes.push("A web interface is available."); return { category, platforms, pricing, tags, install, start, docs, models, bestFor, strengths, gettingStarted, usageNotes }; }

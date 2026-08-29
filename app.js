@@ -65,7 +65,7 @@ function renderNavigation() {
 
 function getFilteredTools() {
   const query = state.query.trim().toLowerCase();
-  const found = state.tools.filter((tool) => { const searchable = [tool.name, tool.description, tool.category, personalNote(tool.id), ...(tool.tags || []), ...(tool.platforms || []), ...(tool.models || []), ...(tool.strengths || []), ...(tool.gettingStarted || []).flatMap((step) => [step.title, step.description])].filter(Boolean).join(" ").toLowerCase(); return (!query || searchable.includes(query)) && (!state.category || tool.category === state.category) && (!state.pricing || tool.pricing === state.pricing) && (!state.platform || (tool.platforms || []).includes(state.platform)) && (!state.favoritesOnly || state.favorites.has(tool.id)); });
+  const found = state.tools.filter((tool) => { const searchable = [tool.name, tool.description, tool.category, personalNote(tool.id), ...(tool.tags || []), ...(tool.platforms || []), ...(tool.models || []), ...(tool.bestFor || []), ...(tool.strengths || []), ...(tool.gettingStarted || []), ...(tool.usageNotes || [])].filter(Boolean).join(" ").toLowerCase(); return (!query || searchable.includes(query)) && (!state.category || tool.category === state.category) && (!state.pricing || tool.pricing === state.pricing) && (!state.platform || (tool.platforms || []).includes(state.platform)) && (!state.favoritesOnly || state.favorites.has(tool.id)); });
   return found.sort((a, b) => state.sort === "name" ? a.name.localeCompare(b.name) : state.sort === "category" ? categoryMeta(a.category).label.localeCompare(categoryMeta(b.category).label) || a.name.localeCompare(b.name) : (b.addedAt || "").localeCompare(a.addedAt || "") || a.name.localeCompare(b.name));
 }
 
