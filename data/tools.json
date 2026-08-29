@@ -906,5 +906,63 @@
       "https://github.com/OpenHands/OpenHands",
       "https://docs.openhands.dev/"
     ]
+  },
+  {
+    "id": "amp",
+    "name": "Amp",
+    "category": "coding-agents",
+    "description": "Amp is an agentic AI coding tool by Sourcegraph that operates via CLI and VS Code extension, designed to perform complex coding tasks using frontier AI models.",
+    "bestFor": [
+      "Developers who want a pay-as-you-go, multi-model terminal agent without a subscription commitment",
+      "Teams looking for a collaborative agentic coding tool with shared threads and outcomes-focused performance"
+    ],
+    "strengths": [
+      "Frontier-first design with unfettered token and tool access, optimizing for output quality and frequently rated above competitors like Claude Code",
+      "Transparent pay-as-you-go pricing with zero markup for individuals, with a free tier available",
+      "Available in the environment developers are already using, including CLI, VS Code, Cursor, and Windsurf"
+    ],
+    "gettingStarted": [
+      "Install the CLI with one command or add the VS Code extension",
+      "Start on the Amp Free tier or purchase $5+ in credits and run your first thread"
+    ],
+    "usageNotes": [
+      "Amp is terminal-centric and optimized for developers comfortable with the command line",
+      "Supports agentic coding, multi-file editing, autonomous operation, and is git-native",
+      "Spends tokens freely for better results, which can make costs less predictable for heavy multi-agent use",
+      "Proprietary tool with no open-source or self-hosted edition"
+    ],
+    "url": "https://sourcegraph.com/amp",
+    "domain": "sourcegraph.com",
+    "favicon": "",
+    "platforms": [
+      "cli",
+      "vscode",
+      "api"
+    ],
+    "pricing": "usage-based",
+    "priceDetails": "Pay-as-you-go with pass-through LLM and tool costs from a $5 minimum; no markup for individuals. Enterprise adds a 50% premium. Free tier available",
+    "tags": [
+      "agentic-coding",
+      "multi-model",
+      "sourcegraph",
+      "git",
+      "code-review"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [
+      "GPT-5.6",
+      "Claude",
+      "Gemini 3 Pro"
+    ],
+    "github": "",
+    "docs": "",
+    "addedAt": "2026-08-29",
+    "updatedAt": "2026-08-29",
+    "lastVerifiedAt": "2026-08-29",
+    "sources": [
+      "https://sourcegraph.com/amp"
+    ]
   }
 ]
