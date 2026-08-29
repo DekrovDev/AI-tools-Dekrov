@@ -675,5 +675,74 @@
     "sources": [
       "https://opencode.ai/"
     ]
+  },
+  {
+    "id": "cline",
+    "name": "Cline",
+    "category": "coding-agents",
+    "description": "An open-source AI coding agent that lives in your IDE, capable of creating/editing files, running terminal commands, using a browser, and connecting to external tools with explicit user approval at every step .",
+    "bestFor": [
+      "Developers seeking an autonomous agent for multi-step coding tasks like feature development and refactoring",
+      "Users who want model flexibility and control over costs",
+      "Developers who prefer a transparent, human-in-the-loop agent"
+    ],
+    "strengths": [
+      "Supports any model provider, including Anthropic, OpenAI, Google, DeepSeek, and local models via Ollama",
+      "Zero-trust architecture: runs client-side with no server-side code storage",
+      "Human-in-the-loop design requires explicit user approval for all sensitive actions",
+      "Includes browser automation for testing web apps and debugging",
+      "Extensible via Model Context Protocol (MCP) servers",
+      "Open-source with Apache 2.0 license"
+    ],
+    "gettingStarted": [
+      "Install the extension from the VS Code Marketplace or your IDE's extension marketplace",
+      "Connect your AI provider by adding your API key (e.g., from Anthropic, OpenRouter, OpenAI) or configuring a local endpoint",
+      "Open the Cline sidebar and describe your task in natural language"
+    ],
+    "usageNotes": [
+      "Cline is free to use; users pay for their chosen model's API usage",
+      "Costs can be minimized by selecting cost-effective models and using context caching where available",
+      "Every file change and terminal command is shown as a diff and requires user approval",
+      "Can operate in a 'Plan' mode to explore the codebase without making changes",
+      "Supports @ mentions to reference files, folders, and URLs in prompts",
+      "Works with VS Code, Cursor, JetBrains, and via CLI"
+    ],
+    "url": "https://cline.ai/",
+    "domain": "cline.ai",
+    "favicon": "",
+    "platforms": [
+      "vscode",
+      "cli"
+    ],
+    "pricing": "free",
+    "priceDetails": "",
+    "tags": [
+      "coding-agent",
+      "open-source",
+      "vs-code",
+      "ai-assistant",
+      "autonomous"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [
+      "Claude 3.7 Sonnet",
+      "Claude 3.5 Sonnet",
+      "GPT-4o",
+      "Gemini",
+      "DeepSeek",
+      "Qwen"
+    ],
+    "github": "https://github.com/cline/cline",
+    "docs": "https://docs.cline.ai",
+    "addedAt": "2026-08-29",
+    "updatedAt": "2026-08-29",
+    "lastVerifiedAt": "2026-08-29",
+    "sources": [
+      "https://cline.ai/",
+      "https://github.com/cline/cline",
+      "https://docs.cline.ai"
+    ]
   }
 ]
