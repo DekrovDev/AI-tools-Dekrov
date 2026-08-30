@@ -1206,5 +1206,78 @@
       "https://v0.dev/",
       "https://v0.app/docs/api/v1/packages/ai-tools"
     ]
+  },
+  {
+    "id": "continue",
+    "name": "Continue",
+    "category": "coding-agents",
+    "description": "An open-source AI code assistant that integrates with VS Code and JetBrains IDEs, offering chat, autocomplete, edit, and agent capabilities powered by any LLM of your choice .",
+    "bestFor": [
+      "Development teams needing to standardize AI workflows across an organization",
+      "Developers who require on-premise or air-gapped development environments for regulated industries",
+      "Users who want to bring their own model (BYOK) with no markup and support for many providers"
+    ],
+    "strengths": [
+      "100% open-source, ensuring no vendor lock-in and full auditability",
+      "Most flexible model support of any major coding assistant, including Claude, GPT-4, Gemini, Mistral, and local models via Ollama",
+      "Source-controlled AI configuration that treats prompts and rules like code",
+      "Strong support for enterprise deployment, including fully offline or on-prem environments"
+    ],
+    "gettingStarted": [
+      "Install the Continue extension from the Visual Studio Marketplace for VS Code, or from the JetBrains Marketplace for JetBrains IDEs .",
+      "Open the Continue settings to modify your configuration file, typically `~/.continue/config.json` or `~/.continue/config.yaml` .",
+      "Add your preferred model provider (e.g., OpenAI, Anthropic, Ollama) and specify the model(s) you want to use for chat, edit, and autocomplete roles ."
+    ],
+    "usageNotes": [
+      "MCP functionality is exclusively available in Agent Mode. Ensure Agent Mode is activated to use external tools and servers .",
+      "Configuration files can be global (`~/.continue/`) or project-specific (`.continue/agents/`), allowing for different settings per project .",
+      "For team collaboration and managed agent workflows, users can optionally sign in to the Continue Hub .",
+      "MCP servers can be configured via YAML files in the `.continue/mcpServers/` directory to provide the agent with access to external tools ."
+    ],
+    "url": "https://continue.dev/",
+    "domain": "continue.dev",
+    "favicon": "https://continue.dev/favicon.ico",
+    "platforms": [
+      "vscode",
+      "desktop"
+    ],
+    "pricing": "freemium",
+    "priceDetails": "The extension is free and open-source (Apache 2.0). Paid plans for the Continue Hub start from $10/month for managed agent workflows and team collaboration features .",
+    "tags": [
+      "ai-code-assistant",
+      "open-source",
+      "vscode-extension",
+      "jetbrains-plugin",
+      "agent",
+      "mcp"
+    ],
+    "install": "Install the 'Continue' extension from the VS Code or JetBrains marketplace .",
+    "start": "Click the Continue icon in the IDE's sidebar to open the chat panel. Use `Cmd+L` (Mac) or `Ctrl+L` (Windows/Linux) as a keyboard shortcut .",
+    "commands": [
+      {
+        "label": "Open Config",
+        "command": "Continue: Open Config"
+      },
+      {
+        "label": "Reload Window",
+        "command": "Reload Window"
+      }
+    ],
+    "models": [
+      "Llama 3.3 70B",
+      "Qwen3-Coder",
+      "DeepSeek-V3.1",
+      "MiniMax-M2.7"
+    ],
+    "github": "https://github.com/continuedev/continue",
+    "docs": "https://docs.continue.dev",
+    "addedAt": "2026-08-30",
+    "updatedAt": "2026-08-30",
+    "lastVerifiedAt": "2026-08-30",
+    "sources": [
+      "https://continue.dev/",
+      "https://github.com/continuedev/continue",
+      "https://docs.continue.dev"
+    ]
   }
 ]
