@@ -34,6 +34,24 @@ You can also use the [GitHub submission form](https://github.com/DekrovDev/AI-to
 - The public catalog lives in this repository and is the same for every visitor.
 - Personal notes live only in the current browser and are never included in public data or submissions.
 
+## AI provider configuration
+
+Smart Add enrichment and the moderator `ai-enrich` flow call an OpenAI-compatible LLM provider. The provider is configured entirely through GitHub Actions variables and secrets — no code changes are needed:
+
+| Setting | Where | Value |
+| --- | --- | --- |
+| `AI_PROVIDER_BASE_URL` | repository variable | `https://openrouter.ai/api/v1` |
+| `AI_MODEL` | repository variable | `z-ai/glm-5.2:free` |
+| `AI_API_KEY` | repository secret | your provider API key |
+
+Configure them at **Settings → Secrets and variables → Actions** in the repository.
+
+**Recommended: OpenRouter.** The `z-ai/glm-5.2:free` model is genuinely free (rate-limited, ~50 requests/day), which is fine for occasional enrichment. Create an API key at [openrouter.ai/keys](https://openrouter.ai/keys).
+
+**Alternative: Z.ai directly.** Use `https://api.z.ai/api/paas/v4` as `AI_PROVIDER_BASE_URL` and `glm-5.2` as `AI_MODEL`, with an API key from [z.ai](https://z.ai). New accounts get free starter credits, after which it is pay-as-you-go.
+
+If any of these settings are missing, enrichment is skipped silently — the deterministic analysis and the normal validation flow still work without an AI provider.
+
 ## Project
 
 AI-Dekrov is a static GitHub Pages project. Its public data and source code live in this repository.
