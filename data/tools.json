@@ -1480,5 +1480,74 @@
       "https://github.com/crewAIInc/crewAI",
       "https://docs.crewai.com/"
     ]
+  },
+  {
+    "id": "microsoft-agent-framework",
+    "name": "Microsoft Agent Framework",
+    "category": "orchestration",
+    "description": "An open-source framework for building, orchestrating, and deploying AI agents and multi-agent workflows, combining the simplicity of AutoGen with enterprise features from Semantic Kernel. Supports Python and .NET .",
+    "bestFor": [
+      "Developers building single or multi-agent AI applications",
+      "Creating complex, multi-step workflows with graph-based orchestration",
+      "Enterprise scenarios requiring state management, telemetry, and type safety"
+    ],
+    "strengths": [
+      "Unified framework combining the strengths of AutoGen and Semantic Kernel",
+      "Graph-based workflows with features like checkpointing and human-in-the-loop support",
+      "Support for multiple LLM providers including Azure OpenAI, OpenAI, Anthropic, and Ollama",
+      "Enterprise-grade features: session-based state, middleware, and built-in OpenTelemetry",
+      "Built-in 'Harness' agent for long-running, multi-step tasks with planning and memory"
+    ],
+    "gettingStarted": [
+      "Install the framework. For Python: pip install agent-framework. For .NET: dotnet add package Microsoft.Agents.AI --prerelease .",
+      "Set environment variables for your chosen LLM provider (e.g., OPENAI_API_KEY, FOUNDRY_PROJECT_ENDPOINT) .",
+      "Create a basic agent. In Python, instantiate an Agent with a chat client and instructions, then call agent.run('prompt') ."
+    ],
+    "usageNotes": [
+      "The Agent Framework does not automatically load .env files. You must load them or set environment variables in your shell or IDE .",
+      "Use an agent for open-ended, conversational tasks requiring autonomous tool use. Use a workflow for well-defined, multi-step processes requiring explicit control .",
+      "The framework is open-source and available on GitHub, with contributions welcome .",
+      "The 'Harness' is a built-in, opinionated agent for production scenarios, providing planning, memory, and tool approval out-of-the-box ."
+    ],
+    "url": "https://learn.microsoft.com/agent-framework/overview",
+    "domain": "learn.microsoft.com",
+    "favicon": "https://learn.microsoft.com/en-us/media/open-graph-image.png",
+    "platforms": [
+      "cli",
+      "api",
+      "web"
+    ],
+    "pricing": "free",
+    "priceDetails": "",
+    "tags": [
+      "microsoft",
+      "agent-framework",
+      "semantic-kernel",
+      "autogen",
+      "ai-orchestration",
+      "multi-agent",
+      "workflows"
+    ],
+    "install": "pip install agent-framework",
+    "start": "from agent_framework import Agent; agent = Agent(...); await agent.run('...')",
+    "commands": [],
+    "models": [
+      "Azure OpenAI",
+      "OpenAI",
+      "Anthropic Claude",
+      "Amazon Bedrock",
+      "Azure AI Foundry",
+      "Ollama",
+      "GitHub Copilot"
+    ],
+    "github": "https://github.com/microsoft/agent-framework",
+    "docs": "https://learn.microsoft.com/agent-framework/overview",
+    "addedAt": "2026-08-30",
+    "updatedAt": "2026-08-30",
+    "lastVerifiedAt": "2026-08-30",
+    "sources": [
+      "https://learn.microsoft.com/agent-framework/overview",
+      "https://github.com/microsoft/agent-framework"
+    ]
   }
 ]
