@@ -1345,5 +1345,59 @@
       "https://github.com/langchain-ai/langchain",
       "https://python.langchain.com/docs"
     ]
+  },
+  {
+    "id": "deep-agents",
+    "name": "Deep Agents",
+    "category": "orchestration",
+    "description": "A harness for building agents that can plan, delegate to sub-agents, and use a virtual filesystem for complex, multi-step tasks. It is built on LangGraph and inspired by systems like Claude Code .",
+    "bestFor": [
+      "Developers building complex agents that require planning and long-term context management",
+      "Tasks that involve delegating work to specialized sub-agents"
+    ],
+    "strengths": [
+      "Built-in planning tool ('write_todos') that forces the agent to decompose tasks",
+      "Ability to delegate to sub-agents to isolate context and manage complexity",
+      "Virtual filesystem for persistent memory and context offloading",
+      "Progressive disclosure of skills to keep context windows small"
+    ],
+    "gettingStarted": [
+      "Install the Python package: `pip install deepagents`",
+      "Alternatively, install with uv: `uv add deepagents`"
+    ],
+    "usageNotes": [
+      "The agent uses a structured system prompt with rules, examples, and anti-derailment instructions .",
+      "Skills are defined in `SKILL.md` files and loaded on demand based on task requirements .",
+      "The harness includes a virtual filesystem with tools like `ls`, `read_file`, and `write_file` for persistent memory .",
+      "Memory can be managed using `AGENTS.md` files that are loaded at startup ."
+    ],
+    "url": "https://docs.langchain.com/oss/python/deepagents/overview",
+    "domain": "langchain.com",
+    "favicon": "",
+    "platforms": [
+      "cli"
+    ],
+    "pricing": "free",
+    "priceDetails": "",
+    "tags": [
+      "langchain",
+      "langgraph",
+      "ai-agents",
+      "planning",
+      "orchestration"
+    ],
+    "install": "pip install deepagents",
+    "start": "",
+    "commands": [],
+    "models": [],
+    "github": "https://github.com/langchain-ai/deepagents",
+    "docs": "https://docs.langchain.com/oss/python/deepagents/overview",
+    "addedAt": "2026-08-30",
+    "updatedAt": "2026-08-30",
+    "lastVerifiedAt": "2026-08-30",
+    "sources": [
+      "https://docs.langchain.com/oss/python/deepagents/overview",
+      "https://github.com/langchain-ai/deepagents"
+    ]
   }
 ]
