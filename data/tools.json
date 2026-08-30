@@ -964,5 +964,69 @@
     "sources": [
       "https://sourcegraph.com/amp"
     ]
+  },
+  {
+    "id": "replit-agent",
+    "name": "Replit Agent",
+    "category": "coding-agents",
+    "description": "An AI-powered software engineering assistant integrated into the Replit cloud IDE that can plan, write, run, test, and deploy code from natural language prompts within a live development environment.",
+    "bestFor": [
+      "Building full-stack web applications from scratch",
+      "Creating prototypes and MVPs quickly",
+      "Automating complex or repetitive workflows",
+      "Building automations and other AI agents",
+      "Knowledge work, research, and file generation"
+    ],
+    "strengths": [
+      "Highly autonomous, capable of testing apps in a browser and automatically fixing issues",
+      "Integrates deeply with Replit's cloud IDE, managing environments, dependencies, and deployment",
+      "Offers Plan Mode for risk-free brainstorming and Build Mode for implementation",
+      "Can build other agents and automations (e.g., Slack bots, Telegram bots)",
+      "Supports 'Custom Instructions' and reusable 'Skills' for team-wide conventions"
+    ],
+    "gettingStarted": [
+      "Go to the Replit home page and select 'General' before writing a prompt, or open any existing project .",
+      "Describe what you want to build or do in plain language in the chat.",
+      "The Agent will either start a planning session (Plan Mode) or build directly (Build Mode) .",
+      "Review the Agent's plan or code changes, test the app in the Preview pane, and iterate via chat ."
+    ],
+    "usageNotes": [
+      "Agent works within a single project's context and cannot interact with other projects .",
+      "For complex tasks, use Plan Mode to brainstorm and create a task list before building .",
+      "The Agent can connect to external services (e.g., Linear, Slack, Notion) via 'Connectors' in project settings .",
+      "App Testing is on by default, allowing the Agent to periodically test the app in a browser preview ."
+    ],
+    "url": "https://replit.com/",
+    "domain": "replit.com",
+    "favicon": "https://replit.com/favicon.ico",
+    "platforms": [
+      "web",
+      "mobile"
+    ],
+    "pricing": "freemium",
+    "priceDetails": "Free Starter plan includes limited, daily-refreshed credits for the Agent. Pro and Enterprise plans offer more usage and features like Custom Instructions.",
+    "tags": [
+      "AI",
+      "coding agent",
+      "IDE",
+      "deployment",
+      "automation",
+      "no-code",
+      "low-code"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [],
+    "github": "https://github.com/replit",
+    "docs": "https://docs.replit.com/",
+    "addedAt": "2026-08-30",
+    "updatedAt": "2026-08-30",
+    "lastVerifiedAt": "2026-08-30",
+    "sources": [
+      "https://replit.com/",
+      "https://github.com/replit",
+      "https://docs.replit.com/"
+    ]
   }
 ]
