@@ -1028,5 +1028,72 @@
       "https://github.com/replit",
       "https://docs.replit.com/"
     ]
+  },
+  {
+    "id": "bolt-new",
+    "name": "Bolt.new",
+    "category": "coding-agents",
+    "description": "AI-powered full-stack web development platform by StackBlitz that runs entirely in the browser using WebContainers technology, enabling natural language prompt-to-application generation, editing, and deployment.",
+    "bestFor": [
+      "Rapid prototyping and full-stack web application development from natural language prompts",
+      "Product managers and designers wanting to build and validate working applications without local setup",
+      "Developers seeking an in-browser environment with complete control over filesystem, terminal, and package management"
+    ],
+    "strengths": [
+      "Runs full Node.js environment in the browser via WebContainers, eliminating local setup and enabling instant development",
+      "AI has complete control over filesystem, server, package manager, terminal, and browser console for full lifecycle management",
+      "Supports popular JavaScript frameworks and libraries including Vite, Next.js, and npm tools",
+      "Integrates design systems (Material UI, Chakra, Shadcn, Porsche Design System) for on-brand code generation",
+      "One-click deployment to production, with Netlify integration resulting in over 1 million AI-generated site deployments"
+    ],
+    "gettingStarted": [
+      "Navigate to bolt.new in your web browser",
+      "Sign in with GitHub or Google account",
+      "Type a natural language prompt describing the application you want to build",
+      "Review the generated application in the live preview environment",
+      "Iterate with additional prompts to refine features and functionality"
+    ],
+    "usageNotes": [
+      "Free tier provides 300K daily tokens and 1M monthly tokens for evaluation",
+      "Pro subscription at $25/month unlocks additional tokens and private projects",
+      "Supports chat-based development with checkpoint, rollback, and prompt optimization features",
+      "Code generation uses AI models including Claude 3.5 Sonnet for zero-shot code generation",
+      "WebContainer execution limits compute-heavy applications with native dependencies or GPU access",
+      "Projects can be exported to GitHub for continued development outside the platform"
+    ],
+    "url": "https://bolt.new/",
+    "domain": "bolt.new",
+    "favicon": "",
+    "platforms": [
+      "web",
+      "api"
+    ],
+    "pricing": "freemium",
+    "priceDetails": "Free tier: 300K daily tokens, 1M monthly tokens. Pro: $25/month for additional tokens and private projects.",
+    "tags": [
+      "AI coding agent",
+      "full-stack",
+      "web development",
+      "in-browser IDE",
+      "prompt-to-app",
+      "StackBlitz",
+      "WebContainers",
+      "vibe coding"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [
+      "Claude 3.5 Sonnet"
+    ],
+    "github": "",
+    "docs": "https://bolt.new/docs",
+    "addedAt": "2026-08-30",
+    "updatedAt": "2026-08-30",
+    "lastVerifiedAt": "2026-08-30",
+    "sources": [
+      "https://bolt.new/",
+      "https://bolt.new/docs"
+    ]
   }
 ]
