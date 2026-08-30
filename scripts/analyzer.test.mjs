@@ -304,7 +304,7 @@ test("analyzeTool candidate passes validation and duplicate detection", async ()
   const checked = validateTool(tool, schema);
   assert.equal(checked.errors.length, 0);
   const duplicates = findDuplicates(checked.tool, tools);
-  assert.ok(duplicates.some((item) => item.id === "cursor" && item.reasons.includes("same domain")));
+  assert.ok(duplicates.some((item) => item.id === "cursor" && item.reasons.includes("same canonical URL")));
 });
 
 const HOME_FINAL = `<!doctype html><head>
@@ -687,11 +687,30 @@ test("identical canonical URL is a duplicate", () => {
   assert.ok(duplicates.some((item) => item.reasons.includes("same canonical URL")));
 });
 
-test("shared product domain is a potential duplicate", () => {
+test("two different tools on the same product domain are not duplicates", () => {
   const a = { id: "tool-a", name: "Tool A", url: "https://exampletool.com/a", domain: "exampletool.com" };
   const b = { id: "tool-b", name: "Tool B", url: "https://exampletool.com/b", domain: "exampletool.com" };
+  assert.deepEqual(findDuplicates(a, [b]), []);
+});
+
+test("different LangChain products sharing langchain.com are not duplicates", () => {
+  const deepAgents = { id: "deep-agents", name: "Deep Agents", url: "https://www.langchain.com/deepagents", domain: "langchain.com" };
+  const langGraph = { id: "langgraph", name: "LangGraph", url: "https://www.langchain.com/langgraph", domain: "langchain.com" };
+  assert.deepEqual(findDuplicates(deepAgents, [langGraph]), []);
+  assert.deepEqual(findDuplicates(langGraph, [deepAgents]), []);
+});
+
+test("different tools on openai.com are not duplicates", () => {
+  const chatgpt = { id: "chatgpt", name: "ChatGPT", url: "https://openai.com/chatgpt", domain: "openai.com" };
+  const o1 = { id: "o1", name: "o1", url: "https://openai.com/o1", domain: "openai.com" };
+  assert.deepEqual(findDuplicates(chatgpt, [o1]), []);
+});
+
+test("similar names are still flagged as duplicates", () => {
+  const a = { id: "cursor", name: "Cursor", url: "https://cursor.com/", domain: "cursor.com" };
+  const b = { id: "cursor-ai", name: "Cursor AI", url: "https://cursor-ai.example/", domain: "cursor-ai.example" };
   const duplicates = findDuplicates(a, [b]);
-  assert.ok(duplicates.some((item) => item.reasons.includes("same domain")));
+  assert.ok(duplicates.some((item) => item.id === "cursor-ai" && item.reasons.includes("very similar name")));
 });
 
 test("same id is a duplicate", () => {

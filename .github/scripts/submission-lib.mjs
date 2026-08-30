@@ -118,20 +118,10 @@ export function validateTool(raw, schema) {
   return { errors, tool: errors.length ? null : tool };
 }
 
-// Hosting, marketplace and package-registry hosts that legitimately host many
-// unrelated tools (github.com, huggingface.co, npmjs.com, app stores, ...).
-// Two entries sharing one of these on domain alone must not be flagged as
-// duplicates, while two products owned by the same domain (cursor.com ==
-// cursor.com) still look suspicious.
-const SHARED_HOSTS = new Set([
-  "github.com", "gitlab.com", "bitbucket.org", "huggingface.co",
-  "npmjs.com", "pypi.org", "crates.io", "marketplace.visualstudio.com",
-  "microsoft.com", "apps.apple.com", "play.google.com", "chrome.google.com",
-  "sites.google.com", "medium.com", "substack.com", "wordpress.com"
-]);
-export function isSharedHost(domain = "") {
-  const host = String(domain).trim().toLowerCase();
-  if (SHARED_HOSTS.has(host)) return true;
-  return host.startsWith("www.") && SHARED_HOSTS.has(host.slice(4));
-}
-export function findDuplicates(tool, tools, excludeId = "") { return tools.filter((existing) => existing.id !== excludeId).flatMap((existing) => { const reasons = []; if (existing.id === tool.id) reasons.push("same id"); if (canonicalUrl(existing.url) === canonicalUrl(tool.url)) reasons.push("same canonical URL"); if (existing.domain && tool.domain && existing.domain.toLowerCase() === tool.domain.toLowerCase() && !isSharedHost(existing.domain)) reasons.push("same domain"); if (isSimilarName(existing.name, tool.name)) reasons.push("very similar name"); return reasons.length ? [{ id: existing.id, name: existing.name, reasons }] : []; }); }
+// A tool is a possible duplicate only on strong signals: same id, same
+// canonical URL, or a very similar name. Domain is deliberately NOT a
+// duplicate criterion: different products from the same company legitimately
+// share a domain (langchain.com hosts both Deep Agents and LangGraph), and
+// platform hosts (github.com, huggingface.co, npmjs.com, ...) host thousands
+// of unrelated tools.
+export function findDuplicates(tool, tools, excludeId = "") { return tools.filter((existing) => existing.id !== excludeId).flatMap((existing) => { const reasons = []; if (existing.id === tool.id) reasons.push("same id"); if (canonicalUrl(existing.url) === canonicalUrl(tool.url)) reasons.push("same canonical URL"); if (isSimilarName(existing.name, tool.name)) reasons.push("very similar name"); return reasons.length ? [{ id: existing.id, name: existing.name, reasons }] : []; }); }
