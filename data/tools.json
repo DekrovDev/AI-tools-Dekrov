@@ -1840,5 +1840,84 @@
       "https://github.com/pydantic/pydantic-ai",
       "https://ai.pydantic.dev"
     ]
+  },
+  {
+    "id": "mastra",
+    "name": "Mastra",
+    "category": "orchestration",
+    "description": "A TypeScript-native framework for building AI agents, tools, and workflows, integrating model routing, memory, evals, and guardrails for production applications .",
+    "bestFor": [
+      "TypeScript developers building production AI agents",
+      "Full-stack web developers integrating AI with Next.js, React, or Node.js",
+      "Creating durable, multi-step workflows with human-in-the-loop capabilities"
+    ],
+    "strengths": [
+      "TypeScript-native design with full IDE autocomplete and type safety",
+      "Supports 40+ LLM providers through a unified model router",
+      "Includes built-in evals, observability, and memory management",
+      "Strong MCP integration for connecting to Model Context Protocol servers",
+      "Durable graph-based workflows with branching, loops, and suspension"
+    ],
+    "gettingStarted": [
+      "Run `npx create-mastra@latest` to create a new project",
+      "Select an LLM provider (OpenAI, Anthropic, Google, etc.) and enter your API key",
+      "Run `npm run dev` to start the development server",
+      "Open the Mastra Studio UI at http://localhost:4111"
+    ],
+    "usageNotes": [
+      "Requires Node.js v20.0+",
+      "Mastra Studio provides an interactive interface for building, testing, and managing agents, workflows, and tools",
+      "Workflows are graph-based state machines with durable execution, supporting branching, parallelism, and human-in-the-loop",
+      "Memory system includes conversation history, working memory, and semantic recall with observational memory for compression",
+      "Evals support model-graded, rule-based, and statistical metrics for output quality measurement"
+    ],
+    "url": "https://mastra.ai/",
+    "domain": "mastra.ai",
+    "favicon": "https://mastra.ai/favicon.ico",
+    "platforms": [
+      "web",
+      "cli",
+      "api"
+    ],
+    "pricing": "freemium",
+    "priceDetails": "Open-source framework under Apache 2.0 with paid Mastra Cloud plans; Teams plan at $250/month adds SSO and SOC 2 documentation",
+    "tags": [
+      "TypeScript",
+      "AI agents",
+      "workflows",
+      "MCP",
+      "RAG",
+      "evals",
+      "observability",
+      "memory"
+    ],
+    "install": "npx create-mastra@latest",
+    "start": "npm run dev",
+    "commands": [
+      {
+        "label": "Create project",
+        "command": "npx create-mastra@latest"
+      },
+      {
+        "label": "Development server",
+        "command": "npm run dev"
+      }
+    ],
+    "models": [
+      "openai/gpt-4o",
+      "openai/gpt-5-nano",
+      "openai/text-embedding-3-small",
+      "venice/venice-uncensored"
+    ],
+    "github": "https://github.com/mastra-ai/mastra",
+    "docs": "https://mastra.ai/docs",
+    "addedAt": "2026-08-30",
+    "updatedAt": "2026-08-30",
+    "lastVerifiedAt": "2026-08-30",
+    "sources": [
+      "https://mastra.ai/",
+      "https://github.com/mastra-ai/mastra",
+      "https://mastra.ai/docs"
+    ]
   }
 ]
