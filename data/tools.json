@@ -1549,5 +1549,67 @@
       "https://learn.microsoft.com/agent-framework/overview",
       "https://github.com/microsoft/agent-framework"
     ]
+  },
+  {
+    "id": "llamaindex",
+    "name": "LlamaIndex",
+    "category": "orchestration",
+    "description": "A data framework for building LLM applications that connect language models to private or specific data sources. It provides tools for data ingestion, indexing, querying, and building agents and multi-stage reasoning systems .",
+    "bestFor": [
+      "Building retrieval-augmented generation (RAG) systems",
+      "Creating agents and workflows that interact with private data",
+      "Developing LLM applications with custom data sources"
+    ],
+    "strengths": [
+      "Provides data connectors for various sources and formats (APIs, PDFs, SQL, etc.)",
+      "Offers advanced retrieval and query interfaces over your data",
+      "Supports a wide array of integrations and pluggable modules, including over 300 integrations on LlamaHub",
+      "Flexible framework with both high-level APIs for beginners and low-level APIs for advanced customization"
+    ],
+    "gettingStarted": [
+      "pip install llama-index"
+    ],
+    "usageNotes": [
+      "The main package `llama-index` provides a starter selection of integrations, while `llama-index-core` allows for a customized setup by adding specific integration packages .",
+      "Core components include models (LLMs and embedding models), prompts, query engines, and agents .",
+      "Works with a variety of vector stores, like Elasticsearch, to store and manage document embeddings .",
+      "Default embedding model is OpenAI's `text-embedding-ada-002`; others can be configured ."
+    ],
+    "url": "https://www.llamaindex.ai/",
+    "domain": "llamaindex.ai",
+    "favicon": "",
+    "platforms": [
+      "cli",
+      "api"
+    ],
+    "pricing": "free",
+    "priceDetails": "Open-source framework, free to use. Integrations may require third-party API keys (e.g., OpenAI) which have their own costs .",
+    "tags": [
+      "data-framework",
+      "llm",
+      "rag",
+      "agents",
+      "python"
+    ],
+    "install": "pip install llama-index",
+    "start": "",
+    "commands": [],
+    "models": [
+      "OpenAI text-embedding-ada-002",
+      "OpenAI text-embedding-3-small",
+      "Hugging Face",
+      "Azure OpenAI",
+      "Replicate"
+    ],
+    "github": "https://github.com/run-llama/llama_index",
+    "docs": "https://docs.llamaindex.ai/",
+    "addedAt": "2026-08-30",
+    "updatedAt": "2026-08-30",
+    "lastVerifiedAt": "2026-08-30",
+    "sources": [
+      "https://www.llamaindex.ai/",
+      "https://github.com/run-llama/llama_index",
+      "https://docs.llamaindex.ai/"
+    ]
   }
 ]
