@@ -46,9 +46,8 @@ const PRICING_RULES = [
 
 const PLATFORM_RULES = [
   { pattern: /\b(?:visual[\s-]+studio[\s-]+code|vs[\s-]+code|vscode)\b/giu, value: "vscode" },
-  { pattern: /\bbrowser[\s-]+extension\b/giu, value: "browser-extension" },
+  { pattern: /\b(?:(?:browser|chrome|firefox)[\s-]+extensions?|browser[\s-]+add(?:[\s-]?on)s?)\b/giu, value: "browser-extension" },
   { pattern: /\b(?:command[\s-]+line|terminal|shell|tui|cli)\b/giu, value: "cli" },
-  { pattern: /\bextension\b/giu, value: "browser-extension" },
   { pattern: /\b(?:web|browser)\b/giu, value: "web" },
   { pattern: /\bdesktop\b/giu, value: "desktop" },
   { pattern: /\bmobile\b/giu, value: "mobile" },

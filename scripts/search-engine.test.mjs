@@ -67,6 +67,41 @@ test("Visual Studio Code is recognized as the VS Code platform", () => {
   assert.deepEqual(parsed.filters.categories, ["coding-agents"]);
 });
 
+test("vscode extension detects only the VS Code platform", () => {
+  assert.deepEqual(parseCatalogQuery("vscode extension").filters.platforms, ["vscode"]);
+});
+
+test("vs code extension detects only the VS Code platform", () => {
+  assert.deepEqual(parseCatalogQuery("vs code extension").filters.platforms, ["vscode"]);
+});
+
+test("visual studio code extension detects only the VS Code platform", () => {
+  assert.deepEqual(parseCatalogQuery("visual studio code extension").filters.platforms, ["vscode"]);
+});
+
+test("browser extension detects the browser-extension platform", () => {
+  assert.deepEqual(parseCatalogQuery("browser extension").filters.platforms, ["browser-extension"]);
+});
+
+test("chrome extension detects the browser-extension platform", () => {
+  assert.deepEqual(parseCatalogQuery("chrome extension").filters.platforms, ["browser-extension"]);
+});
+
+test("firefox extension detects the browser-extension platform", () => {
+  assert.deepEqual(parseCatalogQuery("firefox extension").filters.platforms, ["browser-extension"]);
+});
+
+test("browser addon variants detect the browser-extension platform", () => {
+  assert.deepEqual(parseCatalogQuery("browser addon").filters.platforms, ["browser-extension"]);
+  assert.deepEqual(parseCatalogQuery("browser add-on").filters.platforms, ["browser-extension"]);
+});
+
+test("ambiguous extension words do not create platform filters", () => {
+  for (const query of ["extension", "plugin", "addon", "add-on"]) {
+    assert.deepEqual(parseCatalogQuery(query).filters.platforms, [], query);
+  }
+});
+
 test("multi agent framework is recognized as orchestration", () => {
   assert.deepEqual(parseCatalogQuery("multi agent framework").filters.categories, ["orchestration"]);
 });
