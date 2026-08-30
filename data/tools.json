@@ -1137,5 +1137,74 @@
       "https://github.com/vostride/agent-qa",
       "https://vostride.com/docs/agent-qa"
     ]
+  },
+  {
+    "id": "v0",
+    "name": "v0",
+    "category": "coding-agents",
+    "description": "Vercel's AI-powered tool for generating production-ready React and Next.js components and full-stack applications from natural language prompts, screenshots, or Figma designs. It uses shadcn/ui and Tailwind CSS and offers a live preview environment.",
+    "bestFor": [
+      "Rapid UI prototyping and component scaffolding for React/Next.js",
+      "Greenfield frontend projects starting from a prompt or design",
+      "Product managers and designers creating stakeholder demos",
+      "Generating full-stack apps with Vercel deployment"
+    ],
+    "strengths": [
+      "Exceptional component scaffolding quality with clean, production-ready code",
+      "Native integration with shadcn/ui and Tailwind CSS for modern, accessible UI",
+      "Live visual preview with instant iteration and multiple design variations per prompt",
+      "Seamless one-click deployment to Vercel, enabling a fast path from prompt to live site",
+      "Expanded to full-stack app generation with support for routes, databases, and auth"
+    ],
+    "gettingStarted": [
+      "Navigate to v0.dev in your browser.",
+      "Click 'Sign Up' and authenticate using GitHub, Google, or email.",
+      "Start a new chat and describe the UI or application you want to build in the prompt box.",
+      "Iterate on the generated design by providing follow-up prompts and viewing the live preview."
+    ],
+    "usageNotes": [
+      "The free tier provides a limited number of credits (e.g., 10 generations/day or $5/month in credits).",
+      "Paid plans start at $20/month for Pro (unlimited generations) and $30/user/month for Team.",
+      "A Premium plan ($20/month) is required for API access and the MCP server.",
+      "v0 operates as a standalone tool and does not have context of your existing codebase.",
+      "Generated code often benefits from refinement before being used in a production codebase.",
+      "The tool is primarily for React/Next.js and does not natively support other frameworks like Vue or Angular."
+    ],
+    "url": "https://v0.dev/",
+    "domain": "v0.dev",
+    "favicon": "https://v0.dev/favicon.ico",
+    "platforms": [
+      "web",
+      "api"
+    ],
+    "pricing": "freemium",
+    "priceDetails": "Free tier with limited credits; Pro at $20/mo (unlimited); Premium at $20/mo (adds API and Figma imports); Team at $30/user/mo.",
+    "tags": [
+      "react",
+      "nextjs",
+      "shadcn/ui",
+      "tailwind",
+      "ui-generation",
+      "prototyping",
+      "vercel"
+    ],
+    "install": "pnpm add @v0-sdk/ai-tools ai",
+    "start": "",
+    "commands": [
+      {
+        "label": "Install the v0 SDK",
+        "command": "pnpm add v0@latest"
+      }
+    ],
+    "models": [],
+    "github": "",
+    "docs": "https://v0.app/docs/api/v1/packages/ai-tools",
+    "addedAt": "2026-08-30",
+    "updatedAt": "2026-08-30",
+    "lastVerifiedAt": "2026-08-30",
+    "sources": [
+      "https://v0.dev/",
+      "https://v0.app/docs/api/v1/packages/ai-tools"
+    ]
   }
 ]
