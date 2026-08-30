@@ -1691,5 +1691,81 @@
       "https://github.com/google/adk-python",
       "https://google.github.io/adk-docs/"
     ]
+  },
+  {
+    "id": "openai-agents-sdk",
+    "name": "OpenAI Agents SDK",
+    "category": "orchestration",
+    "description": "A lightweight framework for building multi-agent workflows, supporting features like handoffs, guardrails, and tracing, with provider-agnostic support for over 100 LLMs .",
+    "bestFor": [
+      "Developers building complex, multi-agent AI systems",
+      "Creating voice agents with low-latency interactions",
+      "Automating long-running, multi-step tasks with sandboxed execution"
+    ],
+    "strengths": [
+      "Provider-agnostic design supporting OpenAI and other LLMs",
+      "Built-in capabilities for handoffs, guardrails, and human-in-the-loop workflows",
+      "Includes sandboxed agents for safe, long-running tasks"
+    ],
+    "gettingStarted": [
+      "Set up your Python environment (Python 3.10+)",
+      "Install the SDK package: pip install openai-agents",
+      "Set your OPENAI_API_KEY environment variable",
+      "Run a simple agent with: Runner.run_sync(agent, 'Write a haiku about recursion.')"
+    ],
+    "usageNotes": [
+      "Available for Python and JavaScript/TypeScript (with some features like the new harness launching first in Python)",
+      "Sandbox agents are in beta for JavaScript/TypeScript",
+      "Requires Node.js 22+ for JavaScript/TypeScript environments"
+    ],
+    "url": "https://openai.github.io/openai-agents-python",
+    "domain": "openai.github.io",
+    "favicon": "",
+    "platforms": [
+      "cli",
+      "api"
+    ],
+    "pricing": "free",
+    "priceDetails": "The SDK is open-source and free to use, though using the OpenAI API incurs standard usage costs .",
+    "tags": [
+      "ai-agents",
+      "multi-agent",
+      "openai",
+      "llm",
+      "orchestration",
+      "python",
+      "javascript"
+    ],
+    "install": "pip install openai-agents",
+    "start": "",
+    "commands": [
+      {
+        "label": "Install Python SDK",
+        "command": "pip install openai-agents"
+      },
+      {
+        "label": "Install Python SDK with voice support",
+        "command": "pip install 'openai-agents[voice]'"
+      },
+      {
+        "label": "Install JavaScript/TypeScript SDK",
+        "command": "npm install @openai/agents zod"
+      }
+    ],
+    "models": [
+      "gpt-4o",
+      "gpt-5.5",
+      "over 100 other LLMs via Chat Completions API"
+    ],
+    "github": "https://github.com/openai/openai-agents-python",
+    "docs": "https://openai.github.io/openai-agents-python/",
+    "addedAt": "2026-08-30",
+    "updatedAt": "2026-08-30",
+    "lastVerifiedAt": "2026-08-30",
+    "sources": [
+      "https://openai.github.io/openai-agents-python",
+      "https://github.com/openai/openai-agents-python",
+      "https://openai.github.io/openai-agents-python/"
+    ]
   }
 ]
