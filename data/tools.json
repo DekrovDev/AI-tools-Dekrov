@@ -1279,5 +1279,43 @@
       "https://github.com/continuedev/continue",
       "https://docs.continue.dev"
     ]
+  },
+  {
+    "id": "zed-agent",
+    "name": "Zed Agent",
+    "category": "coding-agents",
+    "description": "Zed's native AI coding agent for reading, searching, editing, and running code inside the Zed editor.",
+    "bestFor": [],
+    "strengths": [],
+    "gettingStarted": [],
+    "usageNotes": [],
+    "url": "https://zed.dev/docs/ai/zed-agent",
+    "domain": "zed.dev",
+    "favicon": "",
+    "platforms": [
+      "desktop"
+    ],
+    "pricing": "",
+    "priceDetails": "",
+    "tags": [
+      "coding-agent",
+      "editor",
+      "ai",
+      "developer-tools"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [],
+    "github": "https://github.com/zed-industries/zed",
+    "docs": "https://zed.dev/docs/ai",
+    "addedAt": "2026-08-30",
+    "updatedAt": "2026-08-30",
+    "lastVerifiedAt": "2026-08-30",
+    "sources": [
+      "https://zed.dev/docs/ai/zed-agent",
+      "https://github.com/zed-industries/zed",
+      "https://zed.dev/docs/ai"
+    ]
   }
 ]
