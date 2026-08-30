@@ -216,7 +216,7 @@ function startReasonChips(steps) {
 function renderStartResults(inner, steps) {
   const result = computeCandidates(state.startHere.config, state.startHere.answers, state.useCases, state.toolById, { primaryLimit: DEFAULT_PRIMARY_LIMIT });
   if (!result.useCase) {
-    inner.innerHTML = `<div class="start-empty"><p class="kicker">START HERE</p><h2>Nothing to show</h2><p>The selected goal is no longer available.</p><div class="start-controls"><button class="button button-secondary" type="button" data-start-back>${icon("arrowLeft")} Back</button><button class="button button-secondary" type="button" data-start-over>Start over</button></div></div>`;
+    inner.innerHTML = `<div class="start-empty"><p class="kicker">START HERE</p><h2>Nothing to show</h2><p>The selected goal is no longer available.</p><div class="start-empty-actions"><div class="start-empty-secondary"><button class="button button-secondary" type="button" data-start-back>${icon("arrowLeft")} Back</button><button class="button button-secondary" type="button" data-start-over>Start over</button></div></div></div>`;
     return;
   }
   const chips = startReasonChips(steps);
@@ -225,7 +225,7 @@ function renderStartResults(inner, steps) {
     const relaxActions = [];
     if (state.startHere.answers.pricing) relaxActions.push(`<button class="button button-secondary" type="button" data-start-relax="pricing">Remove pricing preference</button>`);
     if (state.startHere.answers.platform) relaxActions.push(`<button class="button button-secondary" type="button" data-start-relax="platform">Remove platform preference</button>`);
-    inner.innerHTML = `<div class="start-empty"><p class="kicker">YOUR PATH</p><h2>No exact matches</h2><p>${escapeHtml(result.useCase.name)} has no tools matching your choices. Try relaxing one preference.</p>${chipsHtml}<div class="start-controls">${relaxActions.join("")}<button class="button button-secondary" type="button" data-start-back>${icon("arrowLeft")} Back</button><a class="button button-primary" href="#/use-cases/${encodeURIComponent(result.useCase.id)}">View all tools in this use case ${icon("arrowRight")}</a></div></div>`;
+    inner.innerHTML = `<div class="start-empty"><p class="kicker">YOUR PATH</p><h2>No exact matches</h2><p>${escapeHtml(result.useCase.name)} has no tools matching your choices. Try relaxing one preference.</p>${chipsHtml}<div class="start-empty-actions"><div class="start-empty-secondary">${relaxActions.join("")}<button class="button button-secondary" type="button" data-start-back>${icon("arrowLeft")} Back</button></div><a class="button button-primary" href="#/use-cases/${encodeURIComponent(result.useCase.id)}">View all tools in this use case ${icon("arrowRight")}</a></div></div>`;
     return;
   }
   const cards = result.matches.map(toolCard).join("");
