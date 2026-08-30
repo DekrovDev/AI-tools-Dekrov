@@ -41,12 +41,12 @@ Smart Add enrichment and the moderator `ai-enrich` flow call an OpenAI-compatibl
 | Setting | Where | Value |
 | --- | --- | --- |
 | `AI_PROVIDER_BASE_URL` | repository variable | `https://openrouter.ai/api/v1` |
-| `AI_MODEL` | repository variable | `z-ai/glm-5.2:free` |
+| `AI_MODEL` | repository variable | `nvidia/nemotron-3-super-120b-a12b:free` |
 | `AI_API_KEY` | repository secret | your provider API key |
 
 Configure them at **Settings → Secrets and variables → Actions** in the repository.
 
-**Recommended: OpenRouter.** The `z-ai/glm-5.2:free` model is genuinely free (rate-limited, ~50 requests/day), which is fine for occasional enrichment. Create an API key at [openrouter.ai/keys](https://openrouter.ai/keys).
+**Recommended: OpenRouter.** Free models (currently `nvidia/nemotron-3-super-120b-a12b:free`) cost nothing, which is fine for occasional enrichment. Create an API key at [openrouter.ai/keys](https://openrouter.ai/keys). Other OpenRouter models (e.g. `z-ai/glm-5.2:free` or `z-ai/glm-4.7-flash`) can be used by changing `AI_MODEL`; free-tier shared pools can be rate-limited, in which case enrichment is skipped silently.
 
 **Alternative: Z.ai directly.** Use `https://api.z.ai/api/paas/v4` as `AI_PROVIDER_BASE_URL` and `glm-5.2` as `AI_MODEL`, with an API key from [z.ai](https://z.ai). New accounts get free starter credits, after which it is pay-as-you-go.
 
