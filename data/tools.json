@@ -1764,5 +1764,81 @@
       "https://github.com/openai/openai-agents-python",
       "https://openai.github.io/openai-agents-python/"
     ]
+  },
+  {
+    "id": "pydanticai",
+    "name": "PydanticAI",
+    "category": "orchestration",
+    "description": "A Python agent framework designed for building production-grade applications with Generative AI, leveraging Pydantic for type safety and validation.",
+    "bestFor": [
+      "Python developers",
+      "building type-safe AI agents",
+      "applications requiring validated structured outputs",
+      "integrating with multiple LLM providers"
+    ],
+    "strengths": [
+      "Built by the Pydantic team, leveraging Pydantic's validation layer used across the AI ecosystem",
+      "End-to-end type safety with typed dependencies, tools, and structured outputs",
+      "Model-agnostic, supporting virtually every major LLM provider (OpenAI, Anthropic, Google, etc.)",
+      "Native integration with Pydantic Logfire for real-time debugging, tracing, and cost tracking via OpenTelemetry",
+      "Supports durable execution on Temporal, DBOS, and Prefect",
+      "Composable capabilities (MCP, web search, thinking) and human-in-the-loop tool approval"
+    ],
+    "gettingStarted": [
+      "pip install pydantic-ai",
+      "Define an Agent with a model and instructions: `agent = Agent('openai:gpt-4o', instructions='...')`",
+      "Run the agent synchronously: `result = agent.run_sync('Your query')`",
+      "Optionally define a Pydantic model for structured output and pass it as `output_type`"
+    ],
+    "usageNotes": [
+      "Uses Pydantic models to guarantee the shape of LLM outputs, sending validation errors back to the model for retry",
+      "Tools are defined with `@agent.tool` and their schema is derived from the function signature and docstring",
+      "Dependencies (e.g., DB connections) are injected via `RunContext` for type safety and testability",
+      "Agents can be run as CLI, web chat, or realtime speech interfaces"
+    ],
+    "url": "https://pydantic.dev/ai",
+    "domain": "pydantic.dev",
+    "favicon": "https://pydantic.dev/favicon.ico",
+    "platforms": [
+      "cli",
+      "api"
+    ],
+    "pricing": "free",
+    "priceDetails": "Open-source framework. Usage costs depend on the underlying LLM provider.",
+    "tags": [
+      "python",
+      "agent-framework",
+      "pydantic",
+      "type-safe",
+      "llm",
+      "ai"
+    ],
+    "install": "pip install pydantic-ai",
+    "start": "",
+    "commands": [],
+    "models": [
+      "OpenAI",
+      "Anthropic",
+      "Google Gemini",
+      "Deepseek",
+      "Ollama",
+      "Groq",
+      "Cohere",
+      "Mistral",
+      "Azure AI Foundry",
+      "Amazon Bedrock",
+      "xAI",
+      "Perplexity"
+    ],
+    "github": "https://github.com/pydantic/pydantic-ai",
+    "docs": "https://ai.pydantic.dev",
+    "addedAt": "2026-08-30",
+    "updatedAt": "2026-08-30",
+    "lastVerifiedAt": "2026-08-30",
+    "sources": [
+      "https://pydantic.dev/ai",
+      "https://github.com/pydantic/pydantic-ai",
+      "https://ai.pydantic.dev"
+    ]
   }
 ]
