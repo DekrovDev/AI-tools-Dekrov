@@ -1095,5 +1095,47 @@
       "https://bolt.new/",
       "https://bolt.new/docs"
     ]
+  },
+  {
+    "id": "agent-qa",
+    "name": "Agent QA",
+    "category": "dev-tools",
+    "description": "Agentic QA harness for running natural-language web and mobile tests with execution memory, self-healing actions, a CLI, a dashboard, MCP, and coding-agent skills.",
+    "bestFor": [],
+    "strengths": [],
+    "gettingStarted": [],
+    "usageNotes": [],
+    "url": "https://github.com/vostride/agent-qa",
+    "domain": "github.com",
+    "favicon": "",
+    "platforms": [
+      "web",
+      "cli"
+    ],
+    "pricing": "",
+    "priceDetails": "",
+    "tags": [
+      "testing",
+      "qa",
+      "agents",
+      "automation",
+      "web",
+      "mobile",
+      "cli",
+      "mcp"
+    ],
+    "install": "npm install -D agent-qa",
+    "start": "npx agent-qa dashboard --open",
+    "commands": [],
+    "models": [],
+    "github": "https://github.com/vostride/agent-qa",
+    "docs": "https://vostride.com/docs/agent-qa",
+    "addedAt": "2026-08-30",
+    "updatedAt": "2026-08-30",
+    "lastVerifiedAt": "2026-08-30",
+    "sources": [
+      "https://github.com/vostride/agent-qa",
+      "https://vostride.com/docs/agent-qa"
+    ]
   }
 ]
