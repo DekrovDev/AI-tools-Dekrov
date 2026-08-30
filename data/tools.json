@@ -1611,5 +1611,85 @@
       "https://github.com/run-llama/llama_index",
       "https://docs.llamaindex.ai/"
     ]
+  },
+  {
+    "id": "google-adk",
+    "name": "Agent Development Kit",
+    "category": "orchestration",
+    "description": "An open-source, code-first toolkit from Google for building, evaluating, and deploying complex AI agents and multi-agent systems .",
+    "bestFor": [
+      "developers building complex multi-agent systems",
+      "teams needing fine-grained control over agent logic and orchestration",
+      "production deployment with integration into Google Cloud services"
+    ],
+    "strengths": [
+      "code-first design for flexibility and version control",
+      "supports building hierarchical, multi-agent systems with clear delegation",
+      "offers multiple interaction interfaces: CLI, Web UI, and API",
+      "provides integrated evaluation tools for testing agent performance",
+      "designed for production deployment anywhere, with managed options via Vertex AI Agent Engine",
+      "available in Python, Go, and Java"
+    ],
+    "gettingStarted": [
+      "Install the ADK package for your preferred language (e.g., `pip install google-adk` for Python) .",
+      "Define your agent's logic and tools in code, using the `LlmAgent` class .",
+      "Run your agent locally for testing using the `adk web` or `adk run` commands ."
+    ],
+    "usageNotes": [
+      "Agents are defined in Python using the `google.adk` library .",
+      "The framework uses a Runner component to manage the execution loop, handle session state, and pass messages between the user, agent, and tools .",
+      "Multi-agent systems can be built using hierarchical structures where a root agent delegates tasks to specialized sub-agents based on their `description` .",
+      "Session state and memory can be managed using various services like `InMemorySessionService` for development or `FirestoreSessionService` for production .",
+      "Agents can be deployed to various environments, including Cloud Run, GKE, and Vertex AI Agent Engine ."
+    ],
+    "url": "https://google.github.io/adk-docs",
+    "domain": "google.github.io",
+    "favicon": "https://google.github.io/adk-docs/favicon.ico",
+    "platforms": [
+      "cli",
+      "api",
+      "vscode"
+    ],
+    "pricing": "free",
+    "priceDetails": "",
+    "tags": [
+      "agent development",
+      "multi-agent",
+      "orchestration",
+      "google cloud",
+      "ai",
+      "llm"
+    ],
+    "install": "pip install google-adk",
+    "start": "adk web",
+    "commands": [
+      {
+        "label": "Run interactive session",
+        "command": "adk run <agent_name>"
+      },
+      {
+        "label": "Run agent programmatically",
+        "command": "python3 <path_to_agent_script>"
+      },
+      {
+        "label": "Run evaluation",
+        "command": "adk eval"
+      }
+    ],
+    "models": [
+      "gemini-2.0-flash-exp",
+      "gemini-2.5-flash",
+      "gemini-2.5-pro"
+    ],
+    "github": "https://github.com/google/adk-python",
+    "docs": "https://google.github.io/adk-docs/",
+    "addedAt": "2026-08-30",
+    "updatedAt": "2026-08-30",
+    "lastVerifiedAt": "2026-08-30",
+    "sources": [
+      "https://google.github.io/adk-docs",
+      "https://github.com/google/adk-python",
+      "https://google.github.io/adk-docs/"
+    ]
   }
 ]
