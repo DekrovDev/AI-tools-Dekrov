@@ -1399,5 +1399,86 @@
       "https://docs.langchain.com/oss/python/deepagents/overview",
       "https://github.com/langchain-ai/deepagents"
     ]
+  },
+  {
+    "id": "crewai",
+    "name": "CrewAI",
+    "category": "orchestration",
+    "description": "An open-source framework for orchestrating autonomous AI agents and building complex, event-driven workflows, allowing developers to create production-ready multi-agent systems that combine collaborative intelligence with precise control .",
+    "bestFor": [
+      "Building production-ready multi-agent systems",
+      "Automating complex, multi-step workflows requiring both autonomous agent collaboration and precise control",
+      "Developers seeking a Python-native framework for orchestrating AI agents"
+    ],
+    "strengths": [
+      "Combines autonomous 'Crews' with precise, event-driven 'Flows' for a balanced architecture",
+      "Standalone and lean, independent from other frameworks like LangChain",
+      "Offers production-ready features like state management, checkpointing, and observability",
+      "Supported by a large community with over 100,000 certified developers"
+    ],
+    "gettingStarted": [
+      "pip install crewai",
+      "Set required API keys (e.g., OPENAI_API_KEY, SERPER_API_KEY) in a .env file",
+      "Create a new crew project using the CLI: crewai create crew <project-name>",
+      "Define agents, tasks, and the process (sequential or hierarchical) in the generated project files",
+      "Run the crew with: crewai run"
+    ],
+    "usageNotes": [
+      "CrewAI uses a dual architecture: 'Flows' manage state and control logic, while 'Crews' are autonomous agent teams that perform tasks",
+      "Supports both sequential and hierarchical processes for task delegation",
+      "Can be used via CLI, Python API, or deployed on the CrewAI Enterprise platform for managed infrastructure and monitoring",
+      "Requires API keys for LLM providers and any tools (e.g., Serper for web search)"
+    ],
+    "url": "https://www.crewai.com/",
+    "domain": "crewai.com",
+    "favicon": "",
+    "platforms": [
+      "cli",
+      "api"
+    ],
+    "pricing": "freemium",
+    "priceDetails": "Open-source framework is free; CrewAI AMP (Agent Management Platform) offers enterprise features for production deployment and scaling .",
+    "tags": [
+      "multi-agent",
+      "orchestration",
+      "ai",
+      "framework",
+      "workflow",
+      "automation"
+    ],
+    "install": "pip install crewai",
+    "start": "crewai run",
+    "commands": [
+      {
+        "label": "Create a new crew project",
+        "command": "crewai create crew <project-name>"
+      },
+      {
+        "label": "Run a crew",
+        "command": "crewai run"
+      },
+      {
+        "label": "Install dependencies for a crew",
+        "command": "crewai install"
+      }
+    ],
+    "models": [
+      "openai/gpt-4o",
+      "openai/gpt-4",
+      "openai/gpt-3.5-turbo",
+      "anthropic/claude-3-opus",
+      "anthropic/claude-3-sonnet",
+      "anthropic/claude-3-haiku"
+    ],
+    "github": "https://github.com/crewAIInc/crewAI",
+    "docs": "https://docs.crewai.com/",
+    "addedAt": "2026-08-30",
+    "updatedAt": "2026-08-30",
+    "lastVerifiedAt": "2026-08-30",
+    "sources": [
+      "https://www.crewai.com/",
+      "https://github.com/crewAIInc/crewAI",
+      "https://docs.crewai.com/"
+    ]
   }
 ]
