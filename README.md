@@ -56,4 +56,10 @@ If any of these settings are missing, enrichment is skipped silently — the det
 
 AI-Dekrov is a static GitHub Pages project. Its public data and source code live in this repository.
 
+### Client-side search
+
+The catalog builds one in-memory [Orama](https://docs.orama.com/docs/orama-js) index from `data/tools.json` after the page loads. Search, typo tolerance, relevance ranking, and structured filters run entirely in the browser. The production page resolves the pinned `@orama/orama` 3.1.18 ESM package through the import map in `index.html`; no build step, backend, hosted search service, API key, or Node server is required.
+
+Search-specific parsing and index behavior live in `assets/js/search-engine.js`. Node tests resolve the same exact package version from `package.json` and `package-lock.json`.
+
 Made by Dekrov — [dekrov.com](https://dekrov.com) · [GitHub](https://github.com/DekrovDev)
