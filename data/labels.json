@@ -9,5 +9,6 @@
   { "name": "invalid-tool", "color": "5319e7", "description": "Submission does not describe a real tool." },
   { "name": "dead-project", "color": "ededed", "description": "The project appears abandoned or unavailable." },
   { "name": "spam", "color": "e4e669", "description": "Submission is spam or abuse." },
-  { "name": "other", "color": "c5def5", "description": "Another moderation outcome." }
+  { "name": "other", "color": "c5def5", "description": "Another moderation outcome." },
+  { "name": "ai-enrich", "color": "1d76db", "description": "Moderator requested AI-assisted enrichment of missing submission fields." }
 ]

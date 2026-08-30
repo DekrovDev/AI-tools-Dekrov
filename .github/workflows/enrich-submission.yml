@@ -1,0 +1,66 @@
+name: AI enrich submission
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  enrich:
+    # Only the `ai-enrich` label on a canonical tool-submission issue. The
+    # label is an action request, not a moderation state.
+    if: github.event.label.name == 'ai-enrich' && contains(github.event.issue.labels.*.name, 'tool-submission')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Ensure required labels exist
+        run: node .github/scripts/ensure-labels.mjs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Run moderator AI enrichment
+        run: node .github/scripts/enrich-submission.mjs --event "$GITHUB_EVENT_PATH" --output "$RUNNER_TEMP/enrich-result.json"
+        env:
+          AI_PROVIDER_BASE_URL: ${{ vars.AI_PROVIDER_BASE_URL }}
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          AI_MODEL: ${{ vars.AI_MODEL }}
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Apply enrichment result
+        uses: actions/github-script@v7
+        env:
+          RESULT_PATH: ${{ runner.temp }}/enrich-result.json
+        with:
+          script: |
+            const fs = require('fs');
+            const result = JSON.parse(fs.readFileSync(process.env.RESULT_PATH, 'utf8'));
+            if (result.skip) {
+              console.log('No tool-submission issue to enrich; nothing to do.');
+              return;
+            }
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            // `ai-enrich` is an action label, never a moderation state: remove
+            // it after the attempt, whether successful or not.
+            if (context.payload.issue.labels.some(label => label.name === 'ai-enrich')) {
+              await github.rest.issues.removeLabel({ owner, repo, issue_number, name: 'ai-enrich' }).catch(() => {});
+            }
+            if (result.comment) {
+              await github.rest.issues.createComment({ owner, repo, issue_number, body: result.comment });
+            }
+            if (result.unauthorized || !result.changed) {
+              console.log(result.unauthorized ? 'Not a trusted moderator; issue left unchanged.' : 'No enrichment applied; issue left unchanged.');
+              return;
+            }
+            if (result.newBody) {
+              // Replace only the Tool JSON section; preserve the rest of the
+              // issue body. Editing re-triggers the normal validation workflow.
+              await github.rest.issues.update({ owner, repo, issue_number, body: result.newBody });
+              if (result.verifiedComment) {
+                await github.rest.issues.createComment({ owner, repo, issue_number, body: result.verifiedComment });
+              }
+            }
