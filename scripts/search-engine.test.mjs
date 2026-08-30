@@ -187,7 +187,7 @@ test("special characters are normalized without creating HTML", () => {
 
 test("the unchanged hash route still resolves tool detail IDs", async () => {
   const source = await readFile(new URL("../app.js", import.meta.url), "utf8");
-  assert.match(source, /location\.hash\.match\(\/\^#\\\/tools\\\//);
+  assert.match(source, /parseRouteHash\(location\.hash\)/);
   assert.match(source, /renderDetail\(detailId\)/);
 });
 

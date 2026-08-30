@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "steps": [
+    {
+      "id": "goal",
+      "title": "What do you want to do?",
+      "options": [
+        { "id": "terminal-ai", "label": "Use AI from the terminal", "description": "CLI-first AI tools for terminal workflows.", "icon": "terminal", "useCaseId": "terminal-ai" },
+        { "id": "vscode-ai", "label": "Use AI in VS Code", "description": "Coding assistants that live inside your editor.", "icon": "code", "useCaseId": "vscode-ai" },
+        { "id": "build-ai-agents", "label": "Build AI agents", "description": "Frameworks for building and orchestrating agents.", "icon": "layers", "useCaseId": "build-ai-agents" },
+        { "id": "build-web-apps", "label": "Build a web app", "description": "Generate and ship web apps from a prompt.", "icon": "globe", "useCaseId": "build-web-apps" },
+        { "id": "automate-development", "label": "Automate developer workflows", "description": "Autonomous agents for CI, tests, and release tasks.", "icon": "zap", "useCaseId": "automate-development" },
+        { "id": "local-ai-models", "label": "Use local AI models", "description": "Connect to local or self-hosted models.", "icon": "cpu", "useCaseId": "local-ai-models" },
+        { "id": "build-with-ai-apis", "label": "Build with AI APIs", "description": "Model providers and inference APIs for builders.", "icon": "api", "useCaseId": "build-with-ai-apis" }
+      ]
+    },
+    {
+      "id": "platform",
+      "title": "Where do you want to use it?",
+      "options": [
+        { "id": "cli", "label": "Terminal", "description": "Command-line tools you run in a terminal.", "icon": "terminal", "platform": "cli" },
+        { "id": "vscode", "label": "VS Code", "description": "Tools that live inside the VS Code editor.", "icon": "code", "platform": "vscode" },
+        { "id": "web", "label": "Web", "description": "Tools you use in a browser.", "icon": "globe", "platform": "web" },
+        { "id": "any-platform", "label": "No preference", "description": "Show every tool in this use case.", "platform": null }
+      ]
+    },
+    {
+      "id": "pricing",
+      "title": "What pricing do you prefer?",
+      "options": [
+        { "id": "free", "label": "Free", "description": "Free tools only.", "pricing": ["free"] },
+        { "id": "free-or-freemium", "label": "Free or freemium", "description": "Free tools or free tiers with paid upgrades.", "pricing": ["free", "freemium"] },
+        { "id": "any-pricing", "label": "Any", "description": "Show every tool in this use case.", "pricing": null }
+      ]
+    }
+  ]
+}

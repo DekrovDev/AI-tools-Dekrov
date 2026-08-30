@@ -38,8 +38,12 @@
         <aside class="sidebar" id="sidebar">
           <div class="sidebar-inner">
             <nav aria-label="Main navigation">
+              <a class="nav-item" href="#/start" data-nav="start"><span class="nav-icon" data-icon="compass"></span><span>Start Here</span></a>
               <a class="nav-item is-active" href="#/" data-nav="all"><span class="nav-icon" data-icon="grid"></span><span>All tools</span><span class="nav-count" id="all-count">0</span></a>
               <a class="nav-item" href="#/favorites" data-nav="favorites"><span class="nav-icon" data-icon="star"></span><span>Favorites</span><span class="nav-count" id="favorites-count">0</span></a>
+              <a class="nav-item" href="#/use-cases" data-nav="use-cases"><span class="nav-icon" data-icon="layers"></span><span>Use cases</span></a>
+              <a class="nav-item" href="#/stack" data-nav="stack"><span class="nav-icon" data-icon="stack"></span><span>My Stack</span><span class="nav-count" id="stack-count">0</span></a>
+              <a class="nav-item" href="#/collections" data-nav="collections"><span class="nav-icon" data-icon="collections"></span><span>Collections</span><span class="nav-count" id="collections-count">0</span></a>
             </nav>
 
             <nav class="category-nav" id="category-navigation" aria-label="Categories" hidden>
@@ -86,12 +90,34 @@
             <button class="button button-primary" id="empty-action" type="button">Suggest a tool</button>
           </section>
 
+          <section class="collections-view" id="collections-view" hidden>
+            <div class="collections-head">
+              <div><h2>Collections</h2><p>Group tools into lists you can come back to.</p></div>
+              <button class="button button-primary" id="new-collection-button" type="button"><span data-icon="plus"></span> New collection</button>
+            </div>
+            <div class="collections-grid" id="collections-grid"></div>
+          </section>
+
+          <section class="use-cases-view" id="use-cases-view" hidden>
+            <div class="use-cases-head">
+              <div><p class="kicker">BROWSE BY GOAL</p><h2>Use cases</h2><p>Tools organized by what you want to accomplish.</p></div>
+            </div>
+            <div class="use-cases-grid" id="use-cases-grid"></div>
+          </section>
+
+          <section class="start-view" id="start-view" hidden>
+            <div class="start-inner" id="start-inner"></div>
+          </section>
+
           <section class="detail-view" id="detail-view" hidden></section>
 
         </main>
       </div>
     </div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <dialog class="saved-dialog" id="saved-dialog" aria-labelledby="saved-dialog-title">
+      <div class="saved-dialog-inner" id="saved-dialog-inner"></div>
+    </dialog>
     <dialog class="tool-dialog" id="tool-dialog" aria-labelledby="tool-dialog-title">
       <div class="tool-form">
         <div class="dialog-header"><div><p class="kicker">NEW SUBMISSION</p><h2 id="tool-dialog-title">Suggest a tool</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button></div>

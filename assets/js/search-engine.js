@@ -238,13 +238,19 @@ export function sortCatalogTools(tools, sort = "recent") {
   return values.sort((a, b) => (b.addedAt || "").localeCompare(a.addedAt || "") || a.name.localeCompare(b.name));
 }
 
+function toAllowedSet(value) {
+  return value instanceof Set ? value : value ? new Set(value) : null;
+}
+
 export function filterCatalogTools(tools, options = {}) {
   const favoriteIds = options.favoriteIds instanceof Set ? options.favoriteIds : new Set(options.favoriteIds || []);
+  const allowedIds = toAllowedSet(options.allowedIds);
   return tools.filter((tool) =>
     (!options.category || tool.category === options.category) &&
     (!options.pricing || tool.pricing === options.pricing) &&
     (!options.platform || asStrings(tool.platforms).includes(options.platform)) &&
-    (!options.favoritesOnly || favoriteIds.has(tool.id))
+    (!options.favoritesOnly || favoriteIds.has(tool.id)) &&
+    (!allowedIds || allowedIds.has(tool.id))
   );
 }
 
@@ -355,7 +361,7 @@ export function createCatalogSearch(tools = []) {
 
     if (!queryActive) {
       return {
-        tools: filterCatalogTools(sourceTools, { ...explicitFilters, favoritesOnly: options.favoritesOnly, favoriteIds: options.favoriteIds }),
+        tools: filterCatalogTools(sourceTools, { ...explicitFilters, favoritesOnly: options.favoritesOnly, favoriteIds: options.favoriteIds, allowedIds: options.allowedIds }),
         hits: [],
         parsed,
         queryActive: false,
@@ -400,10 +406,12 @@ export function createCatalogSearch(tools = []) {
     }
 
     const favoriteIds = options.favoriteIds instanceof Set ? options.favoriteIds : new Set(options.favoriteIds || []);
+    const allowedIds = toAllowedSet(options.allowedIds);
     const rankedTools = hits
       .map((hit) => toolsById.get(hit.id))
       .filter(Boolean)
-      .filter((tool) => !options.favoritesOnly || favoriteIds.has(tool.id));
+      .filter((tool) => !options.favoritesOnly || favoriteIds.has(tool.id))
+      .filter((tool) => !allowedIds || allowedIds.has(tool.id));
 
     return { tools: rankedTools, hits, parsed: effectiveParsed, queryActive: true, phase };
   }

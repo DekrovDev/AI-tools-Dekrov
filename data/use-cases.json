@@ -1,0 +1,102 @@
+[
+  {
+    "id": "terminal-ai",
+    "name": "Use AI from the terminal",
+    "shortDescription": "CLI-first AI tools for terminal workflows.",
+    "description": "Coding agents and command-line tools designed to be driven entirely from a terminal.",
+    "icon": "terminal",
+    "toolIds": [
+      "aider",
+      "opencode",
+      "antigravity-cli",
+      "grok-build",
+      "openhands",
+      "deep-agents",
+      "amp"
+    ]
+  },
+  {
+    "id": "vscode-ai",
+    "name": "Use AI in VS Code",
+    "shortDescription": "Coding assistants that live inside your editor.",
+    "description": "AI coding assistants and agents available as VS Code extensions.",
+    "icon": "code",
+    "toolIds": [
+      "windsurf",
+      "github-copilot",
+      "cline",
+      "kilo-code",
+      "continue",
+      "amp"
+    ]
+  },
+  {
+    "id": "build-ai-agents",
+    "name": "Build AI agents",
+    "shortDescription": "Frameworks for building and orchestrating agents.",
+    "description": "Developer frameworks for building, orchestrating, and deploying AI agents and multi-agent systems.",
+    "icon": "layers",
+    "toolIds": [
+      "deep-agents",
+      "crewai",
+      "langchain",
+      "microsoft-agent-framework",
+      "llamaindex",
+      "google-adk",
+      "openai-agents-sdk",
+      "pydanticai",
+      "mastra"
+    ]
+  },
+  {
+    "id": "build-web-apps",
+    "name": "Build a web app",
+    "shortDescription": "Generate and ship web apps from a prompt.",
+    "description": "Tools that generate, iterate on, and deploy full-stack web applications.",
+    "icon": "globe",
+    "toolIds": [
+      "bolt-new",
+      "v0",
+      "replit-agent",
+      "grok-build"
+    ]
+  },
+  {
+    "id": "automate-development",
+    "name": "Automate developer workflows",
+    "shortDescription": "Autonomous agents for CI, tests, and release tasks.",
+    "description": "Tools that run autonomous coding, testing, and CI/CD workflows.",
+    "icon": "zap",
+    "toolIds": [
+      "grok-build",
+      "openhands",
+      "kilo-code",
+      "agent-qa",
+      "replit-agent"
+    ]
+  },
+  {
+    "id": "local-ai-models",
+    "name": "Use local AI models",
+    "shortDescription": "Connect to local or self-hosted models.",
+    "description": "Tools that can connect to locally hosted AI models or local model runtimes.",
+    "icon": "cpu",
+    "toolIds": [
+      "opencode",
+      "continue",
+      "cline"
+    ]
+  },
+  {
+    "id": "build-with-ai-apis",
+    "name": "Build with AI APIs",
+    "shortDescription": "Model providers and inference APIs for builders.",
+    "description": "Unified model APIs and high-speed inference platforms for building AI-powered products.",
+    "icon": "api",
+    "toolIds": [
+      "openrouter",
+      "cerebras",
+      "groq-is-the-premier-neocloud-for-fast-inference"
+    ]
+  }
+]
