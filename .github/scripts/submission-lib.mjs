@@ -19,11 +19,20 @@ export function canonicalUrl(value = "") {
 export function domainFromUrl(value = "") { try { return new URL(value).hostname.replace(/^www\./, "").toLowerCase(); } catch { return ""; } }
 export function section(body = "", label) {
   const header = `### ${label}`;
-  const start = body.indexOf(header);
+  const lines = String(body || "").replace(/\r\n/g, "\n").split("\n");
+  let start = -1;
+  for (let index = 0; index < lines.length; index += 1) {
+    if (lines[index].trim() === header) { start = index; break; }
+  }
   if (start === -1) return "";
-  const afterHeader = body.slice(start + header.length).replace(/^\s*\r?\n/, "");
-  const nextHeader = afterHeader.search(/\r?\n### /);
-  return (nextHeader === -1 ? afterHeader : afterHeader.slice(0, nextHeader)).trim();
+  const content = [];
+  for (let index = start + 1; index < lines.length; index += 1) {
+    // A line starting with "### " begins another section. Stop here so an
+    // empty section never swallows the next section's header or content.
+    if (/^### /.test(lines[index])) break;
+    content.push(lines[index]);
+  }
+  return content.join("\n").trim();
 }
 export function emptyResponse(value) { return /^_?no response_?$/i.test(value.trim()) ? "" : value.trim(); }
 export function parseIssueSubmission(body) {
@@ -109,4 +118,20 @@ export function validateTool(raw, schema) {
   return { errors, tool: errors.length ? null : tool };
 }
 
-export function findDuplicates(tool, tools, excludeId = "") { return tools.filter((existing) => existing.id !== excludeId).flatMap((existing) => { const reasons = []; if (existing.id === tool.id) reasons.push("same id"); if (canonicalUrl(existing.url) === canonicalUrl(tool.url)) reasons.push("same canonical URL"); if (existing.domain && existing.domain.toLowerCase() === tool.domain.toLowerCase()) reasons.push("same domain"); if (isSimilarName(existing.name, tool.name)) reasons.push("very similar name"); return reasons.length ? [{ id: existing.id, name: existing.name, reasons }] : []; }); }
+// Hosting, marketplace and package-registry hosts that legitimately host many
+// unrelated tools (github.com, huggingface.co, npmjs.com, app stores, ...).
+// Two entries sharing one of these on domain alone must not be flagged as
+// duplicates, while two products owned by the same domain (cursor.com ==
+// cursor.com) still look suspicious.
+const SHARED_HOSTS = new Set([
+  "github.com", "gitlab.com", "bitbucket.org", "huggingface.co",
+  "npmjs.com", "pypi.org", "crates.io", "marketplace.visualstudio.com",
+  "microsoft.com", "apps.apple.com", "play.google.com", "chrome.google.com",
+  "sites.google.com", "medium.com", "substack.com", "wordpress.com"
+]);
+export function isSharedHost(domain = "") {
+  const host = String(domain).trim().toLowerCase();
+  if (SHARED_HOSTS.has(host)) return true;
+  return host.startsWith("www.") && SHARED_HOSTS.has(host.slice(4));
+}
+export function findDuplicates(tool, tools, excludeId = "") { return tools.filter((existing) => existing.id !== excludeId).flatMap((existing) => { const reasons = []; if (existing.id === tool.id) reasons.push("same id"); if (canonicalUrl(existing.url) === canonicalUrl(tool.url)) reasons.push("same canonical URL"); if (existing.domain && tool.domain && existing.domain.toLowerCase() === tool.domain.toLowerCase() && !isSharedHost(existing.domain)) reasons.push("same domain"); if (isSimilarName(existing.name, tool.name)) reasons.push("very similar name"); return reasons.length ? [{ id: existing.id, name: existing.name, reasons }] : []; }); }

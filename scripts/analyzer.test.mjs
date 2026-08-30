@@ -622,3 +622,128 @@ test("runSmartAdd reports an unsafe URL without converting", async () => {
 test("parseArgs handles space-separated and equals flags", () => {
   assert.deepEqual(parseArgs(["--event", "/tmp/e.json", "--output=/tmp/o.json"]), { event: "/tmp/e.json", output: "/tmp/o.json" });
 });
+
+// ---------------------------------------------------------------------------
+// Issue-body section parsing regression tests
+// ---------------------------------------------------------------------------
+
+test("empty Existing tool ID on a new submission parses as empty", () => {
+  const body =
+    "### Submission type\n\nnew\n\n### Existing tool ID\n\n\n\n" +
+    "### Tool JSON\n{ \"id\": \"agent-qa\" }\n\n### Confirmation\n\n- [x] yes";
+  const submission = parseIssueSubmission(body);
+  assert.equal(submission.type, "new");
+  assert.equal(submission.existingToolId, "");
+  assert.deepEqual(JSON.parse(submission.json), { id: "agent-qa" });
+});
+
+test("_No response_ Existing tool ID counts as empty", () => {
+  const body = "### Submission type\n\nnew\n\n### Existing tool ID\n\n_No response_\n\n### Tool JSON\n{\"id\":\"agent-qa\"}";
+  const submission = parseIssueSubmission(body);
+  assert.equal(submission.type, "new");
+  assert.equal(submission.existingToolId, "");
+});
+
+test("update submission reads a non-empty Existing tool ID", () => {
+  const body = "### Submission type\n\nupdate\n\n### Existing tool ID\ncursor\n\n### Tool JSON\n{\"id\":\"cursor\"}";
+  const submission = parseIssueSubmission(body);
+  assert.equal(submission.type, "update");
+  assert.equal(submission.existingToolId, "cursor");
+});
+
+test("an empty section never swallows the next section header", () => {
+  const body = "### Submission type\n\nnew\n\n### Existing tool ID\n\n\r\n### Tool JSON\n{\"id\":\"agent-qa\"}";
+  const submission = parseIssueSubmission(body);
+  assert.equal(submission.existingToolId, "");
+  assert.deepEqual(JSON.parse(submission.json), { id: "agent-qa" });
+});
+
+test("section parsing supports both LF and CRLF bodies", () => {
+  const lf = "### Submission type\nnew\n\n### Existing tool ID\n\n_No response_\n\n### Tool JSON\n{\"id\":\"agent-qa\"}\n";
+  const crlf = lf.replace(/\n/g, "\r\n");
+  for (const body of [lf, crlf]) {
+    const submission = parseIssueSubmission(body);
+    assert.equal(submission.type, "new");
+    assert.equal(submission.existingToolId, "");
+    assert.deepEqual(JSON.parse(submission.json), { id: "agent-qa" });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Duplicate detection regression tests
+// ---------------------------------------------------------------------------
+
+const COPILOT = { id: "github-copilot", name: "GitHub Copilot", url: "https://github.com/features/copilot", domain: "github.com" };
+
+test("github-hosted tools are not duplicates by shared domain alone", () => {
+  const agentQa = { id: "agent-qa", name: "Agent QA", url: "https://github.com/vostride/agent-qa", domain: "github.com" };
+  assert.deepEqual(findDuplicates(agentQa, [COPILOT]), []);
+});
+
+test("identical canonical URL is a duplicate", () => {
+  const a = { id: "a", name: "Alpha", url: "https://cursor.com/", domain: "cursor.com" };
+  const b = { id: "b", name: "Beta", url: "https://cursor.com", domain: "cursor.com" };
+  const duplicates = findDuplicates(a, [b]);
+  assert.ok(duplicates.some((item) => item.reasons.includes("same canonical URL")));
+});
+
+test("shared product domain is a potential duplicate", () => {
+  const a = { id: "tool-a", name: "Tool A", url: "https://exampletool.com/a", domain: "exampletool.com" };
+  const b = { id: "tool-b", name: "Tool B", url: "https://exampletool.com/b", domain: "exampletool.com" };
+  const duplicates = findDuplicates(a, [b]);
+  assert.ok(duplicates.some((item) => item.reasons.includes("same domain")));
+});
+
+test("same id is a duplicate", () => {
+  const a = { id: "cursor", name: "One", url: "https://cursor.com/", domain: "cursor.com" };
+  const b = { id: "cursor", name: "Two", url: "https://other.com/", domain: "other.com" };
+  const duplicates = findDuplicates(a, [b]);
+  assert.ok(duplicates.some((item) => item.reasons.includes("same id")));
+});
+
+test("an update does not count itself as a duplicate", () => {
+  const tool = { id: "cursor", name: "Cursor", url: "https://cursor.com/", domain: "cursor.com" };
+  assert.deepEqual(findDuplicates(tool, [tool], "cursor"), []);
+});
+
+test("real new submission body parses cleanly and is not a github.com duplicate", async () => {
+  const schema = await loadSchema();
+  const body = `### Submission type
+
+new
+
+### Existing tool ID
+
+
+
+### Tool JSON
+
+{
+  "id": "agent-qa",
+  "name": "Agent QA",
+  "category": "dev-tools",
+  "description": "Agentic QA harness",
+  "url": "https://github.com/vostride/agent-qa",
+  "domain": "github.com",
+  "platforms": ["web", "cli"],
+  "tags": ["testing", "qa"],
+  "install": "npm install -D agent-qa",
+  "start": "npx agent-qa dashboard --open",
+  "github": "https://github.com/vostride/agent-qa",
+  "docs": "https://vostride.com/docs/agent-qa"
+}
+
+### Context
+
+Official project submission.
+
+### Confirmation
+
+- [x] I confirm that the information is factual and the tool can be publicly listed.`;
+  const submission = parseIssueSubmission(body);
+  assert.equal(submission.type, "new");
+  assert.equal(submission.existingToolId, "");
+  const checked = validateTool(JSON.parse(submission.json), schema);
+  assert.deepEqual(checked.errors, []);
+  assert.deepEqual(findDuplicates(checked.tool, [COPILOT]), []);
+});
