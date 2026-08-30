@@ -51,7 +51,7 @@
     ],
     "strengths": [
       "Terminal workflow support",
-      "Supports 7 detected models"
+      "Supports multiple verified models"
     ],
     "gettingStarted": [
       "Open the official setup documentation for verified next steps."
@@ -110,7 +110,7 @@
     ],
     "strengths": [
       "Terminal workflow support",
-      "Supports 6 detected models"
+      "Supports multiple verified models"
     ],
     "gettingStarted": [
       "Install with: npm install @openrouter/sdk",
@@ -519,8 +519,7 @@
     ],
     "models": [
       "Grok 4.5",
-      "Grok 4.6",
-      "Custom OpenAI-compatible models"
+      "Grok 4.6"
     ],
     "github": "https://github.com/xai-org/grok-build",
     "docs": "https://docs.x.ai/build/overview",
@@ -581,11 +580,11 @@
     "start": "",
     "commands": [],
     "models": [
-      "OpenAI GPT",
+      "GPT",
       "GPT-Codex",
-      "Anthropic Claude",
-      "Anthropic Opus",
-      "Anthropic Haiku",
+      "Claude",
+      "Claude Opus",
+      "Claude Haiku",
       "Gemini Flash",
       "Gemini Pro"
     ],
@@ -664,8 +663,7 @@
       "Claude",
       "GPT",
       "Gemini",
-      "DeepSeek",
-      "Ollama"
+      "DeepSeek"
     ],
     "github": "",
     "docs": "",
@@ -814,8 +812,7 @@
       "Qwen 3.6",
       "Kimi K2.5",
       "MiMo V2",
-      "DeepSeek",
-      "Ollama"
+      "DeepSeek"
     ],
     "github": "https://github.com/Kilo-Org/kilocode",
     "docs": "https://docs.kilo.ai",

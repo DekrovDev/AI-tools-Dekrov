@@ -139,9 +139,12 @@ export async function runSmartAdd({ title, body, authorAssociation, tools, schem
     };
   }
 
-  const { tool, warnings, pages } = analysis;
+  const { tool, warnings, pages, modelCandidates } = analysis;
 
   // Optional AI enrichment: trusted actors only, and only when a provider is configured.
+  // The deterministic candidate keeps `models: []` (regex matches are unverified
+  // candidates); the candidates are handed to the AI purely as leads so it can
+  // decide which are genuinely supported before anything lands in `models`.
   let candidate = tool;
   const trusted = TRUSTED_ASSOCIATIONS.includes(authorAssociation || "");
   if (trusted && env.AI_PROVIDER_BASE_URL && env.AI_API_KEY && env.AI_MODEL) {
@@ -151,6 +154,7 @@ export async function runSmartAdd({ title, body, authorAssociation, tools, schem
       schema,
       evidence,
       context,
+      modelHints: modelCandidates,
       baseUrl: env.AI_PROVIDER_BASE_URL,
       apiKey: env.AI_API_KEY,
       model: env.AI_MODEL

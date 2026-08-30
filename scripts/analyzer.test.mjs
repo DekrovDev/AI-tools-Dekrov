@@ -16,7 +16,7 @@ import {
   detectCategory,
   detectPricing,
   detectTags,
-  detectModels,
+  detectModelCandidates,
   discoverUsefulLinks,
   analyzeTool,
   loadSchema
@@ -219,10 +219,10 @@ test("detects platforms, category, pricing, tags and models conservatively", asy
   assert.ok(tags.includes("agent"));
   assert.ok(tags.includes("llm"));
 
-  const models = detectModels(text);
+  const models = detectModelCandidates(text);
   assert.ok(models.includes("gpt-4"));
   assert.ok(models.includes("claude-3.5"));
-  assert.equal(detectModels("no models mentioned here").length, 0);
+  assert.equal(detectModelCandidates("no models mentioned here").length, 0);
 });
 
 test("discoverUsefulLinks is bounded, same-host only, pricing first", () => {
@@ -359,7 +359,7 @@ pip install aider
 </body></html>`;
 
 test("aider-like page: coding-agents, no web/audio noise, clean install/models/description", async () => {
-  const { tool } = await analyzeTool({
+  const { tool, modelCandidates } = await analyzeTool({
     url: "https://aider.chat/",
     fetchImpl: fakePages({
       "https://aider.chat/": AIDER_HOME,
@@ -374,12 +374,16 @@ test("aider-like page: coding-agents, no web/audio noise, clean install/models/d
   assert.ok(!tool.tags.includes("audio"));
   assert.equal(tool.install, "python -m pip install aider-install");
   assert.ok(tool.description.length >= 20 && tool.description.includes("pair programming"));
-  assert.ok(tool.models.includes("gpt-4o"));
-  assert.ok(tool.models.includes("claude-3.7"));
-  assert.ok(tool.models.includes("deepseek-r1"));
-  assert.ok(!tool.models.includes("deepseek-aider"));
-  assert.ok(!tool.models.includes("deepseek-ollama"));
-  assert.ok(!tool.models.includes("deepseek---api-key"));
+  // Regex detection is unverified *candidates*, never final supported models.
+  assert.deepEqual(tool.models, []);
+  assert.ok(modelCandidates.includes("gpt-4o"));
+  assert.ok(modelCandidates.includes("claude-3.7"));
+  assert.ok(modelCandidates.includes("deepseek-r1"));
+  assert.ok(!modelCandidates.includes("deepseek-aider"));
+  assert.ok(!modelCandidates.includes("deepseek-ollama"));
+  assert.ok(!modelCandidates.includes("deepseek---api-key"));
+  // A raw detected candidate count must never surface as a factual strength.
+  assert.ok(!tool.strengths.some((s) => /Supports \d+ detected models/i.test(s)));
 });
 
 // ---------------------------------------------------------------------------
@@ -623,6 +627,30 @@ test("parseArgs handles space-separated and equals flags", () => {
   assert.deepEqual(parseArgs(["--event", "/tmp/e.json", "--output=/tmp/o.json"]), { event: "/tmp/e.json", output: "/tmp/o.json" });
 });
 
+test("Smart Add does not lock in unverified regex model candidates as final models", async () => {
+  const schema = await loadSchema();
+  const result = await runSmartAdd({
+    title: "[Smart Add] Aider",
+    body: "### Tool URL\nhttps://aider.chat\n\n### Context\nCode assistant\n",
+    authorAssociation: "OWNER",
+    tools: [],
+    schema,
+    env: {}, // no provider configured -> no AI verification step
+    fetchImpl: fakePages({
+      "https://aider.chat/": AIDER_HOME,
+      "https://aider.chat/docs/": "<html><body><h1>Documentation</h1><p>Read the docs.</p></body></html>",
+      "https://aider.chat/docs/install.html": "<html><body><h1>Install</h1><p>Install Aider.</p></body></html>"
+    })
+  });
+  assert.equal(result.convert, true);
+  const submission = parseIssueSubmission(result.canonicalBody);
+  const parsed = JSON.parse(submission.json);
+  // Even though the page mentions several model names, no provider was
+  // configured, so the unverified regex matches must NOT populate `models`.
+  assert.deepEqual(parsed.models, []);
+  assert.ok(!parsed.strengths.some((s) => /detected models/i.test(s)));
+});
+
 // ---------------------------------------------------------------------------
 // Issue-body section parsing regression tests
 // ---------------------------------------------------------------------------
@@ -711,6 +739,18 @@ test("similar names are still flagged as duplicates", () => {
   const b = { id: "cursor-ai", name: "Cursor AI", url: "https://cursor-ai.example/", domain: "cursor-ai.example" };
   const duplicates = findDuplicates(a, [b]);
   assert.ok(duplicates.some((item) => item.id === "cursor-ai" && item.reasons.includes("very similar name")));
+});
+
+test("same-domain tools with similar names are flagged by the name rule, not by domain", () => {
+  // Same domain, different ids and URLs: the only signal is the similar name.
+  const a = { id: "cursor", name: "Cursor", url: "https://cursor.com/", domain: "cursor.com" };
+  const b = { id: "cursor-assistant", name: "Cursor AI", url: "https://cursor.com/assistant", domain: "cursor.com" };
+  const duplicates = findDuplicates(a, [b]);
+  const match = duplicates.find((item) => item.id === "cursor-assistant");
+  assert.ok(match, "expected a duplicate flagged for the similar name");
+  assert.ok(match.reasons.includes("very similar name"), "flagged by the name rule");
+  assert.ok(!match.reasons.includes("same domain"), "domain is not a duplicate reason anymore");
+  assert.deepEqual(match.reasons, ["very similar name"], "only the name rule applies");
 });
 
 test("same id is a duplicate", () => {

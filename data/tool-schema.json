@@ -20,7 +20,7 @@
     "install": { "type": "string", "description": "Verified installation command" },
     "start": { "type": "string", "description": "Verified start command" },
     "commands": { "type": "array", "items": { "type": "object", "properties": { "label": "string", "command": "string" } } },
-    "models": { "type": "array", "items": { "type": "string" } },
+    "models": { "type": "array", "items": { "type": "string" }, "description": "Officially supported AI model names or model families. Do not include providers, runtimes, marketplaces, compatibility statements, or vague model-count descriptions." },
     "github": { "type": "string", "format": "uri", "description": "Official GitHub repository URL" },
     "docs": { "type": "string", "format": "uri", "description": "Official documentation URL" },
     "addedAt": { "type": "string", "format": "date", "description": "Date the public record was added" },

@@ -389,12 +389,16 @@ export function detectTags(text, allowedPlatforms) {
   return [...tags];
 }
 
-// Only well-known model families/versions count. Provider prefixes, CLI flag
-// fragments and API-key examples (deepseek-aider, deepseek---api-key, ...) must
-// not be read as model names.
+// Only well-known model families/versions count, and only as *candidates*.
+// Regex detection proves a name appeared on a page, not that the tool supports
+// it, so the deterministic analyzer never locks these into the final `models`
+// field. Model candidates are exposed as `modelCandidates` for AI enrichment
+// to verify against official evidence. Provider prefixes, CLI flag fragments
+// and API-key examples (deepseek-aider, deepseek---api-key, ...) must not be
+// read as model names.
 const MODEL_PATTERN = /\b(gpt-4(?:\.\d+)?o?(?:-mini)?|gpt-5(?:\.\d+)?|claude[- ][0-9][0-9a-z.-]*|gemini(?: (?:exp |flash |pro )?)?[0-9.]*|llama[- ][0-9.]+|mistral[- ][a-z0-9][a-z0-9.-]*|deepseek[- ](?:r1|r2|v\d|chat|coder|reasoner)(?:[-.][a-z0-9]+)?|qwen\d*(?:-[-a-z0-9]*)?|grok[- ]?[0-9.]+|sonnet-4[.0-9]*|haiku-[0-9.]+|opus-[0-9.]+)\b/gi;
 
-export function detectModels(text) {
+export function detectModelCandidates(text) {
   const matches = text.match(MODEL_PATTERN);
   if (!matches) return [];
   const cleaned = [...new Set(matches.map((value) => value.trim().replace(/\s+/g, "-").toLowerCase()))]
@@ -538,7 +542,9 @@ export async function analyzeTool({ url, context = "", maxPages = MAX_TOTAL_PAGE
   const name = friendlyName(homeTokens, domain);
   const platforms = detectPlatforms(`${homeTokens} ${description} ${fullText}`, allowedPlatforms);
   const pricingInfo = detectPricing(`${homeTokens} ${description} ${rawTexts[0]}`, pricingTexts.join(" "));
-  const profile = detailProfile({ category: detectCategory(`${homeTokens} ${description} ${fullText}`, allowedCategories), platforms, pricing: pricingInfo.pricing || "", tags: detectTags(`${homeTokens} ${description} ${fullText}`, platforms), install: getInstallCommand(codes), start: getStartCommand(fullHtml), docs: docsLink?.href || "", models: detectModels(fullText) });
+  // Regex detection is treated as unverified candidates, never final data.
+  const modelCandidates = detectModelCandidates(fullText);
+  const profile = detailProfile({ category: detectCategory(`${homeTokens} ${description} ${fullText}`, allowedCategories), platforms, pricing: pricingInfo.pricing || "", tags: detectTags(`${homeTokens} ${description} ${fullText}`, platforms), install: getInstallCommand(codes), start: getStartCommand(fullHtml), docs: docsLink?.href || "" });
   const tool = {
     id: slugify(name),
     name,
@@ -558,17 +564,19 @@ export async function analyzeTool({ url, context = "", maxPages = MAX_TOTAL_PAGE
     install: profile.install,
     start: profile.start,
     commands: [],
-    models: profile.models,
+    // Deterministic analysis never asserts model support; only AI enrichment
+    // (with official evidence) may populate `models`. Prefer [] over a
+    // misleading unverified list.
+    models: [],
     github: githubLink?.href || "",
     docs: docsLink?.href || ""
   };
 
   if (!pricingInfo.pricing) warnings.push("Pricing details could not be determined; left empty.");
   if (!githubLink) warnings.push("No official GitHub repository was found.");
-  if (!docsLink) warnings.push("No documentation link was found.");
-
-  const contextOut = (context || "").trim();
-  return { tool, warnings, pages, context: contextOut };
+  if (!docsLink) warnings.push("No documentation link was found.");  const contextOut = (context || "").trim();
+  return { tool, warnings, pages, modelCandidates, context: contextOut };
 }
 
-function detailProfile({ category, platforms, pricing, tags, install, start, docs, models }) { const bestFor = []; if (category === "coding-agents") bestFor.push("AI-assisted software development"); else if (category === "research") bestFor.push("Research and information work"); else if (category === "audio") bestFor.push("Audio and speech workflows"); const strengths = []; if (tags.includes("open-source")) strengths.push("Open-source"); if (platforms.includes("cli")) strengths.push("Terminal workflow support"); if (models.length) strengths.push(`Supports ${models.length} detected model${models.length === 1 ? "" : "s"}`); if (pricing === "free") strengths.push("Free to use"); const gettingStarted = []; if (install) gettingStarted.push(`Install with: ${install}`); if (start) gettingStarted.push(`Start with: ${start}`); if (docs) gettingStarted.push("Open the official setup documentation for verified next steps."); const usageNotes = []; if (platforms.includes("cli")) usageNotes.push("Use from a terminal or command-line workflow."); if (platforms.includes("web")) usageNotes.push("A web interface is available."); return { category, platforms, pricing, tags, install, start, docs, models, bestFor, strengths, gettingStarted, usageNotes }; }
+
+function detailProfile({ category, platforms, pricing, tags, install, start, docs }) { const bestFor = []; if (category === "coding-agents") bestFor.push("AI-assisted software development"); else if (category === "research") bestFor.push("Research and information work"); else if (category === "audio") bestFor.push("Audio and speech workflows"); const strengths = []; if (tags.includes("open-source")) strengths.push("Open-source"); if (platforms.includes("cli")) strengths.push("Terminal workflow support"); if (pricing === "free") strengths.push("Free to use"); const gettingStarted = []; if (install) gettingStarted.push(`Install with: ${install}`); if (start) gettingStarted.push(`Start with: ${start}`); if (docs) gettingStarted.push("Open the official setup documentation for verified next steps."); const usageNotes = []; if (platforms.includes("cli")) usageNotes.push("Use from a terminal or command-line workflow."); if (platforms.includes("web")) usageNotes.push("A web interface is available."); return { category, platforms, pricing, tags, install, start, docs, bestFor, strengths, gettingStarted, usageNotes }; }

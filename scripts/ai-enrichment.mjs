@@ -29,6 +29,42 @@ export const ENRICHMENT_FOCUS_FIELDS = [
   "models"
 ];
 
+// ---------------------------------------------------------------------------
+// Model sanitization: `models` must hold real AI model names/families only.
+// ---------------------------------------------------------------------------
+
+// Values that name a provider, runtime, marketplace or compatibility layer are
+// never real models, even when they carry a model-family word in the middle
+// (e.g. "Anthropic Claude", "Azure OpenAI", "Custom OpenAI-compatible models").
+const MODEL_PROVIDER_PATTERN =
+  /\b(?:openai|anthropic|azure|amazon|amazon\s+bedrock|bedrock|hugging\s?face|replicate|ollama|openrouter|google|aws|microsoft|github)\b/i;
+
+// Vague descriptive claims that must never appear as a model value.
+const MODEL_DESCRIPTIVE_PATTERN =
+  /\b(?:\d+\s*\+?\s*(?:other\s+)?(?:models?|llms?)|other\s+llms?|custom|compatib|chat\s+completions|marketplace|runtime|api\s+platform)\b/i;
+
+// Filters an AI-returned `models` array down to likely real model names.
+// Provider/runtime/marketplace/compatibility statements and vague counts are
+// dropped; kept values are trimmed and deduplicated. Returns the original
+// array unchanged when nothing changes so callers can compare by reference.
+export function sanitizeModels(value) {
+  if (!Array.isArray(value)) return value;
+  const seen = new Set();
+  const out = [];
+  for (const raw of value) {
+    if (typeof raw !== "string") continue;
+    const trimmed = raw.trim().replace(/\s+/g, " ");
+    if (!trimmed || trimmed.length > 60) continue;
+    const lower = trimmed.toLowerCase();
+    if (MODEL_PROVIDER_PATTERN.test(lower)) continue;
+    if (MODEL_DESCRIPTIVE_PATTERN.test(lower)) continue;
+    if (seen.has(lower)) continue;
+    seen.add(lower);
+    out.push(trimmed);
+  }
+  return out.length === value.length ? value : out;
+}
+
 const TRUSTED_PERMISSIONS = new Set(["admin", "maintain", "write"]);
 
 // A moderator applies the `ai-enrich` action label. Only repository members
@@ -74,13 +110,14 @@ export function buildEnrichmentSystemPrompt() {
     "- Fill only fields that the supplied official evidence supports. Never invent features, integrations, models, commands, pricing, prices, or claims.",
     "- Do not describe a tool as \"open-source\" unless official evidence confirms an OSI-compatible open-source license.",
     "- \"commands\" entries must be objects: {\"label\": string, \"command\": string}, one per officially documented command.",
+    "- For models: include only actual AI model names or model families explicitly supported by the tool. Do not include provider names (e.g. OpenAI, Anthropic, Azure OpenAI, Amazon Bedrock, Hugging Face, Replicate, Ollama, OpenRouter), API platforms, model marketplaces, or local runtimes. Do not include vague statements such as \"100+ models\". A model merely mentioned in documentation is not enough; evidence must indicate the tool supports, offers, selects, configures, or runs that model. If support cannot be verified confidently, return {\"models\": []}.",
     "- Use only enum values from the schema. The id must be lowercase kebab-case.",
     "- Do not include generated fields (addedAt, updatedAt, lastVerifiedAt, sources).",
     "- Return ONLY one valid JSON object. No Markdown fences, no explanation."
   ].join("\n");
 }
 
-export function buildEnrichmentUserPrompt({ candidate, schema, context, evidence, focusFields }) {
+export function buildEnrichmentUserPrompt({ candidate, schema, context, evidence, focusFields, modelHints }) {
   const parts = [
     "Tool JSON to enrich (fill only empty verified fields):",
     JSON.stringify(candidate, null, 2),
@@ -92,6 +129,14 @@ export function buildEnrichmentUserPrompt({ candidate, schema, context, evidence
   }
   if (context) {
     parts.push(`User context: ${context}`);
+  }
+  if (Array.isArray(modelHints) && modelHints.length) {
+    parts.push("");
+    parts.push("Model-name candidates spotted on the official pages (NOT verified support, may be mere mentions, " +
+      "compatibility notes, or migration copy):");
+    parts.push(modelHints.join(", "));
+    parts.push("Treat these only as leads. Keep in `models` only those the official evidence explicitly shows " +
+      "the tool supports/offers/selects/configures/runs.");
   }
   parts.push("");
   parts.push("Schema:");
@@ -115,10 +160,11 @@ export async function requestEnrichment({
   apiKey,
   model,
   fetchImpl = fetch,
-  focusFields
+  focusFields,
+  modelHints
 }) {
   if (!baseUrl || !apiKey || !model) return null;
-  const userText = buildEnrichmentUserPrompt({ candidate, schema, context, evidence, focusFields });
+  const userText = buildEnrichmentUserPrompt({ candidate, schema, context, evidence, focusFields, modelHints });
   let content;
   try {
     const response = await fetchImpl(`${String(baseUrl).replace(/\/+$/, "")}/chat/completions`, {
@@ -165,6 +211,15 @@ function mergeIntoCandidate(candidate, parsed) {
       }
       continue;
     }
+    // Only verified model names may enter `models`; a raw AI list is sanitized.
+    if (key === "models" && Array.isArray(value)) {
+      const clean = sanitizeModels(value);
+      if (clean.length) {
+        merged.models = clean;
+        changed = true;
+      }
+      continue;
+    }
     const current = candidate[key];
     const empty = Array.isArray(current) ? current.length === 0 : !current;
     if (empty && typeof value === typeof current && value !== "") {
@@ -192,9 +247,9 @@ export function applyEnrichment(candidate, content) {
 
 // Full Smart Add LLM enrichment: provider call + gap-fill merge. Returns the
 // deterministic candidate unchanged on any failure.
-export async function enrichWithLLM({ candidate, schema, evidence, context, baseUrl, apiKey, model, fetchImpl = fetch }) {
+export async function enrichWithLLM({ candidate, schema, evidence, context, baseUrl, apiKey, model, fetchImpl = fetch, modelHints }) {
   if (!baseUrl || !apiKey || !model) return candidate;
-  const parsed = await requestEnrichment({ candidate, schema, evidence, context, baseUrl, apiKey, model, fetchImpl });
+  const parsed = await requestEnrichment({ candidate, schema, evidence, context, baseUrl, apiKey, model, fetchImpl, modelHints });
   if (!parsed) return candidate;
   return mergeIntoCandidate(candidate, parsed);
 }
@@ -213,6 +268,15 @@ export function mergeEnrichedFields(original, aiObject, focusFields = ENRICHMENT
     if (value === undefined || value === null) continue;
     const current = original[key];
     const empty = Array.isArray(current) ? current.length === 0 : !current;
+    // Only verified model names may enter `models` (see sanitizeModels).
+    if (key === "models" && empty && Array.isArray(value)) {
+      const clean = sanitizeModels(value);
+      if (clean.length) {
+        merged.models = clean;
+        changed = true;
+      }
+      continue;
+    }
     if (empty && typeof value === typeof current && value !== "") {
       merged[key] = value;
       changed = true;

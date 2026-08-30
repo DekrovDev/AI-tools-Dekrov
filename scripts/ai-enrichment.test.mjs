@@ -11,7 +11,8 @@ import {
   buildNoEnrichmentComment,
   buildSuccessComment,
   enrichWithLLM,
-  applyEnrichment
+  applyEnrichment,
+  sanitizeModels
 } from "./ai-enrichment.mjs";
 
 // A valid-but-incomplete contributor submission: several optional fields empty.
@@ -346,4 +347,55 @@ test("success comment lists only actually-changed fields", () => {
   assert.ok(comment.includes("- bestFor"));
   assert.ok(comment.includes("- commands"));
   assert.ok(!comment.includes("strengths"));
+});
+
+// ---------------------------------------------------------------------------
+// models pipeline: sanitize + AI verification
+// ---------------------------------------------------------------------------
+
+test("sanitizeModels keeps valid model names and model families", () => {
+  const input = ["GPT-4o", "Claude Sonnet 4.6", "Gemini 2.5 Pro", "Claude", "Gemini", "DeepSeek"];
+  assert.deepEqual(sanitizeModels(input), input);
+});
+
+test("sanitizeModels filters provider and runtime names", () => {
+  const input = ["GPT-4o", "OpenAI", "Azure OpenAI", "Amazon Bedrock", "Hugging Face", "Replicate", "Ollama", "OpenRouter"];
+  assert.deepEqual(sanitizeModels(input), ["GPT-4o"]);
+});
+
+test("sanitizeModels filters descriptive and compatibility statements", () => {
+  const input = ["Claude", "100+ models", "Custom OpenAI-compatible models", "over 100 other LLMs via Chat Completions API"];
+  assert.deepEqual(sanitizeModels(input), ["Claude"]);
+});
+
+test("sanitizeModels normalizes whitespace and deduplicates", () => {
+  assert.deepEqual(sanitizeModels(["GPT-4o", "  GPT-4o  ", "Gemini  3 Pro"]), ["GPT-4o", "Gemini 3 Pro"]);
+});
+
+test("AI can fill models after deterministic analysis and providers are filtered", async () => {
+  const candidate = { id: "x", name: "X", category: "other", url: "https://x.example", description: "", bestFor: [], models: [] };
+  const result = await enrichWithLLM({
+    candidate,
+    schema: {},
+    evidence: "official docs",
+    context: "",
+    baseUrl: "https://provider.example",
+    apiKey: "key",
+    model: "m",
+    fetchImpl: fakeLlm(JSON.stringify({ models: ["GPT-4o", "Claude", "Ollama", "OpenAI"] }))
+  });
+  assert.deepEqual(result.models, ["GPT-4o", "Claude"]);
+});
+
+test("empty moderator models can be filled by AI with providers filtered", async () => {
+  const result = await runFlow({ aiContent: JSON.stringify({ models: ["Claude", "Ollama", "Azure OpenAI"] }) });
+  assert.equal(result.changed, true);
+  assert.ok(result.filledFields.includes("models"));
+  assert.deepEqual(result.tool.models, ["Claude"]);
+});
+
+test("existing populated contributor models are preserved by moderator enrichment", () => {
+  const orig = { ...ORIGINAL, models: ["GPT-4o", "Claude"] };
+  const merged = mergeEnrichedFields(orig, { models: ["Gemini", "Ollama"] }, ENRICHMENT_FOCUS_FIELDS);
+  assert.deepEqual(merged.models, ["GPT-4o", "Claude"]);
 });
