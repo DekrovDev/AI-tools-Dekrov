@@ -1279,5 +1279,71 @@
       "https://github.com/continuedev/continue",
       "https://docs.continue.dev"
     ]
+  },
+  {
+    "id": "langchain",
+    "name": "LangChain",
+    "category": "orchestration",
+    "description": "LangChain is an open-source framework for developing applications powered by large language models (LLMs). It provides tools and abstractions to connect LLMs with external data sources, enabling context-aware applications like chatbots and retrieval-augmented generation (RAG) .",
+    "bestFor": [
+      "Building applications that require integrating LLMs with external data and APIs",
+      "Creating chatbots with memory and context management",
+      "Developing retrieval-augmented generation (RAG) systems",
+      "Building agents that can perform multi-step actions and use tools"
+    ],
+    "strengths": [
+      "Modular framework with components for chains, agents, retrieval, and memory",
+      "Supports integration with numerous LLM providers (OpenAI, Anthropic, Google, etc.) and vector stores",
+      "Offers LangChain Expression Language (LCEL) for composing chains with built-in streaming and retries",
+      "Provides a simplified agent creation interface (`create_agent`)"
+    ],
+    "gettingStarted": [
+      "Install the core LangChain package and packages for your chosen LLM provider: `pip install langchain langchain-openai`",
+      "Set up environment variables for your API keys: `export OPENAI_API_KEY='your_key'`",
+      "Import modules and create a simple chain using LCEL: `from langchain_openai import ChatOpenAI; from langchain_core.prompts import ChatPromptTemplate`",
+      "Run the chain with `chain.invoke({\"input\": \"your question\"})`"
+    ],
+    "usageNotes": [
+      "Key building blocks are Prompts, Output Parsers, RAG (retrieval and vector stores), and Agents",
+      "LangChain agents use an LLM as a reasoning engine to determine actions and tool use",
+      "The framework supports memory components to maintain conversation state across interactions",
+      "For production, consider using LangGraph for complex, stateful agents, and LangSmith for tracing and debugging"
+    ],
+    "url": "https://www.langchain.com/",
+    "domain": "langchain.com",
+    "favicon": "",
+    "platforms": [
+      "cli",
+      "api"
+    ],
+    "pricing": "free",
+    "priceDetails": "LangChain is an open-source framework available for free .",
+    "tags": [
+      "llm",
+      "framework",
+      "python",
+      "javascript",
+      "rag",
+      "agents",
+      "orchestration"
+    ],
+    "install": "pip install langchain",
+    "start": "",
+    "commands": [],
+    "models": [
+      "GPT-4",
+      "Gemini",
+      "Claude"
+    ],
+    "github": "https://github.com/langchain-ai/langchain",
+    "docs": "https://python.langchain.com/docs",
+    "addedAt": "2026-08-30",
+    "updatedAt": "2026-08-30",
+    "lastVerifiedAt": "2026-08-30",
+    "sources": [
+      "https://www.langchain.com/",
+      "https://github.com/langchain-ai/langchain",
+      "https://python.langchain.com/docs"
+    ]
   }
 ]
