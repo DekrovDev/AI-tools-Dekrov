@@ -52,6 +52,7 @@
             </nav>
           </div>
         </aside>
+        <div class="drawer-backdrop" id="drawer-backdrop" aria-hidden="true"></div>
 
         <main class="main-content">
           <section class="hero" id="catalog-view">
@@ -67,7 +68,7 @@
                 <span data-icon="search"></span>
                 <input id="search-input" type="search" placeholder="Search tools, tags, and notes..." autocomplete="off" />
               </label>
-              <label class="sort-control" for="sort-select"><span>Sort by</span><select id="sort-select"><option value="recent">Recently added</option><option value="relevance" hidden>Relevance</option><option value="name">By name</option><option value="category">By category</option></select></label>
+              <label class="sort-control" for="sort-select"><span>Sort by</span><select id="sort-select" aria-label="Sort catalog"><option value="recent">Recently added</option><option value="relevance" hidden>Relevance</option><option value="name">By name</option><option value="category">By category</option></select></label>
             </div>
             <div class="toolbar-filters">
               <span class="filter-label">Filter</span>
