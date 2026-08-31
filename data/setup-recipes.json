@@ -1,0 +1,186 @@
+{
+  "version": 1,
+  "tools": {
+    "aider": {
+      "envVars": [
+        {
+          "name": "OPENAI_API_KEY",
+          "label": "OpenAI API key",
+          "description": "API key used when Aider runs with an OpenAI model.",
+          "requirement": "depends",
+          "secret": true,
+          "valueHint": "sk-...",
+          "source": "https://aider.chat/docs/config/api-keys.html"
+        },
+        {
+          "name": "ANTHROPIC_API_KEY",
+          "label": "Anthropic API key",
+          "description": "API key used when Aider runs with an Anthropic model.",
+          "requirement": "depends",
+          "secret": true,
+          "valueHint": "sk-ant-...",
+          "source": "https://aider.chat/docs/config/api-keys.html"
+        }
+      ],
+      "commandRecipes": []
+    },
+    "openrouter": {
+      "envVars": [
+        {
+          "name": "OPENROUTER_API_KEY",
+          "label": "OpenRouter API key",
+          "description": "API key used by the OpenRouter SDK quickstart.",
+          "requirement": "required",
+          "secret": true,
+          "valueHint": "sk-or-v1-...",
+          "source": "https://openrouter.ai/docs/cookbook/get-started/quickstart"
+        }
+      ],
+      "commandRecipes": []
+    },
+    "groq-is-the-premier-neocloud-for-fast-inference": {
+      "envVars": [
+        {
+          "name": "GROQ_API_KEY",
+          "label": "Groq API key",
+          "description": "API key read by the Groq SDK quickstart.",
+          "requirement": "required",
+          "secret": true,
+          "valueHint": "gsk_...",
+          "source": "https://console.groq.com/docs/quickstart"
+        }
+      ],
+      "commandRecipes": []
+    },
+    "cerebras": {
+      "envVars": [
+        {
+          "name": "CEREBRAS_API_KEY",
+          "label": "Cerebras API key",
+          "description": "API key read by Cerebras Inference clients.",
+          "requirement": "required",
+          "secret": true,
+          "valueHint": "<your-cerebras-api-key>",
+          "source": "https://inference-docs.cerebras.ai/quickstart"
+        }
+      ],
+      "commandRecipes": []
+    },
+    "openhands": {
+      "envVars": [
+        {
+          "name": "LLM_API_KEY",
+          "label": "LLM provider API key",
+          "description": "Provider credential used by OpenHands when LLM settings are supplied through environment variables.",
+          "requirement": "depends",
+          "secret": true,
+          "valueHint": "<provider-api-key>",
+          "source": "https://docs.openhands.dev/openhands/usage/environment-variables"
+        },
+        {
+          "name": "LLM_MODEL",
+          "label": "LLM model",
+          "description": "Provider and model identifier used by OpenHands.",
+          "requirement": "depends",
+          "secret": false,
+          "valueHint": "provider/model",
+          "source": "https://docs.openhands.dev/openhands/usage/environment-variables"
+        },
+        {
+          "name": "LLM_BASE_URL",
+          "label": "LLM base URL",
+          "description": "Custom provider endpoint used by OpenHands when the selected setup requires one.",
+          "requirement": "depends",
+          "secret": false,
+          "valueHint": "http://localhost:11434/v1",
+          "source": "https://docs.openhands.dev/openhands/usage/environment-variables"
+        }
+      ],
+      "commandRecipes": []
+    },
+    "crewai": {
+      "envVars": [
+        {
+          "name": "OPENAI_API_KEY",
+          "label": "OpenAI API key",
+          "description": "API key used when a CrewAI project is configured with OpenAI.",
+          "requirement": "depends",
+          "secret": true,
+          "valueHint": "sk-...",
+          "source": "https://github.com/crewAIInc/crewAI/blob/main/README.md"
+        }
+      ],
+      "commandRecipes": []
+    },
+    "llamaindex": {
+      "envVars": [
+        {
+          "name": "OPENAI_API_KEY",
+          "label": "OpenAI API key",
+          "description": "API key required by the default OpenAI starter bundle.",
+          "requirement": "depends",
+          "secret": true,
+          "valueHint": "sk-...",
+          "source": "https://developers.llamaindex.ai/python/framework/getting_started/installation/"
+        }
+      ],
+      "commandRecipes": []
+    },
+    "google-adk": {
+      "envVars": [
+        {
+          "name": "GOOGLE_API_KEY",
+          "label": "Google AI API key",
+          "description": "Gemini API key used by the ADK Python getting-started path.",
+          "requirement": "depends",
+          "secret": true,
+          "valueHint": "<your-gemini-api-key>",
+          "source": "https://github.com/google/adk-python/blob/main/.agents/skills/adk-agent-builder/references/getting-started.md"
+        }
+      ],
+      "commandRecipes": []
+    },
+    "openai-agents-sdk": {
+      "envVars": [
+        {
+          "name": "OPENAI_API_KEY",
+          "label": "OpenAI API key",
+          "description": "API key used by the default OpenAI Agents SDK quickstart.",
+          "requirement": "required",
+          "secret": true,
+          "valueHint": "sk-...",
+          "source": "https://openai.github.io/openai-agents-python/quickstart/"
+        }
+      ],
+      "commandRecipes": []
+    },
+    "pydanticai": {
+      "envVars": [
+        {
+          "name": "OPENAI_API_KEY",
+          "label": "OpenAI API key",
+          "description": "API key used when PydanticAI runs with an OpenAI model.",
+          "requirement": "depends",
+          "secret": true,
+          "valueHint": "sk-...",
+          "source": "https://pydantic.dev/docs/ai/models/openai/"
+        }
+      ],
+      "commandRecipes": []
+    },
+    "mastra": {
+      "envVars": [
+        {
+          "name": "OPENAI_API_KEY",
+          "label": "OpenAI API key",
+          "description": "API key used when a Mastra agent selects an OpenAI model.",
+          "requirement": "depends",
+          "secret": true,
+          "valueHint": "sk-...",
+          "source": "https://mastra.ai/docs"
+        }
+      ],
+      "commandRecipes": []
+    }
+  }
+}

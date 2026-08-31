@@ -3,6 +3,8 @@ import { COLLECTIONS_KEY, STACK_KEY, STACK_NAME, MAX_COLLECTION_NAME, createColl
 import { parseUseCases, resolveUseCaseTools, useCaseById, useCaseCount } from "./assets/js/use-cases.js";
 import { START_HERE_PATH, DEFAULT_PRIMARY_LIMIT, applyStartAnswer, computeCandidates, findOption, parseStartHere, resolveGoal } from "./assets/js/start-here.js";
 import { parseRouteHash, readOptionalJson, requiredResponsesAreOk } from "./assets/js/app-runtime-helpers.js";
+import { SETUP_RECIPES_PATH, emptySetupRecipes, parseOptionalSetupRecipes, setupForTool, listAvailableCommands } from "./assets/js/setup-recipes.js";
+import { buildEnvTextForState, canCopyCommands, clearEnvState, commandSequenceRows, createSetupState, envIncluded, hasEnvInput, hasSetupCapability, maskedEnvPreview, moveCommand, selectedCommandOutputs, setEnvValue, setRecipeValue, setupStateForTool, toggleCommandSelected, toggleEnvInclude } from "./assets/js/setup-ui.js";
 
 const CATEGORY_META = {
   "coding-agents": { label: "Coding agents", short: "Coding", color: "#d2f25b" }, orchestration: { label: "Orchestration", short: "Agents", color: "#c2a5ff" },
@@ -45,7 +47,9 @@ const ICONS = {
   zap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 3 4 14h6l-1 7 9-11h-6l1-7Z"/></svg>',
   cpu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="6" width="12" height="12" rx="1"/><rect x="10" y="10" width="4" height="4"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></svg>',
   api: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 9 4 12l4 3M16 9l4 3-4 3M14 5l-4 14"/></svg>',
-  compass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z"/></svg>'
+  compass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z"/></svg>',
+  arrowUp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 19V5m-7 7 7-7 7 7"/></svg>',
+  arrowDown: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14m-7-7 7 7 7-7"/></svg>'
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -59,7 +63,7 @@ const hasValue = (value) => typeof value === "string" && value.trim().length > 0
 function readStoredArray(key) { try { const result = JSON.parse(localStorage.getItem(key) || "[]"); return Array.isArray(result) ? result : []; } catch { return []; } }
 function readStoredObject(key) { try { const result = JSON.parse(localStorage.getItem(key) || "{}"); return result && typeof result === "object" && !Array.isArray(result) ? result : {}; } catch { return {}; } }
 
-const state = { schema: null, siteConfig: null, searchEngine: null, searchIntent: null, searchPhase: "catalog", baseTools: [], tools: [], toolById: new Map(), query: "", category: "", pricing: "", platform: "", executionMode: "", noSignup: false, noApiKey: false, favoritesOnly: false, sort: "recent", catalogSort: "recent", favorites: new Set(readStoredArray(FAVORITES_KEY)), personalNotes: readStoredObject(PERSONAL_NOTES_KEY), theme: localStorage.getItem(THEME_KEY) || "dark", detailReturn: null, collections: parseCollections(localStorage.getItem(COLLECTIONS_KEY)), stack: parseStack(localStorage.getItem(STACK_KEY)), saveDialogContext: null, useCases: [], startHere: { config: null, answers: {} } };
+const state = { schema: null, siteConfig: null, searchEngine: null, searchIntent: null, searchPhase: "catalog", baseTools: [], tools: [], toolById: new Map(), query: "", category: "", pricing: "", platform: "", executionMode: "", noSignup: false, noApiKey: false, favoritesOnly: false, sort: "recent", catalogSort: "recent", favorites: new Set(readStoredArray(FAVORITES_KEY)), personalNotes: readStoredObject(PERSONAL_NOTES_KEY), theme: localStorage.getItem(THEME_KEY) || "dark", detailReturn: null, collections: parseCollections(localStorage.getItem(COLLECTIONS_KEY)), stack: parseStack(localStorage.getItem(STACK_KEY)), saveDialogContext: null, useCases: [], setupRecipes: emptySetupRecipes(), startHere: { config: null, answers: {} }, setup: null };
 function refreshTools() { state.tools = [...state.baseTools]; state.toolById = new Map(state.baseTools.map((tool) => [tool.id, tool])); }
 function saveCollections() { localStorage.setItem(COLLECTIONS_KEY, JSON.stringify(state.collections)); renderNavigation(); }
 function saveStack() { localStorage.setItem(STACK_KEY, JSON.stringify(state.stack)); renderNavigation(); }
@@ -272,19 +276,143 @@ function renderCollectionsView() {
 
 function commandBlock(label, command) { return hasValue(command) ? `<div class="command-block"><div class="command-head"><span>${escapeHtml(label)}</span><button class="copy-command" type="button" data-copy="${escapeHtml(command)}">${icon("copy")} Copy</button></div><pre>${escapeHtml(command)}</pre></div>` : ""; }
 function inferredStrengths(tool) { const values = []; if ((tool.tags || []).includes("open-source")) values.push("Open-source"); if ((tool.platforms || []).includes("cli")) values.push("Built for terminal workflows"); if ((tool.models || []).length) values.push(`Works with ${tool.models.length} listed model${tool.models.length === 1 ? "" : "s"}`); if (tool.pricing === "free") values.push("Free to use"); return values; }
-function guideSteps(tool) { const explicit = Array.isArray(tool.gettingStarted) ? tool.gettingStarted.filter(hasValue).map((description, index) => ({ title: `Step ${index + 1}`, description })) : []; if (explicit.length) return explicit; return [{ title: "Install", description: "Run the verified installation command.", command: tool.install }, { title: "Start", description: "Run the verified start command.", command: tool.start }, tool.docs ? { title: "Read the official setup guide", description: "Use the official documentation for the next setup steps.", url: tool.docs } : null].filter((step) => step.command || step.url); }
+function guideSteps(tool) { const explicit = Array.isArray(tool.gettingStarted) ? tool.gettingStarted.filter(hasValue).map((description, index) => ({ title: `Step ${index + 1}`, description })) : []; if (explicit.length) return explicit; return [{ title: "Install", description: "Run the verified installation command.", command: tool.install }, { title: "Start", description: "Run the verified start command.", command: tool.start }, tool.docs ? { title: "Read the official setup guide", description: "Use the official documentation for the next setup steps.", url: tool.docs } : null].filter((step) => step && (step.command || step.url)); }
 function guideMarkup(step, index) { const link = hasValue(step.url) ? `<a class="guide-link" href="${escapeHtml(step.url)}" target="_blank" rel="noreferrer">Open guide ${icon("external")}</a>` : ""; return `<article class="guide-step"><span class="guide-number">${index + 1}</span><div><h3>${escapeHtml(step.title || "Next step")}</h3>${hasValue(step.description) ? `<p>${escapeHtml(step.description)}</p>` : ""}${commandBlock("Command", step.command)}${link}</div></article>`; }
 function getDetailId() { const route = parseRouteHash(location.hash); return route?.type === "tool" && route.id ? route.id : ""; }
 function renderDetail(id) {
   const tool = state.tools.find((item) => item.id === id); if (!tool) { location.hash = "#/"; return; }
   setDocumentMeta(`${tool.name} — AI-Dekrov`, tool.description || DEFAULT_DESCRIPTION);
-  const meta = categoryMeta(tool.category); const favorite = state.favorites.has(tool.id); const platforms = (tool.platforms || []).map((platform) => `<span class="tag">${escapeHtml(labelize(platform))}</span>`).join("") || "<span>Not specified</span>"; const models = (tool.models || []).map((model) => `<span class="model-pill">${escapeHtml(model)}</span>`).join(""); const commands = (tool.commands || []).map((item) => commandBlock(item.label || "Command", item.command)).join(""); const strengths = (tool.strengths || inferredStrengths(tool)).filter(hasValue); const guide = guideSteps(tool); const note = personalNote(tool.id);
+  const meta = categoryMeta(tool.category); const favorite = state.favorites.has(tool.id); const platforms = (tool.platforms || []).map((platform) => `<span class="tag">${escapeHtml(labelize(platform))}</span>`).join("") || "<span>Not specified</span>"; const models = (tool.models || []).map((model) => `<span class="model-pill">${escapeHtml(model)}</span>`).join(""); const commands = (tool.commands || []).map((item) => commandBlock(item.label || "Command", item.command)).join(""); const strengths = (tool.strengths || inferredStrengths(tool)).filter(hasValue); const guide = guideSteps(tool); const note = personalNote(tool.id); const setupMarkup = renderSetupSection(tool);
   const links = [tool.github && `<a class="card-link" href="${escapeHtml(tool.github)}" target="_blank" rel="noreferrer">GitHub ${icon("external")}</a>`, tool.docs && `<a class="card-link" href="${escapeHtml(tool.docs)}" target="_blank" rel="noreferrer">Documentation ${icon("external")}</a>`].filter(Boolean).join("");
   const sources = (tool.sources || []).filter(hasValue).map((source) => `<a class="source-link" href="${escapeHtml(source)}" target="_blank" rel="noreferrer">${escapeHtml(sourceLabel(source))}${icon("external")}</a>`).join("");
   const accessMetadata = [detailMetadataRow("Execution", tool.executionMode, EXECUTION_LABELS), detailMetadataRow("Signup", tool.signupRequirement, REQUIREMENT_LABELS), detailMetadataRow("API key", tool.apiKeyRequirement, REQUIREMENT_LABELS)].join("");
   const metadata = [tool.addedAt && `<div class="info-row"><dt>Added</dt><dd>${escapeHtml(formatDate(tool.addedAt))}</dd></div>`, tool.updatedAt && `<div class="info-row"><dt>Updated</dt><dd>${escapeHtml(formatDate(tool.updatedAt))}</dd></div>`, tool.lastVerifiedAt && `<div class="info-row"><dt>Last verified</dt><dd>${escapeHtml(formatDate(tool.lastVerifiedAt))}</dd></div>`].filter(Boolean).join("");
   const price = priceSummary(tool);
-  $("#detail-view").innerHTML = `<button class="back-link" type="button" data-back-catalog><span>${icon("arrowLeft")}</span> Back to catalog</button><div class="detail-header">${logoMarkup(tool, meta, true)}<div class="detail-heading"><div class="tool-category">${escapeHtml(meta.label)}</div><h1>${escapeHtml(tool.name)}</h1>${hasValue(tool.description) ? `<p>${escapeHtml(tool.description)}</p>` : ""}</div><div class="detail-actions">${hasValue(tool.url) ? `<a class="button button-primary" href="${escapeHtml(tool.url)}" target="_blank" rel="noreferrer">Open website ${icon("external")}</a>` : ""}<button class="button button-secondary" type="button" data-save-tool="${escapeHtml(tool.id)}">${icon("bookmark")} Save</button><button class="button button-secondary" type="button" data-propose-update="${escapeHtml(tool.id)}">Suggest an update</button><button class="button button-secondary" type="button" data-favorite="${escapeHtml(tool.id)}">${icon("star")} ${favorite ? "Favorited" : "Add to favorites"}</button></div></div><div class="detail-grid"><div class="detail-main">${strengths.length ? `<section class="detail-section strengths-section"><h2>Why it stands out</h2><div class="strength-list">${strengths.map((strength) => `<div>${icon("star")}<span>${escapeHtml(strength)}</span></div>`).join("")}</div></section>` : ""}${guide.length ? `<section class="detail-section getting-started-section"><h2>Getting started</h2><p class="detail-caption">Use only the verified steps shown below. Check the official guide for service-specific menus and options.</p><div class="guide-list">${guide.map(guideMarkup).join("")}</div></section>` : ""}${hasValue(tool.install) || hasValue(tool.start) || commands ? `<section class="detail-section"><h2>More commands</h2>${commands}</section>` : ""}${models ? `<section class="detail-section"><h2>Models</h2><div class="model-list">${models}</div></section>` : ""}${links ? `<section class="detail-section"><h2>Links</h2><div class="detail-links">${links}</div></section>` : ""}${sources ? `<section class="detail-section"><h2>Sources</h2><div class="source-list">${sources}</div></section>` : ""}<section class="detail-section personal-note-section"><h2>Personal note</h2><p class="detail-caption">Stored only in this browser. It is never published or sent with a submission.</p><textarea class="personal-note-input" id="personal-note-input" rows="4" placeholder="Add a private note for yourself">${escapeHtml(note)}</textarea><div class="note-actions"><button class="button button-primary" type="button" data-note-save="${escapeHtml(tool.id)}">Save note</button>${note ? `<button class="button button-secondary" type="button" data-note-delete="${escapeHtml(tool.id)}">Delete note</button>` : ""}</div></section></div><aside class="detail-aside"><dl class="info-list">${tool.pricing || tool.priceDetails ? `<div class="info-row"><dt>Price</dt><dd>${escapeHtml(price)}</dd></div>` : ""}<div class="info-row"><dt>Platforms</dt><dd><div class="platform-list">${platforms}</div></dd></div>${accessMetadata}${tool.domain ? `<div class="info-row"><dt>Domain</dt><dd>${escapeHtml(tool.domain)}</dd></div>` : ""}${metadata}</dl><div class="detail-tags">${(tool.tags || []).map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join("")}</div></aside></div>`;
+  $("#detail-view").innerHTML = `<button class="back-link" type="button" data-back-catalog><span>${icon("arrowLeft")}</span> Back to catalog</button><div class="detail-header">${logoMarkup(tool, meta, true)}<div class="detail-heading"><div class="tool-category">${escapeHtml(meta.label)}</div><h1>${escapeHtml(tool.name)}</h1>${hasValue(tool.description) ? `<p>${escapeHtml(tool.description)}</p>` : ""}</div><div class="detail-actions">${hasValue(tool.url) ? `<a class="button button-primary" href="${escapeHtml(tool.url)}" target="_blank" rel="noreferrer">Open website ${icon("external")}</a>` : ""}<button class="button button-secondary" type="button" data-save-tool="${escapeHtml(tool.id)}">${icon("bookmark")} Save</button><button class="button button-secondary" type="button" data-propose-update="${escapeHtml(tool.id)}">Suggest an update</button><button class="button button-secondary" type="button" data-favorite="${escapeHtml(tool.id)}">${icon("star")} ${favorite ? "Favorited" : "Add to favorites"}</button></div></div><div class="detail-grid"><div class="detail-main">${strengths.length ? `<section class="detail-section strengths-section"><h2>Why it stands out</h2><div class="strength-list">${strengths.map((strength) => `<div>${icon("star")}<span>${escapeHtml(strength)}</span></div>`).join("")}</div></section>` : ""}${guide.length ? `<section class="detail-section getting-started-section"><h2>Getting started</h2><p class="detail-caption">Use only the verified steps shown below. Check the official guide for service-specific menus and options.</p><div class="guide-list">${guide.map(guideMarkup).join("")}</div></section>` : ""}${hasValue(tool.install) || hasValue(tool.start) || commands ? `<section class="detail-section"><h2>More commands</h2>${commands}</section>` : ""}${models ? `<section class="detail-section"><h2>Models</h2><div class="model-list">${models}</div></section>` : ""}${setupMarkup}${links ? `<section class="detail-section"><h2>Links</h2><div class="detail-links">${links}</div></section>` : ""}${sources ? `<section class="detail-section"><h2>Sources</h2><div class="source-list">${sources}</div></section>` : ""}<section class="detail-section personal-note-section"><h2>Personal note</h2><p class="detail-caption">Stored only in this browser. It is never published or sent with a submission.</p><textarea class="personal-note-input" id="personal-note-input" rows="4" placeholder="Add a private note for yourself">${escapeHtml(note)}</textarea><div class="note-actions"><button class="button button-primary" type="button" data-note-save="${escapeHtml(tool.id)}">Save note</button>${note ? `<button class="button button-secondary" type="button" data-note-delete="${escapeHtml(tool.id)}">Delete note</button>` : ""}</div></section></div><aside class="detail-aside"><dl class="info-list">${tool.pricing || tool.priceDetails ? `<div class="info-row"><dt>Price</dt><dd>${escapeHtml(price)}</dd></div>` : ""}<div class="info-row"><dt>Platforms</dt><dd><div class="platform-list">${platforms}</div></dd></div>${accessMetadata}${tool.domain ? `<div class="info-row"><dt>Domain</dt><dd>${escapeHtml(tool.domain)}</dd></div>` : ""}${metadata}</dl><div class="detail-tags">${(tool.tags || []).map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join("")}</div></aside></div>`;
+}
+function setupRequirementBadge(requirement) {
+  const labels = { required: "Required", optional: "Optional", depends: "Depends" };
+  return `<span class="env-requirement env-req-${escapeHtml(requirement)}">${escapeHtml(labels[requirement] || requirement)}</span>`;
+}
+function currentDetailSetup() {
+  const id = getDetailId();
+  if (!id) return null;
+  const tool = state.toolById.get(id);
+  if (!tool) return null;
+  return { tool, setup: setupForTool(state.setupRecipes, id) };
+}
+function envRowMarkup(envVar, index) {
+  const included = envIncluded(state.setup, envVar);
+  const revealed = state.setup.reveal.has(envVar.name);
+  const inputType = envVar.secret && !revealed ? "password" : "text";
+  const value = state.setup.values[envVar.name] || "";
+  const id = `setup-env-${index}`;
+  const source = envVar.source ? `<a class="setup-source" href="${escapeHtml(envVar.source)}" target="_blank" rel="noreferrer">Docs ${icon("external")}</a>` : "";
+  const toggle = envVar.requirement === "required"
+    ? `<span class="env-include env-include-always">Included</span>`
+    : `<label class="env-include"><input type="checkbox" data-env-include="${escapeHtml(envVar.name)}" ${included ? "checked" : ""} /><span>Include in .env</span></label>`;
+  const reveal = envVar.secret ? `<button class="env-reveal" type="button" data-env-reveal="${escapeHtml(envVar.name)}" aria-pressed="${revealed}" aria-label="${revealed ? "Hide" : "Show"} ${escapeHtml(envVar.name)} value">${revealed ? "Hide" : "Show"}</button>` : "";
+  return `<div class="env-row"><div class="env-head"><div class="env-title"><label class="env-name" for="${id}">${escapeHtml(envVar.name)}</label>${envVar.label && envVar.label !== envVar.name ? `<span class="env-label-text">${escapeHtml(envVar.label)}</span>` : ""}</div><div class="env-meta">${setupRequirementBadge(envVar.requirement)}${source}</div></div><p class="env-desc">${escapeHtml(envVar.description)}</p><div class="env-controls">${toggle}<div class="env-field"><input id="${id}" type="${inputType}" data-env-input="${escapeHtml(envVar.name)}" placeholder="${escapeHtml(envVar.valueHint || "")}" value="${escapeHtml(value)}" autocomplete="off" spellcheck="false" />${reveal}</div></div></div>`;
+}
+function recipeInputsMarkup(recipe, selected) {
+  const values = state.setup.recipeValues[recipe.id] || {};
+  const fields = recipe.inputs.map((input) => {
+    const value = values[input.key] || "";
+    if (input.type === "select") {
+      const options = input.options.map((option) => `<option value="${escapeHtml(option.value)}" ${value === option.value ? "selected" : ""}>${escapeHtml(option.label)}</option>`).join("");
+      return `<label class="form-field"><span>${escapeHtml(input.label)}</span><select data-recipe-input="${escapeHtml(recipe.id)}:${escapeHtml(input.key)}"><option value="">—</option>${options}</select></label>`;
+    }
+    return `<label class="form-field"><span>${escapeHtml(input.label)}</span><input type="text" data-recipe-input="${escapeHtml(recipe.id)}:${escapeHtml(input.key)}" value="${escapeHtml(value)}" placeholder="${escapeHtml(input.placeholder || "")}" spellcheck="false" /></label>`;
+  }).join("");
+  return `<div class="recipe-inputs" ${selected ? "" : "hidden"}>${fields}</div>`;
+}
+function commandChoiceMarkup(choice) {
+  const selected = state.setup.selected.includes(choice.id);
+  const order = selected ? state.setup.selected.indexOf(choice.id) + 1 : 0;
+  const recipeInputs = choice.kind === "recipe" ? recipeInputsMarkup(choice.recipe, selected) : "";
+  return `<div class="command-choice ${selected ? "is-selected" : ""}"><label class="command-choice-toggle"><input type="checkbox" data-command-toggle="${escapeHtml(choice.id)}" ${selected ? "checked" : ""} /><span class="command-choice-label">${escapeHtml(choice.label)}</span>${selected ? `<span class="command-order">#${order}</span>` : ""}</label>${choice.description ? `<p class="command-choice-desc">${escapeHtml(choice.description)}</p>` : ""}${choice.kind === "command" ? `<code class="command-choice-code">${escapeHtml(choice.command)}</code>` : ""}${recipeInputs}</div>`;
+}
+function commandSequenceMarkup(tool, setup) {
+  const result = commandSequenceRows(state.setup, tool, setup);
+  const choices = listAvailableCommands(tool, setup);
+  const byId = new Map(choices.map((choice) => [choice.id, choice]));
+  const rows = result.rows.map((row, index) => {
+    const choice = byId.get(row.id);
+    const label = choice?.label || row.label || "Command";
+    return `<div class="command-seq-row"><span class="seq-num">${index + 1}</span><code>${escapeHtml(row.text)}</code><span class="seq-controls"><button class="seq-move" type="button" data-command-move="${escapeHtml(row.id)}:-1" aria-label="Move ${escapeHtml(label)} up">${icon("arrowUp")}</button><button class="seq-move" type="button" data-command-move="${escapeHtml(row.id)}:1" aria-label="Move ${escapeHtml(label)} down">${icon("arrowDown")}</button><button class="seq-remove" type="button" data-command-toggle="${escapeHtml(row.id)}" aria-label="Remove ${escapeHtml(label)}">${icon("x")}</button></span></div>`;
+  }).join("");
+  const seqText = result.rows.map((row) => row.text).join("\n");
+  const body = rows
+    ? `<div class="command-seq-list">${rows}</div><pre class="setup-output-text">${escapeHtml(seqText)}</pre>`
+    : `<p class="setup-hint">${result.incompleteRecipe ? "Fill in the selected recipe inputs to add it to the sequence." : "Select commands to build a setup sequence."}</p>`;
+  return `<div class="setup-preview"><div class="setup-preview-head"><span>Your sequence</span></div>${body}</div>`;
+}
+function renderSetupSection(tool) {
+  const setup = setupForTool(state.setupRecipes, tool.id);
+  const envVars = setup.envVars || [];
+  const choices = listAvailableCommands(tool, setup);
+  const hasEnv = envVars.length > 0;
+  const hasCommands = choices.length > 0;
+  if (!hasSetupCapability(tool, setup)) return "";
+  state.setup = setupStateForTool(state.setup, tool.id);
+  const activeTab = state.setup.tab === "env" && hasEnv ? "env" : state.setup.tab === "commands" && hasCommands ? "commands" : hasEnv ? "env" : "commands";
+  state.setup.tab = activeTab;
+  const tabs = [];
+  if (hasEnv) tabs.push(`<button class="setup-tab ${activeTab === "env" ? "is-active" : ""}" type="button" role="tab" aria-selected="${activeTab === "env"}" data-setup-tab="env">.env</button>`);
+  if (hasCommands) tabs.push(`<button class="setup-tab ${activeTab === "commands" ? "is-active" : ""}" type="button" role="tab" aria-selected="${activeTab === "commands"}" data-setup-tab="commands">Commands</button>`);
+  const { text: envText, masked: maskedText } = envBuildOutputs();
+  const envPanel = hasEnv ? `<div class="setup-panel" role="tabpanel" data-setup-panel="env" ${activeTab === "env" ? "" : "hidden"}><div class="env-list">${envVars.map((envVar, index) => envRowMarkup(envVar, index)).join("")}</div><div class="setup-actions"><button class="button button-primary" type="button" data-setup-copy-env ${envText ? "" : "disabled"}>${icon("copy")} Copy .env</button><button class="button button-secondary" type="button" data-setup-clear ${hasEnvInput(state.setup) ? "" : "hidden"}>Clear values</button></div><div class="setup-preview"><div class="setup-preview-head"><span>Generated .env</span><span class="setup-preview-note">Secret values are masked here and copied directly from this page.</span></div><pre class="setup-output-text" ${maskedText ? "" : "hidden"}>${escapeHtml(maskedText)}</pre><p class="setup-hint" ${maskedText ? "hidden" : ""}>Enter values to generate your .env file.</p></div><p class="setup-security">Values stay in this tab and are never sent or saved by AI-Dekrov.</p></div>` : "";
+  const commandsPanel = hasCommands ? `<div class="setup-panel" role="tabpanel" data-setup-panel="commands" ${activeTab === "commands" ? "" : "hidden"}><div class="command-choices">${choices.map(commandChoiceMarkup).join("")}</div><div class="setup-actions"><button class="button button-primary" type="button" data-setup-copy-commands ${canCopyCommands(state.setup, tool, setup) ? "" : "disabled"}>${icon("copy")} Copy commands</button></div>${commandSequenceMarkup(tool, setup)}<p class="setup-security">Review commands before running them in your terminal.</p></div>` : "";
+  return `<section class="detail-section setup-section"><h2>Setup</h2><p class="detail-caption">Build a local setup without leaving the page. AI-Dekrov never executes these commands.</p><div class="setup-tabs" role="tablist" aria-label="Setup builder">${tabs.join("")}</div>${envPanel}${commandsPanel}</section>`;
+}
+// Compute the .env preview/text for the currently opened tool. A malformed
+// entered value (containing CR/LF/NUL bytes) must never crash the detail UI or
+// surface the value, so any buildEnvText rejection collapses both outputs.
+function envBuildOutputs() {
+  const current = currentDetailSetup();
+  if (!current || !state.setup) return { text: "", masked: "" };
+  const envVars = current.setup.envVars || [];
+  try {
+    return {
+      text: buildEnvTextForState(state.setup, envVars),
+      masked: maskedEnvPreview(state.setup, envVars)
+    };
+  } catch {
+    return { text: "", masked: "" };
+  }
+}
+function updateEnvPreview() {
+  const { text, masked } = envBuildOutputs();
+  const pre = document.querySelector('[data-setup-panel="env"] .setup-output-text');
+  const hint = document.querySelector('[data-setup-panel="env"] .setup-hint');
+  if (pre) { pre.hidden = !masked; pre.textContent = masked; }
+  if (hint) hint.hidden = Boolean(masked);
+  const copyButton = document.querySelector("[data-setup-copy-env]");
+  if (copyButton) copyButton.disabled = !text;
+  const clearButton = document.querySelector("[data-setup-clear]");
+  if (clearButton) clearButton.hidden = !hasEnvInput(state.setup);
+}
+function handleSetupEnvInput(event) {
+  const input = event.target.closest("[data-env-input]");
+  if (!input || !state.setup) return;
+  const name = input.dataset.envInput;
+  setEnvValue(state.setup, name, input.value);
+  const row = input.closest(".env-row");
+  const checkbox = row?.querySelector("[data-env-include]");
+  if (checkbox) {
+    const current = currentDetailSetup();
+    const envVar = current?.setup.envVars?.find((entry) => entry.name === name);
+    checkbox.checked = envVar ? envIncluded(state.setup, envVar) : false;
+  }
+  updateEnvPreview();
+}
+function handleRecipeInputChange(event) {
+  const input = event.target.closest("[data-recipe-input]");
+  if (!input || !state.setup) return;
+  const parts = input.dataset.recipeInput.split(":");
+  if (parts.length !== 2) return;
+  setRecipeValue(state.setup, parts[0], parts[1], input.value);
+  renderCatalog();
 }
 function renderProfileExtras(id) { const tool = state.tools.find((item) => item.id === id); const main = $("#detail-view .detail-main"); if (!tool || !main) return; const list = (values) => (values || []).filter(hasValue).map((value) => `<li>${escapeHtml(value)}</li>`).join(""); const bestFor = list(tool.bestFor); const notes = list(tool.usageNotes); if (!bestFor && !notes) return; main.insertAdjacentHTML("afterbegin", `${bestFor ? `<section class="detail-section profile-section"><h2>Best for</h2><ul class="profile-list">${bestFor}</ul></section>` : ""}${notes ? `<section class="detail-section profile-section"><h2>Usage notes</h2><ul class="profile-list">${notes}</ul></section>` : ""}`); }
 
@@ -1219,7 +1347,7 @@ function saveNewTool(form) {
 }
 let toastTimer;
 function showToast(message) { const toast = $("#toast"); toast.textContent = message; toast.classList.add("is-visible"); clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove("is-visible"), 1800); }
-async function copyText(value) { try { await navigator.clipboard.writeText(value); showToast("Copied"); } catch { showToast("Could not copy to clipboard"); } }
+async function copyText(value, message = "Copied") { try { await navigator.clipboard.writeText(value); showToast(message); } catch { showToast("Could not copy to clipboard"); } }
 function toggleFavorite(id) { if (state.favorites.has(id)) state.favorites.delete(id); else state.favorites.add(id); localStorage.setItem(FAVORITES_KEY, JSON.stringify([...state.favorites])); renderNavigation(); renderCatalog(); }
 
 let searchInputTimer;
@@ -1242,10 +1370,54 @@ function bindEvents() {
     const renameCollectionButton = event.target.closest("[data-rename-collection]"); if (renameCollectionButton) { event.preventDefault(); openRenameCollectionDialog(renameCollectionButton.dataset.renameCollection); }
     const deleteCollectionButton = event.target.closest("[data-delete-collection]"); if (deleteCollectionButton) { event.preventDefault(); openDeleteCollectionDialog(deleteCollectionButton.dataset.deleteCollection); }
     const confirmDelete = event.target.closest("[data-confirm-delete]"); if (confirmDelete) { event.preventDefault(); const context = state.saveDialogContext; if (context?.collectionId) { state.collections.collections = deleteCollection(state.collections.collections, context.collectionId); saveCollections(); closeSavedDialog(); renderCatalog(); showToast("Collection deleted"); } }
-    if (event.target.closest("[data-close-dialog]") && event.target.closest("#saved-dialog")) { event.preventDefault(); closeSavedDialog(); } const update = event.target.closest("[data-propose-update]"); if (update) { const tool = state.tools.find((item) => item.id === update.dataset.proposeUpdate); if (tool) startUpdateSubmission(tool); } const saveNote = event.target.closest("[data-note-save]"); if (saveNote) { savePersonalNote(saveNote.dataset.noteSave, $("#personal-note-input").value); renderDetail(saveNote.dataset.noteSave); showToast("Personal note saved"); } const deleteNote = event.target.closest("[data-note-delete]"); if (deleteNote) { savePersonalNote(deleteNote.dataset.noteDelete, ""); renderDetail(deleteNote.dataset.noteDelete); showToast("Personal note deleted"); } const copy = event.target.closest("[data-copy]"); if (copy) copyText(copy.dataset.copy); if (event.target.closest(".nav-item, .category-link")) { $("#sidebar").classList.remove("is-open"); $("#mobile-menu-toggle").innerHTML = icon("menu"); $("#mobile-menu-toggle").setAttribute("aria-expanded", "false"); } });
-  document.addEventListener("keydown", (event) => { if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") { event.preventDefault(); $("#search-input").focus(); } if (event.key === "Escape" && $("#tool-dialog").open) closeDialog(); if (event.key === "Escape" && $("#info-dialog").open) $("#info-dialog").close(); if (event.key === "Escape" && $("#saved-dialog").open) closeSavedDialog(); }); window.addEventListener("hashchange", syncUrlState);
+    if (event.target.closest("[data-close-dialog]") && event.target.closest("#saved-dialog")) { event.preventDefault(); closeSavedDialog(); } const update = event.target.closest("[data-propose-update]"); if (update) { const tool = state.tools.find((item) => item.id === update.dataset.proposeUpdate); if (tool) startUpdateSubmission(tool); } const saveNote = event.target.closest("[data-note-save]"); if (saveNote) { savePersonalNote(saveNote.dataset.noteSave, $("#personal-note-input").value); renderDetail(saveNote.dataset.noteSave); showToast("Personal note saved"); } const deleteNote = event.target.closest("[data-note-delete]"); if (deleteNote) { savePersonalNote(deleteNote.dataset.noteDelete, ""); renderDetail(deleteNote.dataset.noteDelete); showToast("Personal note deleted"); }    const copy = event.target.closest("[data-copy]"); if (copy) copyText(copy.dataset.copy);
+    const setupTab = event.target.closest("[data-setup-tab]"); if (setupTab) { event.preventDefault(); if (state.setup) state.setup.tab = setupTab.dataset.setupTab; renderCatalog(); }
+    const envInclude = event.target.closest("[data-env-include]"); if (envInclude) { const current = currentDetailSetup(); const envVar = current?.setup.envVars?.find((entry) => entry.name === envInclude.dataset.envInclude); if (envVar && state.setup) { toggleEnvInclude(state.setup, envVar, envInclude.checked); renderCatalog(); } }
+    const envReveal = event.target.closest("[data-env-reveal]"); if (envReveal) { event.preventDefault(); if (state.setup) { const name = envReveal.dataset.envReveal; if (state.setup.reveal.has(name)) state.setup.reveal.delete(name); else state.setup.reveal.add(name); renderCatalog(); } }
+    const setupClear = event.target.closest("[data-setup-clear]"); if (setupClear) { event.preventDefault(); if (state.setup) { clearEnvState(state.setup); renderCatalog(); showToast("Values cleared"); } }
+    const copyEnv = event.target.closest("[data-setup-copy-env]"); if (copyEnv) { event.preventDefault(); const { text } = envBuildOutputs(); if (text) copyText(text, ".env copied"); }
+    const copyCommands = event.target.closest("[data-setup-copy-commands]"); if (copyCommands) { event.preventDefault(); const current = currentDetailSetup(); if (current && state.setup) { const text = selectedCommandOutputs(state.setup, current.tool, current.setup).text; if (text) copyText(text, "Commands copied"); } }
+    const commandToggle = event.target.closest("[data-command-toggle]"); if (commandToggle) { if (state.setup) { toggleCommandSelected(state.setup, commandToggle.dataset.commandToggle); renderCatalog(); } }
+    const commandMove = event.target.closest("[data-command-move]"); if (commandMove) { event.preventDefault(); if (state.setup) { const parts = commandMove.dataset.commandMove.split(":"); moveCommand(state.setup, parts[0], Number(parts[1])); renderCatalog(); } }
+    if (event.target.closest(".nav-item, .category-link")) { $("#sidebar").classList.remove("is-open"); $("#mobile-menu-toggle").innerHTML = icon("menu"); $("#mobile-menu-toggle").setAttribute("aria-expanded", "false"); } });
+  document.addEventListener("keydown", (event) => { if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") { event.preventDefault(); $("#search-input").focus(); } if (event.key === "Escape" && $("#tool-dialog").open) closeDialog(); if (event.key === "Escape" && $("#info-dialog").open) $("#info-dialog").close(); if (event.key === "Escape" && $("#saved-dialog").open) closeSavedDialog(); }); window.addEventListener("hashchange", syncUrlState); document.addEventListener("input", handleSetupEnvInput); document.addEventListener("change", handleRecipeInputChange);
 }
 const DATA_CACHE_BUST = Date.now();
 function fetchJson(path, { bust = false } = {}) { return fetch(bust ? `${path}?v=${DATA_CACHE_BUST}` : path, { cache: "no-store" }); }
-async function init() { setTheme(state.theme); renderStaticIcons(); bindEvents(); try { const [toolsResponse, schemaResponse, configResponse, useCasesResponse, startHereResponse] = await Promise.all([fetchJson("data/tools.json", { bust: true }), fetchJson("data/tool-schema.json"), fetchJson("data/site-config.json"), fetchJson("data/use-cases.json").catch(() => null), fetchJson(START_HERE_PATH).catch(() => null)]); if (!requiredResponsesAreOk([toolsResponse, schemaResponse, configResponse])) throw new Error("Could not load catalog data"); state.baseTools = await toolsResponse.json(); state.schema = await schemaResponse.json(); state.siteConfig = await configResponse.json(); const [useCasesSource, startHereSource] = await Promise.all([readOptionalJson(useCasesResponse), readOptionalJson(startHereResponse)]); state.useCases = parseUseCases(useCasesSource); state.startHere.config = startHereSource ? parseStartHere(startHereSource, { platforms: schemaEnum("platforms"), pricing: schemaEnum("pricing") }) : { version: 1, steps: [] }; state.searchEngine = createCatalogSearch(state.baseTools); renderSchemaControls(); updateAiPrompt(); refreshTools(); renderNavigation(); syncUrlState(); } catch (error) { console.error(error); $("#tools-grid").innerHTML = '<div class="empty-state"><h2>Could not load the catalog</h2><p>Run the site through a local server and refresh the page.</p></div>'; } }
+async function init() {
+  setTheme(state.theme);
+  renderStaticIcons();
+  bindEvents();
+  try {
+    const [toolsResponse, schemaResponse, configResponse, useCasesResponse, startHereResponse, setupResponse] = await Promise.all([
+      fetchJson("data/tools.json", { bust: true }),
+      fetchJson("data/tool-schema.json"),
+      fetchJson("data/site-config.json"),
+      fetchJson("data/use-cases.json").catch(() => null),
+      fetchJson(START_HERE_PATH).catch(() => null),
+      fetchJson(SETUP_RECIPES_PATH).catch(() => null)
+    ]);
+    if (!requiredResponsesAreOk([toolsResponse, schemaResponse, configResponse])) throw new Error("Could not load catalog data");
+    state.baseTools = await toolsResponse.json();
+    state.schema = await schemaResponse.json();
+    state.siteConfig = await configResponse.json();
+    const [useCasesSource, startHereSource, setupSource] = await Promise.all([
+      readOptionalJson(useCasesResponse),
+      readOptionalJson(startHereResponse),
+      readOptionalJson(setupResponse)
+    ]);
+    state.useCases = parseUseCases(useCasesSource);
+    state.startHere.config = startHereSource ? parseStartHere(startHereSource, { platforms: schemaEnum("platforms"), pricing: schemaEnum("pricing") }) : { version: 1, steps: [] };
+    state.setupRecipes = parseOptionalSetupRecipes(setupSource, new Set(state.baseTools.map((tool) => tool.id)));
+    state.searchEngine = createCatalogSearch(state.baseTools);
+    renderSchemaControls();
+    updateAiPrompt();
+    refreshTools();
+    renderNavigation();
+    syncUrlState();
+  } catch (error) {
+    console.error(error);
+    $("#tools-grid").innerHTML = '<div class="empty-state"><h2>Could not load the catalog</h2><p>Run the site through a local server and refresh the page.</p></div>';
+  }
+}
 init();

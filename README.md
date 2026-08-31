@@ -58,6 +58,17 @@ If any of these settings are missing, enrichment is skipped silently — the det
 
 AI-Dekrov is a static GitHub Pages project. Its public data and source code live in this repository.
 
+### Setup recipe metadata
+
+`data/setup-recipes.json` is a versioned, optional metadata file for the future `.env Builder` and `Command Builder`. It is separate from the Tool schema: environment variables and parameterized setup recipes describe setup paths, not a tool's catalog identity.
+
+- Store only verified variable names, descriptions, requirement semantics, generic hints, and official source URLs. Real credentials never belong in the repository.
+- Existing `install`, `start`, and `commands` values in `data/tools.json` remain the primary command sources. Add a parameterized recipe only when an official command cannot be represented by those fields.
+- `assets/js/setup-recipes.js` parses the metadata and builds `.env` or command text entirely client-side. It does not fetch, persist, transmit, log, or execute entered values.
+- Generated commands are copyable text for the visitor to review. AI-Dekrov never runs them and does not claim universal shell safety.
+
+Malformed or unavailable setup metadata disables only the future builders; catalog data, search, tool details, Start Here, and Use Cases remain available. Any later UI must keep entered values in ephemeral memory only—never URLs, storage, analytics, logs, or GitHub submissions.
+
 ### Client-side search
 
 The catalog builds one in-memory [Orama](https://docs.orama.com/docs/orama-js) index from `data/tools.json` after the page loads. Search, typo tolerance, relevance ranking, and structured filters run entirely in the browser. The production page resolves the pinned `@orama/orama` 3.1.18 ESM package through the import map in `index.html`; no build step, backend, hosted search service, API key, or Node server is required.
