@@ -53,7 +53,8 @@ const ICONS = {
   compass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z"/></svg>',
   arrowUp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 19V5m-7 7 7-7 7 7"/></svg>',
   arrowDown: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14m-7-7 7 7 7-7"/></svg>',
-  bug: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="9" width="8" height="10" rx="2"/><path d="M12 9V6M9 7l-2-2m8 2 2-2M9 13H5m10 0h4M9 17H5m10 0h4"/></svg>'
+  bug: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="9" width="8" height="10" rx="2"/><path d="M12 9V6M9 7l-2-2m8 2 2-2M9 13H5m10 0h4M9 17H5m10 0h4"/></svg>',
+  download: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v11m-5-5 5 5 5-5"/><path d="M4 19h16"/></svg>'
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -441,7 +442,7 @@ function renderSetupSection(tool) {
   if (hasEnv) tabs.push(`<button class="setup-tab ${activeTab === "env" ? "is-active" : ""}" type="button" role="tab" aria-selected="${activeTab === "env"}" data-setup-tab="env">.env</button>`);
   if (hasCommands) tabs.push(`<button class="setup-tab ${activeTab === "commands" ? "is-active" : ""}" type="button" role="tab" aria-selected="${activeTab === "commands"}" data-setup-tab="commands">Commands</button>`);
   const { text: envText, masked: maskedText } = envBuildOutputs();
-  const envPanel = hasEnv ? `<div class="setup-panel" role="tabpanel" data-setup-panel="env" ${activeTab === "env" ? "" : "hidden"}><div class="env-list">${envVars.map((envVar, index) => envRowMarkup(envVar, index)).join("")}</div><div class="setup-actions"><button class="button button-primary" type="button" data-setup-copy-env ${envText ? "" : "disabled"}>${icon("copy")} Copy .env</button><button class="button button-secondary" type="button" data-setup-clear ${hasEnvInput(state.setup) ? "" : "hidden"}>Clear values</button></div><div class="setup-preview"><div class="setup-preview-head"><span>Generated .env</span><span class="setup-preview-note">Secret values are masked here and copied directly from this page.</span></div><pre class="setup-output-text" ${maskedText ? "" : "hidden"}>${escapeHtml(maskedText)}</pre><p class="setup-hint" ${maskedText ? "hidden" : ""}>Enter values to generate your .env file.</p></div><p class="setup-security">Values stay in this tab and are never sent or saved by AI-Dekrov.</p></div>` : "";
+  const envPanel = hasEnv ? `<div class="setup-panel" role="tabpanel" data-setup-panel="env" ${activeTab === "env" ? "" : "hidden"}><div class="env-list">${envVars.map((envVar, index) => envRowMarkup(envVar, index)).join("")}</div><div class="setup-actions"><button class="button button-primary" type="button" data-setup-copy-env ${envText ? "" : "disabled"}>${icon("copy")} Copy .env</button><button class="button button-secondary" type="button" data-setup-download-env ${envText ? "" : "disabled"}>${icon("download")} Download .env</button><button class="button button-secondary" type="button" data-setup-clear ${hasEnvInput(state.setup) ? "" : "hidden"}>Clear values</button></div><div class="setup-preview"><div class="setup-preview-head"><span>Generated .env</span><span class="setup-preview-note">Secret values are masked here and copied directly from this page.</span></div><pre class="setup-output-text" ${maskedText ? "" : "hidden"}>${escapeHtml(maskedText)}</pre><p class="setup-hint" ${maskedText ? "hidden" : ""}>Enter values to generate your .env file.</p></div><p class="setup-security">Values stay in this tab and are never sent or saved by AI-Dekrov.</p></div>` : "";
   const commandsPanel = hasCommands ? `<div class="setup-panel" role="tabpanel" data-setup-panel="commands" ${activeTab === "commands" ? "" : "hidden"}><div class="command-choices">${choices.map(commandChoiceMarkup).join("")}</div><div class="setup-actions"><button class="button button-primary" type="button" data-setup-copy-commands ${canCopyCommands(state.setup, tool, setup) ? "" : "disabled"}>${icon("copy")} Copy commands</button><button class="button button-secondary setup-report-action" type="button" data-report-install-issue aria-label="Report an installation or setup failure for ${escapeHtml(tool.name)}">${icon("bug")} Report install issue</button></div>${commandSequenceMarkup(tool, setup)}<p class="setup-security">Review commands before running them in your terminal.</p></div>` : "";
   return `<section class="detail-section setup-section"><h2>Setup</h2><p class="setup-intro">Add the values you need, then choose the commands to run locally. AI-Dekrov never executes or stores them.</p><div class="setup-tabs" role="tablist" aria-label="Setup builder">${tabs.join("")}</div>${envPanel}${commandsPanel}</section>`;
 }
@@ -469,6 +470,8 @@ function updateEnvPreview() {
   if (hint) hint.hidden = Boolean(masked);
   const copyButton = document.querySelector("[data-setup-copy-env]");
   if (copyButton) copyButton.disabled = !text;
+  const downloadButton = document.querySelector("[data-setup-download-env]");
+  if (downloadButton) downloadButton.disabled = !text;
   const clearButton = document.querySelector("[data-setup-clear]");
   if (clearButton) clearButton.hidden = !hasEnvInput(state.setup);
 }
@@ -485,6 +488,41 @@ function handleSetupEnvInput(event) {
     checkbox.checked = envVar ? envIncluded(state.setup, envVar) : false;
   }
   updateEnvPreview();
+}
+// Download .env: same unmasked generated text as Copy .env, written to a local
+// .env file. No network, no persistence; only explicit user clicks trigger it.
+// showSaveFilePicker keeps the exact .env filename; browsers that lack it get
+// a Blob + object URL + temporary anchor download (Chromium may rename
+// dotfiles per platform policy, e.g. env.txt on Windows).
+function downloadEnvFile() {
+  const { text } = envBuildOutputs();
+  if (!text) return;
+  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+  if (window.showSaveFilePicker) { saveEnvViaPicker(blob); return; }
+  downloadEnvBlob(blob);
+}
+async function saveEnvViaPicker(blob) {
+  try {
+    const handle = await window.showSaveFilePicker({ suggestedName: ".env", types: [{ description: "Environment file", accept: { "text/plain": [".env"] } }] });
+    const writable = await handle.createWritable();
+    await writable.write(blob);
+    await writable.close();
+    showToast(".env downloaded");
+  } catch (error) {
+    if (error?.name === "AbortError") return; // user canceled the save dialog
+    downloadEnvBlob(blob);
+  }
+}
+function downloadEnvBlob(blob) {
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = ".env";
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 0);
+  showToast(".env downloaded");
 }
 function handleRecipeInputChange(event) {
   const input = event.target.closest("[data-recipe-input]");
@@ -1431,7 +1469,7 @@ function saveNewTool(form) {
 }
 let toastTimer;
 function showToast(message) { const toast = $("#toast"); toast.textContent = message; toast.classList.add("is-visible"); clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove("is-visible"), 1800); }
-async function copyText(value, message = "Copied") { try { await navigator.clipboard.writeText(value); showToast(message); } catch { showToast("Could not copy to clipboard"); } }
+async function copyText(value, message = "Copied", blockedMessage = null) { try { await navigator.clipboard.writeText(value); showToast(message); } catch { showToast(blockedMessage || "Could not copy to clipboard"); } }
 function toggleFavorite(id) { if (state.favorites.has(id)) state.favorites.delete(id); else state.favorites.add(id); localStorage.setItem(FAVORITES_KEY, JSON.stringify([...state.favorites])); renderNavigation(); renderCatalog(); }
 
 let searchInputTimer;
@@ -1461,8 +1499,9 @@ function bindEvents() {
     const envInclude = event.target.closest("[data-env-include]"); if (envInclude) { const current = currentDetailSetup(); const envVar = current?.setup.envVars?.find((entry) => entry.name === envInclude.dataset.envInclude); if (envVar && state.setup) { toggleEnvInclude(state.setup, envVar, envInclude.checked); renderCatalog(); } }
     const envReveal = event.target.closest("[data-env-reveal]"); if (envReveal) { event.preventDefault(); if (state.setup) { const name = envReveal.dataset.envReveal; if (state.setup.reveal.has(name)) state.setup.reveal.delete(name); else state.setup.reveal.add(name); renderCatalog(); } }
     const setupClear = event.target.closest("[data-setup-clear]"); if (setupClear) { event.preventDefault(); if (state.setup) { clearEnvState(state.setup); renderCatalog(); showToast("Values cleared"); } }
-    const copyEnv = event.target.closest("[data-setup-copy-env]"); if (copyEnv) { event.preventDefault(); const { text } = envBuildOutputs(); if (text) copyText(text, ".env copied"); }
-    const copyCommands = event.target.closest("[data-setup-copy-commands]"); if (copyCommands) { event.preventDefault(); const current = currentDetailSetup(); if (current && state.setup) { const text = selectedCommandOutputs(state.setup, current.tool, current.setup).text; if (text) copyText(text, "Commands copied"); } }
+    const copyEnv = event.target.closest("[data-setup-copy-env]"); if (copyEnv) { event.preventDefault(); const { text } = envBuildOutputs(); if (text) copyText(text, ".env copied", "Clipboard was blocked. Download the .env file or copy it manually."); }
+    const downloadEnv = event.target.closest("[data-setup-download-env]"); if (downloadEnv) { event.preventDefault(); downloadEnvFile(); }
+    const copyCommands = event.target.closest("[data-setup-copy-commands]"); if (copyCommands) { event.preventDefault(); const current = currentDetailSetup(); if (current && state.setup) { const text = selectedCommandOutputs(state.setup, current.tool, current.setup).text; if (text) copyText(text, "Commands copied", "Clipboard was blocked. Select and copy the commands manually."); } }
     const reportInstall = event.target.closest("[data-report-install-issue]"); if (reportInstall) { event.preventDefault(); const current = currentDetailSetup(); if (!current) return; if (!state.siteConfig?.githubRepository) { showToast("Set the GitHub repository in data/site-config.json first"); return; } const url = installFailureIssueUrl(current.tool, state.siteConfig.githubRepository, state.siteConfig.installFailureTemplate || INSTALL_FAILURE_TEMPLATE); if (url) { window.open(url, "_blank", "noopener"); showToast("Install failure report form opened — fill it on GitHub"); } }
     const commandToggle = event.target.closest("[data-command-toggle]"); if (commandToggle) { if (state.setup) { toggleCommandSelected(state.setup, commandToggle.dataset.commandToggle); renderCatalog(); } }
     const commandMove = event.target.closest("[data-command-move]"); if (commandMove) { event.preventDefault(); if (state.setup) { const parts = commandMove.dataset.commandMove.split(":"); moveCommand(state.setup, parts[0], Number(parts[1])); renderCatalog(); } }
