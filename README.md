@@ -88,6 +88,14 @@ Visitors can report a broken installation, start, command, or setup step for any
 - The form warns upfront that reports are public and asks submitters to remove API keys, tokens, passwords, cookies, and other secrets before submitting.
 - Parser/validator: `.github/scripts/install-failure-lib.mjs` · workflow: `.github/workflows/validate-install-failure.yml` · labels in `data/labels.json` · URL builder: `assets/js/install-failure.js`.
 
+### Automatic official-source re-check
+
+GitHub Actions re-checks repository-declared official references weekly (Monday 05:17 UTC) and can be run manually for one exact tool ID or the whole catalog. It checks `sources`, website, docs, GitHub, and setup-recipe source URLs with bounded requests, redirect safety checks, and private/local-network blocking; GitHub credentials are never sent to those external hosts.
+
+Only confirmed 404/410 responses (twice) and unsafe declared URLs are link findings. 401/403 are recorded as restricted, while timeouts, DNS/TLS/network failures, 429, and 5xx responses are inconclusive and do not create Issues by themselves. A missing, invalid, future, or more-than-90-day-old `lastVerifiedAt` is also a human-review finding.
+
+Each affected tool gets at most one open `[Source recheck][tool-id]` maintenance Issue, labeled `source-recheck` and `needs-review`. These Issues are signals for maintainers: HTTP success means only that a reference was reachable from the runner. It never refreshes `lastVerifiedAt`, changes catalog/setup data, opens a PR, or changes a branch. A maintainer should inspect the official source, verify and submit the factual correction through the normal trusted path, then close the Issue.
+
 ### Client-side search
 
 The catalog builds one in-memory [Orama](https://docs.orama.com/docs/orama-js) index from `data/tools.json` after the page loads. Search, typo tolerance, relevance ranking, and structured filters run entirely in the browser. The production page resolves the pinned `@orama/orama` 3.1.18 ESM package through the import map in `index.html`; no build step, backend, hosted search service, API key, or Node server is required.

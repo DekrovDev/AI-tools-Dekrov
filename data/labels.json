@@ -12,5 +12,7 @@
   { "name": "other", "color": "c5def5", "description": "Another moderation outcome." },
   { "name": "ai-enrich", "color": "1d76db", "description": "Moderator requested AI-assisted enrichment of missing submission fields." },
   { "name": "install-failure", "color": "d73a4a", "description": "Reported installation, start, command, or setup failure for a catalog tool." },
-  { "name": "needs-info", "color": "fbca04", "description": "Install failure report needs more or consistent information." }
+  { "name": "needs-info", "color": "fbca04", "description": "Install failure report needs more or consistent information." },
+  { "name": "source-recheck", "color": "5319e7", "description": "Automated official-source re-check found a catalog item requiring human review." },
+  { "name": "needs-review", "color": "fbca04", "description": "Maintenance finding requires human verification before catalog data changes." }
 ]

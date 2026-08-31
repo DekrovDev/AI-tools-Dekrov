@@ -71,6 +71,12 @@ Moderators use `pending`, `needs-changes`, `approved`, `rejected`, and `duplicat
 
 Each tool detail page also includes **Suggest an update**, which opens an update submission bound to the existing tool ID. See [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`MODERATION.md`](MODERATION.md) for the complete workflow.
 
+## Automatic official-source re-check
+
+A maintainer-only GitHub Action runs weekly and may be dispatched manually for an exact tool ID. It checks only repository-declared official URLs: tool sources, website, docs, GitHub, and setup metadata sources. Requests are GETs with a small range header, bounded timeout/concurrency, public-host DNS checks, and manually validated redirects. No browser state, user-entered `.env` values, command-builder values, or credentials are involved.
+
+The Action creates or updates one open maintenance Issue per affected tool only for stale/missing/invalid verification dates, confirmed 404/410 links, or unsafe declared destinations. Restricted and transient responses remain summary-only. A successful request is not factual verification and never updates `lastVerifiedAt`, catalog records, setup metadata, or public UI.
+
 ## Local owner importer
 
 For a fuller metadata analysis, the owner can run:

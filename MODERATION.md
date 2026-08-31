@@ -52,3 +52,9 @@ Guidelines:
 ## Labels
 
 Required labels are defined in [`data/labels.json`](data/labels.json) and are created automatically by the workflows; no manual label setup is needed.
+
+## Automatic official-source re-check
+
+The weekly `source-recheck.yml` maintenance workflow checks only the official URLs already declared in the repository, including setup metadata sources. Its `[Source recheck][tool-id]` Issues are not submissions and do not trigger Smart Add, enrichment, validation, approval PRs, or catalog edits.
+
+Treat a maintenance Issue as a review signal, not a factual verdict. Inspect the official source manually, verify any current facts, make the correction through the normal trusted catalog path (including verification metadata where appropriate), and close the Issue when satisfied. HTTP reachability never updates `lastVerifiedAt`; restricted and transient responses do not create Issues by themselves.
