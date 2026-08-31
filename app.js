@@ -360,8 +360,830 @@ function handleSmartAdd(urlValue) {
   copyText([url.href, context].filter(Boolean).join("\n"));
   showToast("GitHub Issue Form opened — review and submit");
 }
-function promptSchema() { const generated = new Set(state.schema.generated || []); return Object.fromEntries(Object.entries(state.schema.properties).filter(([key]) => !generated.has(key)).map(([key, definition]) => [key, Object.fromEntries(Object.entries(definition).filter(([name]) => ["type", "required", "enum", "format", "pattern", "description", "humanOnly", "allowEmpty", "items"].includes(name)))])); }
-function buildAiPrompt() { if (!state.schema) return "Loading schema..."; const url = $("#prompt-url").value.trim() || "<PASTE_TOOL_URL>"; const context = $("#prompt-context").value.trim(); return ["Analyze this AI tool using publicly available, verifiable information.", `Tool URL: ${url}`, context ? `User context: ${context}` : "", "", "Return ONLY one valid JSON object. Do not use Markdown code fences. Do not add explanations before or after the JSON.", "Do not invent facts. If an ordinary scalar value is unknown, return an empty string. If a list is unknown, return an empty array.", "Always include executionMode, signupRequirement, and apiKeyRequirement. Use only their schema enums and use unknown when official evidence is insufficient.", "executionMode describes where the tool product runs, not where model inference runs. A local client may call a remote model API.", "apiKeyRequirement means a user-provided API key; OAuth, login, and subscriptions are not API keys.", "Use only enum values explicitly allowed in the schema. The id must be lowercase kebab-case.", "Do not include generated fields: addedAt, updatedAt, lastVerifiedAt, or sources.", "", "Schema:", JSON.stringify(promptSchema(), null, 2)].filter(Boolean).join("\n"); }
+const AI_JSON_PROMPT_TEMPLATE = `
+You are creating ONE canonical Tool JSON record for the AI-Dekrov AI tools catalog.
+
+Your job is to research the tool using OFFICIAL PUBLIC SOURCES and return one factual JSON object that conforms exactly to AI-Dekrov Tool Schema v2.
+
+TOOL_URL:
+{{TOOL_URL}}
+
+OPTIONAL_CONTEXT:
+{{OPTIONAL_CONTEXT}}
+
+# OUTPUT RULES
+
+Return ONLY one valid JSON object.
+
+Do NOT:
+- use Markdown code fences;
+- add explanations before or after the JSON;
+- add comments;
+- add citations outside JSON;
+- invent fields;
+- omit canonical fields listed below;
+- use null;
+- fabricate facts to avoid empty/unknown values.
+
+The result must be directly pasteable into AI-Dekrov JSON Import.
+
+# SOURCE POLICY
+
+Use official evidence only.
+
+Preferred source order:
+
+1. official product website;
+2. official documentation;
+3. official GitHub repository;
+4. official pricing page;
+5. other official pages controlled by the product/vendor.
+
+Do NOT rely on:
+- Reddit;
+- blogs;
+- random tutorials;
+- comparison websites;
+- search-result snippets;
+- community descriptions;
+- unofficial repositories;
+- general knowledge when official evidence does not confirm it.
+
+If a fact cannot be verified from official evidence, leave it unknown according to the rules below.
+
+# IMPORTANT CONSERVATIVE RULE
+
+Accuracy is more important than completeness.
+
+Never invent:
+- features;
+- commands;
+- prices;
+- models;
+- installation instructions;
+- platform support;
+- signup requirements;
+- API-key requirements;
+- execution architecture;
+- integrations.
+
+If uncertain, use the appropriate empty or \`unknown\` value.
+
+# EXACT OUTPUT STRUCTURE
+
+Return exactly this field structure:
+
+{
+  "id": "",
+  "name": "",
+  "category": "",
+  "description": "",
+  "bestFor": [],
+  "strengths": [],
+  "gettingStarted": [],
+  "usageNotes": [],
+  "url": "",
+  "domain": "",
+  "favicon": "",
+  "platforms": [],
+  "executionMode": "unknown",
+  "signupRequirement": "unknown",
+  "apiKeyRequirement": "unknown",
+  "pricing": "",
+  "priceDetails": "",
+  "tags": [],
+  "install": "",
+  "start": "",
+  "commands": [],
+  "models": [],
+  "github": "",
+  "docs": ""
+}
+
+Do NOT add:
+
+- addedAt
+- updatedAt
+- lastVerifiedAt
+- sources
+- notes
+
+Those are generated or managed separately by AI-Dekrov.
+
+# FIELD RULES
+
+## id
+
+Stable lowercase kebab-case identifier.
+
+Valid examples:
+
+cursor
+openrouter
+openai-agents-sdk
+visual-studio-code-agent
+
+Rules:
+- lowercase;
+- numbers allowed;
+- hyphens between words;
+- no spaces;
+- no underscores;
+- no punctuation;
+- use the actual product/tool name where possible.
+
+Do not include company slogans or page titles in the ID.
+
+## name
+
+Official product/tool name.
+
+Do not copy marketing slogans into the name.
+
+Example:
+
+Correct:
+"Cursor"
+
+Wrong:
+"Cursor - The AI Code Editor"
+
+## category
+
+MUST be exactly one of:
+
+- coding-agents
+- orchestration
+- chat-llm
+- research
+- audio
+- dev-tools
+- hosting
+- other
+
+Choose the category describing the tool's PRIMARY role.
+
+Use \`other\` only when none of the defined categories reasonably fits.
+
+Category guidance:
+
+coding-agents
+= AI coding agents, coding assistants, autonomous software-development agents
+
+orchestration
+= agent frameworks, multi-agent systems, AI workflow/orchestration frameworks
+
+chat-llm
+= general-purpose AI chat/model interfaces
+
+research
+= tools primarily intended for AI-assisted research/search/investigation
+
+audio
+= speech/audio AI tooling
+
+dev-tools
+= developer-focused AI infrastructure/utilities that are not primarily coding agents
+
+hosting
+= inference/API/model hosting/cloud AI infrastructure
+
+other
+= genuinely outside the above
+
+## description
+
+Short factual description of what the product is and does.
+
+Prefer approximately 1-2 concise sentences.
+
+Avoid:
+- hype;
+- "best";
+- "revolutionary";
+- unverifiable performance claims;
+- repeating the product name unnecessarily.
+
+## bestFor
+
+Array of specific tasks or audiences the tool is particularly suitable for.
+
+Examples:
+
+[
+  "Editing existing codebases with AI",
+  "Terminal-based pair programming",
+  "Developers using multiple LLM providers"
+]
+
+Use factual, specific phrases.
+
+Do not fill this with generic marketing.
+
+If evidence is insufficient:
+
+[]
+
+## strengths
+
+Array of factual differentiators or strengths supported by official evidence.
+
+Examples:
+
+[
+  "Supports multiple model providers",
+  "Can edit files directly from the terminal",
+  "Open-source repository available"
+]
+
+Only say "open-source" when an official repository/license clearly supports that claim.
+
+Do NOT infer open-source merely because a GitHub repository exists.
+
+If uncertain:
+
+[]
+
+## gettingStarted
+
+Verified first-use steps.
+
+One action per array item.
+
+Example:
+
+[
+  "Install the CLI with npm",
+  "Configure a supported model provider",
+  "Run the CLI inside a project directory"
+]
+
+Do not invent setup steps.
+
+If official instructions are insufficient:
+
+[]
+
+## usageNotes
+
+Important verified operational details, workflows, limitations, menus, authentication requirements, or usage behavior.
+
+Examples:
+
+[
+  "Supports both hosted and local model providers",
+  "Provider configuration varies by selected model",
+  "The VS Code extension requires authentication for cloud features"
+]
+
+Do not duplicate description unless useful.
+
+If uncertain:
+
+[]
+
+## url
+
+Official public product URL.
+
+Must use http:// or https://.
+
+Prefer the canonical product homepage rather than:
+- tracking URLs;
+- search URLs;
+- unofficial mirrors.
+
+## domain
+
+Hostname from the official URL without protocol.
+
+Example:
+
+URL:
+https://aider.chat/
+
+domain:
+aider.chat
+
+Do not include paths.
+
+## favicon
+
+Public official favicon/logo URL when clearly available.
+
+Must be an http(s) URL.
+
+Prefer an asset hosted by the official domain.
+
+Do not invent a favicon path unless it is actually valid.
+
+If uncertain:
+
+""
+
+## platforms
+
+Array containing ONLY values from:
+
+- web
+- desktop
+- mobile
+- browser-extension
+- cli
+- vscode
+- api
+
+Include only officially supported interfaces.
+
+Examples:
+
+CLI tool:
+
+[
+  "cli"
+]
+
+Hosted model API with web console:
+
+[
+  "web",
+  "api"
+]
+
+VS Code extension:
+
+[
+  "vscode"
+]
+
+Do NOT classify generic editor plugins as \`browser-extension\`.
+
+Do NOT add \`web\` merely because the product has a website.
+
+A documentation or marketing website does not mean the tool itself is a web application.
+
+# EXECUTION METADATA
+
+These fields require especially conservative reasoning.
+
+Do NOT infer them from platform labels alone.
+
+## executionMode
+
+MUST be exactly one of:
+
+- local
+- cloud
+- hybrid
+- unknown
+
+This describes WHERE THE TOOL PRODUCT ITSELF OPERATES.
+
+It does NOT describe where the selected AI model performs inference.
+
+### local
+
+Use when the core tool can operate as locally installed/self-hosted software without depending on a mandatory vendor-hosted product service.
+
+Examples conceptually:
+- local CLI;
+- local framework;
+- self-hosted agent runtime.
+
+IMPORTANT:
+
+A local CLI that calls OpenAI, Anthropic, OpenRouter, etc. can still be:
+
+"executionMode": "local"
+
+Remote model inference does NOT automatically make the tool cloud-based.
+
+### cloud
+
+Use when meaningful/core usage is primarily dependent on a vendor-hosted service.
+
+Examples:
+- hosted inference API;
+- web-only hosted AI application;
+- cloud platform.
+
+### hybrid
+
+Use when official supported operation meaningfully spans local/self-hosted AND hosted/cloud components or editions.
+
+Also use hybrid when a locally installed client materially depends on a vendor cloud service for its core functionality.
+
+Examples conceptually:
+- product with official cloud and self-hosted editions;
+- local IDE client with mandatory vendor-hosted AI backend;
+- platform that genuinely provides both local framework and managed hosted infrastructure.
+
+Do NOT use \`hybrid\` simply because a local application calls a third-party LLM API.
+
+### unknown
+
+Use when official evidence does not establish the architecture confidently.
+
+Do NOT make these shortcuts:
+
+CLI -> local
+desktop -> local
+VS Code -> local
+web -> cloud
+API -> cloud
+supports Ollama -> local
+supports OpenAI -> cloud
+
+Investigate the actual product architecture.
+
+# SIGNUP METADATA
+
+## signupRequirement
+
+MUST be exactly one of:
+
+- required
+- optional
+- not-required
+- depends
+- unknown
+
+This means PRODUCT ACCOUNT CREATION / SIGN-IN.
+
+### required
+
+A normal/core supported workflow requires creating or signing into an account.
+
+### not-required
+
+A normal/core officially supported workflow works without product account creation or sign-in.
+
+### optional
+
+Accounts exist and may provide additional functionality, but a normal supported workflow works without one.
+
+### depends
+
+The requirement materially differs by edition, interface, deployment, authentication method, or workflow.
+
+### unknown
+
+Official evidence is insufficient.
+
+Important distinctions:
+
+- downloading from GitHub is NOT signup;
+- having a Login button does NOT prove signup is required;
+- optional GitHub authentication does NOT automatically mean required signup;
+- an API key and a user account are different concepts;
+- OAuth/login and API keys must not be conflated.
+
+# API KEY METADATA
+
+## apiKeyRequirement
+
+MUST be exactly one of:
+
+- required
+- optional
+- not-required
+- depends
+- unknown
+
+This field refers ONLY to a USER-PROVIDED API KEY.
+
+OAuth, browser login, subscription authentication, vendor account sessions, automatically managed credentials, etc. are NOT API keys for this field.
+
+### required
+
+A normal/core workflow requires the user to supply an API key.
+
+### not-required
+
+A normal/core officially supported workflow works without the user supplying an API key.
+
+### optional
+
+BYOK/API-key configuration is supported, but at least one normal official workflow works without supplying a key.
+
+Example conceptually:
+- built-in hosted models are available;
+- BYOK is additionally supported.
+
+### depends
+
+Whether a user-provided API key is needed materially depends on:
+- selected provider;
+- model;
+- deployment;
+- authentication path;
+- workflow.
+
+This is common for multi-provider developer tools.
+
+Example:
+
+Provider A -> OAuth
+Provider B -> API key
+Local Ollama -> neither
+
+Then \`depends\` may be more accurate than \`optional\`.
+
+### unknown
+
+Official evidence is insufficient.
+
+Do NOT infer:
+
+supports OpenAI
+-> API key required
+
+The tool may also support OAuth, built-in models, subscriptions or local providers.
+
+Do NOT infer:
+
+supports local model
+-> API key not required
+
+unless that is a real supported normal workflow.
+
+# PRICING
+
+## pricing
+
+MUST be exactly one of:
+
+- free
+- freemium
+- paid
+- usage-based
+- ""
+
+Use:
+
+free
+= normal product is free
+
+freemium
+= free tier plus paid plans/features
+
+paid
+= normal access requires payment/subscription
+
+usage-based
+= primarily billed by actual usage, tokens, API calls, compute, etc.
+
+If pricing cannot be confidently verified:
+
+""
+
+Do not guess based on reputation.
+
+## priceDetails
+
+Short specific pricing information when officially verified.
+
+Examples:
+
+"$20/month Pro plan"
+
+"Pay per token"
+
+"Free tier available; paid usage beyond included quota"
+
+If pricing is complicated, summarize conservatively.
+
+If no reliable detail:
+
+""
+
+# TAGS
+
+## tags
+
+Short factual searchable keywords.
+
+Examples:
+
+[
+  "coding",
+  "agent",
+  "cli",
+  "open-source"
+]
+
+Avoid:
+- marketing phrases;
+- duplicate variants;
+- unsupported claims.
+
+Use lowercase where reasonable.
+
+# INSTALL / START / COMMANDS
+
+## install
+
+Verified primary installation command.
+
+Example:
+
+"pip install aider-install"
+
+Only provide an actual documented command.
+
+Do not invent package names.
+
+If no command exists or cannot be verified:
+
+""
+
+## start
+
+Verified primary command to start/use the tool after installation.
+
+Example:
+
+"aider"
+
+If uncertain:
+
+""
+
+## commands
+
+Array of additional officially documented useful commands.
+
+Each item MUST have exactly:
+
+{
+  "label": "",
+  "command": ""
+}
+
+Example:
+
+[
+  {
+    "label": "Run tests",
+    "command": "npx agent-qa test"
+  }
+]
+
+Do not represent commands as strings.
+
+Do not invent useful-looking commands.
+
+Do not duplicate \`install\` or \`start\` unnecessarily.
+
+If none:
+
+[]
+
+# MODELS
+
+## models
+
+This field is STRICT.
+
+Include ONLY actual AI model names or model families that the official evidence explicitly indicates the tool:
+
+- supports;
+- offers;
+- runs;
+- selects;
+- configures;
+- integrates as a model.
+
+Examples of potentially valid entries:
+
+[
+  "Claude 4",
+  "GPT-5",
+  "Gemini 2.5",
+  "DeepSeek R1"
+]
+
+Provider names are NOT models.
+
+Do NOT include values such as:
+
+- OpenAI
+- Anthropic
+- Google
+- Azure OpenAI
+- Amazon Bedrock
+- AWS
+- Hugging Face
+- Replicate
+- Ollama
+- OpenRouter
+- Groq
+
+Those are providers, runtimes, platforms or marketplaces.
+
+Do NOT include:
+- "100+ models"
+- "OpenAI-compatible models"
+- "custom models"
+- "local models"
+- "other LLMs"
+- model counts
+- provider compatibility statements
+
+A model being casually mentioned in documentation is NOT sufficient.
+
+The official evidence must show that the TOOL actually supports/offers/selects/configures/runs it.
+
+If this cannot be confidently established:
+
+[]
+
+Be conservative.
+
+# github
+
+Official GitHub repository URL for the product/project.
+
+Do not use:
+- unofficial forks;
+- random plugins;
+- unrelated company repositories.
+
+If none:
+
+""
+
+# docs
+
+Canonical official documentation URL.
+
+Prefer the documentation homepage for the actual product.
+
+If none can be verified:
+
+""
+
+# UNKNOWN VALUE RULES
+
+For the three structured metadata fields, always use:
+
+"executionMode": "unknown"
+"signupRequirement": "unknown"
+"apiKeyRequirement": "unknown"
+
+when evidence is insufficient.
+
+Do NOT use empty strings for those three fields.
+
+For unknown ordinary scalar fields use:
+
+""
+
+For unknown list fields use:
+
+[]
+
+Never use:
+- null
+- "N/A"
+- "none"
+- "unsure"
+- "probably"
+- arbitrary values outside the enums
+
+# CONSISTENCY CHECK
+
+Before answering, internally verify:
+
+1. JSON parses successfully.
+2. There is exactly one JSON object.
+3. All expected fields are present.
+4. No unsupported fields are present.
+5. id is lowercase kebab-case.
+6. category is from the allowed enum.
+7. platforms contain only allowed values.
+8. executionMode is from its allowed enum.
+9. signupRequirement is from its allowed enum.
+10. apiKeyRequirement is from its allowed enum.
+11. pricing is allowed or empty.
+12. commands are objects with label + command.
+13. models contain actual model names/families, not provider names.
+14. generated metadata is absent.
+15. all claims are supported by official evidence.
+16. unknown execution/signup/API-key information uses \`unknown\`, not guesses.
+17. OAuth/login has not been confused with an API key.
+18. model inference location has not been confused with tool execution architecture.
+
+Return ONLY the final JSON object.
+`;
+
+function buildAiPrompt() {
+  const url = $("#prompt-url").value.trim() || "<PASTE_TOOL_URL>";
+  const context = $("#prompt-context").value.trim();
+  return AI_JSON_PROMPT_TEMPLATE.trim()
+    .replace("{{TOOL_URL}}", () => url)
+    .replace("{{OPTIONAL_CONTEXT}}", () => context);
+}
 function updateAiPrompt() { $("#ai-prompt").value = buildAiPrompt(); }
 function setJsonErrors(errors = []) { const panel = $("#json-errors"); panel.hidden = errors.length === 0; panel.innerHTML = errors.length ? `<strong>Check the JSON:</strong><ul>${errors.map((error) => `<li>${escapeHtml(error)}</li>`).join("")}</ul>` : ""; }
 function resetJsonImport() { jsonCandidate = null; $("#prompt-url").value = ""; $("#prompt-context").value = ""; $("#json-import-input").value = ""; $("#json-preview").hidden = true; $("#json-import-confirm").hidden = true; $("#json-edit-manual").hidden = true; setJsonErrors(); updateAiPrompt(); }
