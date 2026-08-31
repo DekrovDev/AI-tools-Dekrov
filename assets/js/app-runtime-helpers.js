@@ -13,6 +13,8 @@ export function parseRouteHash(hash = "") {
   if (hash === "#/stack") return { type: "stack" };
   if (hash.startsWith("#/collections/")) return { type: "collection", id: decodeRouteSegment(hash.slice("#/collections/".length)) };
   if (hash === "#/collections") return { type: "collections" };
+  const sharedMatch = hash.match(/^#\/shared\/([A-Za-z0-9_-]*)$/);
+  if (sharedMatch) return { type: "shared", token: sharedMatch[1] };
   if (hash === "#/favorites") return { type: "favorites" };
   const toolMatch = hash.match(/^#\/tools\/([^/?#]+)$/);
   if (toolMatch) return { type: "tool", id: decodeRouteSegment(toolMatch[1]) };

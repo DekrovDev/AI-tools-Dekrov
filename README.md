@@ -69,6 +69,16 @@ AI-Dekrov is a static GitHub Pages project. Its public data and source code live
 
 Malformed or unavailable setup metadata disables only the future builders; catalog data, search, tool details, Start Here, and Use Cases remain available. Any later UI must keep entered values in ephemeral memory only—never URLs, storage, analytics, logs, or GitHub submissions.
 
+### Shareable Collections
+
+Collections are browser-local by default and never leave your browser. A Collection can also be shared as a **snapshot encoded straight into a URL** (`#/shared/<token>`):
+
+- **Share** on a collection copies a link containing only the collection name and its tool IDs. Local ids, timestamps, notes, favorites, My Stack, and filters are never included.
+- **Opening a shared link does not save anything.** It renders a read-only view of the tools, scoped to the same search and filters as the rest of the site. Only pressing **Save to Collections** writes a new local collection.
+- The payload is compact base64url JSON (UTF-8 safe for Cyrillic and emoji). Decoding is hardened: malformed, oversized, wrong-version, or unknown-tool links are rejected gracefully without breaking the catalog.
+- Copied links are immutable snapshots. If the sender later renames a collection or adds/removes tools, an old link keeps its original contents.
+- Codec and validation live in `assets/js/shared-collections.js` (DOM-free); no backend, API, database, or accounts are involved.
+
 ### Client-side search
 
 The catalog builds one in-memory [Orama](https://docs.orama.com/docs/orama-js) index from `data/tools.json` after the page loads. Search, typo tolerance, relevance ranking, and structured filters run entirely in the browser. The production page resolves the pinned `@orama/orama` 3.1.18 ESM package through the import map in `index.html`; no build step, backend, hosted search service, API key, or Node server is required.

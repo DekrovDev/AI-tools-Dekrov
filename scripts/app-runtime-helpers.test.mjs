@@ -11,6 +11,25 @@ test("route parser keeps exact stack matching and safely decodes valid routes", 
   assert.deepEqual(parseRouteHash("#/collections/my%20tools"), { type: "collection", id: "my tools" });
 });
 
+test("shared route is recognized and returns its token", () => {
+  const token = "eyJ2IjoxLCJuYW1lIjoiQ29kaW5nIiwidG9vbElkcyI6W119";
+  assert.deepEqual(parseRouteHash(`#/shared/${token}`), { type: "shared", token });
+  assert.deepEqual(parseRouteHash("#/shared/"), { type: "shared", token: "" });
+  // Not a shared route.
+  assert.equal(parseRouteHash("#/sharedfoo/abc"), null);
+  assert.equal(parseRouteHash("#/shared"), null);
+  assert.equal(parseRouteHash("#/shared/abc/"), null);
+  // Normal routes unchanged.
+  assert.deepEqual(parseRouteHash("#/collections/my-tools"), { type: "collection", id: "my-tools" });
+  assert.deepEqual(parseRouteHash("#/"), null);
+});
+
+test("malformed percent-encoding/hash on shared route never throws", () => {
+  assert.doesNotThrow(() => parseRouteHash("#/shared/%%%"));
+  assert.doesNotThrow(() => parseRouteHash("#/shared/a b+c"));
+  assert.doesNotThrow(() => parseRouteHash("#/shared/%E0%A4%A"));
+});
+
 test("malformed route encoding fails safely without throwing", () => {
   assert.doesNotThrow(() => parseRouteHash("#/tools/%E0%A4%A"));
   assert.deepEqual(parseRouteHash("#/tools/%E0%A4%A"), { type: "tool", id: "" });
