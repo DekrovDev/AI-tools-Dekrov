@@ -1,0 +1,56 @@
+name: Validate install failure
+
+on:
+  issues:
+    types: [opened, edited, reopened]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  validate:
+    # Trigger either by body section header (works even if the custom label is
+    # missing on a fresh repository) or by the install-failure label itself.
+    if: (github.event.issue.body != null && (contains(github.event.issue.body, '### Failure stage') || contains(github.event.issue.body, '### Command or setup step'))) || startsWith(github.event.issue.title, '[Install failure]') || contains(github.event.issue.labels.*.name, 'install-failure')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Validate install failure report
+        run: node .github/scripts/validate-install-failure.mjs --event "$GITHUB_EVENT_PATH" --output "$RUNNER_TEMP/install-failure-result.json"
+      - name: Ensure required labels exist
+        run: node .github/scripts/ensure-labels.mjs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Compute report label transitions
+        run: node .github/scripts/compute-install-failure-labels.mjs --event "$GITHUB_EVENT_PATH" --result "$RUNNER_TEMP/install-failure-result.json" --output "$RUNNER_TEMP/install-failure-labels.json"
+      - name: Apply report labels
+        uses: actions/github-script@v7
+        env:
+          LABELS_PATH: ${{ runner.temp }}/install-failure-labels.json
+        with:
+          script: |
+            const fs = require('fs');
+            const { add, remove, skip } = JSON.parse(fs.readFileSync(process.env.LABELS_PATH, 'utf8'));
+            if (skip) {
+              console.log('Not an install failure report; nothing to do.');
+              return;
+            }
+            // Always additive: add labels if missing, remove exactly the reported
+            // labels, and never replace the full label set. Any unrelated labels
+            // (submission states, moderator outcomes, triage notes) are preserved.
+            if (Array.isArray(add) && add.length) {
+              await github.rest.issues.addLabels({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number, labels: add });
+            }
+            for (const name of Array.isArray(remove) ? remove : []) {
+              try {
+                await github.rest.issues.removeLabel({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number, name });
+              } catch (error) {
+                // 404: label already gone; ignore.
+                const status = error.status ?? error.response?.status;
+                if (status !== 404) throw error;
+              }
+            }

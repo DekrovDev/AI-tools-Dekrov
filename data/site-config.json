@@ -1,5 +1,6 @@
 {
   "githubRepository": "DekrovDev/AI-tools-Dekrov",
   "issueTemplate": "tool-submission.yml",
-  "smartAddTemplate": "smart-add.yml"
+  "smartAddTemplate": "smart-add.yml",
+  "installFailureTemplate": "install-failure.yml"
 }

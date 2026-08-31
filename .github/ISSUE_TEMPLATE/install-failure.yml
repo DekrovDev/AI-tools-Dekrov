@@ -1,0 +1,111 @@
+name: Install / setup failure
+description: Report a broken installation, start, or documented setup command.
+title: "[Install failure] "
+labels: ["install-failure"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting an install or setup failure for a tool in the AI-Dekrov catalog.
+
+        ⚠️ This issue is **public**. Before submitting:
+        - Remove API keys, access tokens, passwords, cookies and private URLs.
+        - AI-Dekrov does not need any credentials to investigate a broken command.
+        - Share only factual reproduction information.
+  - type: input
+    id: tool_id
+    attributes:
+      label: Tool ID
+      description: If the title already contains [tool-id], you may leave this empty. Otherwise enter the catalog tool ID.
+      placeholder: aider
+    validations:
+      required: false
+  - type: dropdown
+    id: failure_stage
+    attributes:
+      label: Failure stage
+      options:
+        - Installation command
+        - Start command
+        - Other documented command
+        - Setup / environment
+        - Documentation mismatch
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: operating_system
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: shell_terminal
+    attributes:
+      label: Shell / terminal
+      options:
+        - PowerShell
+        - Command Prompt
+        - bash
+        - zsh
+        - fish
+        - Other
+        - Not sure
+    validations:
+      required: false
+  - type: input
+    id: tool_version
+    attributes:
+      label: Tool version
+      description: Version you were trying to install or run, if known.
+      placeholder: 1.2.3, latest, or unknown
+    validations:
+      required: false
+  - type: textarea
+    id: command_or_setup_step
+    attributes:
+      label: Command or setup step
+      description: Paste the command or describe the specific documented setup step that failed. Remove API keys, tokens and other secrets before submitting.
+      placeholder: |
+        The command I ran was:
+        npm install -g aider
+    validations:
+      required: true
+  - type: textarea
+    id: error_output
+    attributes:
+      label: Error output
+      description: Paste the relevant error message. Remove secrets, tokens, private paths or sensitive data first. A short relevant excerpt is preferable.
+      placeholder: The relevant part of the error message, with any secrets removed.
+    validations:
+      required: true
+  - type: textarea
+    id: expected_result
+    attributes:
+      label: Expected result
+      description: What you expected to happen.
+      placeholder: The CLI should install successfully and become available in the terminal.
+    validations:
+      required: false
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      description: Package manager, runtime or dependency version, the official docs page you followed, or reproduction notes. Never share personal identifying information.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Public-data confirmation
+      description: Confirm before submitting.
+      options:
+        - label: I removed API keys, tokens, passwords, cookies and other secrets from this public report.
+          required: true
+        - label: I understand this GitHub issue will be public.
+          required: true

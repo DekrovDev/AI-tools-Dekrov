@@ -79,6 +79,15 @@ Collections are browser-local by default and never leave your browser. A Collect
 - Copied links are immutable snapshots. If the sender later renames a collection or adds/removes tools, an old link keeps its original contents.
 - Codec and validation live in `assets/js/shared-collections.js` (DOM-free); no backend, API, database, or accounts are involved.
 
+### Install / setup failure reports
+
+Visitors can report a broken installation, start, command, or setup step for any catalog tool from **Setup → Commands → Report install issue**. Clicking it opens the repository's dedicated GitHub Issue Form (`install-failure.yml`) in a new tab with a structured title like `[Install failure][aider] Aider`. The site never sends anything to GitHub through an API: it only opens GitHub's hosted form.
+
+- Reports are **public**, independent issues — they are **not** tool submissions. They never receive `tool-submission`/`approved`, never trigger approval PR, enrichment, or Smart Add workflows, and never modify `data/tools.json` or `data/setup-recipes.json`.
+- A `validate-install-failure` workflow parses the structured form with the same `section`/`emptyResponse` helpers as tool submissions, resolves the tool ID from the title (or the optional Tool ID field), checks the required fields, and labels the issue `install-failure` (plus `needs-info` when more/consistent information is needed). It never creates a branch, PR, or deployment.
+- The form warns upfront that reports are public and asks submitters to remove API keys, tokens, passwords, cookies, and other secrets before submitting.
+- Parser/validator: `.github/scripts/install-failure-lib.mjs` · workflow: `.github/workflows/validate-install-failure.yml` · labels in `data/labels.json` · URL builder: `assets/js/install-failure.js`.
+
 ### Client-side search
 
 The catalog builds one in-memory [Orama](https://docs.orama.com/docs/orama-js) index from `data/tools.json` after the page loads. Search, typo tolerance, relevance ranking, and structured filters run entirely in the browser. The production page resolves the pinned `@orama/orama` 3.1.18 ESM package through the import map in `index.html`; no build step, backend, hosted search service, API key, or Node server is required.
