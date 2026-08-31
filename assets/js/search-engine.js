@@ -245,10 +245,14 @@ function toAllowedSet(value) {
 export function filterCatalogTools(tools, options = {}) {
   const favoriteIds = options.favoriteIds instanceof Set ? options.favoriteIds : new Set(options.favoriteIds || []);
   const allowedIds = toAllowedSet(options.allowedIds);
+  const noRequirementValues = new Set(["not-required", "optional"]);
   return tools.filter((tool) =>
     (!options.category || tool.category === options.category) &&
     (!options.pricing || tool.pricing === options.pricing) &&
     (!options.platform || asStrings(tool.platforms).includes(options.platform)) &&
+    (!options.executionMode || tool.executionMode === options.executionMode) &&
+    (!options.noSignup || noRequirementValues.has(tool.signupRequirement)) &&
+    (!options.noApiKey || noRequirementValues.has(tool.apiKeyRequirement)) &&
     (!options.favoritesOnly || favoriteIds.has(tool.id)) &&
     (!allowedIds || allowedIds.has(tool.id))
   );
@@ -356,7 +360,10 @@ export function createCatalogSearch(tools = []) {
     const explicitFilters = {
       category: options.category || "",
       pricing: options.pricing || "",
-      platform: options.platform || ""
+      platform: options.platform || "",
+      executionMode: options.executionMode || "",
+      noSignup: Boolean(options.noSignup),
+      noApiKey: Boolean(options.noApiKey)
     };
 
     if (!queryActive) {
@@ -405,13 +412,14 @@ export function createCatalogSearch(tools = []) {
       }
     }
 
-    const favoriteIds = options.favoriteIds instanceof Set ? options.favoriteIds : new Set(options.favoriteIds || []);
-    const allowedIds = toAllowedSet(options.allowedIds);
-    const rankedTools = hits
+    const rankedTools = filterCatalogTools(hits
       .map((hit) => toolsById.get(hit.id))
-      .filter(Boolean)
-      .filter((tool) => !options.favoritesOnly || favoriteIds.has(tool.id))
-      .filter((tool) => !allowedIds || allowedIds.has(tool.id));
+      .filter(Boolean), {
+        ...explicitFilters,
+        favoritesOnly: options.favoritesOnly,
+        favoriteIds: options.favoriteIds,
+        allowedIds: options.allowedIds
+      });
 
     return { tools: rankedTools, hits, parsed: effectiveParsed, queryActive: true, phase };
   }

@@ -558,6 +558,11 @@ export async function analyzeTool({ url, context = "", maxPages = MAX_TOTAL_PAGE
     domain,
     favicon: firstFavicon(homepage.text, homepageUrl),
     platforms,
+    // These facts need explicit product/account evidence. The deterministic
+    // analyzer deliberately avoids inferring them from weak page wording.
+    executionMode: "unknown",
+    signupRequirement: "unknown",
+    apiKeyRequirement: "unknown",
     pricing: pricingInfo.pricing || "",
     priceDetails: pricingInfo.priceDetails || "",
     tags: profile.tags,

@@ -9,7 +9,7 @@ Browse trusted links, supported platforms, pricing, install commands, and short 
 ## Explore the catalog
 
 - Search by name, description, tag, category, platform, or model.
-- Filter by price and platform: Web, Desktop, CLI, VS Code, and API.
+- Filter by price, platform, and tool execution (Local, Cloud, or Hybrid), or show tools with a supported no-signup / no-API-key path.
 - Save favorites and your theme preference in your own browser.
 - Open a dedicated page for every tool, with its official links and commands.
 
@@ -22,6 +22,8 @@ Click **Suggest a tool** on the website and choose the fastest option:
 - **JSON Import** includes an AI Prompt Builder: use an external model to prepare schema-valid JSON, validate it here, then submit it for review.
 
 Smart Add, Manual, and JSON Import all produce the same kind of submission. Submissions are checked for valid JSON, URLs, enums, IDs, and potential duplicates. A moderator reviews the result before it can become a pull request. Nothing is published automatically.
+
+Tool records also carry three structured environment fields: `executionMode`, `signupRequirement`, and `apiKeyRequirement`. Execution describes where the tool product runs, not where model inference happens; a local tool may still call a remote model API. API-key requirement means a user-provided key—OAuth, account login, and subscriptions are not API keys. When official evidence is insufficient, the canonical value is `unknown`.
 
 For a deeper local analysis, the repository owner can run `npm run add-tool -- <url>`, which downloads the page, shows a preview, and writes to `data/tools.json` only after confirmation.
 

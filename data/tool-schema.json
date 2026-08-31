@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "title": "AI-Dekrov tool record",
   "properties": {
     "id": { "type": "string", "required": true, "pattern": "kebab-case", "description": "Stable kebab-case identifier" },
@@ -14,6 +14,9 @@
     "domain": { "type": "string", "description": "Website domain without protocol" },
     "favicon": { "type": "string", "format": "uri", "description": "Public favicon or logo URL" },
     "platforms": { "type": "array", "items": { "enum": ["web", "desktop", "mobile", "browser-extension", "cli", "vscode", "api"] } },
+    "executionMode": { "type": "string", "enum": ["local", "cloud", "hybrid", "unknown"], "description": "Where the tool product itself runs. This is independent of where any model inference runs." },
+    "signupRequirement": { "type": "string", "enum": ["required", "optional", "not-required", "depends", "unknown"], "description": "Whether the normal supported tool workflow requires an account." },
+    "apiKeyRequirement": { "type": "string", "enum": ["required", "optional", "not-required", "depends", "unknown"], "description": "Whether the user must provide an API key. OAuth, login, and subscriptions are not API keys." },
     "pricing": { "type": "string", "enum": ["free", "freemium", "paid", "usage-based"], "allowEmpty": true },
     "priceDetails": { "type": "string", "description": "Optional specific price or billing terms" },
     "tags": { "type": "array", "items": { "type": "string" } },

@@ -23,7 +23,7 @@ Categories appear in the navigation only when they contain at least one publishe
 
 Search looks through names, descriptions, categories, tags, platforms, models, and personal notes stored in the current browser. Use `Ctrl + K` on Windows/Linux or `Cmd + K` on macOS to focus search.
 
-The catalog can be filtered by price and platform, then sorted by recently added, name, or category. Price uses the factual options Free, Freemium, Paid, and Usage-based, with optional details such as `$20/month` or `Pay per token`. Clear appears next to the filters whenever a search or filter is active.
+The catalog can be filtered by price, platform, and tool execution (Local, Cloud, or Hybrid), then sorted by recently added, name, or category. **No signup** matches only tools marked `not-required` or `optional`; **No API key** uses the same exact rule. `unknown`, `required`, and `depends` never match those convenience filters. All filters combine with AND semantics and remain active inside Use Cases, My Stack, and Collections. Price uses the factual options Free, Freemium, Paid, and Usage-based, with optional details such as `$20/month` or `Pay per token`. Clear appears next to the filters whenever a search or filter is active.
 
 ## Favorites and theme
 
@@ -31,7 +31,7 @@ Visitors can favorite tools, keep personal notes, and switch between light and d
 
 ## Tool pages
 
-Each tool has a readable hash URL such as `#/tools/tool-id`. Its detail page can show an official website, price and price details, platforms, install and start commands, additional commands, supported models, documentation, GitHub, tags, a domain, public dates, and source links. The browser title and description update for the active category, Favorites, and each tool page.
+Each tool has a readable hash URL such as `#/tools/tool-id`. Its detail page can show an official website, price and price details, platforms, execution mode, signup/API-key requirements, install and start commands, additional commands, supported models, documentation, GitHub, tags, a domain, public dates, and source links. Unknown environment values are omitted from the detail summary. The browser title and description update for the active category, Favorites, and each tool page.
 
 ## Suggesting a tool
 
@@ -44,7 +44,7 @@ The default mode. Paste an official tool URL and optionally add context, then cl
 Once the Issue is submitted, the Smart Add Action runs on GitHub:
 
 1. safely downloads the homepage (and up to three obviously useful official pages such as pricing, docs, or getting started);
-2. extracts name, description, canonical URL, domain, favicon, platforms, category, pricing, tags, commands, models, GitHub, and docs — using the schema as the single source of truth for allowed values;
+2. extracts name, description, canonical URL, domain, favicon, platforms, category, pricing, tags, commands, models, GitHub, and docs, while conservatively defaulting execution/signup/API-key metadata to `unknown` — using the schema as the single source of truth for allowed values;
 3. optionally enriches the candidate with an external LLM for trusted contributors only (disabled by default, never required);
 4. validates the result with the same validation logic as any submission and checks duplicates;
 5. leaves a **Smart Add analysis** comment, then converts the Issue into the canonical `tool-submission` format with `tool-submission` + `pending` (or `needs-changes`) labels.
@@ -53,13 +53,13 @@ The converted Issue behaves exactly like a manual submission: moderators review 
 
 ### Manual
 
-Use the full editor for the name, category, price, specific price details, description, URLs, platforms, tags, commands, models, GitHub, and documentation. Website is required because every public tool needs an official public URL.
+Use the full editor for the name, category, price, specific price details, description, URLs, platforms, execution mode, signup/API-key requirements, tags, commands, models, GitHub, and documentation. Website is required because every public tool needs an official public URL.
 
 ### JSON Import and AI Prompt Builder
 
 Enter a URL and optional context. The site builds a prompt from [`data/tool-schema.json`](data/tool-schema.json), so the schema does not need to be copied or maintained in multiple places.
 
-Copy the prompt into an external AI model, paste the returned JSON back into the site, validate it, review the readable preview, and edit it if necessary. The prompt requires one valid JSON object with no Markdown or explanations, only allowed enum values, empty values for unknown facts, and a kebab-case ID.
+Copy the prompt into an external AI model, paste the returned JSON back into the site, validate it, review the readable preview, and edit it if necessary. The prompt requires one valid JSON object with no Markdown or explanations, only allowed enum values, and a kebab-case ID. It explicitly requires `executionMode`, `signupRequirement`, and `apiKeyRequirement`; uncertain values for those fields must be `unknown`.
 
 ## Public submission and moderation
 

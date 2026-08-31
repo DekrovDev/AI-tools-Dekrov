@@ -287,6 +287,9 @@ test("analyzeTool builds a schema-shaped candidate from homepage + useful pages"
   assert.equal(tool.github, "https://github.com/getcursor/cursor");
   assert.equal(tool.docs, "https://docs.cursor.com/");
   assert.equal(tool.install, "npm install -g cursor");
+  assert.equal(tool.executionMode, "unknown");
+  assert.equal(tool.signupRequirement, "unknown");
+  assert.equal(tool.apiKeyRequirement, "unknown");
   assert.equal(result.context, "Official coding agent from OpenAI");
   assert.ok(pages.some((page) => page.kind === "pricing"));
   assert.ok(Array.isArray(warnings));

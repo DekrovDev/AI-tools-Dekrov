@@ -65,6 +65,7 @@ function buildBody(tool) {
 }
 
 const ENV = { AI_PROVIDER_BASE_URL: "https://provider.example", AI_API_KEY: "key", AI_MODEL: "m" };
+const METADATA_SCHEMA = await loadSchema();
 
 // Fake official-source fetcher (safeFetch-compatible).
 function fakeEvidence() {
@@ -398,4 +399,53 @@ test("existing populated contributor models are preserved by moderator enrichmen
   const orig = { ...ORIGINAL, models: ["GPT-4o", "Claude"] };
   const merged = mergeEnrichedFields(orig, { models: ["Gemini", "Ollama"] }, ENRICHMENT_FOCUS_FIELDS);
   assert.deepEqual(merged.models, ["GPT-4o", "Claude"]);
+});
+
+test("moderator enrichment rewrites a canonical body with filled and unknown metadata", async () => {
+  const result = await runFlow({ aiContent: JSON.stringify({ executionMode: "local" }) });
+  assert.equal(result.changed, true);
+  assert.ok(result.filledFields.includes("executionMode"));
+  const parsed = parseIssueSubmission(result.newBody);
+  const tool = JSON.parse(parsed.json);
+  assert.equal(tool.executionMode, "local");
+  assert.equal(tool.signupRequirement, "unknown");
+  assert.equal(tool.apiKeyRequirement, "unknown");
+});
+
+test("Smart Add enrichment fills only unknown structured metadata", () => {
+  const candidate = { ...ORIGINAL, executionMode: "unknown", signupRequirement: "unknown", apiKeyRequirement: "unknown" };
+  const result = applyEnrichment(candidate, JSON.stringify({ executionMode: "local", signupRequirement: "optional", apiKeyRequirement: "required" }), METADATA_SCHEMA);
+  assert.equal(result.executionMode, "local");
+  assert.equal(result.signupRequirement, "optional");
+  assert.equal(result.apiKeyRequirement, "required");
+});
+
+test("Smart Add enrichment never overwrites known structured metadata", () => {
+  const candidate = { ...ORIGINAL, executionMode: "hybrid", signupRequirement: "required", apiKeyRequirement: "not-required" };
+  const result = applyEnrichment(candidate, JSON.stringify({ executionMode: "cloud", signupRequirement: "optional", apiKeyRequirement: "required" }), METADATA_SCHEMA);
+  assert.equal(result, candidate);
+});
+
+test("Smart Add enrichment ignores invalid structured metadata strings and booleans", () => {
+  const candidate = { ...ORIGINAL, executionMode: "unknown", signupRequirement: "unknown", apiKeyRequirement: "unknown" };
+  for (const content of [
+    JSON.stringify({ executionMode: "desktop", signupRequirement: "no", apiKeyRequirement: "oauth" }),
+    JSON.stringify({ executionMode: true, signupRequirement: false, apiKeyRequirement: true })
+  ]) {
+    assert.equal(applyEnrichment(candidate, content, METADATA_SCHEMA), candidate);
+  }
+});
+
+test("moderator enrichment fills missing or unknown structured metadata", () => {
+  const original = { ...ORIGINAL, executionMode: "unknown" };
+  const merged = mergeEnrichedFields(original, { executionMode: "local", signupRequirement: "not-required", apiKeyRequirement: "optional" }, ENRICHMENT_FOCUS_FIELDS, METADATA_SCHEMA);
+  assert.equal(merged.executionMode, "local");
+  assert.equal(merged.signupRequirement, "not-required");
+  assert.equal(merged.apiKeyRequirement, "optional");
+});
+
+test("moderator enrichment preserves known metadata and ignores invalid values", () => {
+  const original = { ...ORIGINAL, executionMode: "cloud", signupRequirement: "required", apiKeyRequirement: "unknown" };
+  const merged = mergeEnrichedFields(original, { executionMode: "local", signupRequirement: "optional", apiKeyRequirement: false }, ENRICHMENT_FOCUS_FIELDS, METADATA_SCHEMA);
+  assert.equal(merged, original);
 });

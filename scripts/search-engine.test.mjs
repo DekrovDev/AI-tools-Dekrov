@@ -17,6 +17,9 @@ function tool(overrides = {}) {
     gettingStarted: [],
     usageNotes: [],
     platforms: [],
+    executionMode: "unknown",
+    signupRequirement: "unknown",
+    apiKeyRequirement: "unknown",
     pricing: "free",
     tags: [],
     models: [],
@@ -171,6 +174,63 @@ test("existing category, pricing, and platform filtering remains exact", () => {
   const filtered = filterCatalogTools(tools, { category: "coding-agents", pricing: "free", platform: "vscode" });
   assert.ok(filtered.length > 0);
   assert.ok(filtered.every((item) => item.category === "coding-agents" && item.pricing === "free" && item.platforms.includes("vscode")));
+});
+
+const metadataTools = [
+  tool({ id: "local-free", name: "Local Alpha", category: "coding-agents", platforms: ["vscode"], executionMode: "local", signupRequirement: "not-required", apiKeyRequirement: "required", pricing: "free", tags: ["alpha"] }),
+  tool({ id: "cloud-paid", name: "Cloud Alpha", category: "coding-agents", platforms: ["web"], executionMode: "cloud", signupRequirement: "required", apiKeyRequirement: "not-required", pricing: "paid", tags: ["alpha"] }),
+  tool({ id: "hybrid-free", name: "Hybrid Beta", category: "dev-tools", platforms: ["cli"], executionMode: "hybrid", signupRequirement: "optional", apiKeyRequirement: "optional", pricing: "free", tags: ["beta"] }),
+  tool({ id: "unknown-free", name: "Unknown Alpha", category: "coding-agents", platforms: ["vscode"], executionMode: "unknown", signupRequirement: "unknown", apiKeyRequirement: "unknown", pricing: "free", tags: ["alpha"] })
+];
+const metadataEngine = createCatalogSearch(metadataTools);
+
+test("execution filters match Local, Cloud, and Hybrid exactly", () => {
+  assert.deepEqual(filterCatalogTools(metadataTools, { executionMode: "local" }).map((item) => item.id), ["local-free"]);
+  assert.deepEqual(filterCatalogTools(metadataTools, { executionMode: "cloud" }).map((item) => item.id), ["cloud-paid"]);
+  assert.deepEqual(filterCatalogTools(metadataTools, { executionMode: "hybrid" }).map((item) => item.id), ["hybrid-free"]);
+});
+
+test("unknown execution never matches an explicit execution filter", () => {
+  for (const executionMode of ["local", "cloud", "hybrid"]) {
+    assert.ok(!filterCatalogTools(metadataTools, { executionMode }).some((item) => item.id === "unknown-free"));
+  }
+});
+
+test("No signup matches only not-required and optional", () => {
+  assert.deepEqual(filterCatalogTools(metadataTools, { noSignup: true }).map((item) => item.id), ["local-free", "hybrid-free"]);
+});
+
+test("No API key matches only not-required and optional", () => {
+  assert.deepEqual(filterCatalogTools(metadataTools, { noApiKey: true }).map((item) => item.id), ["cloud-paid", "hybrid-free"]);
+});
+
+test("No signup and No API key combine with AND semantics", () => {
+  assert.deepEqual(filterCatalogTools(metadataTools, { noSignup: true, noApiKey: true }).map((item) => item.id), ["hybrid-free"]);
+});
+
+test("metadata filters combine with text search", () => {
+  assert.deepEqual(metadataEngine.search("alpha", { executionMode: "local" }).tools.map((item) => item.id), ["local-free"]);
+  assert.deepEqual(metadataEngine.search("alpha", { executionMode: "cloud" }).tools.map((item) => item.id), ["cloud-paid"]);
+});
+
+test("metadata filters combine with pricing, platform, and category", () => {
+  const result = metadataEngine.search("alpha", { category: "coding-agents", pricing: "free", platform: "vscode", executionMode: "local", noSignup: true });
+  assert.deepEqual(result.tools.map((item) => item.id), ["local-free"]);
+});
+
+test("metadata filters apply to an empty-query scoped collection", () => {
+  const allowedIds = new Set(["local-free", "cloud-paid"]);
+  assert.deepEqual(metadataEngine.search("", { allowedIds, executionMode: "cloud" }).tools.map((item) => item.id), ["cloud-paid"]);
+});
+
+test("metadata filters apply to ranked search inside My Stack", () => {
+  const allowedIds = new Set(["local-free", "unknown-free"]);
+  assert.deepEqual(metadataEngine.search("alpha", { allowedIds, noSignup: true }).tools.map((item) => item.id), ["local-free"]);
+});
+
+test("metadata filters apply inside a Use Case scope", () => {
+  const allowedIds = new Set(["cloud-paid", "hybrid-free"]);
+  assert.deepEqual(metadataEngine.search("", { allowedIds, noApiKey: true }).tools.map((item) => item.id), ["cloud-paid", "hybrid-free"]);
 });
 
 test("tools with empty optional arrays are safe to index", () => {

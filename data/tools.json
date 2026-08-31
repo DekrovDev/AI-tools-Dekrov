@@ -11,6 +11,9 @@
       "cli",
       "web"
     ],
+    "executionMode": "local",
+    "signupRequirement": "not-required",
+    "apiKeyRequirement": "depends",
     "pricing": "free",
     "priceDetails": "",
     "tags": [
@@ -66,6 +69,9 @@
       "cli",
       "desktop"
     ],
+    "executionMode": "hybrid",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "optional",
     "pricing": "usage-based",
     "priceDetails": "",
     "tags": [
@@ -126,6 +132,9 @@
       "cli",
       "api"
     ],
+    "executionMode": "cloud",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "depends",
     "pricing": "freemium",
     "priceDetails": "25+ free models · Free tier available · Paid models are pay-as-you-go",
     "tags": [
@@ -174,6 +183,9 @@
     "domain": "groq.com",
     "favicon": "https://groq.com/favicon.ico",
     "platforms": [],
+    "executionMode": "cloud",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "depends",
     "pricing": "paid",
     "priceDetails": "Paid plans",
     "tags": [
@@ -189,7 +201,8 @@
     "updatedAt": "2026-08-29",
     "lastVerifiedAt": "2026-08-29",
     "sources": [
-      "https://groq.com/"
+      "https://groq.com/",
+      "https://console.groq.com/docs/quickstart"
     ]
   },
   {
@@ -228,6 +241,9 @@
       "vscode",
       "api"
     ],
+    "executionMode": "cloud",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "depends",
     "pricing": "freemium",
     "priceDetails": "Free tier with $5 credits; Developer tier pay-per-token from $0.35/M input tokens; Pro $50/month; Enterprise custom pricing",
     "tags": [
@@ -301,6 +317,9 @@
       "desktop",
       "vscode"
     ],
+    "executionMode": "hybrid",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "optional",
     "pricing": "freemium",
     "priceDetails": "Free, Pro (estimated $20/mo), Teams ($40/seat/mo), Max ($200/mo)",
     "tags": [
@@ -368,6 +387,9 @@
       "vscode",
       "api"
     ],
+    "executionMode": "hybrid",
+    "signupRequirement": "depends",
+    "apiKeyRequirement": "depends",
     "pricing": "freemium",
     "priceDetails": "Free tier available; Google AI Pro at $19.99/mo and Google AI Ultra at $100/mo offer increased limits",
     "tags": [
@@ -430,6 +452,9 @@
     "platforms": [
       "cli"
     ],
+    "executionMode": "local",
+    "signupRequirement": "depends",
+    "apiKeyRequirement": "optional",
     "pricing": "free",
     "priceDetails": "",
     "tags": [
@@ -450,7 +475,7 @@
     "updatedAt": "2026-08-29",
     "lastVerifiedAt": "2026-08-29",
     "sources": [
-      "https://docs.flutter.dev/ai/antigravity-cli"
+      "https://antigravity.google/docs/cli/install/"
     ]
   },
   {
@@ -494,6 +519,9 @@
       "cli",
       "vscode"
     ],
+    "executionMode": "hybrid",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "optional",
     "pricing": "paid",
     "priceDetails": "Available on SuperGrok and X Premium plans",
     "tags": [
@@ -568,6 +596,9 @@
       "cli",
       "api"
     ],
+    "executionMode": "hybrid",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "not-required",
     "pricing": "freemium",
     "priceDetails": "Free plan available; paid plans start at approximately $10/month",
     "tags": [
@@ -637,6 +668,9 @@
       "desktop",
       "vscode"
     ],
+    "executionMode": "local",
+    "signupRequirement": "optional",
+    "apiKeyRequirement": "depends",
     "pricing": "free",
     "priceDetails": "OpenCode itself is free and open-source; users pay for their own API usage from chosen model providers .",
     "tags": [
@@ -671,7 +705,8 @@
     "updatedAt": "2026-08-29",
     "lastVerifiedAt": "2026-08-29",
     "sources": [
-      "https://opencode.ai/"
+      "https://opencode.ai/",
+      "https://opencode.ai/docs/providers/"
     ]
   },
   {
@@ -712,6 +747,9 @@
       "vscode",
       "cli"
     ],
+    "executionMode": "local",
+    "signupRequirement": "optional",
+    "apiKeyRequirement": "depends",
     "pricing": "free",
     "priceDetails": "",
     "tags": [
@@ -782,6 +820,9 @@
       "web",
       "desktop"
     ],
+    "executionMode": "hybrid",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "optional",
     "pricing": "freemium",
     "priceDetails": "Free tier for the open-source extension with BYOK models; Kilo Pass managed inference starts at $19 per month . Teams plan at $15 per user per month .",
     "tags": [
@@ -860,6 +901,9 @@
       "cli",
       "web"
     ],
+    "executionMode": "hybrid",
+    "signupRequirement": "depends",
+    "apiKeyRequirement": "depends",
     "pricing": "free",
     "priceDetails": "Freemium. Self-hosted open-source core is free (MIT). A free SaaS tier is available with BYOK or at-cost model pricing. Enterprise plans with features like RBAC and SSO are quote-based .",
     "tags": [
@@ -936,6 +980,9 @@
       "vscode",
       "api"
     ],
+    "executionMode": "hybrid",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "optional",
     "pricing": "usage-based",
     "priceDetails": "Pay-as-you-go with pass-through LLM and tool costs from a $5 minimum; no markup for individuals. Enterprise adds a 50% premium. Free tier available",
     "tags": [
@@ -1000,6 +1047,9 @@
       "web",
       "mobile"
     ],
+    "executionMode": "cloud",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "not-required",
     "pricing": "freemium",
     "priceDetails": "Free Starter plan includes limited, daily-refreshed credits for the Agent. Pro and Enterprise plans offer more usage and features like Custom Instructions.",
     "tags": [
@@ -1065,6 +1115,9 @@
       "web",
       "api"
     ],
+    "executionMode": "cloud",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "not-required",
     "pricing": "freemium",
     "priceDetails": "Free tier: 300K daily tokens, 1M monthly tokens. Pro: $25/month for additional tokens and private projects.",
     "tags": [
@@ -1109,6 +1162,9 @@
       "web",
       "cli"
     ],
+    "executionMode": "local",
+    "signupRequirement": "not-required",
+    "apiKeyRequirement": "depends",
     "pricing": "",
     "priceDetails": "",
     "tags": [
@@ -1174,6 +1230,9 @@
       "web",
       "api"
     ],
+    "executionMode": "cloud",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "depends",
     "pricing": "freemium",
     "priceDetails": "Free tier with limited credits; Pro at $20/mo (unlimited); Premium at $20/mo (adds API and Figma imports); Team at $30/user/mo.",
     "tags": [
@@ -1238,6 +1297,9 @@
       "vscode",
       "desktop"
     ],
+    "executionMode": "local",
+    "signupRequirement": "optional",
+    "apiKeyRequirement": "depends",
     "pricing": "freemium",
     "priceDetails": "The extension is free and open-source (Apache 2.0). Paid plans for the Continue Hub start from $10/month for managed agent workflows and team collaboration features .",
     "tags": [
@@ -1313,6 +1375,9 @@
       "cli",
       "api"
     ],
+    "executionMode": "local",
+    "signupRequirement": "not-required",
+    "apiKeyRequirement": "depends",
     "pricing": "free",
     "priceDetails": "LangChain is an open-source framework available for free .",
     "tags": [
@@ -1374,6 +1439,9 @@
     "platforms": [
       "cli"
     ],
+    "executionMode": "local",
+    "signupRequirement": "not-required",
+    "apiKeyRequirement": "depends",
     "pricing": "free",
     "priceDetails": "",
     "tags": [
@@ -1433,6 +1501,9 @@
       "cli",
       "api"
     ],
+    "executionMode": "hybrid",
+    "signupRequirement": "optional",
+    "apiKeyRequirement": "depends",
     "pricing": "freemium",
     "priceDetails": "Open-source framework is free; CrewAI AMP (Agent Management Platform) offers enterprise features for production deployment and scaling .",
     "tags": [
@@ -1514,6 +1585,9 @@
       "api",
       "web"
     ],
+    "executionMode": "local",
+    "signupRequirement": "not-required",
+    "apiKeyRequirement": "depends",
     "pricing": "free",
     "priceDetails": "",
     "tags": [
@@ -1579,6 +1653,9 @@
       "cli",
       "api"
     ],
+    "executionMode": "local",
+    "signupRequirement": "not-required",
+    "apiKeyRequirement": "depends",
     "pricing": "free",
     "priceDetails": "Open-source framework, free to use. Integrations may require third-party API keys (e.g., OpenAI) which have their own costs .",
     "tags": [
@@ -1647,6 +1724,9 @@
       "api",
       "vscode"
     ],
+    "executionMode": "local",
+    "signupRequirement": "not-required",
+    "apiKeyRequirement": "depends",
     "pricing": "free",
     "priceDetails": "",
     "tags": [
@@ -1722,6 +1802,9 @@
       "cli",
       "api"
     ],
+    "executionMode": "local",
+    "signupRequirement": "not-required",
+    "apiKeyRequirement": "depends",
     "pricing": "free",
     "priceDetails": "The SDK is open-source and free to use, though using the OpenAI API incurs standard usage costs .",
     "tags": [
@@ -1803,6 +1886,9 @@
       "cli",
       "api"
     ],
+    "executionMode": "local",
+    "signupRequirement": "not-required",
+    "apiKeyRequirement": "depends",
     "pricing": "free",
     "priceDetails": "Open-source framework. Usage costs depend on the underlying LLM provider.",
     "tags": [
@@ -1879,6 +1965,9 @@
       "cli",
       "api"
     ],
+    "executionMode": "hybrid",
+    "signupRequirement": "optional",
+    "apiKeyRequirement": "depends",
     "pricing": "freemium",
     "priceDetails": "Open-source framework under Apache 2.0 with paid Mastra Cloud plans; Teams plan at $250/month adds SSO and SOC 2 documentation",
     "tags": [

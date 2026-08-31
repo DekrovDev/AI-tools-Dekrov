@@ -74,6 +74,12 @@ export function foundList(tool, pages) {
   return badges;
 }
 
+const ACCESS_LABELS = {
+  local: "Local", cloud: "Cloud", hybrid: "Hybrid", unknown: "Unknown",
+  required: "Required", optional: "Optional", "not-required": "Not required", depends: "Depends"
+};
+const accessLabel = (value) => ACCESS_LABELS[value] || "Unknown";
+
 export function buildAnalysisComment({ tool, warnings, duplicates, errors, pages, context }) {
   const lines = [];
   lines.push("### Smart Add analysis");
@@ -82,6 +88,9 @@ export function buildAnalysisComment({ tool, warnings, duplicates, errors, pages
   lines.push(`Category: ${tool.category}`);
   lines.push(`Platforms: ${tool.platforms.length ? tool.platforms.join(" · ") : "unspecified"}`);
   lines.push(`Pricing: ${tool.pricing || "not specified"}`);
+  lines.push(`Execution: ${accessLabel(tool.executionMode)}`);
+  lines.push(`Signup: ${accessLabel(tool.signupRequirement)}`);
+  lines.push(`API key: ${accessLabel(tool.apiKeyRequirement)}`);
   if (context) lines.push(`Context: ${context.slice(0, 240)}`);
   lines.push("");
   const found = foundList(tool, pages);

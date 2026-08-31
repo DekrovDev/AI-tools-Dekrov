@@ -18,7 +18,7 @@ Smart Add Issues arrive through the `smart-add.yml` form. The Smart Add Action a
 
 - The official URL loads and refers to a real tool.
 - The description and tags are factual.
-- URLs, commands, price and platforms are supported by the provided sources.
+- URLs, commands, price, platforms, execution mode, signup requirement, and API-key requirement are supported by the provided official sources; uncertain environment fields stay `unknown`.
 - The submission is not a duplicate.
 - No untrusted verification claims or system metadata are included.
 
@@ -43,7 +43,7 @@ Guidelines:
 
 - **Optional.** Enrichment is a moderation convenience, not part of the normal flow. Skipping it never blocks a submission.
 - **Moderators only.** Only repository members with `admin`, `maintain`, or `write` permission can trigger it. The action verifies the labeler's permission before any AI call; external contributors cannot consume the AI API.
-- **Contributor content is preserved.** AI may fill only fields the contributor left empty (e.g. `bestFor`, `strengths`, `gettingStarted`, `usageNotes`, `favicon`, `pricing`, `priceDetails`, `commands`, `models`). It never rewrites filled fields and never inserts generated metadata (`addedAt`, `updatedAt`, `lastVerifiedAt`, `sources`).
+- **Contributor content is preserved.** AI may fill only fields the contributor left empty (e.g. `bestFor`, `strengths`, `gettingStarted`, `usageNotes`, `favicon`, `pricing`, `priceDetails`, `commands`, `models`) and `unknown` gaps in `executionMode`, `signupRequirement`, or `apiKeyRequirement`. It never rewrites known values and never inserts generated metadata (`addedAt`, `updatedAt`, `lastVerifiedAt`, `sources`). Invalid enum strings and non-string metadata are ignored before merge.
 - **Official sources only.** Only the issue's supplied `url`, `github`, and `docs` are fetched, through the existing SSRF-guarded fetcher. Fetching requires at least one reachable official source; otherwise nothing is changed.
 - **AI cannot publish anything.** Enrichment only edits the Issue body. Nothing is ever published automatically. The normal validation workflow re-runs after the edit, and a moderator must still apply `approved` to create the reviewable PR.
 - **Outcomes.** On success the bot posts the filled fields and keeps the contributor data; if nothing can be verified, or the AI output is invalid, the original submission is left unchanged. `ai-enrich` is an action label and is always removed after the attempt.

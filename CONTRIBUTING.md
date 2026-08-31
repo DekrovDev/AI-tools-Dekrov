@@ -29,6 +29,14 @@ The validation Action comments on the Issue and assigns either `pending` or `nee
 - no personal or browser-only fields;
 - no generated system fields.
 
+Every normalized tool record includes:
+
+- `executionMode`: `local`, `cloud`, `hybrid`, or `unknown`;
+- `signupRequirement`: `required`, `optional`, `not-required`, `depends`, or `unknown`;
+- `apiKeyRequirement`: the same requirement enum.
+
+Execution describes the tool product architecture, not the model-inference location. A local CLI can still call a remote model API. API-key requirement refers only to a user-provided key; OAuth, login, and subscriptions do not count. Older submissions may omit these fields and will normalize to `unknown`; invalid strings and non-string values are rejected.
+
 ## Moderation labels
 
 The required labels are defined in [`data/labels.json`](data/labels.json). The validation and Smart Add workflows create any missing labels automatically, so a fresh repository works without manual setup:
