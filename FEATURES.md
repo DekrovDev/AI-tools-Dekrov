@@ -25,6 +25,8 @@ Search looks through names, descriptions, categories, tags, platforms, models, a
 
 The catalog can be filtered by price, platform, and tool execution (Local, Cloud, or Hybrid), then sorted by recently added, name, or category. **No signup** matches only tools marked `not-required` or `optional`; **No API key** uses the same exact rule. `unknown`, `required`, and `depends` never match those convenience filters. All filters combine with AND semantics and remain active inside Use Cases, My Stack, and Collections. Price uses the factual options Free, Freemium, Paid, and Usage-based, with optional details such as `$20/month` or `Pay per token`. Clear appears next to the filters whenever a search or filter is active.
 
+When a normal global catalog search has no match, AI-Dekrov offers a shortcut to the existing **Suggest a tool** dialog. Name queries prefill Manual mode; official URL queries prefill Smart Add. Nothing is submitted automatically.
+
 ## Favorites and theme
 
 Visitors can favorite tools, keep personal notes, and switch between light and dark themes. These preferences are stored only in that visitor's browser and do not change the public catalog.

@@ -7,6 +7,7 @@ import { SETUP_RECIPES_PATH, emptySetupRecipes, parseOptionalSetupRecipes, setup
 import { buildEnvTextForState, canCopyCommands, clearEnvState, commandSequenceRows, createSetupState, envIncluded, hasEnvInput, hasSetupCapability, maskedEnvPreview, moveCommand, selectedCommandOutputs, setEnvValue, setRecipeValue, setupStateForTool, toggleCommandSelected, toggleEnvInclude } from "./assets/js/setup-ui.js";
 import { decodeSharedCollection, importSharedCollection, resolveSharedToolIds, sharedCollectionUrl, sharedFailureMessage } from "./assets/js/shared-collections.js";
 import { INSTALL_FAILURE_TEMPLATE, INSTALL_FAILURE_LABEL, installFailureIssueUrl } from "./assets/js/install-failure.js";
+import { looksLikeOfficialUrlQuery, matchingToolsForUrl, missingToolPrefill, shouldOfferMissingToolSuggestion } from "./assets/js/missing-tool-suggestion.js";
 
 const CATEGORY_META = {
   "coding-agents": { label: "Coding agents", short: "Coding", color: "#d2f25b" }, orchestration: { label: "Orchestration", short: "Agents", color: "#c2a5ff" },
@@ -148,9 +149,11 @@ function renderNavigation() {
 
 function getFilteredTools() {
   const options = { category: state.category, pricing: state.pricing, platform: state.platform, executionMode: state.executionMode, noSignup: state.noSignup, noApiKey: state.noApiKey, favoritesOnly: state.favoritesOnly, favoriteIds: state.favorites, allowedIds: viewAllowedIds() };
-  const result = state.searchEngine
+  const urlQuery = looksLikeOfficialUrlQuery(state.query);
+  let result = state.searchEngine
     ? state.searchEngine.search(state.query, options)
     : { tools: filterCatalogTools(state.tools, options), parsed: null, queryActive: false, phase: "catalog" };
+  if (urlQuery) result = { ...result, tools: filterCatalogTools(matchingToolsForUrl(state.query, state.baseTools), options) };
   state.searchIntent = result.parsed;
   state.searchPhase = result.phase;
   const found = [...result.tools];
@@ -200,6 +203,15 @@ function renderCatalog() {
     state.shared = null;
   }
   const tools = getFilteredTools(); const active = Boolean(state.query || state.category || state.pricing || state.platform || state.executionMode || state.noSignup || state.noApiKey);
+  const globalSearch = state.searchEngine?.search(state.query);
+  const globalMatchCount = looksLikeOfficialUrlQuery(state.query) ? matchingToolsForUrl(state.query, state.baseTools).length : globalSearch?.tools.length || 0;
+  const missingPrefill = !detail && !isShared && shouldOfferMissingToolSuggestion({
+    query: state.query,
+    parsed: globalSearch?.parsed || state.searchIntent,
+    globalMatchCount,
+    isNormalCatalog: !state.favoritesOnly && !view,
+    tools: state.baseTools
+  }) ? missingToolPrefill(state.query) : null;
   const useCase = currentUseCase();
   const viewTitle = view?.type === "use-case" ? (useCase?.name || "Use case") : view?.type === "stack" ? "My Stack" : view?.type === "collection" ? (collectionById(view.id)?.name || "Collection") : state.favoritesOnly || location.hash === "#/favorites" ? "Favorites" : state.category ? categoryMeta(state.category).label : "All tools";
   if (!isShared) setDocumentMeta(viewTitle === "AI-Dekrov" ? "AI-Dekrov" : `${viewTitle} — AI-Dekrov`);
@@ -228,6 +240,12 @@ function renderCatalog() {
     $("#empty-state h2").textContent = title;
     $("#empty-state p").textContent = copy;
     $("#empty-action").textContent = action;
+  }
+  $("#missing-tool-suggestion").hidden = !missingPrefill;
+  if (missingPrefill) {
+    $("#missing-tool-query").textContent = missingPrefill.name || missingPrefill.url;
+    $("#missing-tool-action").dataset.missingToolMode = missingPrefill.mode;
+    $("#missing-tool-action").dataset.missingToolValue = missingPrefill.name || missingPrefill.url;
   }
   const viewActions = $("#view-actions");
   if (view?.type === "collection") {
@@ -526,6 +544,11 @@ let submissionDraft = null;
 function setAddMode(mode) { $$("[data-add-mode]").forEach((tab) => { const active = tab.dataset.addMode === mode; tab.classList.toggle("is-active", active); tab.setAttribute("aria-selected", String(active)); }); $$("[data-add-panel]").forEach((panel) => { panel.hidden = panel.dataset.addPanel !== mode; }); if (mode === "manual") $("#tool-form [name=name]").focus(); if (mode === "smart") $("#smart-url").focus(); if (mode === "json") updateAiPrompt(); }
 function resetAddDraft() { submissionDraft = null; $("#smart-add-form").reset(); $("#tool-form").reset(); $("#tool-form").dataset.source = "manual"; delete $("#tool-form").dataset.existingId; resetJsonImport(); $("#submission-review").hidden = true; }
 function openDialog(mode = "smart") { resetAddDraft(); if (!$("#tool-dialog").open) $("#tool-dialog").showModal(); setAddMode(mode); }
+function openSuggestDialog({ mode = "smart", name = "", url = "" } = {}) {
+  openDialog(mode);
+  if (mode === "manual" && name) $("#tool-form").elements.name.value = name;
+  if (mode === "smart" && url) $("#smart-url").value = url;
+}
 function closeDialog() { $("#tool-dialog").close(); }
 function makeId(name) { const stem = name.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "tool"; const taken = new Set(state.tools.map((tool) => tool.id)); let id = stem; let index = 2; while (taken.has(id)) { id = `${stem}-${index}`; index += 1; } return id; }
 function splitList(value = "") { return String(value).split(",").map((item) => item.trim()).filter(Boolean); }
@@ -1409,7 +1432,7 @@ function toggleFavorite(id) { if (state.favorites.has(id)) state.favorites.delet
 let searchInputTimer;
 function bindEvents() {
   $("#theme-toggle").addEventListener("click", () => setTheme(state.theme === "dark" ? "light" : "dark")); $("#add-tool-button").addEventListener("click", () => openDialog("smart")); $("#info-button").addEventListener("click", () => $("#info-dialog").showModal()); $$('[data-add-mode]').forEach((button) => button.addEventListener("click", () => setAddMode(button.dataset.addMode))); $$("[data-close-dialog]").forEach((button) => button.addEventListener("click", closeDialog)); $$("[data-close-info]").forEach((button) => button.addEventListener("click", () => $("#info-dialog").close())); $("#tool-dialog").addEventListener("click", (event) => { if (event.target === event.currentTarget) closeDialog(); }); $("#tool-dialog").addEventListener("close", resetAddDraft); $("#info-dialog").addEventListener("click", (event) => { if (event.target === event.currentTarget) $("#info-dialog").close(); }); $("#smart-add-form").addEventListener("submit", (event) => { event.preventDefault(); handleSmartAdd($("#smart-url").value); }); $("#tool-form").addEventListener("submit", (event) => { event.preventDefault(); saveNewTool(event.currentTarget); }); $("#prompt-url").addEventListener("input", updateAiPrompt); $("#prompt-context").addEventListener("input", updateAiPrompt); $("#copy-ai-prompt").addEventListener("click", () => copyText($("#ai-prompt").value)); $("#reset-json-import").addEventListener("click", resetJsonImport); $("#json-validate").addEventListener("click", () => { try { const raw = JSON.parse($("#json-import-input").value); jsonCandidate = normalizeImportedTool(raw); $("#json-import-input").value = JSON.stringify(raw, null, 2); setJsonErrors(); renderJsonPreview(jsonCandidate); $("#json-import-confirm").hidden = false; $("#json-edit-manual").hidden = false; showToast("JSON validated"); } catch (error) { jsonCandidate = null; $("#json-preview").hidden = true; $("#json-import-confirm").hidden = true; $("#json-edit-manual").hidden = true; setJsonErrors(error.errors || [error.message || "Could not parse JSON."]); } }); $("#json-edit-manual").addEventListener("click", () => { if (!jsonCandidate) return; fillManualForm(jsonCandidate); setAddMode("manual"); showToast("You can edit the fields"); }); $("#json-import-confirm").addEventListener("click", () => { if (!jsonCandidate) return; prepareSubmission(jsonCandidate); }); $("#submission-edit").addEventListener("click", () => { if (!submissionDraft?.tool) return; fillManualForm(submissionDraft.tool); $("#tool-form").dataset.existingId = submissionDraft.existingToolId || ""; setAddMode("manual"); }); $("#submission-open-issue").addEventListener("click", openGitHubIssue);
-  $("#mobile-menu-toggle").addEventListener("click", () => { const sidebar = $("#sidebar"); const open = sidebar.classList.toggle("is-open"); $("#mobile-menu-toggle").innerHTML = icon(open ? "x" : "menu"); $("#mobile-menu-toggle").setAttribute("aria-expanded", String(open)); }); $("#search-input").addEventListener("input", (event) => { setSearchQuery(event.target.value); clearTimeout(searchInputTimer); searchInputTimer = setTimeout(renderCatalog, 90); }); $("#pricing-filter").addEventListener("change", (event) => { state.pricing = event.target.value; renderCatalog(); }); $("#platform-filter").addEventListener("change", (event) => { state.platform = event.target.value; renderCatalog(); }); $("#execution-filter").addEventListener("change", (event) => { state.executionMode = event.target.value; renderCatalog(); }); $("#no-signup-filter").addEventListener("change", (event) => { state.noSignup = event.target.checked; renderCatalog(); }); $("#no-api-key-filter").addEventListener("change", (event) => { state.noApiKey = event.target.checked; renderCatalog(); }); $("#sort-select").addEventListener("change", (event) => { state.sort = event.target.value; if (state.sort !== "relevance") state.catalogSort = state.sort; renderCatalog(); });  $("#clear-filters").addEventListener("click", clearFilters);  $("#empty-action").addEventListener("click", () => { const view = currentView(); if (state.query || state.category || state.pricing || state.platform || state.executionMode || state.noSignup || state.noApiKey) { clearFilters(); return; } if (view?.type === "stack" || view?.type === "collection" || view?.type === "use-case" || view?.type === "shared") { location.hash = "#/"; return; } openDialog(); });
+  $("#mobile-menu-toggle").addEventListener("click", () => { const sidebar = $("#sidebar"); const open = sidebar.classList.toggle("is-open"); $("#mobile-menu-toggle").innerHTML = icon(open ? "x" : "menu"); $("#mobile-menu-toggle").setAttribute("aria-expanded", String(open)); }); $("#search-input").addEventListener("input", (event) => { setSearchQuery(event.target.value); clearTimeout(searchInputTimer); searchInputTimer = setTimeout(renderCatalog, 90); }); $("#pricing-filter").addEventListener("change", (event) => { state.pricing = event.target.value; renderCatalog(); }); $("#platform-filter").addEventListener("change", (event) => { state.platform = event.target.value; renderCatalog(); }); $("#execution-filter").addEventListener("change", (event) => { state.executionMode = event.target.value; renderCatalog(); }); $("#no-signup-filter").addEventListener("change", (event) => { state.noSignup = event.target.checked; renderCatalog(); }); $("#no-api-key-filter").addEventListener("change", (event) => { state.noApiKey = event.target.checked; renderCatalog(); }); $("#sort-select").addEventListener("change", (event) => { state.sort = event.target.value; if (state.sort !== "relevance") state.catalogSort = state.sort; renderCatalog(); });  $("#clear-filters").addEventListener("click", clearFilters);  $("#empty-action").addEventListener("click", () => { const view = currentView(); if (state.query || state.category || state.pricing || state.platform || state.executionMode || state.noSignup || state.noApiKey) { clearFilters(); return; } if (view?.type === "stack" || view?.type === "collection" || view?.type === "use-case" || view?.type === "shared") { location.hash = "#/"; return; } openDialog(); }); $("#missing-tool-action").addEventListener("click", (event) => { const button = event.currentTarget; const value = button.dataset.missingToolValue || ""; if (button.dataset.missingToolMode === "smart") openSuggestDialog({ mode: "smart", url: value }); else openSuggestDialog({ mode: "manual", name: value }); });
   $("#new-collection-button").addEventListener("click", () => openNewCollectionDialog());
   $("#saved-dialog").addEventListener("click", (event) => { if (event.target === event.currentTarget) closeSavedDialog(); });
   $("#saved-dialog").addEventListener("close", () => { state.saveDialogContext = null; });
