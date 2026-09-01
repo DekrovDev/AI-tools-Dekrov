@@ -630,9 +630,11 @@ function handleSmartAdd(urlValue) {
   showToast("GitHub Issue Form opened — review and submit");
 }
 const AI_JSON_PROMPT_TEMPLATE = `
-You are creating ONE canonical Tool JSON record for the AI-Dekrov AI tools catalog.
+You are creating ONE production-quality canonical Tool JSON record for the AI-Dekrov AI tools catalog.
 
-Your job is to research the tool thoroughly using OFFICIAL PUBLIC SOURCES and return one factual, useful, information-dense JSON object that conforms exactly to AI-Dekrov Tool Schema v2.
+Your task is NOT merely to summarize a homepage.
+
+Your task is to thoroughly research the current product, identify its canonical identity, understand how it is actually used, verify its important technical and commercial details, and return the most complete factual JSON record possible for AI-Dekrov.
 
 TOOL_URL:
 {{TOOL_URL}}
@@ -640,244 +642,220 @@ TOOL_URL:
 OPTIONAL_CONTEXT:
 {{OPTIONAL_CONTEXT}}
 
-# CORE PRIORITIES
+# PRIMARY OBJECTIVE
 
-Follow these priorities in this exact order:
+Produce a record that is simultaneously:
 
-1. Accuracy — never fabricate facts.
-2. Completeness — actively research every field instead of leaving easy blanks.
-3. Canonical naming — use the real product name, not marketing headlines.
-4. Usefulness — include concrete information that helps someone understand, evaluate, install, or use the product.
-5. Conservatism — if a fact genuinely cannot be verified, leave the appropriate empty or \`unknown\` value.
+1. accurate;
+2. current;
+3. information-dense;
+4. useful to someone deciding whether to use the tool;
+5. useful to someone trying to get started with it;
+6. consistent with the AI-Dekrov schema;
+7. free from marketing filler;
+8. free from unverifiable claims.
 
-IMPORTANT:
+Accuracy is the highest priority.
 
-Empty values are a LAST RESORT, not the default.
+However, DO NOT use "accuracy" as an excuse to leave fields empty without researching them.
+
+Empty values are a LAST RESORT.
 
 Before returning:
 
-* \`[]\`
 * \`""\`
+* \`[]\`
 * \`"unknown"\`
 
-for a field that could reasonably contain information, make a dedicated attempt to verify that field from official sources.
+for a field that could reasonably contain useful information, make a dedicated attempt to verify that field from an appropriate official source.
 
-Do not stop after reading only the homepage.
+Do not stop after inspecting only the homepage.
 
-# OUTPUT RULES
+# RESEARCH DEPTH
 
-Return ONLY one valid JSON object.
+Research the product in several passes before writing the JSON.
 
-Do NOT:
+At minimum, when available, inspect:
 
-* use Markdown code fences;
-* add explanations before or after the JSON;
-* add comments;
-* add citations outside JSON;
-* invent fields;
-* omit canonical fields listed below;
-* use null;
-* fabricate facts to avoid empty/unknown values.
+1. official homepage / product page;
+2. official documentation or help center;
+3. official getting-started / quickstart / onboarding pages;
+4. official pricing page;
+5. official developer/API documentation;
+6. official download/platform pages;
+7. official GitHub repository or organization when relevant;
+8. official integrations/features pages when relevant;
+9. official security/trust pages only if security claims are important;
+10. official app-store/browser-extension listings when needed to verify platforms.
 
-The result must be directly pasteable into AI-Dekrov JSON Import.
+A search engine may be used to DISCOVER official pages.
 
-# RESEARCH PROCESS
+Search-result snippets are NOT evidence.
 
-Research the product in multiple passes.
-
-## Pass 1 — Product identity
-
-Determine:
-
-* canonical product name;
-* primary purpose;
-* official homepage;
-* primary category;
-* supported platforms.
-
-## Pass 2 — Product capabilities
-
-Look specifically for:
-
-* official feature pages;
-* documentation;
-* product overview;
-* use cases;
-* integrations;
-* supported workflows.
-
-Use this evidence to populate:
-
-* description;
-* bestFor;
-* strengths;
-* usageNotes;
-* tags.
-
-## Pass 3 — Getting started
-
-Actively search official sources for:
-
-* quickstart;
-* getting started;
-* onboarding;
-* installation;
-* first-use instructions;
-* signup flow;
-* download page.
-
-Do not leave \`gettingStarted\` empty merely because the homepage does not explain onboarding.
-
-For a normal hosted web product, verified getting-started steps may be simple, for example:
-
-* open the official product;
-* create/sign in to an account if required;
-* start the documented primary workflow.
-
-Every step must still be supported by official evidence.
-
-## Pass 4 — Pricing
-
-Actively look for:
-
-* \`/pricing\`;
-* plans;
-* billing documentation;
-* FAQ;
-* product/account pages describing free or paid access.
-
-Determine:
-
-* pricing;
-* priceDetails.
-
-Allowed \`pricing\` values:
-
-* free
-* freemium
-* paid
-* usage-based
-* ""
-
-Do not assume a product is free merely because it can be opened.
-
-Do not assume it is paid merely because it is aimed at businesses.
-
-Use \`""\` only when public official evidence does not allow a reliable classification.
-
-## Pass 5 — Technical information
-
-Actively inspect:
-
-* official docs;
-* API docs;
-* developer pages;
-* official GitHub organization/repository;
-* installation pages;
-* download pages.
-
-Determine where applicable:
-
-* platforms;
-* executionMode;
-* signupRequirement;
-* apiKeyRequirement;
-* install;
-* start;
-* commands;
-* models;
-* github;
-* docs.
-
-## Pass 6 — Missing-field audit
-
-Before producing the final JSON, review EVERY field that is still empty or unknown.
-
-For each empty/unknown field, ask internally:
-
-1. Is this field relevant to this kind of product?
-2. Have I specifically checked an official source where this information would normally appear?
-3. Can the value be safely determined from direct official evidence?
-4. Is the field actually not applicable?
-
-Only keep the field empty/unknown if the answer cannot be verified reliably.
+Do not treat a statement as verified merely because a search engine or AI search interface displayed it.
 
 # SOURCE POLICY
 
-Use official evidence as the authoritative basis.
+Prefer current first-party evidence.
 
-Preferred sources:
+Good evidence:
 
-1. official product website;
-2. official documentation;
-3. official pricing page;
-4. official developer/API documentation;
-5. official GitHub repository or organization;
-6. official help center;
-7. official download/app pages;
-8. other pages controlled by the vendor.
-
-You MAY use a search engine to DISCOVER official pages.
-
-Search-result snippets themselves are NOT evidence.
+* official product website;
+* official documentation;
+* official pricing page;
+* official help center;
+* official developer documentation;
+* official GitHub repository;
+* official GitHub organization when clearly relevant;
+* official product changelog;
+* official download page;
+* vendor-controlled App Store / Google Play / extension listing;
+* official trust/security page.
 
 Do NOT use as factual evidence:
 
 * Reddit;
+* Wikipedia;
 * random blogs;
+* Medium posts;
 * comparison websites;
-* SEO directories;
+* AI directories;
+* SourceForge descriptions;
 * unofficial tutorials;
-* unofficial repositories;
-* generated summaries;
-* general knowledge when current official evidence is available.
+* unofficial GitHub repositories;
+* SEO pages;
+* cached third-party pricing;
+* search-result snippets;
+* generated AI summaries;
+* general knowledge when current official evidence can be checked.
 
-# REASONABLE INFERENCE
+Third-party pages may help locate an official source, but the final factual claim should be based on official evidence whenever reasonably possible.
 
-You may make a conservative inference only when it follows directly from official product behavior or documentation.
+# CURRENTNESS RULE
 
-Examples:
+Assume that product information may have changed.
 
-* If the official product itself is usable through its website, \`"web"\` may be included in \`platforms\`.
-* If official documentation explicitly exposes an API, \`"api"\` may be included.
-* If the official download page provides Windows/macOS applications, \`"desktop"\` may be included.
-* If normal use clearly requires signing in through the official product, \`signupRequirement\` may be \`"required"\`.
+Treat these as HIGH-VOLATILITY fields:
 
-Do NOT infer:
+* pricing;
+* plan names;
+* free-tier availability;
+* supported models;
+* limits;
+* integrations;
+* available platforms;
+* API availability;
+* signup requirements;
+* product names;
+* product status;
+* installation commands.
 
-* underlying models from writing style or branding;
-* API-key requirements merely because an API exists;
-* local execution merely because a CLI exists;
-* pricing tiers from third-party sources;
-* unsupported integrations.
+For these fields, prefer current official evidence.
 
-# EMPTY / UNKNOWN SEMANTICS
+Do not use an old price, old model list, old plan, old product name, or discontinued workflow simply because it appears in search results.
 
-Use empty values deliberately.
+If current official evidence supports only a general statement, use the general statement.
 
-\`""\`
-= no verified value is available for an optional string field.
+Example:
 
-\`[]\`
-= no verified entries are available OR the list is not applicable.
+Official evidence confirms paid subscriptions but does not expose the current exact price.
 
-\`"unknown"\`
-= the schema requires an enum value but official evidence does not resolve it.
+Correct:
 
-Do NOT fill a field with text such as:
+"pricing": "paid",
+"priceDetails": "Paid subscription; current public price was not verified."
 
-* "unknown"
-* "not found"
-* "N/A"
-* "none"
+But because AI-Dekrov prefers clean product data, an even better representation is usually:
 
-unless that exact string is an allowed enum value.
+"pricing": "paid",
+"priceDetails": ""
 
-Do not put research-process commentary into normal product fields.
+Do NOT invent or reuse an old exact price.
 
-# EXACT OUTPUT STRUCTURE
+# PRODUCT IDENTITY CHECK
 
-Return exactly:
+Before filling any other field, determine exactly WHAT PRODUCT the URL represents.
+
+Do not accidentally mix:
+
+* a company and one of its products;
+* two products from the same company;
+* an old product and its successor;
+* an AI feature and the entire parent platform;
+* similarly named services;
+* separate business lines with different pricing;
+* historical branding and current branding.
+
+Follow redirects and current official branding.
+
+If the product has been renamed, prefer the current official name.
+
+If the supplied URL redirects to a clear successor product, describe the current product rather than preserving obsolete branding.
+
+Do not combine facts from two separate products merely because they share a company.
+
+# OUTPUT FORMAT
+
+Return EXACTLY ONE valid standard JSON object.
+
+The response must begin with \`{\` and end with \`}\`.
+
+Do NOT:
+
+* use Markdown code fences;
+* write an introduction;
+* write an explanation after the JSON;
+* add comments;
+* add footnotes;
+* add citations;
+* add reference numbers;
+* add source IDs;
+* add Markdown;
+* use trailing commas;
+* use \`null\`;
+* invent extra fields.
+
+The JSON must be directly pasteable into AI-Dekrov JSON Import and parsable by standard \`JSON.parse()\`.
+
+# ABSOLUTE CITATION BAN
+
+Research citations must NEVER appear in the final JSON.
+
+Forbidden examples anywhere inside any string:
+
+\`[citation:1]\`
+\`[citation:5][citation:8]\`
+\`[1]\`
+\`[2][4]\`
+\`【3】\`
+\`(source 4)\`
+\`[source:2]\`
+footnote symbols
+search-engine reference markers
+
+Wrong:
+
+"Supports document analysis [citation:4]"
+
+Correct:
+
+"Supports document analysis"
+
+Wrong:
+
+"Plans start at $20/month [5]"
+
+Correct ONLY if currently verified:
+
+"Plans start at $20/month"
+
+The final JSON must read like a clean human-maintained database record, NOT like an AI research answer.
+
+Before outputting, perform a dedicated citation-cleaning pass over EVERY string.
+
+# EXACT JSON STRUCTURE
+
+Return ALL of these fields and no others:
 
 {
 "id": "",
@@ -914,47 +892,111 @@ Do NOT add:
 * sources
 * notes
 * verificationNotes
+* confidence
+* citations
 
-Those are generated or managed separately by AI-Dekrov.
+These are generated or managed separately by AI-Dekrov.
+
+# EMPTY VALUE POLICY
+
+An empty value is acceptable when:
+
+1. the field is not applicable to this product; OR
+2. no reliable current official evidence was found after checking the appropriate official sources.
+
+Use:
+
+\`""\`
+for an optional string with no verified value.
+
+\`[]\`
+for an optional list with no verified entries or where the concept is not applicable.
+
+\`"unknown"\`
+only for enum fields where the real value cannot be established reliably.
+
+Do NOT write textual placeholders such as:
+
+"Unknown"
+"N/A"
+"Not found"
+"None"
+"Not applicable"
+"Unable to verify"
+
+inside ordinary fields.
+
+Use the actual empty representation instead.
+
+Do NOT invent information merely to eliminate empty values.
+
+At the same time, do NOT leave a field empty simply because it was not shown on the homepage.
 
 # FIELD RULES
 
 ## id
 
-Stable lowercase kebab-case identifier based on the canonical product name.
+Create a stable lowercase kebab-case ID derived from the canonical product name.
 
-Rules:
+Requirements:
 
 * lowercase;
-* numbers allowed;
+* ASCII letters/numbers;
 * hyphens between words;
 * no spaces;
 * no underscores;
-* no marketing slogans.
+* no punctuation;
+* no slogans;
+* no generic page-title text.
 
-Example:
+Examples:
 
 Correct:
 \`cursor\`
+\`claude-code\`
+\`openai-agents-sdk\`
+\`elevenlabs\`
 
 Wrong:
 \`cursor-the-ai-code-editor\`
+\`Claude_Code\`
+\`best-ai-search-platform\`
+
+Prefer the canonical product name over the company name when they differ.
 
 ## name
 
-Use the official canonical product name only.
+Use the exact current canonical product/tool name.
+
+Do not copy:
+
+* HTML page titles;
+* SEO titles;
+* slogans;
+* taglines;
+* descriptive headlines.
 
 Correct:
-\`Cursor\`
+
+"Cursor"
 
 Wrong:
-\`Cursor - The AI Code Editor\`
 
-Never use an HTML page title or marketing headline as the product name.
+"Cursor - The AI Code Editor"
+
+Correct:
+
+"Groq"
+
+Wrong:
+
+"Groq is the premier neocloud for fast inference"
+
+If official sources use several spellings, prefer the primary current branding used on the product itself.
 
 ## category
 
-MUST be exactly one of:
+Choose EXACTLY ONE category from:
 
 * coding-agents
 * app-builders
@@ -996,144 +1038,376 @@ MUST be exactly one of:
 * productivity
 * other
 
-Choose ONE category describing the product's PRIMARY role.
+Choose the product's PRIMARY CURRENT ROLE.
 
-Do not select \`research\` merely because the product can perform research.
-Do not select \`automation\` merely because the product automates some tasks.
-Do not select \`chat-llm\` merely because the product has a chat interface.
+Secondary capabilities belong in \`tags\`, \`strengths\`, \`bestFor\`, or \`usageNotes\`.
 
-Classify based on its primary marketed use.
+Do NOT choose a category merely because the product CAN perform that task.
 
-Use \`other\` only when no existing category reasonably fits.
+Category meanings:
+
+coding-agents
+= AI coding assistants, autonomous coding agents, AI IDE agents
+
+app-builders
+= prompt-driven/no-code/AI application or website builders
+
+orchestration
+= frameworks and infrastructure for building/orchestrating AI agents and multi-agent systems
+
+chat-llm
+= general-purpose conversational AI assistants/interfaces
+
+research
+= products primarily designed for research, investigation, evidence gathering, literature analysis, or deep analytical research
+
+search
+= AI search engines / answer engines primarily centered on finding and answering from information
+
+automation
+= end-user or enterprise AI workflow automation, autonomous operations, process automation, general agent-workflow platforms
+
+browser-agents
+= products primarily designed for browser/web interaction and browser automation by agents
+
+local-ai
+= products primarily for running, managing, or chatting with AI models locally/self-hosted
+
+inference
+= APIs/platforms primarily selling model inference
+
+hosting
+= broader AI/model infrastructure, deployment, compute, hosting, cloud infrastructure
+
+rag
+= retrieval, ingestion, document retrieval, RAG infrastructure
+
+observability
+= LLM tracing, monitoring, evaluation, observability
+
+dev-tools
+= developer AI infrastructure/utilities that do not fit coding-agents/orchestration/inference/etc.
+
+testing
+= AI-assisted testing, QA, test generation
+
+security
+= AI security, model security, application security tooling
+
+data-analysis
+= AI analytics, data analysis, BI, SQL/data exploration
+
+databases
+= AI/vector databases and database-oriented AI products
+
+writing
+= writing, copywriting, editing, rewriting
+
+documents
+= OCR, extraction, document processing, document intelligence
+
+presentations
+= slide/presentation generation
+
+meetings
+= meeting transcription, notes, summaries, meeting intelligence
+
+audio
+= general audio editing, restoration, podcast/audio processing
+
+voice
+= TTS, STT, speech, voice cloning, voice agents
+
+music
+= AI music generation/composition
+
+image
+= image generation/editing
+
+video
+= video generation/editing
+
+design
+= UI/UX/graphic/design-focused AI products
+
+3d
+= 3D generation/modeling
+
+translation
+= translation, localization, dubbing
+
+education
+= tutoring, learning, education
+
+customer-support
+= support agents/helpdesk automation
+
+sales
+= sales prospecting, sales intelligence, outreach, sales agents
+
+marketing
+= marketing/campaign/content marketing automation
+
+legal
+= legal AI
+
+finance
+= finance/investment/accounting-oriented AI
+
+healthcare
+= healthcare/clinical AI
+
+productivity
+= general productivity/work assistants that do not fit a more specific primary category
+
+other
+= genuinely does not fit any category above
+
+IMPORTANT CLASSIFICATION RULES:
+
+* A chat interface does NOT automatically mean \`chat-llm\`.
+* Research capability does NOT automatically mean \`research\`.
+* Automation capability does NOT automatically mean \`automation\`.
+* API access does NOT automatically mean \`inference\`.
+* AI features inside a product do NOT automatically make it \`dev-tools\`.
+
+For broad products, use their primary current official positioning and core user workflow.
+
+Example:
+If a platform primarily sells autonomous execution of business workflows but also performs research, prefer \`automation\`.
+
+If a product primarily finds and synthesizes information but has some agent features, prefer \`research\` or \`search\`.
+
+If a developer framework lets developers CREATE agents/workflows, prefer \`orchestration\`.
+
+Use \`other\` only after ruling out every reasonable defined category.
 
 ## description
 
-Write a concise factual product description.
+Write 1–2 concise factual sentences.
 
-Prefer:
+The description should answer:
 
-* what the product is;
-* what its main function is;
-* who it is for when relevant.
+* What is it?
+* What is its primary function?
+* Who/what workflow is it built for when relevant?
+
+Good description:
+specific, neutral, understandable without marketing context.
 
 Avoid:
 
-* marketing adjectives;
-* unsupported superlatives;
 * slogans;
-* vague wording.
+* hype;
+* unsupported superlatives;
+* "revolutionary";
+* "best";
+* "leading";
+* "cutting-edge";
+* vague AI buzzwords.
 
-Aim for approximately 1–2 sentences.
+Do not turn the description into a full feature list.
+
+Aim for roughly 25–60 words.
 
 ## bestFor
 
-Aim for 2–5 concrete entries when official evidence supports them.
+Aim for 3–5 high-quality entries when evidence supports them.
 
-Describe real tasks, workflows, or audiences.
+Each entry should describe a REAL use case, task, workflow, or user type.
 
 Good:
-
-* "Automating recurring research workflows"
-* "Generating meeting transcripts and summaries"
-* "Running open-source LLMs locally"
+"Analyzing scientific literature"
+"Automating recurring research workflows"
+"Generating and debugging code across a repository"
+"Running open-source LLMs locally"
+"Customer-support teams automating ticket resolution"
 
 Bad:
+"AI"
+"Work"
+"Businesses"
+"Productivity"
+"Anyone needing help"
 
-* "AI"
-* "Productivity"
-* "Everyone"
+Prefer use cases over generic job titles.
 
-Do not leave empty without first reviewing official use cases/features.
+Job titles are fine when the product is genuinely specialized for them.
+
+Do not simply rewrite \`strengths\`.
 
 ## strengths
 
-Aim for 2–5 factual differentiators.
+Aim for 3–6 concrete factual differentiators.
 
-Prefer concrete capabilities:
+A strength should explain WHY the product stands out.
 
-* specific workflow support;
-* supported modalities;
-* deployment options;
-* integrations;
+Good strength types:
+
+* distinctive workflow;
 * architecture;
-* notable verified product features.
+* specific automation capability;
+* important supported modality;
+* meaningful integration ecosystem;
+* local/offline capability;
+* multi-agent functionality;
+* verified interoperability;
+* unusually important enterprise feature;
+* important developer feature.
 
-Avoid generic filler such as:
+Bad:
+"Powerful AI"
+"Easy to use"
+"Modern UI"
+"Fast"
+"Very accurate"
+"Great for productivity"
 
-* "Easy to use"
-* "Powerful AI"
-* "Modern interface"
+unless a specific measurable/technical fact supports the statement.
 
-unless official evidence provides a specific basis.
+Do not write advertising copy.
+
+Do not include citation markers.
+
+Do not duplicate \`bestFor\`.
 
 ## gettingStarted
 
-Aim for 2–5 verified steps when the product is usable by an end user or developer.
+This field is important because AI-Dekrov renders it as the actual Getting Started guide.
 
 Research onboarding separately.
 
-Examples:
+Aim for 2–5 useful verified steps when appropriate.
 
-* create an account;
+Useful steps may include:
+
+* create/sign into an account;
+* download the official application;
 * install the official package;
-* download the application;
-* obtain an API key;
-* connect an integration;
-* run the documented first command;
-* open the primary workspace.
+* install an official extension;
+* obtain/configure an API key;
+* connect a repository;
+* create a workspace/project;
+* select/create the documented workflow;
+* run the official first command.
 
-For products where there is genuinely no public onboarding or where access is sales-only, \`[]\` is acceptable.
+Prefer service-specific steps.
+
+Weak filler:
+
+"Visit the website."
+"Explore features."
+"Start using the tool."
+
+Do not create generic steps just to fill the array.
+
+For a straightforward hosted service, simple onboarding steps are acceptable if verified, but keep them practical.
+
+If no useful explicit steps can be established but \`install\`, \`start\`, or \`docs\` are available, \`gettingStarted\` may be \`[]\`.
+
+Never invent UI menu names or onboarding steps.
 
 ## usageNotes
 
-Aim for 2–6 useful, verified notes.
+Aim for 3–6 concise useful notes.
 
-Prefer information such as:
+Use this field for IMPORTANT practical information that does not belong elsewhere.
 
-* important workflow details;
-* plan limitations;
-* supported environments;
-* account/access behavior;
-* major integrations;
-* deployment constraints;
-* notable product modes;
-* material usage restrictions.
+Good usage notes:
 
-Do not repeat \`description\`, \`bestFor\`, or \`strengths\` word-for-word.
+* how major modes differ;
+* meaningful workflow behavior;
+* important plan limitations;
+* account/access requirements;
+* supported deployment options;
+* important integration behavior;
+* important file/modality limitations;
+* notable enterprise/developer workflow facts;
+* important differences between free and paid access;
+* current product constraints.
 
-Do not insert citation numbers or source markers.
+Do NOT:
+
+* repeat the description;
+* repeat strengths word-for-word;
+* fill it with marketing claims;
+* add irrelevant trivia;
+* add citation markers.
+
+Be especially careful with negative claims.
+
+Do not write:
+"There is no mobile app"
+
+merely because you did not find one.
+
+Absence is difficult to prove.
+
+Only state explicit negative limitations when official evidence clearly supports them.
 
 ## url
 
-Canonical official public product URL.
+Use the canonical current official public product URL.
 
-Prefer the product homepage rather than:
+Requirements:
 
-* tracking URLs;
-* campaign URLs;
-* deep documentation pages.
+* HTTPS when available;
+* remove tracking parameters;
+* remove affiliate/referral parameters;
+* remove unnecessary locale parameters;
+* prefer canonical product homepage over a deep docs URL.
+
+Follow redirects when necessary.
+
+Do not use:
+
+* review sites;
+* GitHub when a canonical product homepage exists;
+* search-result URLs.
 
 ## domain
 
-Hostname derived from the canonical official URL.
+Derive from canonical \`url\`.
 
-No protocol.
-No path.
+Do not include:
 
-Example:
-\`example.com\`
+* protocol;
+* path;
+* query;
+* fragment.
+
+Examples:
+
+\`openai.com\`
+\`docs.example.com\`
+
+Preserve \`www.\` only when it is genuinely part of the canonical hostname being used; otherwise prefer the normal root domain.
 
 ## favicon
 
-Use a verified public favicon/logo URL when one can be obtained from official site metadata or an obvious official favicon endpoint.
+Use an actual verified publicly accessible official favicon/icon URL when available.
 
-Otherwise use \`""\`.
+Good sources:
 
-Do not invent a path merely to make this field non-empty.
+* official HTML favicon metadata;
+* obvious official static icon URL;
+* vendor-controlled icon asset.
+
+Do NOT guess:
+
+\`https://example.com/favicon.ico\`
+
+unless it is actually verified.
+
+If not confidently verified:
+
+"favicon": ""
+
+A missing favicon is preferable to a broken one.
 
 ## platforms
 
-Allowed values:
+Allowed values ONLY:
 
 * web
 * desktop
@@ -1143,13 +1417,38 @@ Allowed values:
 * vscode
 * api
 
-Include every VERIFIED supported platform that represents an actual way to use the product.
+Include all VERIFIED ways users can actually interact with/use the product.
 
-Do not confuse:
+Definitions:
 
-* a website describing the product with a usable web application;
-* an SDK with a CLI;
-* an API with an API key requirement.
+web
+= usable web application/interface, not merely a marketing website
+
+desktop
+= native/desktop application
+
+mobile
+= native mobile application
+
+browser-extension
+= browser extension
+
+cli
+= official command-line interface
+
+vscode
+= official VS Code extension/integration that represents a real product interface
+
+api
+= officially supported API
+
+Do not infer platforms from vague compatibility claims.
+
+An SDK does not automatically imply \`cli\`.
+
+A documentation website does not imply \`web\`.
+
+A product having a website does not imply a usable web app.
 
 ## executionMode
 
@@ -1160,9 +1459,31 @@ Allowed:
 * hybrid
 * unknown
 
-Classify where the PRODUCT workflow executes, not merely where an underlying model runs.
+Classify where the PRODUCT's meaningful workflow executes.
 
-Use \`unknown\` only after checking official architecture/setup documentation when relevant.
+local
+= designed to run primarily on the user's machine/infrastructure
+
+cloud
+= primarily vendor-hosted/cloud service
+
+hybrid
+= meaningful combination of local and cloud execution
+
+unknown
+= official information is insufficient
+
+Examples:
+
+A local desktop client that sends all work to vendor servers is usually \`cloud\` or \`hybrid\`, not automatically \`local\`.
+
+A CLI is NOT automatically local execution.
+
+A self-hosted inference server is normally \`local\`.
+
+A product offering both vendor cloud and official self-hosting may be \`hybrid\`.
+
+Do not classify based solely on where the underlying LLM runs unless that is central to the product.
 
 ## signupRequirement
 
@@ -1174,9 +1495,24 @@ Allowed:
 * depends
 * unknown
 
-Determine the requirement for normal supported use.
+Determine whether an account is required for NORMAL SUPPORTED PRODUCT USE.
 
-Do not confuse account login with API keys.
+required
+= normal usage requires an account/login
+
+optional
+= meaningful normal usage is available without registration, while an account adds optional capability
+
+not-required
+= normal workflow does not require an account
+
+depends
+= genuinely differs by major workflow/platform/deployment
+
+unknown
+= cannot be established reliably
+
+Do not classify registration for a newsletter/docs site as product signup.
 
 ## apiKeyRequirement
 
@@ -1188,15 +1524,34 @@ Allowed:
 * depends
 * unknown
 
-This means whether THE USER must provide an API key for normal use.
+Meaning:
 
-OAuth/login/subscription credentials are not API keys.
+Does THE USER need to supply/configure an API key for normal supported usage?
 
-A product having an API does NOT automatically mean API keys are required for every workflow.
+OAuth/login/password/subscription credentials are NOT API keys.
+
+required
+= core workflow requires an API key
+
+optional
+= product works normally without one, but optional API/BYOK workflows use keys
+
+not-required
+= normal usage has no user-provided API-key requirement
+
+depends
+= materially varies by workflow/provider/deployment
+
+unknown
+= unclear
+
+A product merely OFFERING an API does NOT mean API keys are required for ordinary users.
+
+A BYOK product may be \`required\` or \`depends\` depending on its actual supported workflow.
 
 ## pricing
 
-Allowed:
+Allowed EXACTLY:
 
 * free
 * freemium
@@ -1204,124 +1559,432 @@ Allowed:
 * usage-based
 * ""
 
-Actively research official pricing before returning \`""\`.
+Actively check CURRENT official pricing.
 
-Use:
+Definitions:
 
-* free = normal product access is free;
-* freemium = meaningful free access plus paid tiers;
-* paid = normal access requires payment/subscription;
-* usage-based = primarily billed according to consumption.
+free
+= core product is normally available for free and is not meaningfully monetized through paid product tiers
 
-If several models apply, select the classification that best describes the product's primary billing model and explain details in \`priceDetails\`.
+freemium
+= meaningful free tier plus paid tiers/options
+
+paid
+= normal access requires payment/subscription; a limited trial does NOT make a product freemium
+
+usage-based
+= primary billing model is metered consumption/pay-as-you-go
+
+""
+= current official pricing classification genuinely cannot be verified
+
+Enterprise/contact-sales-only products normally count as:
+
+"pricing": "paid"
+
+Do not infer freemium merely because:
+
+* a demo exists;
+* a trial exists;
+* a playground page exists;
+* signup is free.
 
 ## priceDetails
 
-Include verified useful pricing details when publicly available:
+Give concise CURRENT useful pricing detail when directly verified.
 
-* plan names;
-* starting prices;
-* usage rates;
-* free-tier limits;
-* trial information;
+Useful examples:
+
+* free-tier limitations;
+* named plans;
+* starting subscription price;
+* per-token/per-minute/per-credit rate;
+* trial duration;
 * enterprise/custom pricing.
 
-Keep concise.
-
-Do not copy an entire pricing table.
-
-## tags
-
-Aim for 4–8 useful lowercase tags.
-
-Tags should improve discovery beyond the primary category.
-
-Use meaningful product capabilities, workflows, or technology types.
-
-Avoid duplicating nearly identical tags.
-
-## install
-
-Official verified installation command when applicable.
-
-Examples:
-
-* npm;
-* pip;
-* brew;
-* curl installer;
-* other documented package commands.
-
-For web-only products, use \`""\`.
-
-Never invent an install command.
-
-## start
-
-Official verified command used to start/use the installed product when applicable.
-
-For products without a CLI/local runtime, use \`""\`.
-
-## commands
-
-Include only useful official commands that are specifically verified.
-
-Each item:
-
-{
-"label": "Human-readable action",
-"command": "exact command"
-}
-
-Do not generate guessed commands from package names.
-
-For products without meaningful CLI commands, use \`[]\`.
-
-## models
-
-Include officially supported or explicitly documented AI model names/model families ONLY when the product exposes or meaningfully supports selectable/identified models.
+Prefer 1–3 concise sentences maximum.
 
 Do NOT:
 
-* guess the underlying model;
-* list providers instead of models;
-* list every possible model in a marketplace unless that list is useful and officially documented;
-* convert vague claims such as "multiple leading models" into invented names.
+* reproduce a full pricing table;
+* use old prices;
+* use approximate prices from third parties;
+* combine pricing from another product owned by the same company;
+* write "approximately $X" when the current official price cannot be confirmed.
 
-If the vendor intentionally does not disclose the model, use \`[]\`.
+If pricing category is known but exact details are not:
+
+"priceDetails": ""
+
+This is acceptable.
+
+Cross-check \`pricing\` and \`priceDetails\` for contradictions.
+
+## tags
+
+Aim for 4–8 useful discovery tags.
+
+Prefer concise lowercase terms.
+
+Kebab-case is preferred for multi-word tags.
+
+Examples:
+
+* \`open-source\`
+* \`code-generation\`
+* \`research\`
+* \`voice-cloning\`
+* \`workflow-automation\`
+* \`rag\`
+* \`self-hosted\`
+* \`multi-agent\`
+
+Tags should add useful searchable concepts beyond the primary category.
+
+Avoid:
+
+* meaningless generic tags like \`ai\`;
+* duplicate synonyms;
+* product/company name as a tag unless useful;
+* marketing terminology with no search value.
+
+## install
+
+Include an EXACT current official installation command only when applicable.
+
+Examples:
+
+* npm install command;
+* pip install command;
+* brew command;
+* curl installer command;
+* official package manager command.
+
+Preserve command spelling and flags exactly.
+
+Do NOT infer a package name from the product name.
+
+For products without command-line/package installation:
+
+"install": ""
+
+A desktop download button is NOT an install command.
+
+## start
+
+Include the exact official command used to start/run the installed product when clearly documented.
+
+Examples:
+\`ollama serve\`
+\`open-webui serve\`
+
+Do not invent start commands.
+
+For hosted/web products:
+
+"start": ""
+
+## commands
+
+Include only VERIFIED useful official CLI commands.
+
+Structure:
+
+[
+{
+"label": "Human-readable action",
+"command": "exact official command"
+}
+]
+
+Use commands only when they meaningfully help someone operate the tool.
+
+Do NOT generate commands based on intuition.
+
+Do NOT include:
+
+* pseudo-code;
+* API requests unless they are explicitly intended as CLI commands;
+* guessed package commands;
+* shell commands not documented by the product.
+
+For most hosted products:
+
+"commands": []
+
+## models
+
+This field must be extremely conservative.
+
+Include ONLY model names/model families that the CURRENT official product explicitly makes available, supports, or meaningfully exposes.
+
+Do NOT guess underlying models.
+
+Do NOT use:
+
+* third-party articles;
+* search snippets;
+* old screenshots;
+* historical model announcements;
+* provider names without specific model families;
+* vague claims like "leading models";
+* assumptions based on integrations.
+
+Examples of valid values:
+"GPT-5"
+"Claude Sonnet 4"
+"Gemini 2.5 Pro"
+"Llama 3.3"
+"DeepSeek R1"
+
+Only include current verified names.
+
+Do not automatically list a model because the vendor COMPANY has access to it.
+
+The model must be relevant to THIS PRODUCT.
+
+If the official product says only:
+
+"Choose from multiple leading AI models"
+
+without naming them:
+
+"models": []
+
+For marketplaces/routers/platforms supporting hundreds of models:
+
+DO NOT dump hundreds of entries.
+
+If there is a small, official, prominently supported model set, list it.
+
+If there is no meaningful canonical short list:
+
+"models": []
+
+Mention broad multi-model capability in \`strengths\` or \`usageNotes\` instead when officially supported.
+
+As a general quality rule, keep this list focused and normally below ~12 entries.
 
 ## github
 
-Official GitHub repository URL for the product when one exists.
+Use the canonical official GitHub repository URL when one exists and is relevant to the product.
 
-Use \`""\` for proprietary products with no official public repository.
+Prefer:
+specific repository > generic organization page.
 
-An organization homepage may be used only when it is clearly the official relevant GitHub presence and there is no single canonical repository.
+Example:
+
+Correct:
+\`https://github.com/ollama/ollama\`
+
+Less useful:
+\`https://github.com/ollama\`
+
+Use an organization URL only when:
+
+* it is clearly official;
+* there is no single canonical repository appropriate for the product.
+
+For proprietary products with no relevant public official GitHub:
+
+"github": ""
+
+Do not treat an unofficial SDK/community repository as official GitHub.
 
 ## docs
 
-Canonical official documentation/help/developer URL.
+Find the best canonical official documentation/help/developer URL.
 
-Actively look for documentation before leaving this blank.
+Examples:
 
-# FINAL QUALITY CHECK
+* docs homepage;
+* developer documentation;
+* official help center;
+* official quickstart documentation.
 
-Before responding, perform this checklist internally:
+Prefer the root documentation entry point rather than a random deep article unless the product has no docs homepage.
 
-1. Is \`name\` the actual product name rather than a page title?
-2. Is the primary category correct?
-3. Did I research beyond the homepage?
-4. Did I separately check onboarding/getting-started information?
-5. Did I separately check pricing?
-6. Did I separately check documentation/API/GitHub where relevant?
-7. Are \`bestFor\` and \`strengths\` concrete rather than generic?
-8. Are there useful \`usageNotes\`?
-9. Did I avoid leaving fields empty just because they were not on the homepage?
-10. For every remaining empty/unknown value, did I genuinely fail to verify it or determine that it is not applicable?
-11. Did I avoid inventing facts merely to make the record look complete?
-12. Is the final result valid standard JSON with no comments, Markdown, citations, or extra text?
+Actively search for documentation before leaving this blank.
 
-Only after this audit, return the JSON object.`;
+For a product with separate user docs and developer docs, choose the documentation site most representative of the product's primary workflow.
+
+# SECURITY / COMPLIANCE CLAIMS
+
+Security claims are allowed but must be held to a high evidence standard.
+
+Examples:
+
+* SOC 2 Type II
+* HIPAA
+* GDPR-related commitments
+* ISO 27001
+
+Use them only when directly confirmed by current official:
+
+* trust center;
+* security page;
+* legal/compliance documentation.
+
+Do not promote generic security language into a strength merely to make the product look impressive.
+
+Security is usually less important than actual product functionality unless security is a meaningful differentiator for the product.
+
+# INTEGRATIONS
+
+Only name specific integrations when directly verified.
+
+Do not convert vague wording like:
+
+"integrates with your favorite tools"
+
+into invented names.
+
+If an official integrations directory exists, use it.
+
+Avoid dumping huge integration lists.
+
+Mention only the most important relevant integrations.
+
+# NEGATIVE CLAIMS
+
+Be very careful when claiming that something DOES NOT EXIST.
+
+Examples:
+
+"There is no mobile app."
+"No API is available."
+"No free plan exists."
+"The product does not support local execution."
+
+Failure to find something is NOT proof that it does not exist.
+
+Prefer leaving the corresponding field empty/unknown unless official evidence clearly establishes the absence.
+
+# DUPLICATION CONTROL
+
+Each field has a different purpose.
+
+Avoid repeating the same sentence across:
+
+* description;
+* bestFor;
+* strengths;
+* usageNotes.
+
+Description:
+what the product is.
+
+bestFor:
+who/tasks it fits.
+
+strengths:
+why it stands out.
+
+gettingStarted:
+how to begin.
+
+usageNotes:
+practical details/constraints/workflow behavior.
+
+tags:
+search/discovery keywords.
+
+A strong record should reveal NEW useful information as the user moves through these sections.
+
+# INFORMATION DENSITY
+
+Prefer specific facts over filler.
+
+Weak:
+
+"Helps users work more efficiently."
+
+Strong:
+
+"Runs multiple research tasks in parallel and returns structured outputs with linked source material."
+
+Weak:
+
+"Offers integrations."
+
+Strong, if verified:
+
+"Connects with Slack, Google Drive, and Notion for workflow inputs and outputs."
+
+Weak:
+
+"Supports multiple AI models."
+
+Strong, if verified:
+
+"Allows users to select between Claude Sonnet and Gemini Pro."
+
+Never make the strong version unless the specific fact is verified.
+
+# INTERNAL MISSING-FIELD AUDIT
+
+Before finalizing, inspect EVERY empty/unknown field.
+
+For each one, ask internally:
+
+1. Is this field relevant to this product?
+2. Did I check the official source where this information would normally be documented?
+3. Did I check a dedicated pricing/docs/download/API/GitHub page when relevant?
+4. Is it genuinely unavailable or not applicable?
+5. Am I leaving it empty because information is absent, or merely because I stopped researching too early?
+
+Only keep the empty value when justified.
+
+# CROSS-FIELD CONSISTENCY AUDIT
+
+Before outputting, verify:
+
+* \`id\` matches canonical \`name\`;
+* \`category\` matches the product's primary role;
+* \`tags\` do not contradict category;
+* \`url\` and \`domain\` correspond;
+* \`platforms\` match actual product interfaces;
+* \`executionMode\` is consistent with deployment;
+* \`signupRequirement\` matches actual onboarding;
+* \`apiKeyRequirement\` is not confused with login;
+* \`pricing\` matches \`priceDetails\`;
+* \`install\`, \`start\`, and \`commands\` make sense for the listed platforms;
+* \`models\` belong to this exact current product;
+* \`github\` is truly official;
+* \`docs\` is truly official;
+* bestFor/strengths/usageNotes do not repeat each other;
+* no unsupported negative claims exist.
+
+# FINAL SANITIZATION
+
+Before responding:
+
+1. Remove every citation/reference marker from all strings.
+2. Remove Markdown formatting.
+3. Remove research commentary.
+4. Remove trailing whitespace.
+5. Remove accidental duplicated spaces.
+6. Ensure no string contains an unescaped literal newline that would break JSON.
+7. Ensure no \`null\` exists.
+8. Ensure every array contains only the expected type.
+9. Ensure commands contain \`label\` and \`command\`.
+10. Ensure all enum values match the allowed spelling exactly.
+11. Ensure JSON is valid under standard \`JSON.parse()\`.
+12. Ensure the response contains NOTHING except the JSON object.
+
+# FINAL QUALITY STANDARD
+
+The record should be good enough that a human curator normally needs only to VERIFY it, not rewrite it.
+
+Do not maximize the number of filled fields.
+
+Maximize the amount of VERIFIED, CURRENT, USEFUL information.
+
+A carefully justified empty value is better than a hallucination.
+
+But a lazy empty value caused by shallow research is unacceptable.
+
+Now research the supplied TOOL_URL thoroughly, perform the audits above, and return exactly one clean JSON object.`;
 
 function buildAiPrompt() {
   const url = $("#prompt-url").value.trim() || "<PASTE_TOOL_URL>";
