@@ -147,47 +147,56 @@
         </form>
         <form class="add-panel" id="tool-form" data-add-panel="manual" hidden>
           <p class="add-panel-copy">Review the fields and add only what is genuinely needed.</p>
-          <div class="form-grid">
-          <label class="form-field form-field-wide"><span>Name *</span><input name="name" required maxlength="80" placeholder="For example, Cursor" /></label>
-          <label class="form-field"><span>Category *</span><select name="category" required></select></label>
-          <label class="form-field"><span>Price</span><select name="pricing"></select></label>
-          <label class="form-field"><span>Price details</span><input name="priceDetails" maxlength="80" placeholder="e.g. $20/month" /></label>
-          <label class="form-field form-field-wide"><span>Short description</span><textarea name="description" rows="3" maxlength="300" placeholder="What it is and why it is useful"></textarea></label>
-          <label class="form-field form-field-wide"><span>Best for</span><input name="bestFor" placeholder="Comma-separated tasks or audiences" /></label>
-          <label class="form-field form-field-wide"><span>Strengths</span><input name="strengths" placeholder="Comma-separated factual advantages" /></label>
-          <label class="form-field form-field-wide"><span>Getting started</span><textarea name="gettingStarted" rows="3" placeholder="One verified step per line"></textarea></label>
-          <label class="form-field form-field-wide"><span>Usage notes</span><textarea name="usageNotes" rows="3" placeholder="Menus, workflows, limits, or requirements — one per line"></textarea></label>
-          <label class="form-field form-field-wide"><span>Website *</span><input name="url" type="url" required placeholder="https://..." /></label>
-          <label class="form-field"><span>Domain</span><input name="domain" placeholder="cursor.com" /></label>
-          <label class="form-field"><span>Favicon / logo URL</span><input name="favicon" type="url" placeholder="https://.../favicon.ico" /></label>
-          <fieldset class="form-field form-field-wide"><legend>Platforms</legend><div class="platform-options"><label><input type="checkbox" name="platforms" value="web" /> Web</label><label><input type="checkbox" name="platforms" value="desktop" /> Desktop</label><label><input type="checkbox" name="platforms" value="mobile" /> Mobile</label><label><input type="checkbox" name="platforms" value="browser-extension" /> Browser extension</label><label><input type="checkbox" name="platforms" value="cli" /> CLI</label><label><input type="checkbox" name="platforms" value="vscode" /> VS Code</label><label><input type="checkbox" name="platforms" value="api" /> API</label></div></fieldset>
-          <label class="form-field"><span>Execution</span><select name="executionMode"></select></label>
-          <label class="form-field"><span>Signup requirement</span><select name="signupRequirement"></select></label>
-          <label class="form-field"><span>API key requirement</span><select name="apiKeyRequirement"></select></label>
-          <label class="form-field form-field-wide"><span>Tags</span><input name="tags" placeholder="coding, cli, research" /></label>
-          <label class="form-field"><span>Install</span><input name="install" placeholder="npm install ..." /></label>
-          <label class="form-field"><span>Start</span><input name="start" placeholder="start command" /></label>
-          <label class="form-field form-field-wide"><span>Models</span><input name="models" placeholder="Comma-separated, if relevant" /></label>
-          <label class="form-field"><span>GitHub</span><input name="github" type="url" placeholder="https://github.com/..." /></label>
-          <label class="form-field"><span>Documentation</span><input name="docs" type="url" placeholder="https://.../docs" /></label>
+          <div class="form-grid manual-form-grid">
+            <section class="form-section"><div class="form-section-heading"><h3>Basics</h3><p>Required fields are marked with *</p></div><div class="form-section-grid">
+              <label class="form-field form-field-wide"><span>Name *</span><input name="name" required maxlength="80" placeholder="For example, Cursor" /></label>
+              <label class="form-field"><span>Category *</span><select name="category" required></select></label>
+              <label class="form-field"><span>Price</span><select name="pricing"></select></label>
+              <label class="form-field"><span>Price details</span><input name="priceDetails" maxlength="80" placeholder="e.g. $20/month" /></label>
+              <label class="form-field form-field-wide"><span>Short description</span><textarea name="description" rows="3" maxlength="300" placeholder="What it is and why it is useful"></textarea></label>
+            </div></section>
+            <section class="form-section"><div class="form-section-heading"><h3>Use &amp; positioning</h3><p>Help people decide when this tool fits.</p></div><div class="form-section-grid">
+              <label class="form-field form-field-wide"><span>Best for</span><input name="bestFor" placeholder="Comma-separated tasks or audiences" /></label>
+              <label class="form-field form-field-wide"><span>Strengths</span><input name="strengths" placeholder="Comma-separated factual advantages" /></label>
+              <label class="form-field form-field-wide"><span>Getting started</span><textarea name="gettingStarted" rows="3" placeholder="One verified step per line"></textarea></label>
+              <label class="form-field form-field-wide"><span>Usage notes</span><textarea name="usageNotes" rows="3" placeholder="Menus, workflows, limits, or requirements — one per line"></textarea></label>
+            </div></section>
+            <section class="form-section"><div class="form-section-heading"><h3>Access &amp; platform</h3><p>Use official URLs and known requirements.</p></div><div class="form-section-grid">
+              <label class="form-field form-field-wide"><span>Website *</span><input name="url" type="url" required placeholder="https://..." /></label>
+              <label class="form-field"><span>Domain</span><input name="domain" placeholder="cursor.com" /></label>
+              <label class="form-field"><span>Favicon / logo URL</span><input name="favicon" type="url" placeholder="https://.../favicon.ico" /></label>
+              <fieldset class="form-field form-field-wide"><legend>Platforms</legend><div class="platform-options"><label><input type="checkbox" name="platforms" value="web" /> Web</label><label><input type="checkbox" name="platforms" value="desktop" /> Desktop</label><label><input type="checkbox" name="platforms" value="mobile" /> Mobile</label><label><input type="checkbox" name="platforms" value="browser-extension" /> Browser extension</label><label><input type="checkbox" name="platforms" value="cli" /> CLI</label><label><input type="checkbox" name="platforms" value="vscode" /> VS Code</label><label><input type="checkbox" name="platforms" value="api" /> API</label></div></fieldset>
+              <label class="form-field"><span>Execution</span><select name="executionMode"></select></label>
+              <label class="form-field"><span>Signup requirement</span><select name="signupRequirement"></select></label>
+              <label class="form-field"><span>API key requirement</span><select name="apiKeyRequirement"></select></label>
+            </div></section>
+            <section class="form-section"><div class="form-section-heading"><h3>Technical metadata</h3><p>Add only verified reference details.</p></div><div class="form-section-grid">
+              <label class="form-field form-field-wide"><span>Tags</span><input name="tags" placeholder="coding, cli, research" /></label>
+              <label class="form-field"><span>Install</span><input name="install" placeholder="npm install ..." /></label>
+              <label class="form-field"><span>Start</span><input name="start" placeholder="start command" /></label>
+              <label class="form-field form-field-wide"><span>Models</span><input name="models" placeholder="Comma-separated, if relevant" /></label>
+              <label class="form-field"><span>GitHub</span><input name="github" type="url" placeholder="https://github.com/..." /></label>
+              <label class="form-field"><span>Documentation</span><input name="docs" type="url" placeholder="https://.../docs" /></label>
+            </div></section>
           </div>
           <div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>Cancel</button><button class="button button-primary" type="submit">Prepare submission</button></div>
         </form>
         <form class="add-panel" id="json-import-form" data-add-panel="json" hidden>
           <p class="add-panel-copy">Ask any external AI model to prepare JSON using the schema below. There is no built-in AI API: everything works on this static site.</p>
-          <div class="prompt-builder">
+          <section class="prompt-builder json-step">
+            <div class="json-step-heading"><span>1</span><div><h3>Generate a prompt</h3><p>Use it with any external AI model.</p></div></div>
             <label class="form-field form-field-wide"><span>Tool URL</span><input id="prompt-url" type="url" placeholder="https://..." /></label>
             <label class="form-field form-field-wide"><span>Context (optional)</span><textarea id="prompt-context" rows="2" placeholder="For example: needed for VS Code and local CLI projects"></textarea></label>
             <label class="form-field form-field-wide"><span>AI Prompt</span><textarea id="ai-prompt" rows="11" readonly spellcheck="false"></textarea></label>
             <div class="prompt-actions"><button class="button button-secondary" id="copy-ai-prompt" type="button">Copy AI prompt</button><button class="button button-secondary" id="reset-json-import" type="button">Reset</button></div>
-          </div>
-          <label class="form-field form-field-wide"><span>JSON from AI</span><textarea id="json-import-input" name="json-import" rows="12" spellcheck="false" placeholder='{ "id": "tool-name", "name": "Tool name", ... }'></textarea></label>
+          </section>
+          <section class="json-step json-input-step"><div class="json-step-heading"><span>2</span><div><h3>Paste &amp; validate JSON</h3><p>This is the editable submission input.</p></div></div><label class="form-field form-field-wide"><span>JSON from AI</span><textarea id="json-import-input" name="json-import" rows="12" spellcheck="false" placeholder='{ "id": "tool-name", "name": "Tool name", ... }'></textarea></label></section>
           <div class="validation-errors" id="json-errors" role="alert" hidden></div>
           <div class="json-preview" id="json-preview" hidden></div>
           <div class="dialog-actions"><button class="button button-secondary" type="button" id="json-validate">Validate JSON</button><button class="button button-secondary" type="button" id="json-edit-manual" hidden>Edit</button><button class="button button-primary" type="button" id="json-import-confirm" hidden>Prepare submission</button></div>
         </form>
         <section class="add-panel submission-review" id="submission-review" data-add-panel="review" hidden>
-          <p class="add-panel-copy">Review the data before submitting. A proposal does not appear in the catalog immediately: it is moderated first.</p>
+          <div class="submission-review-heading"><p class="kicker">REVIEW BEFORE SUBMITTING</p><p class="add-panel-copy">Check the proposal before opening GitHub. It is moderated before it can appear in the catalog.</p></div>
           <div class="json-preview" id="submission-preview"></div>
           <div class="duplicate-warning" id="duplicate-warning" hidden></div>
           <div class="submission-instructions" id="submission-instructions"></div>
