@@ -2150,5 +2150,74 @@
     "sources": [
       "https://www.genspark.ai/"
     ]
+  },
+  {
+    "id": "you-com",
+    "name": "You.com",
+    "category": "research",
+    "description": "You.com is an AI-powered productivity engine and research platform that integrates multiple AI models, offers web search with verifiable citations, and provides specialized agents for research, data analysis, and custom tasks.",
+    "bestFor": [
+      "Conducting in-depth research with comprehensive source citations",
+      "Analyzing complex data and generating reports",
+      "Creating custom AI agents for specific workflows",
+      "Accessing multiple leading AI models in a single interface"
+    ],
+    "strengths": [
+      "Provides verifiable citations linked directly to source data for increased trust",
+      "Offers access to a wide range of leading AI models from providers like OpenAI, Anthropic, and Google",
+      "Features specialized agents like ARI for deep research and Genius for complex problem-solving",
+      "Supports zero data retention for enhanced enterprise privacy"
+    ],
+    "gettingStarted": [
+      "Navigate to You.com in a web browser",
+      "Enter a question or prompt in the search/query bar",
+      "Select 'Auto Mode' for automatic agent/model selection, or choose a specific model or agent manually",
+      "Review the AI-generated response with its accompanying citations"
+    ],
+    "usageNotes": [
+      "You.com's primary interface is a web application with a chat-like search experience.",
+      "'Auto Mode' intelligently selects the most suitable AI agent (e.g., Research, Genius) or model based on the user's query.",
+      "Users can create 'Custom Agents' by selecting a base model, providing specific instructions, and enabling live web access.",
+      "The platform is designed with enterprise-grade features, including zero data retention and integration with private company data."
+    ],
+    "url": "https://you.com/",
+    "domain": "you.com",
+    "favicon": "",
+    "platforms": [
+      "web",
+      "mobile",
+      "browser-extension",
+      "api"
+    ],
+    "executionMode": "cloud",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "not-required",
+    "pricing": "freemium",
+    "priceDetails": "Free tier available; YouPro membership billed at $20/month (or $15/month with annual contract) for unlimited queries and advanced features",
+    "tags": [
+      "ai-search",
+      "research",
+      "agent",
+      "productivity",
+      "enterprise",
+      "multi-model"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [
+      "Claude 3.5 Sonnet",
+      "GPT-4o",
+      "Gemini 1.5 Pro",
+      "DeepSeek"
+    ],
+    "github": "",
+    "docs": "",
+    "addedAt": "2026-09-01",
+    "updatedAt": "2026-09-01",
+    "lastVerifiedAt": "2026-09-01",
+    "sources": [
+      "https://you.com/"
+    ]
   }
 ]
