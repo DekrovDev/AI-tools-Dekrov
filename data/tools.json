@@ -2837,5 +2837,78 @@
       "https://exa.ai/",
       "https://exa.ai/docs"
     ]
+  },
+  {
+    "id": "tavily",
+    "name": "Tavily",
+    "category": "search",
+    "description": "A search engine optimized for AI agents and LLMs. The Tavily Search API provides efficient, persistent search results with built-in scraping, filtering, and extraction of relevant information in a single API call, making it suitable for RAG applications and autonomous agents .",
+    "bestFor": [
+      "AI agents and LLM applications needing real-time web search",
+      "Retrieval-augmented generation (RAG) workflows",
+      "Developers seeking a search API with integrated content extraction"
+    ],
+    "strengths": [
+      "Purpose-built for LLMs with AI-powered scoring, filtering, and ranking of sources",
+      "Combines searching, scraping, and content extraction into a single API call",
+      "Offers a credit-based model with a free tier (1,000 credits/month)"
+    ],
+    "gettingStarted": [
+      "Install the Tavily Python SDK: `pip install tavily-python`",
+      "Sign up to get a free API key",
+      "Run a search: `client.search(query=\"your query\", max_results=5)`"
+    ],
+    "usageNotes": [
+      "Search depth can be set to 'basic' (1 credit) or 'advanced' (2 credits)",
+      "Integration is available through client libraries (Python, Node.js) and partner frameworks like LangChain and LlamaIndex",
+      "API key is required for authentication, set via `TAVILY_API_KEY` environment variable or directly in the client"
+    ],
+    "url": "https://tavily.com/",
+    "domain": "tavily.com",
+    "favicon": "https://tavily.com/favicon.ico",
+    "platforms": [
+      "api",
+      "cli",
+      "web"
+    ],
+    "executionMode": "cloud",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "required",
+    "pricing": "freemium",
+    "priceDetails": "Free plan includes 1,000 credits/month. Pay-as-you-go is $0.008/credit. Monthly paid plans range from $30 to $500, with custom enterprise pricing. Basic search costs 1 credit, advanced search costs 2 credits .",
+    "tags": [
+      "search",
+      "api",
+      "rag",
+      "agents",
+      "web-search"
+    ],
+    "install": "pip install tavily-python",
+    "start": "",
+    "commands": [
+      {
+        "label": "Search web",
+        "command": "tvly search \"your query\" --json"
+      },
+      {
+        "label": "Extract content from URL",
+        "command": "tvly extract \"https://example.com/article\" --json"
+      },
+      {
+        "label": "Map website URLs",
+        "command": "tvly map \"https://docs.example.com\" --json"
+      }
+    ],
+    "models": [],
+    "github": "https://github.com/tavily-ai/tavily-python",
+    "docs": "https://docs.tavily.com/",
+    "addedAt": "2026-09-01",
+    "updatedAt": "2026-09-01",
+    "lastVerifiedAt": "2026-09-01",
+    "sources": [
+      "https://tavily.com/",
+      "https://github.com/tavily-ai/tavily-python",
+      "https://docs.tavily.com/"
+    ]
   }
 ]
