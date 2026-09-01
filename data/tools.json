@@ -2660,5 +2660,63 @@
     "sources": [
       "https://www.connectedpapers.com/"
     ]
+  },
+  {
+    "id": "semantic-scholar",
+    "name": "Semantic Scholar",
+    "category": "research",
+    "description": "A free AI-powered academic search engine developed by the Allen Institute for AI (AI2) that uses semantic search to help users discover and understand scientific literature across over 200 million papers.",
+    "bestFor": [
+      "Literature reviews and preliminary scoping in STEM fields",
+      "Tracing citation networks and finding related research",
+      "Exploring complex topics where terminology varies"
+    ],
+    "strengths": [
+      "Permanently free with no paid tier",
+      "Provides AI-generated TL;DR summaries for many papers",
+      "Offers a free open API and a dataset (S2ORC) that powers other research tools"
+    ],
+    "gettingStarted": [
+      "Navigate to the official Semantic Scholar website",
+      "Enter a keyword, paper title, or author name in the search bar"
+    ],
+    "usageNotes": [
+      "Basic search functionality does not require a user account, though an account is needed for features like 'My Library' and research alerts",
+      "The platform does not support Boolean operators (AND, OR, NOT) or wildcards due to its semantic search model",
+      "Free access to the public API is available but with lower rate limits without an API key"
+    ],
+    "url": "https://www.semanticscholar.org/",
+    "domain": "www.semanticscholar.org",
+    "favicon": "",
+    "platforms": [
+      "web",
+      "api",
+      "browser-extension"
+    ],
+    "executionMode": "cloud",
+    "signupRequirement": "optional",
+    "apiKeyRequirement": "optional",
+    "pricing": "free",
+    "priceDetails": "A free service with no paid tier, supported by the Allen Institute for AI's endowment.",
+    "tags": [
+      "academic search",
+      "research",
+      "semantic search",
+      "literature discovery",
+      "citation analysis"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [],
+    "github": "",
+    "docs": "https://www.semanticscholar.org/product/api",
+    "addedAt": "2026-09-01",
+    "updatedAt": "2026-09-01",
+    "lastVerifiedAt": "2026-09-01",
+    "sources": [
+      "https://www.semanticscholar.org/",
+      "https://www.semanticscholar.org/product/api"
+    ]
   }
 ]
