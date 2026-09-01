@@ -2219,5 +2219,67 @@
     "sources": [
       "https://you.com/"
     ]
+  },
+  {
+    "id": "consensus",
+    "name": "Consensus",
+    "category": "research",
+    "description": "An AI-powered academic search engine that searches over 220 million peer-reviewed research papers to provide evidence-based answers and cited summaries.",
+    "bestFor": [
+      "Conducting literature reviews",
+      "Exploring new research topics",
+      "Fact-checking claims with scientific evidence",
+      "Finding peer-reviewed papers on a topic"
+    ],
+    "strengths": [
+      "Answers are grounded in peer-reviewed research",
+      "Includes the Consensus Meter to visualize agreement in literature",
+      "Offers Deep Review for comprehensive literature searches"
+    ],
+    "gettingStarted": [
+      "Visit the official website at consensus.app",
+      "Create an account to access features",
+      "Enter a research question in the search bar"
+    ],
+    "usageNotes": [
+      "The Research Agent automatically chooses the right tools and steps for your question, enabling workflows like citation crawling, author search, and study comparisons .",
+      "Pro messages provide AI-powered summaries of up to 20 papers, while Deep reviews analyze up to 50 papers to generate a structured literature review .",
+      "Pro search leverages OpenAI's best-in-class LLMs but is grounded in scientific research .",
+      "A free tier is available with limited Pro messages, Deep reviews, and Study Snapshots per month ."
+    ],
+    "url": "https://consensus.app/",
+    "domain": "consensus.app",
+    "favicon": "https://consensus.app/favicon.ico",
+    "platforms": [
+      "web",
+      "api"
+    ],
+    "executionMode": "cloud",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "not-required",
+    "pricing": "freemium",
+    "priceDetails": "Free tier available; Pro plan is $20/month or $144/year, Deep plan is $65/month or $540/year, custom pricing for Teams and Enterprise .",
+    "tags": [
+      "research",
+      "academic",
+      "science",
+      "literature-review",
+      "peer-reviewed"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [
+      "OpenAI best-in-class LLMs"
+    ],
+    "github": "",
+    "docs": "https://help.consensus.app/",
+    "addedAt": "2026-09-01",
+    "updatedAt": "2026-09-01",
+    "lastVerifiedAt": "2026-09-01",
+    "sources": [
+      "https://consensus.app/",
+      "https://help.consensus.app/"
+    ]
   }
 ]
