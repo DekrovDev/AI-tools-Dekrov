@@ -1468,7 +1468,7 @@ function saveNewTool(form) {
   try { prepareSubmission({ ...normalizeImportedTool(tool), source: form.dataset.source || "manual" }); } catch (error) { setAddMode("manual"); showToast(error.errors?.[0] || error.message || "Check the required fields"); }
 }
 let toastTimer;
-function showToast(message) { const toast = $("#toast"); toast.textContent = message; toast.classList.add("is-visible"); clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove("is-visible"), 1800); }
+function showToast(message) { const toast = $("#toast"); const host = document.querySelector("dialog[open]") || document.body; if (toast.parentElement !== host) host.append(toast); toast.textContent = message; toast.classList.add("is-visible"); clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove("is-visible"), 1800); }
 async function copyText(value, message = "Copied", blockedMessage = null) { try { await navigator.clipboard.writeText(value); showToast(message); } catch { showToast(blockedMessage || "Could not copy to clipboard"); } }
 function toggleFavorite(id) { if (state.favorites.has(id)) state.favorites.delete(id); else state.favorites.add(id); localStorage.setItem(FAVORITES_KEY, JSON.stringify([...state.favorites])); renderNavigation(); renderCatalog(); }
 
