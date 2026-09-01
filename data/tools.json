@@ -2008,5 +2008,76 @@
       "https://github.com/mastra-ai/mastra",
       "https://mastra.ai/docs"
     ]
+  },
+  {
+    "id": "perplexity",
+    "name": "Perplexity",
+    "category": "research",
+    "description": "Perplexity is an AI-powered answer engine that combines real-time web search with advanced language models to provide cited, conversational responses. It synthesizes information from multiple sources to deliver structured answers and reports, distinguishing itself from traditional search engines .",
+    "bestFor": [
+      "Academic research and literature reviews",
+      "Professional and market analysis",
+      "Complex queries requiring cited and up-to-date information",
+      "Students and knowledge workers needing in-depth reports"
+    ],
+    "strengths": [
+      "Provides real-time, cited answers with direct links to sources",
+      "Offers model selection for Pro and Max users, including GPT, Claude, and Gemini models",
+      "Includes a Deep Research feature for generating comprehensive reports on complex topics",
+      "Supports file uploads and analysis of various document types",
+      "Available across multiple platforms, including web, mobile, and desktop"
+    ],
+    "gettingStarted": [
+      "Visit the Perplexity website or download the mobile/desktop app",
+      "Enter a query in the search bar to start a standard search",
+      "For Pro Search or Deep Research, sign up for a Pro or Max subscription",
+      "Access the API via the documentation for developer integration"
+    ],
+    "usageNotes": [
+      "Standard searches are free and largely unlimited .",
+      "Pro Search and Deep Research have usage limits dependent on the subscription plan .",
+      "Advanced AI models and features like file creation, image, and video generation are primarily for paid subscribers .",
+      "An API is available for developers with separate pricing and usage structures ."
+    ],
+    "url": "https://www.perplexity.ai/",
+    "domain": "perplexity.ai",
+    "favicon": "https://www.perplexity.ai/favicon.ico",
+    "platforms": [
+      "web",
+      "mobile",
+      "desktop",
+      "api"
+    ],
+    "executionMode": "cloud",
+    "signupRequirement": "optional",
+    "apiKeyRequirement": "depends",
+    "pricing": "freemium",
+    "priceDetails": "Free tier available with limited Pro Searches. Pro plan at ~$20/month or ~$200/year. Max plan at ~$167/month (annual) to ~$200/month for higher limits and features . Enterprise pricing available. API is usage-based .",
+    "tags": [
+      "research",
+      "answer engine",
+      "ai assistant",
+      "search"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [
+      "Sonar",
+      "GPT-5",
+      "Claude 4.0 Sonnet",
+      "Claude Sonnet 4.6",
+      "Gemini 3.1 Pro",
+      "Grok 4"
+    ],
+    "github": "",
+    "docs": "https://docs.perplexity.ai/",
+    "addedAt": "2026-09-01",
+    "updatedAt": "2026-09-01",
+    "lastVerifiedAt": "2026-09-01",
+    "sources": [
+      "https://www.perplexity.ai/",
+      "https://docs.perplexity.ai/"
+    ]
   }
 ]
