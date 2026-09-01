@@ -794,6 +794,41 @@ If the supplied URL redirects to a clear successor product, describe the current
 
 Do not combine facts from two separate products merely because they share a company.
 
+# CURRENT PRODUCT IDENTITY LOCK
+
+Before researching individual fields, establish the CURRENT primary product identity from the canonical official homepage.
+
+Treat the current canonical homepage and current primary product pages as the authoritative source for:
+
+- canonical product identity;
+- primary positioning;
+- primary category;
+- main product purpose.
+
+Documentation may contain:
+- legacy functionality;
+- secondary products;
+- older positioning;
+- sub-products;
+- features that remain available but are no longer the product's primary focus.
+
+Do NOT allow documentation, search results, older pages, or secondary product pages to override the CURRENT canonical homepage when deciding the product's identity or primary category.
+
+If the homepage and documentation appear inconsistent:
+
+1. determine whether the company/product has recently changed positioning;
+2. use the CURRENT homepage for name, description, and primary category;
+3. treat capabilities found only in docs as secondary features unless current product pages confirm otherwise;
+4. do not merge historical and current versions of the product into one record.
+
+For fast-changing products, prefer a slightly less complete CURRENT record over a detailed record assembled from multiple generations of the product.
+
+A feature existing somewhere in documentation does not mean it defines the current product.
+
+Example:
+
+If the current homepage positions a product as an autonomous business-operations platform and documentation includes an AI search feature, classify the product as \`automation\`, not \`search\`, unless current official product positioning clearly makes search the primary product.
+
 # OUTPUT FORMAT
 
 Return EXACTLY ONE valid standard JSON object.
