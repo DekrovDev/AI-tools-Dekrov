@@ -2348,5 +2348,69 @@
       "https://elicit.com/",
       "https://docs.elicit.com"
     ]
+  },
+  {
+    "id": "scite",
+    "name": "Scite",
+    "category": "research",
+    "description": "An AI-powered platform that helps researchers discover, evaluate, and understand scholarly literature through 'Smart Citations' which classify citation context as supporting, contrasting, or mentioning . It provides tools for literature search, systematic review, and reference checking .",
+    "bestFor": [
+      "Academic researchers conducting literature reviews",
+      "Students needing to evaluate the credibility of sources",
+      "Authors checking the reliability of their manuscript references",
+      "Systematic reviews and meta-analyses"
+    ],
+    "strengths": [
+      "Classifies citations by context (supporting, contrasting, or mentioning)",
+      "Provides insights into the credibility and impact of research",
+      "Offers a generative AI assistant for answering research questions with references",
+      "Features a Reference Check tool to identify retractions and editorial notices",
+      "Indexes a vast database of citation statements from millions of publications"
+    ],
+    "gettingStarted": [
+      "Navigate to the official Scite website at https://scite.ai/",
+      "Perform a basic search for a topic, article, or author",
+      "View the 'Smart Citations' on an article's page to see how it has been cited"
+    ],
+    "usageNotes": [
+      "The platform is primarily accessed via the web .",
+      "Basic searches may be available without an account, but many advanced features like saving searches, using the Assistant, and creating dashboards require a personal account .",
+      "Access for institutional users often depends on the institution's subscription, allowing for free use of enhanced features through the organization's license .",
+      "The platform also offers a Model Context Protocol (MCP) server to connect its database to other AI assistants like ChatGPT and Claude .",
+      "An API is available for enterprise and custom integrations ."
+    ],
+    "url": "https://scite.ai/",
+    "domain": "scite.ai",
+    "favicon": "",
+    "platforms": [
+      "web",
+      "api"
+    ],
+    "executionMode": "cloud",
+    "signupRequirement": "depends",
+    "apiKeyRequirement": "not-required",
+    "pricing": "paid",
+    "priceDetails": "Requires a subscription; institutional access often provided through academic licenses. Personal Basic plan is reported to be around $20/month or $12/month with annual commitment .",
+    "tags": [
+      "research",
+      "academic",
+      "citations",
+      "literature-review",
+      "smart-citations",
+      "ai-assistant"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [],
+    "github": "",
+    "docs": "https://scite.ai/getting-started",
+    "addedAt": "2026-09-01",
+    "updatedAt": "2026-09-01",
+    "lastVerifiedAt": "2026-09-01",
+    "sources": [
+      "https://scite.ai/",
+      "https://scite.ai/getting-started"
+    ]
   }
 ]
