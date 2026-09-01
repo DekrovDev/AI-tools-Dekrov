@@ -87,3 +87,5 @@ button:disabled{cursor:not-allowed}
 .toast{line-height:1.45;max-width:min(calc(100vw - 32px),520px);text-align:center;white-space:normal}
 dialog .toast{bottom:16px;position:absolute;z-index:4}
 @media(max-width:680px){.toast{bottom:14px;padding:10px 12px}}
+
+.back-to-top{align-items:center;background:var(--raised);border:1px solid var(--line);border-radius:9px;bottom:22px;box-shadow:var(--shadow);color:var(--accent);display:inline-flex;height:42px;justify-content:center;opacity:0;pointer-events:none;position:fixed;right:22px;transform:translateY(6px);transition:background .18s,border-color .18s,color .18s,opacity .18s,transform .18s;width:42px;z-index:9}.back-to-top.is-visible{opacity:1;pointer-events:auto;transform:translateY(0)}.toast.is-visible~.back-to-top{bottom:72px}.back-to-top:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}.back-to-top svg{height:18px;width:18px}@media(max-width:680px){.back-to-top{bottom:16px;right:16px}.toast.is-visible~.back-to-top{bottom:72px}}@media(prefers-reduced-motion:reduce){.back-to-top{transition:none}}
