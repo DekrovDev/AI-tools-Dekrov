@@ -2598,5 +2598,67 @@
       "https://www.researchrabbit.ai/",
       "https://learn.researchrabbit.ai/"
     ]
+  },
+  {
+    "id": "connected-papers",
+    "name": "Connected Papers",
+    "category": "research",
+    "description": "Connected Papers is a visual literature mapping tool that generates interactive graphs of related academic papers based on citation similarity, using co-citation and bibliographic coupling [citation:1][citation:5][citation:10]. It helps researchers explore a field by starting from a single seed paper and discovering connected works, prior foundational works, and derivative recent publications [citation:3][citation:12][citation:15].",
+    "bestFor": [
+      "Visual exploration of academic literature",
+      "Identifying foundational 'Prior Works' in a research area",
+      "Discovering recent 'Derivative Works' and review papers",
+      "Getting an overview of a new academic field",
+      "Building bibliographies and finding gaps"
+    ],
+    "strengths": [
+      "Creates interactive, visual graphs of paper relationships",
+      "Based on similarity (co-citation and bibliographic coupling), not just direct citations",
+      "Helps identify seminal works and recent trends",
+      "Export citations as BibTeX files",
+      "Integrates with reference managers like Zotero, EndNote, and Mendeley [citation:8][citation:12]"
+    ],
+    "gettingStarted": [
+      "Navigate to the Connected Papers website [citation:12]",
+      "Enter a seed paper by title, DOI, or other identifier in the input field [citation:3][citation:10][citation:12]",
+      "Click the 'Build a graph' button to generate a visual network of related papers [citation:12]"
+    ],
+    "usageNotes": [
+      "Generates a graph of ~40 papers based on a seed paper from the Semantic Scholar corpus [citation:3][citation:5][citation:15]",
+      "Uses co-citation and bibliographic coupling to determine similarity; papers do not need to directly cite each other [citation:1][citation:5][citation:12]",
+      "Node size indicates citation count, and node color indicates publication year (darker is older) [citation:3][citation:5][citation:12]",
+      "The free version allows a limited number of graphs per month (e.g., 5 graphs/month) [citation:3][citation:5][citation:12]",
+      "Provides 'Prior Works' and 'Derivative Works' views to trace the intellectual lineage of a field [citation:1][citation:3][citation:12]"
+    ],
+    "url": "https://www.connectedpapers.com/",
+    "domain": "www.connectedpapers.com",
+    "favicon": "",
+    "platforms": [
+      "web"
+    ],
+    "executionMode": "cloud",
+    "signupRequirement": "not-required",
+    "apiKeyRequirement": "not-required",
+    "pricing": "freemium",
+    "priceDetails": "Free plan allows up to 5 graphs per month; premium academic subscription is $6/month [citation:3][citation:5][citation:12]",
+    "tags": [
+      "research",
+      "literature-mapping",
+      "visualization",
+      "academic",
+      "citation-analysis"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [],
+    "github": "",
+    "docs": "",
+    "addedAt": "2026-09-01",
+    "updatedAt": "2026-09-01",
+    "lastVerifiedAt": "2026-09-01",
+    "sources": [
+      "https://www.connectedpapers.com/"
+    ]
   }
 ]
