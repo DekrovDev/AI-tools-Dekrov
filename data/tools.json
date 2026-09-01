@@ -2777,5 +2777,65 @@
       "https://phind.com/",
       "https://huggingface.co/Phind"
     ]
+  },
+  {
+    "id": "exa",
+    "name": "Exa",
+    "category": "search",
+    "description": "Exa is a web search API designed for AI agents and applications. It operates its own search engine with embeddings-based retrieval and provides search, content fetching, and research capabilities through a hosted API and MCP server .",
+    "bestFor": [
+      "AI agents that need to ground responses with current web data",
+      "Coding agents searching for documentation and code examples",
+      "Semantic discovery and research tasks"
+    ],
+    "strengths": [
+      "Operates its own independent search index rather than wrapping other search engines",
+      "Offers multiple search types, including instant and deep-research modes",
+      "Provides code search over billions of GitHub repositories and documentation pages",
+      "Used by over 5,000 enterprise customers including Cursor and Cognition"
+    ],
+    "gettingStarted": [
+      "Sign up for an Exa account to obtain an API key",
+      "Install the Python SDK via pip install exa-py",
+      "Use the Exa MCP server in compatible clients by adding the server URL"
+    ],
+    "usageNotes": [
+      "Exa is a hosted service accessed via API or MCP server; it is not a locally runnable search engine",
+      "A free plan is available for casual use, with higher limits requiring an API key",
+      "Search types range from instant (~200ms) to deep-reasoning (up to 40 seconds)",
+      "The service supports code search, category-based filtering, and structured output schemas"
+    ],
+    "url": "https://exa.ai/",
+    "domain": "exa.ai",
+    "favicon": "https://exa.ai/favicon.ico",
+    "platforms": [
+      "api"
+    ],
+    "executionMode": "cloud",
+    "signupRequirement": "optional",
+    "apiKeyRequirement": "depends",
+    "pricing": "freemium",
+    "priceDetails": "Free plan available for casual use; paid usage-based pricing for higher volume and features",
+    "tags": [
+      "search",
+      "api",
+      "ai-agent",
+      "web-search",
+      "embedding",
+      "code-search"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [],
+    "github": "",
+    "docs": "https://exa.ai/docs",
+    "addedAt": "2026-09-01",
+    "updatedAt": "2026-09-01",
+    "lastVerifiedAt": "2026-09-01",
+    "sources": [
+      "https://exa.ai/",
+      "https://exa.ai/docs"
+    ]
   }
 ]
