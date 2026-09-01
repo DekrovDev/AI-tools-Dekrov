@@ -2910,5 +2910,70 @@
       "https://github.com/tavily-ai/tavily-python",
       "https://docs.tavily.com/"
     ]
+  },
+  {
+    "id": "brave-search-api",
+    "name": "Brave Search API",
+    "category": "search",
+    "description": "A REST API providing programmatic access to Brave's independent web search index. It enables web, news, image, and video searches, returning structured JSON results for integration into applications and AI workflows .",
+    "bestFor": [
+      "Integrating real-time web search into AI applications",
+      "Grounding AI model responses with current information",
+      "Building privacy-focused search tools and news monitors",
+      "Performing research and data collection using an independent search index"
+    ],
+    "strengths": [
+      "Powered by Brave's own independent search index, not reliant on Google or Bing",
+      "Includes a dedicated News Search API endpoint for real-time articles",
+      "Offers a free tier with 2,000 queries per month",
+      "Supports 'LLM Context' endpoint for AI grounding with source extraction"
+    ],
+    "gettingStarted": [
+      "Sign up for an account at the Brave Search API portal.",
+      "Choose a subscription plan (a free plan is available).",
+      "Generate an API key from the dashboard.",
+      "Include the API key in the `X-Subscription-Token` header for API requests ."
+    ],
+    "usageNotes": [
+      "Authentication is performed using an API key via the `X-Subscription-Token` header .",
+      "The API exposes multiple endpoints including `/web/search`, `/news/search`, and `/local/pois` .",
+      "Rate limits vary by plan, e.g., 1 request per second on the free tier .",
+      "The `llm-context` mode can be used for AI grounding, returning extracted text chunks from search results ."
+    ],
+    "url": "https://brave.com/search/api",
+    "domain": "brave.com",
+    "favicon": "https://brave.com/static-assets/images/brave-logo-sans-text.svg",
+    "platforms": [
+      "api"
+    ],
+    "executionMode": "cloud",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "required",
+    "pricing": "freemium",
+    "priceDetails": "Free tier with 2,000 queries/month; paid plans start from $3/month for 1,000 queries .",
+    "tags": [
+      "search-api",
+      "web-search",
+      "news-api",
+      "brave",
+      "ai-grounding",
+      "real-time-data"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [
+      "brave",
+      "brave-pro"
+    ],
+    "github": "",
+    "docs": "https://api.search.brave.com/app/documentation/web-search/get-started",
+    "addedAt": "2026-09-01",
+    "updatedAt": "2026-09-01",
+    "lastVerifiedAt": "2026-09-01",
+    "sources": [
+      "https://brave.com/search/api",
+      "https://api.search.brave.com/app/documentation/web-search/get-started"
+    ]
   }
 ]
