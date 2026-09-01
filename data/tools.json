@@ -2718,5 +2718,64 @@
       "https://www.semanticscholar.org/",
       "https://www.semanticscholar.org/product/api"
     ]
+  },
+  {
+    "id": "phind",
+    "name": "Phind",
+    "category": "search",
+    "description": "An AI-powered search engine tailored for developers, providing answers to technical questions alongside cited sources .",
+    "bestFor": [
+      "Finding technical solutions and documentation",
+      "Debugging code issues",
+      "Learning new technologies"
+    ],
+    "strengths": [
+      "Provides cited sources with answers for verification",
+      "Optimized for code generation and technical reasoning",
+      "Offers an interactive conversational search experience"
+    ],
+    "gettingStarted": [
+      "Navigate to phind.com",
+      "Enter a technical question in the search bar"
+    ],
+    "usageNotes": [
+      "Can be used without an account",
+      "The free tier limits the use of the best models, such as 10 requests per day",
+      "Paid plans offer increased usage, faster inference, and data privacy options"
+    ],
+    "url": "https://phind.com/",
+    "domain": "phind.com",
+    "favicon": "",
+    "platforms": [
+      "web",
+      "browser-extension"
+    ],
+    "executionMode": "cloud",
+    "signupRequirement": "optional",
+    "apiKeyRequirement": "not-required",
+    "pricing": "freemium",
+    "priceDetails": "Free tier available with limited daily best-model requests. Paid Pro plan at $20/month (or $17/month annually) and Business plan at $40/month .",
+    "tags": [
+      "search",
+      "developer",
+      "code",
+      "ai"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [
+      "Phind-70B",
+      "Phind-405B"
+    ],
+    "github": "https://huggingface.co/Phind",
+    "docs": "",
+    "addedAt": "2026-09-01",
+    "updatedAt": "2026-09-01",
+    "lastVerifiedAt": "2026-09-01",
+    "sources": [
+      "https://phind.com/",
+      "https://huggingface.co/Phind"
+    ]
   }
 ]
