@@ -200,6 +200,11 @@ test("detects platforms, category, pricing, tags and models conservatively", asy
   // "research assistant" must prefer research over the generic chat-llm rule.
   assert.equal(detectCategory("research assistant for literature search and papers", categoriesAllowed), "research");
   assert.equal(detectCategory("a chat assistant for everyday questions", categoriesAllowed), "chat-llm");
+  // Expanded taxonomy: broad-catalog categories infer correctly.
+  assert.equal(detectCategory("an ai tutor for students", categoriesAllowed), "education");
+  assert.equal(detectCategory("sales prospecting and lead generation", categoriesAllowed), "sales");
+  assert.equal(detectCategory("meeting notes and transcription", categoriesAllowed), "meetings");
+  assert.equal(detectCategory("3d model generation from text", categoriesAllowed), "3d");
 
   const pricing = detectPricing("Free plan available", "Pro plan is $20/month");
   assert.equal(pricing.pricing, "freemium");

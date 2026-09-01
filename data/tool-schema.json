@@ -4,7 +4,7 @@
   "properties": {
     "id": { "type": "string", "required": true, "pattern": "kebab-case", "description": "Stable kebab-case identifier" },
     "name": { "type": "string", "required": true, "description": "Official tool name" },
-    "category": { "type": "string", "required": true, "enum": ["coding-agents", "orchestration", "chat-llm", "research", "audio", "dev-tools", "hosting", "other"] },
+    "category": { "type": "string", "required": true, "enum": ["coding-agents", "app-builders", "orchestration", "chat-llm", "research", "search", "automation", "browser-agents", "local-ai", "inference", "hosting", "rag", "observability", "dev-tools", "testing", "security", "data-analysis", "databases", "writing", "documents", "presentations", "meetings", "audio", "voice", "music", "image", "video", "design", "3d", "translation", "education", "customer-support", "sales", "marketing", "legal", "finance", "healthcare", "productivity", "other"] },
     "description": { "type": "string", "description": "Short factual description" },
     "bestFor": { "type": "array", "items": { "type": "string" }, "description": "Specific tasks or audiences the tool fits best" },
     "strengths": { "type": "array", "items": { "type": "string" }, "description": "Factual strengths or differentiators" },

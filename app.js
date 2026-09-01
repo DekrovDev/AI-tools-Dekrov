@@ -10,10 +10,25 @@ import { INSTALL_FAILURE_TEMPLATE, INSTALL_FAILURE_LABEL, installFailureIssueUrl
 import { looksLikeOfficialUrlQuery, matchingToolsForUrl, missingToolPrefill, shouldOfferMissingToolSuggestion } from "./assets/js/missing-tool-suggestion.js";
 
 const CATEGORY_META = {
-  "coding-agents": { label: "Coding agents", short: "Coding", color: "#d2f25b" }, orchestration: { label: "Orchestration", short: "Agents", color: "#c2a5ff" },
-  "chat-llm": { label: "Chat / LLM", short: "Chat / LLM", color: "#8db7ff" }, research: { label: "Research", short: "Research", color: "#ffb26b" },
-  audio: { label: "Audio", short: "Audio", color: "#8db7ff" }, "dev-tools": { label: "Dev tools", short: "Dev tools", color: "#d2f25b" },
-  hosting: { label: "Hosting / Infrastructure", short: "Hosting", color: "#ffb26b" }, other: { label: "Other", short: "Other", color: "#98a0ad" }
+  "coding-agents": { label: "Coding agents", short: "Coding", color: "#d2f25b" }, "app-builders": { label: "App builders", short: "App builders", color: "#d2f25b" },
+  orchestration: { label: "Orchestration", short: "Orchestration", color: "#c2a5ff" }, "chat-llm": { label: "Chat / LLM", short: "Chat / LLM", color: "#8db7ff" },
+  research: { label: "Research", short: "Research", color: "#ffb26b" }, search: { label: "Search", short: "Search", color: "#ffb26b" },
+  automation: { label: "Automation", short: "Automation", color: "#c2a5ff" }, "browser-agents": { label: "Browser agents", short: "Browser", color: "#c2a5ff" },
+  "local-ai": { label: "Local AI", short: "Local AI", color: "#8db7ff" }, inference: { label: "Inference", short: "Inference", color: "#ffb26b" },
+  hosting: { label: "Hosting / Infrastructure", short: "Hosting", color: "#ffb26b" }, rag: { label: "RAG", short: "RAG", color: "#c2a5ff" },
+  observability: { label: "Observability", short: "Observability", color: "#ffb26b" }, "dev-tools": { label: "Dev tools", short: "Dev tools", color: "#d2f25b" },
+  testing: { label: "Testing", short: "Testing", color: "#d2f25b" }, security: { label: "Security", short: "Security", color: "#ff7777" },
+  "data-analysis": { label: "Data analysis", short: "Data", color: "#8db7ff" }, databases: { label: "Databases", short: "Databases", color: "#8db7ff" },
+  writing: { label: "Writing", short: "Writing", color: "#ffb26b" }, documents: { label: "Documents", short: "Documents", color: "#ffb26b" },
+  presentations: { label: "Presentations", short: "Slides", color: "#ffb26b" }, meetings: { label: "Meetings", short: "Meetings", color: "#ffb26b" },
+  audio: { label: "Audio", short: "Audio", color: "#8db7ff" }, voice: { label: "Voice", short: "Voice", color: "#8db7ff" }, music: { label: "Music", short: "Music", color: "#8db7ff" },
+  image: { label: "Image", short: "Image", color: "#c2a5ff" }, video: { label: "Video", short: "Video", color: "#c2a5ff" }, design: { label: "Design", short: "Design", color: "#c2a5ff" },
+  "3d": { label: "3D", short: "3D", color: "#c2a5ff" }, translation: { label: "Translation", short: "Translation", color: "#ffb26b" },
+  education: { label: "Education", short: "Education", color: "#d2f25b" }, "customer-support": { label: "Customer support", short: "Support", color: "#d2f25b" },
+  sales: { label: "Sales", short: "Sales", color: "#d2f25b" }, marketing: { label: "Marketing", short: "Marketing", color: "#d2f25b" },
+  legal: { label: "Legal", short: "Legal", color: "#ff7777" }, finance: { label: "Finance", short: "Finance", color: "#ff7777" },
+  healthcare: { label: "Healthcare", short: "Healthcare", color: "#ff7777" }, productivity: { label: "Productivity", short: "Productivity", color: "#d2f25b" },
+  other: { label: "Other", short: "Other", color: "#98a0ad" }
 };
 const PRICE_LABELS = { free: "Free", freemium: "Freemium", paid: "Paid", "usage-based": "Usage-based" };
 const EXECUTION_LABELS = { local: "Local", cloud: "Cloud", hybrid: "Hybrid", unknown: "Unknown" };
@@ -764,15 +779,46 @@ Wrong:
 
 ## category
 
-MUST be exactly one of:
+MUST be exactly one of the current AI-Dekrov catalog categories:
 
 - coding-agents
+- app-builders
 - orchestration
 - chat-llm
 - research
-- audio
-- dev-tools
+- search
+- automation
+- browser-agents
+- local-ai
+- inference
 - hosting
+- rag
+- observability
+- dev-tools
+- testing
+- security
+- data-analysis
+- databases
+- writing
+- documents
+- presentations
+- meetings
+- audio
+- voice
+- music
+- image
+- video
+- design
+- 3d
+- translation
+- education
+- customer-support
+- sales
+- marketing
+- legal
+- finance
+- healthcare
+- productivity
 - other
 
 Choose the category describing the tool's PRIMARY role.
@@ -784,6 +830,9 @@ Category guidance:
 coding-agents
 = AI coding agents, coding assistants, autonomous software-development agents
 
+app-builders
+= prompt/no-code app and website builders
+
 orchestration
 = agent frameworks, multi-agent systems, AI workflow/orchestration frameworks
 
@@ -791,16 +840,106 @@ chat-llm
 = general-purpose AI chat/model interfaces
 
 research
-= tools primarily intended for AI-assisted research/search/investigation
+= tools primarily intended for AI-assisted research/investigation
 
-audio
-= speech/audio AI tooling
+search
+= AI search / answer engines
+
+automation
+= AI workflow automation and general AI-agent platforms
+
+browser-agents
+= browser-use / web automation agents
+
+local-ai
+= locally running or self-hosted AI runtimes and chat apps
+
+inference
+= model inference APIs and inference platforms
+
+hosting
+= inference/API/model hosting/cloud AI infrastructure
+
+rag
+= retrieval-augmented generation and vector retrieval tooling
+
+observability
+= LLM tracing, evaluation, and observability
 
 dev-tools
 = developer-focused AI infrastructure/utilities that are not primarily coding agents
 
-hosting
-= inference/API/model hosting/cloud AI infrastructure
+testing
+= AI-assisted testing and QA
+
+security
+= AI security tooling
+
+data-analysis
+= AI-assisted data analysis and analytics
+
+databases
+= AI/vector databases
+
+writing
+= AI writing assistants and copywriting
+
+documents
+= document processing, extraction, and OCR
+
+presentations
+= AI presentation and slide generation
+
+meetings
+= AI meeting notes/transcription assistants
+
+audio
+= audio AI tooling (editing, podcasts, effects)
+
+voice
+= speech/voice AI (TTS, STT, voice agents)
+
+music
+= AI music generation
+
+image
+= AI image generation/editing
+
+video
+= AI video generation/editing
+
+design
+= AI design tools
+
+3d
+= AI 3D generation/modeling
+
+translation
+= AI translation/dubbing/localization
+
+education
+= AI tutoring and learning tools
+
+customer-support
+= AI customer-support agents
+
+sales
+= AI sales tooling
+
+marketing
+= AI marketing tooling
+
+legal
+= AI legal tooling
+
+finance
+= AI finance tooling
+
+healthcare
+= AI healthcare tooling
+
+productivity
+= AI productivity assistants
 
 other
 = genuinely outside the above

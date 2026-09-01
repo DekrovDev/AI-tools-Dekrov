@@ -55,12 +55,43 @@ const PLATFORM_RULES = [
 ];
 
 const CATEGORY_RULES = [
+  { pattern: /\b(?:app[\s-]+builders?|no[\s-]+code[\s-]+app|vibe[\s-]+coding)\b/giu, value: "app-builders" },
   { pattern: /\b(?:multi[\s-]+agent[\s-]+framework|agent[\s-]+framework|multi[\s-]+agent[\s-]+orchestration|orchestration)\b/giu, value: "orchestration" },
   { pattern: /\b(?:coding[\s-]+agents?|code[\s-]+agents?|programming[\s-]+agents?|code[\s-]+assistant)\b/giu, value: "coding-agents" },
+  { pattern: /\b(?:workflow[\s-]+automation|automation[\s-]+platform|ai[\s-]+agents?)\b/giu, value: "automation" },
+  { pattern: /\b(?:browser[\s-]+agents?|browser[\s-]+automation)\b/giu, value: "browser-agents" },
+  { pattern: /\b(?:local[\s-]+ai|local[\s-]+llm|self[\s-]+hosted[\s-]+ai)\b/giu, value: "local-ai" },
+  { pattern: /\b(?:model[\s-]+inference|inference[\s-]+api|inference[\s-]+platform)\b/giu, value: "inference" },
+  { pattern: /\b(?:rag|retrieval[\s-]+augmented)\b/giu, value: "rag" },
+  { pattern: /\b(?:llm[\s-]+observability|ai[\s-]+observability|tracing)\b/giu, value: "observability" },
   { pattern: /\b(?:developer[\s-]+tools?|dev[\s-]+tools?)\b/giu, value: "dev-tools" },
+  { pattern: /\b(?:ai[\s-]+testing|test[\s-]+automation)\b/giu, value: "testing" },
+  { pattern: /\b(?:ai[\s-]+security|security[\s-]+testing)\b/giu, value: "security" },
+  { pattern: /\b(?:data[\s-]+analysis|data[\s-]+analytics)\b/giu, value: "data-analysis" },
+  { pattern: /\b(?:vector[\s-]+databases?|ai[\s-]+databases?)\b/giu, value: "databases" },
+  { pattern: /\b(?:ai[\s-]+writing|writing[\s-]+assistant)\b/giu, value: "writing" },
+  { pattern: /\b(?:document[\s-]+ai|document[\s-]+processing|ocr)\b/giu, value: "documents" },
+  { pattern: /\b(?:ai[\s-]+presentations?|slide[\s-]+generator)\b/giu, value: "presentations" },
+  { pattern: /\b(?:ai[\s-]+meeting|meeting[\s-]+notetaker)\b/giu, value: "meetings" },
   { pattern: /\b(?:research[\s-]+tools?|research)\b/giu, value: "research" },
+  { pattern: /\b(?:ai[\s-]+search|web[\s-]+search)\b/giu, value: "search" },
   { pattern: /\b(?:hosting[\s-]+infrastructure|infrastructure[\s-]+hosting)\b/giu, value: "hosting" },
   { pattern: /\b(?:chat[\s-]+llm|llm[\s-]+chat)\b/giu, value: "chat-llm" },
+  { pattern: /\b(?:ai[\s-]+voice|voice[\s-]+ai|text[\s-]+to[\s-]+speech|speech[\s-]+to[\s-]+text)\b/giu, value: "voice" },
+  { pattern: /\b(?:ai[\s-]+music|music[\s-]+generation)\b/giu, value: "music" },
+  { pattern: /\b(?:ai[\s-]+image|image[\s-]+generation)\b/giu, value: "image" },
+  { pattern: /\b(?:ai[\s-]+video|video[\s-]+generation)\b/giu, value: "video" },
+  { pattern: /\b(?:ai[\s-]+design|design[\s-]+assistant)\b/giu, value: "design" },
+  { pattern: /\b(?:ai[\s-]+3d|3d[\s-]+generation)\b/giu, value: "3d" },
+  { pattern: /\b(?:ai[\s-]+translation|translation[\s-]+ai)\b/giu, value: "translation" },
+  { pattern: /\b(?:ai[\s-]+education|ai[\s-]+tutor)\b/giu, value: "education" },
+  { pattern: /\b(?:ai[\s-]+customer[\s-]+support|support[\s-]+agent)\b/giu, value: "customer-support" },
+  { pattern: /\b(?:ai[\s-]+sales|sales[\s-]+ai)\b/giu, value: "sales" },
+  { pattern: /\b(?:ai[\s-]+marketing|marketing[\s-]+ai)\b/giu, value: "marketing" },
+  { pattern: /\b(?:ai[\s-]+legal|legal[\s-]+ai)\b/giu, value: "legal" },
+  { pattern: /\b(?:ai[\s-]+finance|financial[\s-]+ai)\b/giu, value: "finance" },
+  { pattern: /\b(?:ai[\s-]+healthcare|healthcare[\s-]+ai)\b/giu, value: "healthcare" },
+  { pattern: /\b(?:ai[\s-]+productivity|productivity[\s-]+ai)\b/giu, value: "productivity" },
   { pattern: /\baudio[\s-]+tools?\b/giu, value: "audio" }
 ];
 
@@ -73,7 +104,7 @@ const CONCEPT_RULES = [
 const FILTER_LABELS = {
   pricing: { free: "Free", freemium: "Freemium", paid: "Paid", "usage-based": "Usage-based" },
   platforms: { web: "Web", desktop: "Desktop", mobile: "Mobile", "browser-extension": "Browser extension", cli: "CLI", vscode: "VS Code", api: "API" },
-  categories: { "coding-agents": "Coding agents", orchestration: "Orchestration", "chat-llm": "Chat / LLM", research: "Research", audio: "Audio", "dev-tools": "Dev tools", hosting: "Hosting", other: "Other" },
+  categories: { "coding-agents": "Coding agents", "app-builders": "App builders", orchestration: "Orchestration", "chat-llm": "Chat / LLM", research: "Research", search: "Search", automation: "Automation", "browser-agents": "Browser agents", "local-ai": "Local AI", inference: "Inference", hosting: "Hosting", rag: "RAG", observability: "Observability", "dev-tools": "Dev tools", testing: "Testing", security: "Security", "data-analysis": "Data analysis", databases: "Databases", writing: "Writing", documents: "Documents", presentations: "Presentations", meetings: "Meetings", audio: "Audio", voice: "Voice", music: "Music", image: "Image", video: "Video", design: "Design", "3d": "3D", translation: "Translation", education: "Education", "customer-support": "Customer support", sales: "Sales", marketing: "Marketing", legal: "Legal", finance: "Finance", healthcare: "Healthcare", productivity: "Productivity", other: "Other" },
   concepts: { "open-source": "Open source", "self-hosted": "Self-hosted", byok: "BYOK" }
 };
 
