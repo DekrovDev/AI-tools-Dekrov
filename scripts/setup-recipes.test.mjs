@@ -198,7 +198,8 @@ test("all initial setup metadata is official-source-backed and catalog-valid", (
   const setups = Object.values(parsed.tools);
   const envVars = setups.flatMap((setup) => setup.envVars);
   const recipes = setups.flatMap((setup) => setup.commandRecipes);
-  assert.equal(catalog.length, 31);
+  const setupToolIds = Object.keys(parsed.tools);
+  assert.ok(setupToolIds.every((id) => knownToolIds.has(id)));
   assert.equal(setups.length, 11);
   assert.equal(envVars.length, 14);
   assert.equal(recipes.length, 0);
