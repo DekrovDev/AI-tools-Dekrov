@@ -2480,5 +2480,63 @@
       "https://notebooklm.google.com/",
       "https://support.google.com/notebooklm"
     ]
+  },
+  {
+    "id": "scispace",
+    "name": "SciSpace",
+    "category": "research",
+    "description": "An AI-powered research platform that helps users discover, understand, and analyze scientific literature. It features a semantic search engine, an interactive PDF reader with a Copilot assistant, and tools for writing and citation management .",
+    "bestFor": [
+      "Literature reviews",
+      "Understanding complex scientific papers",
+      "Quickly finding answers to research questions"
+    ],
+    "strengths": [
+      "Can explain math, tables, and technical jargon in papers",
+      "Provides citations with answers from source documents",
+      "Supports natural language queries across a large database of papers"
+    ],
+    "gettingStarted": [
+      "Create a free account on scispace.com",
+      "Use the search bar to ask a research question in natural language",
+      "Upload a PDF and use the chat feature to ask specific questions about it"
+    ],
+    "usageNotes": [
+      "Previously known as Typeset.io",
+      "The Copilot provides answers with citations and references to the source location",
+      "Supports queries in multiple languages, including Spanish",
+      "Uploaded documents are private and not used to train AI models"
+    ],
+    "url": "https://scispace.com/",
+    "domain": "scispace.com",
+    "favicon": "https://typeset.io/favicon.ico",
+    "platforms": [
+      "web",
+      "browser-extension"
+    ],
+    "executionMode": "cloud",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "not-required",
+    "pricing": "freemium",
+    "priceDetails": "Free tier with limited standard searches and daily Copilot questions; Premium plan offers unlimited features, Deep Review, and full SciSpace Agent access .",
+    "tags": [
+      "research",
+      "academic",
+      "literature-review",
+      "pdf",
+      "science"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [],
+    "github": "",
+    "docs": "https://scispace.com/",
+    "addedAt": "2026-09-01",
+    "updatedAt": "2026-09-01",
+    "lastVerifiedAt": "2026-09-01",
+    "sources": [
+      "https://scispace.com/"
+    ]
   }
 ]
