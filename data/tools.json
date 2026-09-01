@@ -2538,5 +2538,65 @@
     "sources": [
       "https://scispace.com/"
     ]
+  },
+  {
+    "id": "researchrabbit",
+    "name": "ResearchRabbit",
+    "category": "research",
+    "description": "An AI-powered literature discovery and mapping platform that helps researchers find, organize, and visualize academic papers through citation networks .",
+    "bestFor": [
+      "Discovering relevant academic papers from a seed article",
+      "Visualizing citation networks and author connections",
+      "Organizing literature reviews into collections",
+      "Staying updated with new research in a field"
+    ],
+    "strengths": [
+      "Interactive citation and co-author network visualization",
+      "Iterative discovery engine that refines results as you add papers",
+      "Free tier available with unlimited searches and collections",
+      "Zotero integration for importing and exporting references"
+    ],
+    "gettingStarted": [
+      "Go to the ResearchRabbit website at researchrabbit.ai",
+      "Create a free account using your email address",
+      "Search for a topic or add a 'seed' paper using its title, DOI, or PMID",
+      "Add relevant papers to a collection to begin discovering related works"
+    ],
+    "usageNotes": [
+      "The tool is primarily optimized for discovering journal articles, which may limit discovery of books or conference proceedings",
+      "Visualization maps are interactive and can be exported as PNG images",
+      "Reference lists can be exported in CSV, RIS, and BibTeX formats",
+      "Personal account creation is required to use the service"
+    ],
+    "url": "https://www.researchrabbit.ai/",
+    "domain": "researchrabbit.ai",
+    "favicon": "https://www.researchrabbit.ai/favicon.ico",
+    "platforms": [
+      "web"
+    ],
+    "executionMode": "cloud",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "not-required",
+    "pricing": "freemium",
+    "priceDetails": "Free tier available; RR+ premium plan starts at $10/month or $12.50/month with country discounts available .",
+    "tags": [
+      "research",
+      "literature-discovery",
+      "citation-mapping",
+      "academic"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [],
+    "github": "",
+    "docs": "https://learn.researchrabbit.ai/",
+    "addedAt": "2026-09-01",
+    "updatedAt": "2026-09-01",
+    "lastVerifiedAt": "2026-09-01",
+    "sources": [
+      "https://www.researchrabbit.ai/",
+      "https://learn.researchrabbit.ai/"
+    ]
   }
 ]
