@@ -2221,6 +2221,7 @@
     ]
   },
   {
+
     "id": "consensus",
     "name": "Consensus",
     "category": "research",
@@ -2265,21 +2266,85 @@
       "science",
       "literature-review",
       "peer-reviewed"
+
+    "id": "felo",
+    "name": "Felo",
+    "category": "search",
+    "description": "Felo is a multilingual AI-powered answer engine and search assistant that uses AI agent technology to retrieve and synthesize information from global sources, including web pages, academic papers, and social media platforms. It also offers features for content creation, such as presentation and webpage generation .",
+    "bestFor": [
+      "Cross-language research and information discovery",
+      "Getting AI-generated answers with cited sources",
+      "Creating presentations, web pages, and mind maps from search results"
+    ],
+    "strengths": [
+      "Provides precise answers with traceable sources",
+      "Supports search and reading across multiple languages",
+      "Integrates an AI agent builder for creating custom assistants without coding",
+      "Offers multi-platform support including web, mobile apps, and a browser extension"
+    ],
+    "gettingStarted": [
+      "Visit the official website at felo.ai",
+      "Enter a search query in your preferred language",
+      "Review the AI-generated answer and its sources"
+    ],
+    "usageNotes": [
+      "The service is free with daily credits for advanced features like professional search and content generation",
+      "Paid subscriptions (Professional/Monthly/Annual plans) provide additional credits and access to premium features",
+      "Custom AI agents can be created and shared on the Felo platform",
+      "Felo is developed by Felo Inc., a Japanese technology company"
+    ],
+    "url": "https://felo.ai/",
+    "domain": "felo.ai",
+    "favicon": "https://felo.ai/favicon.ico",
+    "platforms": [
+      "web",
+      "mobile",
+      "browser-extension"
+    ],
+    "executionMode": "cloud",
+    "signupRequirement": "optional",
+    "apiKeyRequirement": "not-required",
+    "pricing": "freemium",
+    "priceDetails": "Free Standard plan with daily credits; paid plans start at $14.99/month or $149.99/year .",
+    "tags": [
+      "ai search",
+      "answer engine",
+      "research",
+      "multilingual",
+      "agent",
+      "no-code",
+      "productivity"
+
     ],
     "install": "",
     "start": "",
     "commands": [],
     "models": [
+
       "OpenAI best-in-class LLMs"
     ],
     "github": "",
     "docs": "https://help.consensus.app/",
+
+      "Claude Fable",
+      "OpenAI o1",
+      "Claude 3.5 Sonnet",
+      "Gemini 3 Pro"
+    ],
+    "github": "",
+    "docs": "https://felo.ai",
+
     "addedAt": "2026-09-01",
     "updatedAt": "2026-09-01",
     "lastVerifiedAt": "2026-09-01",
     "sources": [
+
       "https://consensus.app/",
       "https://help.consensus.app/"
+
+      "https://felo.ai/",
+      "https://felo.ai"
+
     ]
   }
 ]
