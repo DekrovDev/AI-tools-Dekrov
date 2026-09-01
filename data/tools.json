@@ -2079,5 +2079,76 @@
       "https://www.perplexity.ai/",
       "https://docs.perplexity.ai/"
     ]
+  },
+  {
+    "id": "genspark",
+    "name": "Genspark",
+    "category": "other",
+    "description": "Genspark is an all-in-one AI workspace that uses autonomous agents to handle tasks like research, document drafting, presentation creation, and application development . The platform integrates a persistent memory system called SecondBrain to retain context across various work tools .",
+    "bestFor": [
+      "Knowledge workers seeking to automate repetitive tasks",
+      "Teams that want AI agents to collaborate within shared workspaces",
+      "Creating presentations, documents, and spreadsheets from natural language prompts"
+    ],
+    "strengths": [
+      "Offers a wide range of AI-powered tools including chat, image generation, and video generation",
+      "Features a persistent memory layer (SecondBrain) that connects to emails, calendars, and workplace tools",
+      "Provides team collaboration features through GenTeam"
+    ],
+    "gettingStarted": [
+      "Visit the official website at genspark.ai",
+      "Sign up for an account",
+      "Begin using the AI Workspace through the web or mobile applications"
+    ],
+    "usageNotes": [
+      "The platform is primarily cloud-based and requires a user account .",
+      "Available on web, iOS, and Android .",
+      "Pricing includes a free tier with paid plans like Genspark Plus (starting at approximately $24.99/month) and Genspark Pro ($249.99/month) ."
+    ],
+    "url": "https://www.genspark.ai/",
+    "domain": "www.genspark.ai",
+    "favicon": "https://www.genspark.ai/favicon.ico",
+    "platforms": [
+      "web",
+      "mobile",
+      "api"
+    ],
+    "executionMode": "cloud",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "not-required",
+    "pricing": "freemium",
+    "priceDetails": "Free tier available. Paid plans include Genspark Plus (starting at $24.99/month) and Genspark Pro ($249.99/month) .",
+    "tags": [
+      "ai-workspace",
+      "productivity",
+      "agent",
+      "research",
+      "presentations",
+      "document-creation"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [
+      "GPT",
+      "Claude",
+      "Gemini",
+      "Grok",
+      "Nano Banana Pro",
+      "FLUX",
+      "Seedream",
+      "Veo",
+      "Sora",
+      "Kling",
+      "Seedance"
+    ],
+    "github": "",
+    "docs": "https://www.genspark.ai/",
+    "addedAt": "2026-09-01",
+    "updatedAt": "2026-09-01",
+    "lastVerifiedAt": "2026-09-01",
+    "sources": [
+      "https://www.genspark.ai/"
+    ]
   }
 ]
