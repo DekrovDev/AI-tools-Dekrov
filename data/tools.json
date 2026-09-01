@@ -2412,5 +2412,73 @@
       "https://scite.ai/",
       "https://scite.ai/getting-started"
     ]
+  },
+  {
+    "id": "notebooklm",
+    "name": "NotebookLM",
+    "category": "research",
+    "description": "An AI-powered research assistant that grounds its responses in user-uploaded sources. It helps synthesize information from documents, websites, and videos into summaries, study guides, and audio overviews .",
+    "bestFor": [
+      "Synthesizing information from multiple documents",
+      "Creating study guides and briefing documents",
+      "Generating AI podcasts from source material",
+      "Academic research and literature review",
+      "Analyzing meeting notes and transcripts"
+    ],
+    "strengths": [
+      "Responses are grounded in user-provided sources with clear citations",
+      "Generates audio overviews (AI podcasts) from uploaded content",
+      "Supports a wide variety of source formats, including PDFs, websites, YouTube videos, and Google Docs",
+      "Offers a Studio for creating infographics, slide decks, and mind maps from your sources"
+    ],
+    "gettingStarted": [
+      "Visit the official NotebookLM website.",
+      "Sign in with your Google account .",
+      "Create a new notebook for your project .",
+      "Upload your primary sources (PDFs, web links, videos, etc.) .",
+      "Start asking questions in the chat interface or generate new content (e.g., summaries, audio overviews) ."
+    ],
+    "usageNotes": [
+      "NotebookLM is a cloud-based web application accessed via a Google account .",
+      "Sources are indexed to provide AI responses that are anchored to the provided material .",
+      "An official unofficial Python API and CLI tools exist, but they are third-party projects and not official Google products .",
+      "Pricing is based on a tiered system with a free tier and several paid plans (Plus, Pro, Ultra, Enterprise) that offer higher usage limits and features ."
+    ],
+    "url": "https://notebooklm.google.com/",
+    "domain": "notebooklm.google.com",
+    "favicon": "https://notebooklm.google.com/favicon.ico",
+    "platforms": [
+      "web",
+      "mobile"
+    ],
+    "executionMode": "cloud",
+    "signupRequirement": "required",
+    "apiKeyRequirement": "not-required",
+    "pricing": "freemium",
+    "priceDetails": "Free tier available; paid plans (Plus, Pro, Ultra, Enterprise) with higher usage limits and features, accessible through Google AI subscriptions .",
+    "tags": [
+      "research",
+      "ai-assistant",
+      "google",
+      "gemini",
+      "document-analysis",
+      "podcast-generation"
+    ],
+    "install": "",
+    "start": "",
+    "commands": [],
+    "models": [
+      "Gemini 3.5",
+      "Gemini 3"
+    ],
+    "github": "",
+    "docs": "https://support.google.com/notebooklm",
+    "addedAt": "2026-09-01",
+    "updatedAt": "2026-09-01",
+    "lastVerifiedAt": "2026-09-01",
+    "sources": [
+      "https://notebooklm.google.com/",
+      "https://support.google.com/notebooklm"
+    ]
   }
 ]
