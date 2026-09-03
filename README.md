@@ -13,6 +13,16 @@ Browse trusted links, supported platforms, pricing, install commands, and short 
 - Save favorites and your theme preference in your own browser.
 - Open a dedicated page for every tool, with its official links and commands.
 
+## Dev Resources catalog
+
+AI-Dekrov has two catalogs. The **AI Tools** catalog lists AI products; the **Dev Resources** catalog lists useful websites and utilities for developers: ready UI components, CSS/JS snippets, generators, icon and SVG libraries, mock API tools, JSON utilities, and similar sites that provide a concrete, reusable solution to a development task.
+
+Switch between the two with the **AI Tools | Dev Resources** switcher at the top of the catalog. Dev Resources keeps the same product experience: categories, search, filters (price, open source, no signup, copyable code), sorting, dedicated resource pages, favorites, My Stack, and collections.
+
+Resources live in `data/dev-resources.json` and are added the same way tools are — one structured entry per resource, with no UI code changes needed. Each entry carries an id, name, category, description, official URL, tags, technologies, pricing, and flags such as open source / no signup / copyable code. To add a resource, edit the file following the existing entries; validation keeps malformed entries out automatically.
+
+The catalog intentionally starts empty: entries are added manually over time and must meet the same quality bar as AI tools (real site, concrete resource, verifiable official URL).
+
 ## Suggest a tool
 
 Click **Suggest a tool** on the website and choose the fastest option:

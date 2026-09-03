@@ -8,6 +8,11 @@ function decodeRouteSegment(value) {
 
 export function parseRouteHash(hash = "") {
   if (hash === "#/start") return { type: "start" };
+  if (hash === "#/dev") return { type: "dev" };
+  if (hash === "#/dev/favorites") return { type: "dev-favorites" };
+  if (hash === "#/dev/stack") return { type: "dev-stack" };
+  if (hash.startsWith("#/dev/category/")) return { type: "dev-category", id: decodeRouteSegment(hash.slice("#/dev/category/".length)) };
+  if (hash.startsWith("#/dev/resource/")) return { type: "dev-resource", id: decodeRouteSegment(hash.slice("#/dev/resource/".length)) };
   if (hash === "#/use-cases") return { type: "use-cases" };
   if (hash.startsWith("#/use-cases/")) return { type: "use-case", id: decodeRouteSegment(hash.slice("#/use-cases/".length)) };
   if (hash === "#/stack") return { type: "stack" };

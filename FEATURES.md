@@ -94,3 +94,18 @@ The local Node.js script downloads a public page and attempts to find metadata, 
 [`data/tools.json`](data/tools.json) is the one public catalog database. GitHub Pages publishes the same merged data to every visitor.
 
 `localStorage` is used only for theme, favorites, personal notes, UI preferences, and unfinished drafts. It never stores published tools.
+
+## Dev Resources catalog
+
+AI-Dekrov ships a second catalog alongside AI Tools. The **Dev Resources** switcher at the top of the catalog opens developer resources: websites that provide a concrete resource, generator, reusable component, or tool for programming and web development (UI components, templates, CSS effects, animations and loaders, icons and SVG libraries, color/font tools, generators, code snippets, mock API and testing tools, JSON utilities, and small developer utilities).
+
+The catalog experience mirrors AI Tools:
+
+- Categories in the sidebar and as filter chips; search covers names, descriptions, tags, technologies, and categories.
+- Filters for price, **Open source**, **No signup**, and **Copy code**, plus sorting and dedicated resource pages with a Back action.
+- Every resource can be favorited and saved to My Stack or a Collection; saved items live in the same browser storage as AI Tools but are typed with a `dev:` prefix so AI tool IDs and dev resource IDs can never collide.
+- **Saved** scope chips (All resources / Favorites / My Stack) show dev-scoped views of your saved items.
+
+Resources live in [`data/dev-resources.json`](data/dev-resources.json) and are validated by the shared pure parser (`assets/js/dev-resources.js`) — add one structured entry and it appears without touching UI code. Dev Resources is intentionally separate from AI Tools: use the AI Tools catalog for AI products, and Dev Resources for developer sites, even when a site has optional AI-assisted features.
+
+The starter catalog is intentionally empty; entries are added manually with the same quality bar as AI tools (a real, useful resource with a verifiable official URL).

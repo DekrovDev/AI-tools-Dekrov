@@ -11,6 +11,7 @@ import {
   encodeSharedCollection,
   importSharedCollection,
   normalizeSharedCollection,
+  resolveSharedEntityRefs,
   resolveSharedToolIds,
   sharedCollectionUrl,
   sharedFailureMessage
@@ -136,6 +137,11 @@ test("invalid tool ID format is rejected (kept out of payload)", () => {
   assert.deepEqual(createSharedCollectionPayload({ ...baseCollection, toolIds: ["aider", "with space", "UPPER"] }).toolIds, ["aider"]);
 });
 
+test("typed Dev refs round-trip while invalid typed refs are discarded", () => {
+  const decoded = decodeSharedCollection(encodeSharedCollection({ ...baseCollection, toolIds: ["aider", "dev:uiverse", "dev:", "dev:with space"] }));
+  assert.deepEqual(decoded.payload.toolIds, ["aider", "dev:uiverse"]);
+});
+
 test("every real catalog ID passes the validator and can be shared", () => {
   const decoded = decodeSharedCollection(encodeSharedCollection({ ...baseCollection, toolIds: catalog.map((tool) => tool.id) }));
   assert.equal(decoded.ok, true);
@@ -147,6 +153,17 @@ test("unknown tool IDs resolve safely and known order is preserved", () => {
   const resolved = resolveSharedToolIds(payload, knownIds);
   assert.deepEqual(resolved.knownIds, ["aider", "cline"]);
   assert.equal(resolved.missingCount, 2);
+});
+
+test("mixed shared refs resolve and import in order while unknown refs fail safely", () => {
+  const payload = createSharedCollectionPayload({ ...baseCollection, toolIds: ["aider", "dev:uiverse", "ghost", "dev:gone"] });
+  const resolved = resolveSharedEntityRefs(payload, knownIds, new Set(["uiverse"]));
+  assert.deepEqual(resolved.knownRefs, ["aider", "dev:uiverse"]);
+  assert.deepEqual(resolved.knownToolRefs, ["aider"]);
+  assert.deepEqual(resolved.knownDevRefs, ["dev:uiverse"]);
+  assert.equal(resolved.missingCount, 2);
+  const imported = importSharedCollection([], payload, knownIds, new Set(["uiverse"]));
+  assert.deepEqual(imported.collection.toolIds, ["aider", "dev:uiverse"]);
 });
 
 test("canonical URL uses the supplied origin/path and carries no filters", () => {

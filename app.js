@@ -1,13 +1,16 @@
 import { createCatalogSearch, filterCatalogTools, formatDetectedFilters, matchesParsedFilters } from "./assets/js/search-engine.js";
-import { COLLECTIONS_KEY, STACK_KEY, STACK_NAME, MAX_COLLECTION_NAME, createCollectionAndAppend, deleteCollection, filterKnownIds, normalizeCollectionName, parseCollections, parseStack, renameCollection, toggleStackTool, toggleToolInCollection } from "./assets/js/saved-library.js";
+import { COLLECTIONS_KEY, STACK_KEY, STACK_NAME, MAX_COLLECTION_NAME, createCollectionAndAppend, deleteCollection, normalizeCollectionName, parseCollections, parseStack, renameCollection, toggleStackTool, toggleToolInCollection } from "./assets/js/saved-library.js";
 import { parseUseCases, resolveUseCaseTools, useCaseById, useCaseCount } from "./assets/js/use-cases.js";
 import { START_HERE_PATH, DEFAULT_PRIMARY_LIMIT, applyStartAnswer, computeCandidates, findOption, parseStartHere, resolveGoal } from "./assets/js/start-here.js";
 import { parseRouteHash, readOptionalJson, requiredResponsesAreOk } from "./assets/js/app-runtime-helpers.js";
 import { SETUP_RECIPES_PATH, emptySetupRecipes, parseOptionalSetupRecipes, setupForTool, listAvailableCommands } from "./assets/js/setup-recipes.js";
 import { buildEnvTextForState, canCopyCommands, clearEnvState, commandSequenceRows, createSetupState, envIncluded, hasEnvInput, hasSetupCapability, maskedEnvPreview, moveCommand, selectedCommandOutputs, setEnvValue, setRecipeValue, setupStateForTool, toggleCommandSelected, toggleEnvInclude } from "./assets/js/setup-ui.js";
-import { decodeSharedCollection, importSharedCollection, resolveSharedToolIds, sharedCollectionUrl, sharedFailureMessage } from "./assets/js/shared-collections.js";
+import { decodeSharedCollection, importSharedCollection, resolveSharedEntityRefs, sharedCollectionUrl, sharedFailureMessage } from "./assets/js/shared-collections.js";
 import { INSTALL_FAILURE_TEMPLATE, INSTALL_FAILURE_LABEL, installFailureIssueUrl } from "./assets/js/install-failure.js";
 import { looksLikeOfficialUrlQuery, matchingToolsForUrl, missingToolPrefill, shouldOfferMissingToolSuggestion } from "./assets/js/missing-tool-suggestion.js";
+import { DEV_PRICING_VALUES, devCategoryMeta, filterDevResources, parseDevResources, sortDevResources } from "./assets/js/dev-resources.js";
+import { createDevSearch } from "./assets/js/dev-search.js";
+import { KIND_DEV, KIND_TOOLS, entityRef, entityRefParts, isDevRef, refsOfKind, splitKnownRefs } from "./assets/js/entity-ids.js";
 
 const CATEGORY_META = {
   "coding-agents": { label: "Coding agents", short: "Coding", color: "#d2f25b" }, "app-builders": { label: "App builders", short: "App builders", color: "#d2f25b" },
@@ -83,13 +86,71 @@ const hasValue = (value) => typeof value === "string" && value.trim().length > 0
 function readStoredArray(key) { try { const result = JSON.parse(localStorage.getItem(key) || "[]"); return Array.isArray(result) ? result : []; } catch { return []; } }
 function readStoredObject(key) { try { const result = JSON.parse(localStorage.getItem(key) || "{}"); return result && typeof result === "object" && !Array.isArray(result) ? result : {}; } catch { return {}; } }
 
-const state = { schema: null, siteConfig: null, searchEngine: null, searchIntent: null, searchPhase: "catalog", baseTools: [], tools: [], toolById: new Map(), query: "", category: "", pricing: "", platform: "", executionMode: "", noSignup: false, noApiKey: false, favoritesOnly: false, sort: "recent", catalogSort: "recent", favorites: new Set(readStoredArray(FAVORITES_KEY)), personalNotes: readStoredObject(PERSONAL_NOTES_KEY), theme: localStorage.getItem(THEME_KEY) || "dark", detailReturn: null, collections: parseCollections(localStorage.getItem(COLLECTIONS_KEY)), stack: parseStack(localStorage.getItem(STACK_KEY)), saveDialogContext: null, useCases: [], setupRecipes: emptySetupRecipes(), startHere: { config: null, answers: {} }, setup: null, shared: null };
+const state = { schema: null, siteConfig: null, searchEngine: null, searchIntent: null, searchPhase: "catalog", baseTools: [], tools: [], toolById: new Map(), query: "", category: "", pricing: "", platform: "", executionMode: "", noSignup: false, noApiKey: false, favoritesOnly: false, sort: "recent", catalogSort: "recent", favorites: new Set(readStoredArray(FAVORITES_KEY)), personalNotes: readStoredObject(PERSONAL_NOTES_KEY), theme: localStorage.getItem(THEME_KEY) || "dark", detailReturn: null, collections: parseCollections(localStorage.getItem(COLLECTIONS_KEY)), stack: parseStack(localStorage.getItem(STACK_KEY)), saveDialogContext: null, useCases: [], setupRecipes: emptySetupRecipes(), startHere: { config: null, answers: {} }, setup: null, shared: null, devResources: [], devById: new Map(), devSearchEngine: null };
 function refreshTools() { state.tools = [...state.baseTools]; state.toolById = new Map(state.baseTools.map((tool) => [tool.id, tool])); }
+
+// Dev Resources catalog UI state. Kept fully separate from the tools UI state
+// (state.query/category/pricing/...) so switching catalogs never disturbs the
+// other side; routes decide which dataset is live.
+const devUi = { query: "", category: "", pricing: "", openSource: false, noSignup: false, copyable: false, sort: "recent", catalogSort: "recent", favoritesOnly: false };
+let lastRenderedKind = "tools";
+function devRoute() {
+  const route = parseRouteHash(location.hash);
+  return ["dev", "dev-category", "dev-resource", "dev-favorites", "dev-stack"].includes(route?.type) ? route : null;
+}
+function devResourceById(id) { return state.devById.get(id) || null; }
+function getDevDetailId() { const route = parseRouteHash(location.hash); return route?.type === "dev-resource" && route.id ? route.id : ""; }
+function devRef(id) { return entityRef(KIND_DEV, id); }
+function knownDevIds() { return new Set(state.devById.keys()); }
+function knownToolIds() { return new Set(state.toolById.keys()); }
+function devFavoriteRefs() { return refsOfKind([...state.favorites], KIND_DEV); }
+function devFavoriteIds() { return splitKnownRefs(devFavoriteRefs(), knownToolIds(), knownDevIds()).known.map((ref) => entityRefParts(ref).id); }
+function devStackRefs() { return refsOfKind(state.stack, KIND_DEV); }
+function devStackIds() { return splitKnownRefs(devStackRefs(), knownToolIds(), knownDevIds()).known.map((ref) => entityRefParts(ref).id); }
+function devViewAllowedIds() {
+  const view = devRoute();
+  if (!view) return null;
+  if (view.type === "dev-favorites") return new Set(devFavoriteIds());
+  if (view.type === "dev-stack") return new Set(devStackIds());
+  return null;
+}
+function sharedEntityRefs(view) {
+  if (state.shared?.token === view?.token) return state.shared.knownRefs;
+  const decoded = decodeSharedCollection(view?.token);
+  return decoded.ok ? resolveSharedEntityRefs(decoded.payload, knownToolIds(), knownDevIds()).knownRefs : [];
+}
+function viewEntityRefs(view = currentView()) {
+  if (view?.type === "collection") {
+    const collection = collectionById(view.id);
+    return collection ? splitKnownRefs(collection.toolIds, knownToolIds(), knownDevIds()).known : [];
+  }
+  return view?.type === "shared" ? sharedEntityRefs(view) : [];
+}
+function scopedCatalogKind(view = currentView()) {
+  if (!view || !["collection", "shared"].includes(view.type)) return null;
+  const refs = viewEntityRefs(view);
+  const hasTools = refs.some((ref) => entityRefParts(ref).kind === KIND_TOOLS);
+  const hasDev = refs.some((ref) => entityRefParts(ref).kind === KIND_DEV);
+  return hasTools && hasDev ? "mixed" : hasDev ? "dev" : "tools";
+}
+function catalogContextKind(view = currentView()) { return devRoute() ? "dev" : scopedCatalogKind(view) || "tools"; }
+function isDevUiContext(view = currentView()) { return catalogContextKind(view) === "dev"; }
+function refsForKind(view, kind) { return viewEntityRefs(view).filter((ref) => entityRefParts(ref).kind === kind); }
+function resolveEntityLabel(ref) {
+  const { kind, id } = entityRefParts(ref);
+  if (kind === KIND_DEV) return devResourceById(id)?.name || id;
+  return state.toolById.get(id)?.name || id;
+}
+function devStackCount() { return devStackIds().length; }
+function favoriteCountByKind(kind) {
+  if (kind === KIND_DEV) return devFavoriteIds().length;
+  return state.tools.filter((tool) => state.favorites.has(tool.id)).length;
+}
 function saveCollections() { localStorage.setItem(COLLECTIONS_KEY, JSON.stringify(state.collections)); renderNavigation(); }
 function saveStack() { localStorage.setItem(STACK_KEY, JSON.stringify(state.stack)); renderNavigation(); }
 function collectionById(id) { return state.collections.collections.find((collection) => collection.id === id); }
 function stackCount() { return state.stack.filter((id) => state.toolById.has(id)).length; }
-function collectionToolCount(collection) { return collection ? filterKnownIds(collection.toolIds, new Set(state.toolById.keys())).length : 0; }
+function collectionToolCount(collection) { return collection ? splitKnownRefs(collection.toolIds, knownToolIds(), knownDevIds()).known.length : 0; }
 function pricingLabel(pricing) { return PRICE_LABELS[pricing] || "Not specified"; }
 function priceSummary(tool) { return tool.pricing ? [pricingLabel(tool.pricing), tool.priceDetails].filter(Boolean).join(" · ") : tool.priceDetails || "Not specified"; }
 function detailMetadataRow(label, value, labels) { return value && value !== "unknown" ? `<div class="info-row"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(labels[value] || labelize(value))}</dd></div>` : ""; }
@@ -138,34 +199,42 @@ function viewAllowedIds(view) {
   if (!view || view.type === "collections" || view.type === "use-cases") return null;
   if (view.type === "stack") return new Set(state.stack);
   if (view.type === "use-case") { const useCase = useCaseById(state.useCases, view.id); return useCase ? new Set(resolveUseCaseTools(useCase, state.toolById).map((tool) => tool.id)) : new Set(); }
-  if (view.type === "shared") {
-    if (state.shared && state.shared.token === view.token) return new Set(state.shared.knownIds);
-    const decoded = decodeSharedCollection(view.token);
-    if (!decoded.ok) return new Set();
-    return new Set(resolveSharedToolIds(decoded.payload, new Set(state.toolById.keys())).knownIds);
-  }
-  const collection = collectionById(view.id);
-  return collection ? new Set(collection.toolIds) : new Set();
+  if (["collection", "shared"].includes(view.type)) return new Set(refsForKind(view, KIND_TOOLS).map((ref) => entityRefParts(ref).id));
+  return new Set();
 }
 function renderNavigation() {
+  const hash = location.hash;
+  const contextKind = catalogContextKind();
+  const devActive = contextKind === "dev";
+  const mixedActive = contextKind === "mixed";
   const counts = state.tools.reduce((all, tool) => { all[tool.category] = (all[tool.category] || 0) + 1; return all; }, {});
   const categories = Object.keys(counts);
-  $("#all-count").textContent = state.tools.length; $("#favorites-count").textContent = state.favorites.size; $("#stack-count").textContent = stackCount(); $("#collections-count").textContent = state.collections.collections.length; $("#category-navigation").hidden = categories.length === 0;
-  $("#category-links").innerHTML = categories.map((category) => { const meta = categoryMeta(category); return `<a class="category-link ${state.category === category ? "is-active" : ""}" href="#/category/${encodeURIComponent(category)}"><i class="category-dot" style="background:${meta.color}"></i><span>${escapeHtml(meta.label)}</span><span>${counts[category]}</span></a>`; }).join("");
-  $("#category-filters").innerHTML = (categories.length ? ["", ...categories] : []).map((category) => `<button class="chip ${state.category === category ? "is-active" : ""}" type="button" data-category-filter="${escapeHtml(category)}">${escapeHtml(category ? categoryMeta(category).short : "All categories")}</button>`).join("");
-  const hash = location.hash;
+  $("#all-count").textContent = state.tools.length; $("#favorites-count").textContent = devActive ? favoriteCountByKind(KIND_DEV) : favoriteCountByKind(KIND_TOOLS); $("#stack-count").textContent = devActive ? devStackCount() : stackCount(); $("#collections-count").textContent = state.collections.collections.length; $("[data-nav=favorites]").href = devActive ? "#/dev/favorites" : "#/favorites"; $("[data-nav=stack]").href = devActive ? "#/dev/stack" : "#/stack"; $("#category-navigation").hidden = categories.length === 0;
+  if (devActive) {
+    const devCounts = state.devResources.reduce((all, resource) => { all[resource.category] = (all[resource.category] || 0) + 1; return all; }, {});
+    const devCategories = Object.keys(devCounts);
+    $("#category-navigation").hidden = devCategories.length === 0 || !devRoute();
+    $("#category-links").innerHTML = devCategories.map((category) => { const meta = devCategoryMeta(category); const activeClass = devUi.category === category ? "is-active" : ""; return `<a class="category-link ${activeClass}" href="#/dev/category/${encodeURIComponent(category)}"><i class="category-dot" style="background:${meta.color}"></i><span>${escapeHtml(meta.label)}</span><span>${devCounts[category]}</span></a>`; }).join("");
+    $("#category-filters").innerHTML = (devCategories.length ? ["", ...devCategories] : []).map((category) => `<button class="chip ${devUi.category === category ? "is-active" : ""}" type="button" data-category-filter="${escapeHtml(category)}">${escapeHtml(category ? devCategoryMeta(category).short || devCategoryMeta(category).label : "All categories")}</button>`).join("");
+  } else {
+    $("#category-navigation").hidden = mixedActive || categories.length === 0;
+    $("#category-links").innerHTML = categories.map((category) => { const meta = categoryMeta(category); return `<a class="category-link ${state.category === category ? "is-active" : ""}" href="#/category/${encodeURIComponent(category)}"><i class="category-dot" style="background:${meta.color}"></i><span>${escapeHtml(meta.label)}</span><span>${counts[category]}</span></a>`; }).join("");
+    $("#category-filters").innerHTML = (categories.length ? ["", ...categories] : []).map((category) => `<button class="chip ${state.category === category ? "is-active" : ""}" type="button" data-category-filter="${escapeHtml(category)}">${escapeHtml(category ? categoryMeta(category).short : "All categories")}</button>`).join("");
+  }
   let active = "all";
-  if (hash.startsWith("#/shared")) active = "";
+  if (devActive || mixedActive || hash.startsWith("#/shared")) active = "";
   else if (hash === "#/start") active = "start";
   else if (hash === "#/favorites") active = "favorites";
   else if (hash === "#/use-cases" || hash.startsWith("#/use-cases/")) active = "use-cases";
   else if (hash === "#/stack") active = "stack";
   else if (hash === "#/collections" || hash.startsWith("#/collections/")) active = "collections";
-  $$("[data-nav]").forEach((item) => item.classList.toggle("is-active", item.dataset.nav === active && !getDetailId()));
+  $$("[data-nav]").forEach((item) => item.classList.toggle("is-active", item.dataset.nav === active && !getDetailId() && !getDevDetailId()));
 }
 
-function getFilteredTools() {
-  const options = { category: state.category, pricing: state.pricing, platform: state.platform, executionMode: state.executionMode, noSignup: state.noSignup, noApiKey: state.noApiKey, favoritesOnly: state.favoritesOnly, favoriteIds: state.favorites, allowedIds: viewAllowedIds() };
+function getFilteredTools({ ignoreStructuredFilters = false, allowedIds } = {}) {
+  const options = ignoreStructuredFilters
+    ? { category: "", pricing: "", platform: "", executionMode: "", noSignup: false, noApiKey: false, favoritesOnly: false, favoriteIds: state.favorites, allowedIds: allowedIds ?? viewAllowedIds() }
+    : { category: state.category, pricing: state.pricing, platform: state.platform, executionMode: state.executionMode, noSignup: state.noSignup, noApiKey: state.noApiKey, favoritesOnly: state.favoritesOnly, favoriteIds: state.favorites, allowedIds: allowedIds ?? viewAllowedIds() };
   const urlQuery = looksLikeOfficialUrlQuery(state.query);
   let result = state.searchEngine
     ? state.searchEngine.search(state.query, options)
@@ -189,7 +258,43 @@ function toolCard(tool) {
   return `<article class="tool-card"><div class="tool-card-top">${logoMarkup(tool, meta)}<div class="tool-title-block"><div class="tool-category"><i style="background:${meta.color}"></i>${escapeHtml(meta.label)}</div><h3 class="tool-name" title="${escapeHtml(tool.name)}">${escapeHtml(tool.name)}</h3></div><button class="favorite-button ${isFavorite ? "is-favorite" : ""}" type="button" data-favorite="${escapeHtml(tool.id)}" aria-label="${isFavorite ? "Remove from favorites" : "Add to favorites"}">${icon("star")}</button></div><p class="tool-description">${escapeHtml(tool.description || "No description yet.")}</p><div class="tool-card-meta"><div class="tool-platforms" aria-label="Platforms">${platforms || '<span>Platform not specified</span>'}</div><div class="tool-tags">${tags || '<span class="tag">No tags</span>'}</div></div><div class="tool-footer"><span class="price-badge price-${escapeHtml(tool.pricing || "unspecified")}" title="${escapeHtml(price)}">${escapeHtml(tool.pricing ? pricingLabel(tool.pricing) : "Not specified")}</span><div class="card-actions"><button class="save-tool-button" type="button" data-save-tool="${escapeHtml(tool.id)}" aria-label="Save ${escapeHtml(tool.name)} to collections or stack" title="Save to collections or stack">${icon("bookmark")}</button><a class="card-link card-link-detail" data-tool-detail href="#/tools/${encodeURIComponent(tool.id)}">Details ${icon("arrowRight")}</a>${hasValue(tool.url) ? `<a class="external-link" href="${escapeHtml(tool.url)}" target="_blank" rel="noreferrer">Website ${icon("external")}</a>` : ""}</div></div></article>`;
 }
 
+// A Dev-only Collection keeps the resource catalog's controls and filtering
+// semantics while preserving its normal Collection/share route.
+function renderScopedDevCollection(view) {
+  const ids = new Set(refsForKind(view, KIND_DEV).map((ref) => entityRefParts(ref).id));
+  const resources = devFilteredResources({ allowedIds: ids });
+  const active = Boolean(devUi.query.trim() || devUi.category || devUi.pricing || devUi.openSource || devUi.noSignup || devUi.copyable);
+  const title = view?.type === "shared" ? (state.shared?.payload.name || "Shared Collection") : collectionById(view?.id)?.name || "Collection";
+  if (view?.type !== "shared") setDocumentMeta(`${title} — Dev Resources — AI-Dekrov`);
+  $("#tools-grid").innerHTML = resources.map(devCard).join("");
+  $("#results-count").textContent = resources.length;
+  $("#results-title").textContent = title;
+  $("#clear-filters").hidden = !active;
+  $("#pricing-filter").value = devUi.pricing;
+  $("#pricing-filter").closest(".select-field").classList.toggle("is-active", Boolean(devUi.pricing));
+  $("#dev-open-source-filter").closest(".filter-toggle").classList.toggle("is-active", devUi.openSource);
+  $("#dev-no-signup-filter").closest(".filter-toggle").classList.toggle("is-active", devUi.noSignup);
+  $("#dev-copyable-filter").closest(".filter-toggle").classList.toggle("is-active", devUi.copyable);
+  $("#dev-open-source-filter").checked = devUi.openSource;
+  $("#dev-no-signup-filter").checked = devUi.noSignup;
+  $("#dev-copyable-filter").checked = devUi.copyable;
+  $("#empty-state").hidden = resources.length > 0;
+  if (!resources.length) {
+    $("#empty-state .empty-icon").innerHTML = icon("code");
+    $("#empty-state h2").textContent = active ? "No matching resources in this collection" : "This collection is empty";
+    $("#empty-state p").textContent = active ? "Clear search and filters to see this collection." : "Add Dev Resources from a resource card or detail page.";
+    $("#empty-action").textContent = active ? "Clear search & filters" : "Browse all resources";
+    $("#empty-action").dataset.recovery = active ? "clear" : "browse";
+  }
+  $("#missing-tool-suggestion").hidden = true;
+  const viewActions = $("#view-actions");
+  const collection = view?.type === "collection" ? collectionById(view.id) : null;
+  viewActions.hidden = !collection;
+  viewActions.innerHTML = collection ? `<button class=" button button-secondary" type="button" data-share-collection="${escapeHtml(collection.id)}" aria-label="Copy a share link for ${escapeHtml(collection.name)}">${icon("external")} Share</button><button class="button button-secondary" type="button" data-rename-collection="${escapeHtml(collection.id)}">${icon("edit")} Rename</button><button class="button button-secondary button-danger" type="button" data-delete-collection="${escapeHtml(collection.id)}">${icon("trash")} Delete</button>` : "";
+}
+
 function renderCatalog() {
+  if (devRoute()) { renderDevCatalog(); return; }
   const detailId = getDetailId(); const detail = Boolean(detailId);
   const view = currentView();
   if (view?.type === "use-case") { const useCase = useCaseById(state.useCases, view.id); if (!useCase) { location.hash = "#/use-cases"; return; } }
@@ -200,10 +305,10 @@ function renderCatalog() {
   $("#start-view").hidden = !isStart;
   $("#use-cases-view").hidden = !isUseCasesIndex;
   $("#collections-view").hidden = !isCollectionsIndex;
-  $("#catalog-view").hidden = detail || isShared;
+  $("#catalog-view").hidden = detail;
   $("#shared-view").hidden = !isShared;
-  $(".toolbar").hidden = detail || isCollectionsIndex || isUseCasesIndex || isStart || isShared;
-  $(".results-head").hidden = detail || isCollectionsIndex || isUseCasesIndex || isStart || isShared;
+  $(".toolbar").hidden = detail || isCollectionsIndex || isUseCasesIndex || isStart;
+  $(".results-head").hidden = detail || isCollectionsIndex || isUseCasesIndex || isStart;
   $("#tools-grid").hidden = detail || isCollectionsIndex || isUseCasesIndex || isStart;
   $("#detail-view").hidden = !detail;
   if (detail) { renderDetail(detailId); return; }
@@ -213,13 +318,17 @@ function renderCatalog() {
   if (isShared) {
     const decoded = decodeSharedCollection(view.token);
     if (!decoded.ok) { state.shared = null; renderSharedInvalid(decoded.reason); setDocumentMeta("Shared Collection — AI-Dekrov"); return; }
-    const resolved = resolveSharedToolIds(decoded.payload, new Set(state.toolById.keys()));
-    state.shared = { token: view.token, payload: decoded.payload, knownIds: resolved.knownIds, missingCount: resolved.missingCount };
+    const resolved = resolveSharedEntityRefs(decoded.payload, knownToolIds(), knownDevIds());
+    state.shared = { token: view.token, payload: decoded.payload, ...resolved };
     renderSharedBanner(state.shared);
   } else {
     state.shared = null;
   }
-  const tools = getFilteredTools(); const active = Boolean(state.query || state.category || state.pricing || state.platform || state.executionMode || state.noSignup || state.noApiKey);
+  const contextKind = catalogContextKind(view);
+  applyKindUi(contextKind);
+  if (contextKind === "dev") { renderScopedDevCollection(view); return; }
+  const mixedCollection = contextKind === "mixed";
+  const tools = getFilteredTools({ ignoreStructuredFilters: mixedCollection }); const devItems = mixedCollection ? devItemsForToolView(view) : []; const totalItems = tools.length + devItems.length; const active = mixedCollection ? Boolean(state.query.trim()) : Boolean(state.query || state.category || state.pricing || state.platform || state.executionMode || state.noSignup || state.noApiKey);
   const globalSearch = state.searchEngine?.search(state.query);
   const globalMatchCount = looksLikeOfficialUrlQuery(state.query) ? matchingToolsForUrl(state.query, state.baseTools).length : globalSearch?.tools.length || 0;
   const missingPrefill = !detail && !isShared && shouldOfferMissingToolSuggestion({
@@ -230,10 +339,10 @@ function renderCatalog() {
     tools: state.baseTools
   }) ? missingToolPrefill(state.query) : null;
   const useCase = currentUseCase();
-  const viewTitle = view?.type === "use-case" ? (useCase?.name || "Use case") : view?.type === "stack" ? "My Stack" : view?.type === "collection" ? (collectionById(view.id)?.name || "Collection") : state.favoritesOnly || location.hash === "#/favorites" ? "Favorites" : state.category ? categoryMeta(state.category).label : "All tools";
+  const viewTitle = isShared ? (state.shared?.payload.name || "Shared Collection") : view?.type === "use-case" ? (useCase?.name || "Use case") : view?.type === "stack" ? "My Stack" : view?.type === "collection" ? (collectionById(view.id)?.name || "Collection") : state.favoritesOnly || location.hash === "#/favorites" ? "Favorites" : state.category ? categoryMeta(state.category).label : "All tools";
   if (!isShared) setDocumentMeta(viewTitle === "AI-Dekrov" ? "AI-Dekrov" : `${viewTitle} — AI-Dekrov`);
-  $("#tools-grid").innerHTML = tools.map(toolCard).join(""); $("#results-count").textContent = tools.length; $("#results-title").textContent = viewTitle; $("#clear-filters").hidden = !active; [["#pricing-filter", state.pricing], ["#platform-filter", state.platform], ["#execution-filter", state.executionMode]].forEach(([selector, value]) => $(selector).closest(".select-field").classList.toggle("is-active", Boolean(value))); $("#no-signup-filter").closest(".filter-toggle").classList.toggle("is-active", state.noSignup); $("#no-api-key-filter").closest(".filter-toggle").classList.toggle("is-active", state.noApiKey); $("#empty-state").hidden = tools.length > 0; $("#empty-state .empty-icon").dataset.icon = view?.type === "stack" ? "stack" : view?.type === "collection" ? "folder" : view?.type === "use-case" ? "layers" : "search"; $("#empty-state .empty-icon").innerHTML = icon($("#empty-state .empty-icon").dataset.icon);
-  if (!tools.length) {
+  $("#tools-grid").innerHTML = [...tools.map(toolCard), ...devItems.map(devCard)].join(""); $("#results-count").textContent = totalItems; $("#results-title").textContent = viewTitle; $("#clear-filters").hidden = !active; [["#pricing-filter", state.pricing], ["#platform-filter", state.platform], ["#execution-filter", state.executionMode]].forEach(([selector, value]) => $(selector).closest(".select-field").classList.toggle("is-active", Boolean(value))); $("#no-signup-filter").closest(".filter-toggle").classList.toggle("is-active", state.noSignup); $("#no-api-key-filter").closest(".filter-toggle").classList.toggle("is-active", state.noApiKey); $("#empty-state").hidden = totalItems > 0; $("#empty-state .empty-icon").dataset.icon = view?.type === "stack" ? "stack" : view?.type === "collection" ? "folder" : view?.type === "use-case" ? "layers" : "search"; $("#empty-state .empty-icon").innerHTML = icon($("#empty-state .empty-icon").dataset.icon);
+  if (!totalItems) {
     const queryActive = Boolean(state.query.trim());
     const detected = formatDetectedFilters(state.searchIntent);
     let title = queryActive ? "No matching tools found" : active ? "Nothing found" : "No tools yet";
@@ -246,10 +355,10 @@ function renderCatalog() {
     if (view?.type === "collection") { title = canRecoverScopedView ? "No matching tools in this collection" : "This collection is empty"; copy = canRecoverScopedView ? "Clear search and filters to see this collection." : "Add tools to this collection from any tool card or detail page."; action = canRecoverScopedView ? "Clear search & filters" : "Browse all tools"; recovery = canRecoverScopedView ? "clear" : "browse"; }
     if (view?.type === "use-case") { title = canRecoverScopedView ? `No matching tools in ${useCase?.name || "this use case"}` : "No tools in this use case"; copy = canRecoverScopedView ? `Clear search and filters to see tools in ${useCase?.name || "this use case"}.` : "This use case has no valid tools in the current catalog."; action = canRecoverScopedView ? "Clear search & filters" : "Browse all tools"; recovery = canRecoverScopedView ? "clear" : "browse"; }
     if (view?.type === "shared") {
-      const noneAvailable = (state.shared?.knownIds.length || 0) === 0;
+      const noneAvailable = (state.shared?.knownRefs.length || 0) === 0;
       if (noneAvailable) {
-        title = "No tools available";
-        copy = state.shared?.missingCount ? "None of the tools in this shared collection are currently available in the catalog." : "This shared collection has no tools in the current catalog.";
+        title = "No items available";
+        copy = state.shared?.missingCount ? "None of the items in this shared collection are currently available in the catalog." : "This shared collection has no items in the current catalog.";
         action = "Browse all tools"; recovery = "browse";
       } else {
         title = "No matching tools in this shared collection";
@@ -277,6 +386,179 @@ function renderCatalog() {
     viewActions.innerHTML = "";
   }
 }
+// ---------------------------------------------------------------------------
+// Dev Resources catalog (second catalog dataset)
+// ---------------------------------------------------------------------------
+function devFilteredResources({ allowedIds = devViewAllowedIds() } = {}) {
+  const options = {
+    category: devUi.category,
+    pricing: devUi.pricing,
+    openSource: devUi.openSource,
+    noSignup: devUi.noSignup,
+    copyable: devUi.copyable,
+    favoritesOnly: devUi.favoritesOnly,
+    favoriteIds: new Set(devFavoriteIds()),
+    allowedIds
+  };
+  let result = state.devSearchEngine
+    ? state.devSearchEngine.search(devUi.query, options)
+    : { items: filterDevResources(state.devResources, options), queryActive: false, phase: "catalog" };
+  const items = [...result.items];
+  if (result.queryActive && devUi.sort === "relevance") return items;
+  return sortDevResources(items, devUi.sort === "relevance" ? "recent" : devUi.sort);
+}
+
+
+function devCard(resource) {
+  const meta = devCategoryMeta(resource.category);
+  const ref = devRef(resource.id);
+  const isFavorite = state.favorites.has(ref);
+  const tags = (resource.tags || []).slice(0, 4).map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join("");
+  return `<article class="tool-card dev-card"><div class="tool-card-top">${logoMarkup(resource, meta)}<div class="tool-title-block"><div class="tool-category"><i style="background:${meta.color}"></i>Dev resource · ${escapeHtml(meta.label)}</div><h3 class="tool-name" title="${escapeHtml(resource.name)}">${escapeHtml(resource.name)}</h3></div><button class="favorite-button ${isFavorite ? "is-favorite" : ""}" type="button" data-favorite="${escapeHtml(ref)}" aria-label="${isFavorite ? "Remove from favorites" : "Add to favorites"}">${icon("star")}</button></div><p class="tool-description">${escapeHtml(resource.description || "No description yet.")}</p><div class="tool-card-meta"><div class="tool-tags">${tags || '<span class="tag">No tags</span>'}</div></div><div class="tool-footer"><div class="card-actions"><button class="save-tool-button" type="button" data-save-tool="${escapeHtml(ref)}" aria-label="Save ${escapeHtml(resource.name)} to collections or stack" title="Save to collections or stack">${icon("bookmark")}</button><a class="card-link card-link-detail" data-dev-detail href="#/dev/resource/${encodeURIComponent(resource.id)}">Details ${icon("arrowRight")}</a>${hasValue(resource.url) ? `<a class="external-link" href="${escapeHtml(resource.url)}" target="_blank" rel="noreferrer">Website ${icon("external")}</a>` : ""}</div></div></article>`;
+}
+
+// Dev cards only accompany AI cards in intentionally mixed Collection views.
+function devItemsForToolView(view) {
+  const ids = refsForKind(view, KIND_DEV).map((ref) => entityRefParts(ref).id);
+  if (!ids.length) return [];
+  const result = state.devSearchEngine
+    ? state.devSearchEngine.search(state.query, { allowedIds: new Set(ids) })
+    : { items: filterDevResources(state.devResources, { allowedIds: new Set(ids) }), queryActive: false };
+  const items = [...result.items];
+  if (!(result.queryActive && state.sort === "relevance")) return sortDevResources(items, state.sort === "relevance" ? "recent" : state.sort);
+  return items;
+}
+
+function applyKindUi(kind = catalogContextKind()) {
+  const dev = kind === "dev";
+  const mixed = kind === "mixed";
+  const kindChanged = lastRenderedKind !== kind;
+  lastRenderedKind = kind;
+  if (kindChanged) {
+    if (dev) {
+      $("#pricing-filter").innerHTML = `<option value="">Price: Any</option>${DEV_PRICING_VALUES.map((value) => `<option value="${value}">${escapeHtml(pricingLabel(value))}</option>`).join("")}`;
+    } else {
+      $("#pricing-filter").innerHTML = `<option value="">Price: Any</option>${schemaEnum("pricing").map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(pricingLabel(value))}</option>`).join("")}`;
+    }
+    $("#search-input").value = dev ? devUi.query : state.query;
+  }
+  const platformField = $("#platform-filter").closest(".select-field");
+  const executionField = $("#execution-filter").closest(".select-field");
+  if (platformField) platformField.hidden = dev || mixed;
+  if (executionField) executionField.hidden = dev || mixed;
+  $("#no-api-key-filter").closest(".filter-toggle").hidden = dev || mixed;
+  $("#no-signup-filter").closest(".filter-toggle").hidden = dev || mixed;
+  $$(".dev-only-filter").forEach((toggle) => { toggle.hidden = !dev || mixed; });
+  $("#dev-scope-chips").hidden = !dev || !devRoute();
+  $(".toolbar-filters").hidden = mixed;
+  $(".sort-control").hidden = mixed;
+  $("#search-input").placeholder = dev ? "Search resources, tags, and tech..." : mixed ? "Search this collection..." : "Search tools, tags, and notes...";
+  const title = $("#hero-title");
+  const subtitle = $("#hero-subtitle");
+  if (title) title.textContent = dev ? "Dev resources, organized." : mixed ? "Collection, organized." : "AI tools, organized.";
+  if (subtitle) subtitle.textContent = dev ? "Components, generators, and utilities to build faster." : mixed ? "Search across the tools and resources you saved together." : "Keep the useful ones close. Discover the next one without the noise.";
+  $$("[data-kind-switch]").forEach((button) => {
+    const activeKind = !mixed && button.dataset.kindSwitch === (dev ? "dev" : "tools");
+    button.classList.toggle("is-active", activeKind);
+    button.setAttribute("aria-selected", String(activeKind));
+  });
+  if (dev) {
+    $("#sort-select").value = devUi.sort;
+    $("#sort-select option[value=relevance]").hidden = !devUi.query.trim();
+  } else {
+    $("#sort-select").value = state.sort;
+    $("#sort-select option[value=relevance]").hidden = !state.query.trim();
+  }
+}
+
+function renderDevCatalog() {
+  const view = devRoute();
+  const detailId = getDevDetailId();
+  const detail = Boolean(detailId);
+  $("#start-view").hidden = true;
+  $("#use-cases-view").hidden = true;
+  $("#collections-view").hidden = true;
+  $("#shared-view").hidden = true;
+  $("#catalog-view").hidden = detail;
+  $(".toolbar").hidden = detail;
+  $(".results-head").hidden = detail;
+  $("#tools-grid").hidden = detail;
+  $("#detail-view").hidden = !detail;
+  applyKindUi();
+  if (detail) { renderDevDetail(detailId); return; }
+  devUi.favoritesOnly = view?.type === "dev-favorites";
+  devUi.category = view?.type === "dev-category" ? view.id : "";
+  const resources = devFilteredResources();
+  const isFavoritesScope = view?.type === "dev-favorites";
+  const isStackScope = view?.type === "dev-stack";
+  let viewTitle = isFavoritesScope ? "Favorite resources" : isStackScope ? "My Stack · resources" : devUi.category ? devCategoryMeta(devUi.category).label : "All dev resources";
+  setDocumentMeta(`${viewTitle} — Dev Resources — AI-Dekrov`);
+  $("#tools-grid").innerHTML = resources.map(devCard).join("");
+  $("#results-count").textContent = resources.length;
+  $("#results-title").textContent = viewTitle;
+  const active = Boolean(devUi.query.trim() || devUi.category || devUi.pricing || devUi.openSource || devUi.noSignup || devUi.copyable);
+  $("#clear-filters").hidden = !active && !isFavoritesScope && !isStackScope;
+  $("#pricing-filter").closest(".select-field").classList.toggle("is-active", Boolean(devUi.pricing));
+  $("#dev-open-source-filter").closest(".filter-toggle").classList.toggle("is-active", devUi.openSource);
+  $("#dev-no-signup-filter").closest(".filter-toggle").classList.toggle("is-active", devUi.noSignup);
+  $("#dev-copyable-filter").closest(".filter-toggle").classList.toggle("is-active", devUi.copyable);
+  $("#dev-open-source-filter").checked = devUi.openSource;
+  $("#dev-no-signup-filter").checked = devUi.noSignup;
+  $("#dev-copyable-filter").checked = devUi.copyable;
+  $("#pricing-filter").value = devUi.pricing;
+  $$("[data-dev-scope]").forEach((button) => {
+    const activeScope = button.dataset.devScope === "all" ? !isFavoritesScope && !isStackScope : button.dataset.devScope === "favorites" ? isFavoritesScope : isStackScope;
+    button.classList.toggle("is-active", activeScope);
+  });
+  $("#empty-state").hidden = resources.length > 0;
+  const emptyIcon = $("#empty-state .empty-icon");
+  emptyIcon.dataset.icon = isStackScope ? "stack" : isFavoritesScope ? "star" : "code";
+  emptyIcon.innerHTML = icon(emptyIcon.dataset.icon);
+  if (!resources.length) {
+    const queryActive = Boolean(devUi.query.trim());
+    let title = queryActive ? "No matching resources found" : active ? "Nothing found" : "No dev resources yet";
+    let copy = queryActive ? "Try removing a filter or using fewer keywords." : active ? "Change the search or clear the filters." : "The dev resources catalog starts empty. Entries are added as structured data files over time.";
+    let action = active ? "Clear filters" : "Open AI Tools";
+    let recovery = active ? "clear" : "browse";
+    if (isFavoritesScope) { title = active ? "No matching favorite resources" : "No favorite resources yet"; copy = active ? "Clear search and filters to see your favorite resources." : "Save dev resources with the star icon to keep them close."; action = "All resources"; recovery = "browse"; }
+    if (isStackScope) { title = active ? "No matching resources in your stack" : "Your dev stack is empty"; copy = active ? "Clear search and filters to see your stacked resources." : "Open a dev resource and press Save to add it to My Stack."; action = "All resources"; recovery = "browse"; }
+    $("#empty-state h2").textContent = title;
+    $("#empty-state p").textContent = copy;
+    $("#empty-action").textContent = action;
+    $("#empty-action").dataset.recovery = recovery;
+  }
+  $("#missing-tool-suggestion").hidden = true;
+  $("#view-actions").hidden = true;
+  $("#view-actions").innerHTML = "";
+}
+
+function renderDevDetail(resourceId) {
+  const resource = devResourceById(resourceId);
+  if (!resource) { location.hash = "#/dev"; return; }
+  const meta = devCategoryMeta(resource.category);
+  const ref = devRef(resource.id);
+  const favorite = state.favorites.has(ref);
+  const tags = (resource.tags || []).map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join("");
+  const tech = (resource.tech || []).map((item) => `<span class="tag dev-tech-tag">${escapeHtml(item)}</span>`).join("");
+  const flags = [];
+  if (resource.copyable) flags.push("Ready-to-copy code");
+  if (resource.noSignup) flags.push("No account needed");
+  if (resource.openSource) flags.push("Open source");
+  const flagsMarkup = flags.length ? `<div class="dev-detail-flags">${flags.map((flag) => `<span class="tag dev-flag-tag">${escapeHtml(flag)}</span>`).join("")}</div>` : "";
+  const facts = [
+    `<div class="info-row"><dt>Category</dt><dd>${escapeHtml(meta.label)}</dd></div>`,
+    resource.pricing || resource.priceDetails ? `<div class="info-row"><dt>Price</dt><dd>${escapeHtml([pricingLabel(resource.pricing), resource.priceDetails].filter(Boolean).join(" · ") || "Not specified")}</dd></div>` : "",
+    resource.noSignup ? '<div class="info-row"><dt>Signup</dt><dd>Not required</dd></div>' : "",
+    resource.copyable ? '<div class="info-row"><dt>Code</dt><dd>Ready to copy</dd></div>' : "",
+    resource.openSource ? '<div class="info-row"><dt>License</dt><dd>Open source</dd></div>' : "",
+    resource.domain ? `<div class="info-row"><dt>Domain</dt><dd>${escapeHtml(resource.domain)}</dd></div>` : "",
+    resource.addedAt ? `<div class="info-row info-row-reference"><dt>Added</dt><dd>${escapeHtml(formatDate(resource.addedAt))}</dd></div>` : ""
+  ].filter(Boolean).join("");
+  setDocumentMeta(`${resource.name} — Dev Resources — AI-Dekrov`, resource.description || DEFAULT_DESCRIPTION);
+  const main = `<section class="detail-section getting-started-section"><h2>What it provides</h2><p class="detail-caption">${escapeHtml(resource.description || "No description yet.")}</p>${flagsMarkup}</section>` + ((resource.tags || []).length || (resource.tech || []).length ? `<section class="detail-section personal-note-section"><h2>Tags &amp; technology</h2><div class="detail-tags">${tech}${tags}</div></section>` : "");
+  $("#detail-view").innerHTML = `<button class="back-link" type="button" data-back-catalog><span>${icon("arrowLeft")}</span> Back to resources</button><div class="detail-header"><div class="detail-identity">${logoMarkup(resource, meta, true)}<div class="detail-heading"><div class="tool-category">Dev resource · ${escapeHtml(meta.label)}</div><h1>${escapeHtml(resource.name)}</h1>${hasValue(resource.description) ? `<p>${escapeHtml(resource.description)}</p>` : ""}</div></div><div class="detail-actions">${hasValue(resource.url) ? `<a class="button button-primary" href="${escapeHtml(resource.url)}" target="_blank" rel="noreferrer">Open website ${icon("external")}</a>` : ""}<button class="button button-secondary" type="button" data-save-tool="${escapeHtml(ref)}">${icon("bookmark")} Save</button><button class="button button-secondary" type="button" data-favorite="${escapeHtml(ref)}">${icon("star")} ${favorite ? "Favorited" : "Add to favorites"}</button></div></div><div class="detail-grid"><div class="detail-main">${main}</div><aside class="detail-aside"><section class="detail-facts"><h2>Essential facts</h2><dl class="info-list">${facts}</dl></section>${hasValue(resource.url) ? `<a class="button button-secondary detail-website-link" href="${escapeHtml(resource.url)}" target="_blank" rel="noreferrer">Visit ${escapeHtml(sourceLabel(resource.url))} ${icon("external")}</a>` : ""}</aside></div>`;
+}
+
 function renderUseCasesView() {
   const list = state.useCases;
   $("#use-cases-grid").innerHTML = list.length ? list.map((useCase) => {
@@ -356,10 +638,10 @@ function renderCollectionsView() {
 
 function renderSharedBanner(shared) {
   const total = shared.payload.toolIds.length;
-  const available = shared.knownIds.length;
-  const count = `${available} of ${total} tool${total === 1 ? "" : "s"}`;
-  const missing = shared.missingCount > 0 ? `<p class="shared-missing">${shared.missingCount} tool${shared.missingCount === 1 ? "" : "s"} from this shared collection are no longer available.</p>` : "";
-  setDocumentMeta(`${shared.payload.name} — Shared Collection — AI-Dekrov`, "Shared set of AI tools.");
+  const available = shared.knownRefs.length;
+  const count = `${available} of ${total} item${total === 1 ? "" : "s"}`;
+  const missing = shared.missingCount > 0 ? `<p class="shared-missing">${shared.missingCount} item${shared.missingCount === 1 ? "" : "s"} from this shared collection are no longer available.</p>` : "";
+  setDocumentMeta(`${shared.payload.name} — Shared Collection — AI-Dekrov`, "Shared set of catalog items.");
   $("#shared-view").innerHTML = `<div class="shared-head"><div><p class="kicker">SHARED COLLECTION</p><h2>${escapeHtml(shared.payload.name)}</h2><p>${count} · shared as a read-only snapshot in this link.</p>${missing}</div><div class="shared-actions"><button class="button button-primary" type="button" data-shared-save ${available === 0 ? "disabled" : ""} aria-label="Save this shared collection to your collections">${icon("bookmark")} Save to Collections</button><a class="button button-secondary" href="#/">Back to catalog</a></div></div><p class="shared-note">Opening this link does not save anything. Save to Collections makes your own local copy; later edits to the original collection are not reflected in this link.</p>`;
 }
 function renderSharedInvalid(reason) {
@@ -564,10 +846,12 @@ function renderSavedDialog() {
   if (context.mode === "delete") { renderDeleteConfirm(inner); return; }
 }
 function renderSavePicker(inner) {
-  const toolId = state.saveDialogContext.toolId; const tool = state.toolById.get(toolId);
+  const toolId = state.saveDialogContext.toolId;
+  const isDevEntity = isDevRef(toolId);
+  const label = resolveEntityLabel(toolId);
   const stackActive = isToolInStack(toolId);
   const collectionRows = state.collections.collections.map((collection) => { const inCollection = isToolInCollection(collection, toolId); return `<button class="save-collection-row" type="button" data-toggle-collection="${escapeHtml(collection.id)}" aria-pressed="${inCollection}"><span class="check ${inCollection ? "is-checked" : ""}">${inCollection ? "✓" : ""}</span><span>${escapeHtml(collection.name)}</span><span class="save-collection-count">${collectionToolCount(collection)}</span></button>`; }).join("");
-  inner.innerHTML = `<div class="saved-dialog-header"><div><p class="kicker">SAVE</p><h2 id="saved-dialog-title">Save tool</h2></div><button class="icon-button close-saved" type="button" data-close-dialog aria-label="Close">×</button></div><div class="saved-tool-label">${escapeHtml(tool?.name || toolId)}</div><div class="saved-stack-toggle"><span class="saved-list-name">My Stack</span><button class="stack-toggle-button ${stackActive ? "is-active" : ""}" type="button" data-toggle-stack aria-pressed="${stackActive}">${icon("stack")} ${stackActive ? "In My Stack" : "Add to My Stack"}</button></div><div class="saved-collections-section"><span class="saved-list-name">Collections</span><div class="save-collections-list">${collectionRows || '<span class="save-collections-empty">No collections yet.</span>'}</div><button class="new-collection-inline" type="button" data-new-collection>${icon("plus")} New collection</button></div><div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>Done</button></div>`;
+  inner.innerHTML = `<div class="saved-dialog-header"><div><p class="kicker">SAVE</p><h2 id="saved-dialog-title">Save ${isDevEntity ? "resource" : "tool"}</h2></div><button class="icon-button close-saved" type="button" data-close-dialog aria-label="Close">×</button></div><div class="saved-tool-label">${escapeHtml(label)}</div><div class="saved-stack-toggle"><span class="saved-list-name">My Stack</span><button class="stack-toggle-button ${stackActive ? "is-active" : ""}" type="button" data-toggle-stack aria-pressed="${stackActive}">${icon("stack")} ${stackActive ? "In My Stack" : "Add to My Stack"}</button></div><div class="saved-collections-section"><span class="saved-list-name">Collections</span><div class="save-collections-list">${collectionRows || '<span class="save-collections-empty">No collections yet.</span>'}</div><button class="new-collection-inline" type="button" data-new-collection>${icon("plus")} New collection</button></div><div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>Done</button></div>`;
 }
 function renderNameForm(inner, { title, confirm, value = "", placeholder = "Collection name" }) {
   inner.innerHTML = `<div class="saved-dialog-header"><div><p class="kicker">COLLECTIONS</p><h2 id="saved-dialog-title">${escapeHtml(title)}</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button></div><form class="saved-name-form" data-saved-name-form><label class="form-field"><span>Name</span><input class="saved-name-input" type="text" maxlength="${MAX_COLLECTION_NAME}" value="${escapeHtml(value)}" placeholder="${escapeHtml(placeholder)}" autofocus /></label><div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>Cancel</button><button class="button button-primary" type="submit">${escapeHtml(confirm)}</button></div></form>`;
@@ -596,11 +880,43 @@ const BACK_TO_TOP_THRESHOLD = 600;
 const BACK_TO_TOP_HIDE_THRESHOLD = 520;
 function updateBackToTopVisibility() { const button = $("#back-to-top"); const threshold = button.classList.contains("is-visible") ? BACK_TO_TOP_HIDE_THRESHOLD : BACK_TO_TOP_THRESHOLD; button.classList.toggle("is-visible", window.scrollY > threshold); }
 function scrollToTop() { const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"; window.scrollTo({ top: 0, behavior }); if (behavior === "auto") updateBackToTopVisibility(); else window.setTimeout(updateBackToTopVisibility, 500); }
-function syncUrlState() { setMobileDrawer(false); const route = parseRouteHash(location.hash); if (route?.type === "favorites") { state.favoritesOnly = true; state.category = ""; } else if (route?.type === "category") { state.category = route.id; state.favoritesOnly = false; } else if (!getDetailId()) { state.favoritesOnly = false; state.category = ""; } renderNavigation(); renderCatalog(); const restoreScroll = state.restoreScroll; state.restoreScroll = null; window.scrollTo({ top: restoreScroll ?? 0, behavior: restoreScroll == null ? "smooth" : "auto" }); updateBackToTopVisibility(); }
-function rememberCatalogPosition() { state.detailReturn = { hash: location.hash && !getDetailId() ? location.hash : "#/", query: state.query, pricing: state.pricing, platform: state.platform, executionMode: state.executionMode, noSignup: state.noSignup, noApiKey: state.noApiKey, sort: state.sort, catalogSort: state.catalogSort, scrollY: window.scrollY }; }
-function restoreCatalogPosition() { const saved = state.detailReturn; state.detailReturn = null; if (!saved) { location.hash = "#/"; return; } state.query = saved.query; state.pricing = saved.pricing; state.platform = saved.platform; state.executionMode = saved.executionMode || ""; state.noSignup = Boolean(saved.noSignup); state.noApiKey = Boolean(saved.noApiKey); state.sort = saved.sort; state.catalogSort = saved.catalogSort || "recent"; $("#search-input").value = saved.query; $("#pricing-filter").value = saved.pricing; $("#platform-filter").value = saved.platform; $("#execution-filter").value = state.executionMode; $("#no-signup-filter").checked = state.noSignup; $("#no-api-key-filter").checked = state.noApiKey; $("#sort-select option[value=relevance]").hidden = !saved.query.trim(); $("#sort-select").value = saved.sort; state.restoreScroll = saved.scrollY; history.pushState(null, "", saved.hash); syncUrlState(); }
+function syncUrlState() { setMobileDrawer(false); const route = parseRouteHash(location.hash); if (devRoute()) { devUi.favoritesOnly = route?.type === "dev-favorites"; devUi.category = route?.type === "dev-category" ? route.id : ""; } else if (route?.type === "favorites") { state.favoritesOnly = true; state.category = ""; } else if (route?.type === "category") { state.category = route.id; state.favoritesOnly = false; } else if (!getDetailId() && !getDevDetailId()) { state.favoritesOnly = false; state.category = ""; } renderNavigation(); renderCatalog(); const restoreScroll = state.restoreScroll; state.restoreScroll = null; window.scrollTo({ top: restoreScroll ?? 0, behavior: restoreScroll == null ? "smooth" : "auto" }); updateBackToTopVisibility(); }
+function rememberCatalogPosition() {
+  if (isDevUiContext()) {
+    state.detailReturn = { dev: true, hash: location.hash && !getDevDetailId() ? location.hash : "#/dev", query: devUi.query, pricing: devUi.pricing, openSource: devUi.openSource, noSignup: devUi.noSignup, copyable: devUi.copyable, sort: devUi.sort, catalogSort: devUi.catalogSort, favoritesOnly: devUi.favoritesOnly, scrollY: window.scrollY };
+    return;
+  }
+  state.detailReturn = { hash: location.hash && !getDetailId() ? location.hash : "#/", query: state.query, pricing: state.pricing, platform: state.platform, executionMode: state.executionMode, noSignup: state.noSignup, noApiKey: state.noApiKey, sort: state.sort, catalogSort: state.catalogSort, scrollY: window.scrollY };
+}
+function restoreCatalogPosition() { const saved = state.detailReturn; state.detailReturn = null; if (!saved) { location.hash = devRoute() ? "#/dev" : "#/"; return; } if (saved.dev) { devUi.query = saved.query || ""; devUi.pricing = saved.pricing || ""; devUi.openSource = Boolean(saved.openSource); devUi.noSignup = Boolean(saved.noSignup); devUi.copyable = Boolean(saved.copyable); devUi.sort = saved.sort || "recent"; devUi.catalogSort = saved.catalogSort || "recent"; devUi.favoritesOnly = Boolean(saved.favoritesOnly); $("#search-input").value = devUi.query; $("#pricing-filter").value = devUi.pricing; $("#sort-select option[value=relevance]").hidden = !devUi.query.trim(); $("#sort-select").value = devUi.sort; state.restoreScroll = saved.scrollY; history.pushState(null, "", saved.hash); syncUrlState(); return; } state.query = saved.query; state.pricing = saved.pricing; state.platform = saved.platform; state.executionMode = saved.executionMode || ""; state.noSignup = Boolean(saved.noSignup); state.noApiKey = Boolean(saved.noApiKey); state.sort = saved.sort; state.catalogSort = saved.catalogSort || "recent"; $("#search-input").value = saved.query; $("#pricing-filter").value = saved.pricing; $("#platform-filter").value = saved.platform; $("#execution-filter").value = state.executionMode; $("#no-signup-filter").checked = state.noSignup; $("#no-api-key-filter").checked = state.noApiKey; $("#sort-select option[value=relevance]").hidden = !saved.query.trim(); $("#sort-select").value = saved.sort; state.restoreScroll = saved.scrollY; history.pushState(null, "", saved.hash); syncUrlState(); }
 function setSearchQuery(value) { const next = String(value || ""); const wasActive = Boolean(state.query.trim()); const active = Boolean(next.trim()); if (!wasActive && active && state.sort !== "relevance") { state.catalogSort = state.sort; state.sort = "relevance"; } else if (wasActive && !active && state.sort === "relevance") { state.sort = state.catalogSort || "recent"; } state.query = next; $("#sort-select option[value=relevance]").hidden = !active; $("#sort-select").value = state.sort; }
-function clearFilters() { setSearchQuery(""); state.category = ""; state.pricing = ""; state.platform = ""; state.executionMode = ""; state.noSignup = false; state.noApiKey = false; $("#search-input").value = ""; $("#pricing-filter").value = ""; $("#platform-filter").value = ""; $("#execution-filter").value = ""; $("#no-signup-filter").checked = false; $("#no-api-key-filter").checked = false; if (!getDetailId()) { const view = currentView(); let target = state.favoritesOnly ? "#/favorites" : "#/"; if (view?.type === "stack") target = "#/stack"; else if (view?.type === "collections") target = "#/collections"; else if (view?.type === "collection" || view?.type === "use-case" || view?.type === "shared") target = location.hash; history.replaceState(null, "", target); renderNavigation(); renderCatalog(); } }
+function setDevSearchQuery(value) { const next = String(value || ""); const wasActive = Boolean(devUi.query.trim()); const active = Boolean(next.trim()); if (!wasActive && active && devUi.sort !== "relevance") { devUi.catalogSort = devUi.sort; devUi.sort = "relevance"; } else if (wasActive && !active && devUi.sort === "relevance") { devUi.sort = devUi.catalogSort || "recent"; } devUi.query = next; $("#sort-select option[value=relevance]").hidden = !active; $("#sort-select").value = devUi.sort; }
+function clearFilters() {
+  if (isDevUiContext()) {
+    const wasActive = Boolean(devUi.query.trim());
+    if (wasActive && devUi.sort === "relevance") devUi.sort = devUi.catalogSort || "recent";
+    devUi.query = ""; devUi.category = ""; devUi.pricing = ""; devUi.openSource = false; devUi.noSignup = false; devUi.copyable = false;
+    $("#search-input").value = "";
+    $("#pricing-filter").value = "";
+    $("#dev-open-source-filter").checked = false;
+    $("#dev-no-signup-filter").checked = false;
+    $("#dev-copyable-filter").checked = false;
+    $("#sort-select option[value=relevance]").hidden = true;
+    $("#sort-select").value = devUi.sort;
+    if (!getDevDetailId()) {
+      const view = devRoute() || currentView();
+      let target = devUi.favoritesOnly ? "#/dev/favorites" : "#/dev";
+      if (view?.type === "dev-stack") target = "#/dev/stack";
+      else if (view?.type === "dev-category") target = "#/dev";
+      else if (view?.type === "collection" || view?.type === "shared") target = location.hash;
+      history.replaceState(null, "", target);
+      renderNavigation();
+      renderCatalog();
+    }
+    return;
+  }
+  setSearchQuery(""); state.category = ""; state.pricing = ""; state.platform = ""; state.executionMode = ""; state.noSignup = false; state.noApiKey = false; $("#search-input").value = ""; $("#pricing-filter").value = ""; $("#platform-filter").value = ""; $("#execution-filter").value = ""; $("#no-signup-filter").checked = false; $("#no-api-key-filter").checked = false; if (!getDetailId()) { const view = currentView(); let target = state.favoritesOnly ? "#/favorites" : "#/"; if (view?.type === "stack") target = "#/stack"; else if (view?.type === "collections") target = "#/collections"; else if (view?.type === "collection" || view?.type === "use-case" || view?.type === "shared") target = location.hash; history.replaceState(null, "", target); renderNavigation(); renderCatalog(); } }
+
 let jsonCandidate = null;
 let submissionDraft = null;
 function setAddMode(mode) { $$("[data-add-mode]").forEach((tab) => { const active = tab.dataset.addMode === mode; tab.classList.toggle("is-active", active); tab.setAttribute("aria-selected", String(active)); }); $$("[data-add-panel]").forEach((panel) => { panel.hidden = panel.dataset.addPanel !== mode; }); if (mode === "manual") $("#tool-form [name=name]").focus(); if (mode === "smart") $("#smart-url").focus(); if (mode === "json") updateAiPrompt(); }
@@ -610,6 +926,11 @@ function openSuggestDialog({ mode = "smart", name = "", url = "" } = {}) {
   openDialog(mode);
   if (mode === "manual" && name) $("#tool-form").elements.name.value = name;
   if (mode === "smart" && url) $("#smart-url").value = url;
+}
+function switchCatalog(kind) {
+  const hash = location.hash;
+  const scope = hash === "#/favorites" || hash === "#/dev/favorites" ? "favorites" : hash === "#/stack" || hash === "#/dev/stack" ? "stack" : "";
+  location.hash = kind === "dev" ? scope ? `#/dev/${scope}` : "#/dev" : scope ? `#/${scope}` : "#/";
 }
 function closeDialog() { $("#tool-dialog").close(); }
 function makeId(name) { const stem = name.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "tool"; const taken = new Set(state.tools.map((tool) => tool.id)); let id = stem; let index = 2; while (taken.has(id)) { id = `${stem}-${index}`; index += 1; } return id; }
@@ -2070,12 +2391,28 @@ let searchInputTimer;
 function bindEvents() {
   $("#back-to-top").addEventListener("click", scrollToTop); window.addEventListener("scroll", updateBackToTopVisibility, { passive: true });
   $("#theme-toggle").addEventListener("click", () => setTheme(state.theme === "dark" ? "light" : "dark")); $("#add-tool-button").addEventListener("click", () => openDialog("smart")); $("#info-button").addEventListener("click", () => $("#info-dialog").showModal()); $$('[data-add-mode]').forEach((button) => button.addEventListener("click", () => setAddMode(button.dataset.addMode))); $$("[data-close-dialog]").forEach((button) => button.addEventListener("click", closeDialog)); $$("[data-close-info]").forEach((button) => button.addEventListener("click", () => $("#info-dialog").close())); $("#tool-dialog").addEventListener("click", (event) => { if (event.target === event.currentTarget) closeDialog(); }); $("#tool-dialog").addEventListener("close", resetAddDraft); $("#info-dialog").addEventListener("click", (event) => { if (event.target === event.currentTarget) $("#info-dialog").close(); }); $("#smart-add-form").addEventListener("submit", (event) => { event.preventDefault(); handleSmartAdd($("#smart-url").value); }); $("#tool-form").addEventListener("submit", (event) => { event.preventDefault(); saveNewTool(event.currentTarget); }); $("#prompt-url").addEventListener("input", updateAiPrompt); $("#prompt-context").addEventListener("input", updateAiPrompt); $("#copy-ai-prompt").addEventListener("click", () => copyText($("#ai-prompt").value)); $("#reset-json-import").addEventListener("click", resetJsonImport); $("#json-validate").addEventListener("click", () => { try { const raw = JSON.parse($("#json-import-input").value); jsonCandidate = normalizeImportedTool(raw); $("#json-import-input").value = JSON.stringify(raw, null, 2); setJsonErrors(); renderJsonPreview(jsonCandidate); $("#json-import-confirm").hidden = false; $("#json-edit-manual").hidden = false; showToast("JSON validated"); } catch (error) { jsonCandidate = null; $("#json-preview").hidden = true; $("#json-import-confirm").hidden = true; $("#json-edit-manual").hidden = true; setJsonErrors(error.errors || [error.message || "Could not parse JSON."]); } }); $("#json-edit-manual").addEventListener("click", () => { if (!jsonCandidate) return; fillManualForm(jsonCandidate); setAddMode("manual"); showToast("You can edit the fields"); }); $("#json-import-confirm").addEventListener("click", () => { if (!jsonCandidate) return; prepareSubmission(jsonCandidate); }); $("#submission-edit").addEventListener("click", () => { if (!submissionDraft?.tool) return; fillManualForm(submissionDraft.tool); $("#tool-form").dataset.existingId = submissionDraft.existingToolId || ""; setAddMode("manual"); }); $("#submission-open-issue").addEventListener("click", openGitHubIssue);
-  $("#mobile-menu-toggle").addEventListener("click", () => setMobileDrawer(!$("#sidebar").classList.contains("is-open"))); $("#drawer-backdrop").addEventListener("click", () => setMobileDrawer(false)); $("#search-input").addEventListener("input", (event) => { setSearchQuery(event.target.value); clearTimeout(searchInputTimer); searchInputTimer = setTimeout(renderCatalog, 90); }); $("#pricing-filter").addEventListener("change", (event) => { state.pricing = event.target.value; renderCatalog(); }); $("#platform-filter").addEventListener("change", (event) => { state.platform = event.target.value; renderCatalog(); }); $("#execution-filter").addEventListener("change", (event) => { state.executionMode = event.target.value; renderCatalog(); }); $("#no-signup-filter").addEventListener("change", (event) => { state.noSignup = event.target.checked; renderCatalog(); }); $("#no-api-key-filter").addEventListener("change", (event) => { state.noApiKey = event.target.checked; renderCatalog(); }); $("#sort-select").addEventListener("change", (event) => { state.sort = event.target.value; if (state.sort !== "relevance") state.catalogSort = state.sort; renderCatalog(); });  $("#clear-filters").addEventListener("click", clearFilters);  $("#empty-action").addEventListener("click", (event) => { const recovery = event.currentTarget.dataset.recovery; if (recovery === "clear") { clearFilters(); return; } if (recovery === "browse") { location.hash = "#/"; return; } openDialog(); }); $("#missing-tool-action").addEventListener("click", (event) => { const button = event.currentTarget; const value = button.dataset.missingToolValue || ""; if (button.dataset.missingToolMode === "smart") openSuggestDialog({ mode: "smart", url: value }); else openSuggestDialog({ mode: "manual", name: value }); });
+  $("#mobile-menu-toggle").addEventListener("click", () => setMobileDrawer(!$("#sidebar").classList.contains("is-open")));
+  $("#drawer-backdrop").addEventListener("click", () => setMobileDrawer(false));
+  $("#search-input").addEventListener("input", (event) => { if (isDevUiContext()) setDevSearchQuery(event.target.value); else setSearchQuery(event.target.value); clearTimeout(searchInputTimer); searchInputTimer = setTimeout(renderCatalog, 90); });
+  $("#pricing-filter").addEventListener("change", (event) => { if (isDevUiContext()) devUi.pricing = event.target.value; else state.pricing = event.target.value; renderCatalog(); });
+  $("#platform-filter").addEventListener("change", (event) => { state.platform = event.target.value; renderCatalog(); });
+  $("#execution-filter").addEventListener("change", (event) => { state.executionMode = event.target.value; renderCatalog(); });
+  $("#no-signup-filter").addEventListener("change", (event) => { state.noSignup = event.target.checked; renderCatalog(); });
+  $("#no-api-key-filter").addEventListener("change", (event) => { state.noApiKey = event.target.checked; renderCatalog(); });
+  $("#sort-select").addEventListener("change", (event) => { if (isDevUiContext()) { devUi.sort = event.target.value; if (devUi.sort !== "relevance") devUi.catalogSort = devUi.sort; } else { state.sort = event.target.value; if (state.sort !== "relevance") state.catalogSort = state.sort; } renderCatalog(); });
+  $("#dev-open-source-filter").addEventListener("change", (event) => { devUi.openSource = event.target.checked; renderCatalog(); });
+  $("#dev-no-signup-filter").addEventListener("change", (event) => { devUi.noSignup = event.target.checked; renderCatalog(); });
+  $("#dev-copyable-filter").addEventListener("change", (event) => { devUi.copyable = event.target.checked; renderCatalog(); });
+  $("#clear-filters").addEventListener("click", clearFilters);
+  $("#empty-action").addEventListener("click", (event) => { const recovery = event.currentTarget.dataset.recovery; if (recovery === "clear") { clearFilters(); return; } if (recovery === "browse") { location.hash = isDevUiContext() ? "#/dev" : "#/"; return; } openDialog(); });
+  $$("[data-kind-switch]").forEach((button) => button.addEventListener("click", () => switchCatalog(button.dataset.kindSwitch)));
+  $$("[data-dev-scope]").forEach((button) => button.addEventListener("click", () => { const scope = button.dataset.devScope; location.hash = scope === "favorites" ? "#/dev/favorites" : scope === "stack" ? "#/dev/stack" : "#/dev"; }));
+  $("#missing-tool-action").addEventListener("click", (event) => { const button = event.currentTarget; const value = button.dataset.missingToolValue || ""; if (button.dataset.missingToolMode === "smart") openSuggestDialog({ mode: "smart", url: value }); else openSuggestDialog({ mode: "manual", name: value }); });
   $("#new-collection-button").addEventListener("click", () => openNewCollectionDialog());
   $("#saved-dialog").addEventListener("click", (event) => { if (event.target === event.currentTarget) closeSavedDialog(); });
   $("#saved-dialog").addEventListener("close", () => { state.saveDialogContext = null; });
   document.addEventListener("submit", (event) => { const nameForm = event.target.closest("[data-saved-name-form]"); if (nameForm) { event.preventDefault(); commitSavedNameForm(nameForm); } });
-  document.addEventListener("click", (event) => { const category = event.target.closest("[data-category-filter]"); if (category) { state.category = category.dataset.categoryFilter; history.replaceState(null, "", state.category ? `#/category/${encodeURIComponent(state.category)}` : "#/"); renderNavigation(); renderCatalog(); } const toolDetail = event.target.closest("[data-tool-detail]"); if (toolDetail) rememberCatalogPosition(); const back = event.target.closest("[data-back-catalog]"); if (back) restoreCatalogPosition();    const favorite = event.target.closest("[data-favorite]"); if (favorite) { event.preventDefault(); toggleFavorite(favorite.dataset.favorite); }
+  document.addEventListener("click", (event) => { const category = event.target.closest("[data-category-filter]"); if (category) { const categoryValue = category.dataset.categoryFilter; if (isDevUiContext()) { devUi.category = categoryValue; const view = currentView(); history.replaceState(null, "", view?.type === "collection" || view?.type === "shared" ? location.hash : categoryValue ? `#/dev/category/${encodeURIComponent(categoryValue)}` : "#/dev"); } else { state.category = categoryValue; history.replaceState(null, "", categoryValue ? `#/category/${encodeURIComponent(categoryValue)}` : "#/"); } renderNavigation(); renderCatalog(); } const toolDetail = event.target.closest("[data-tool-detail], [data-dev-detail]"); if (toolDetail) rememberCatalogPosition(); const back = event.target.closest("[data-back-catalog]"); if (back) restoreCatalogPosition();    const favorite = event.target.closest("[data-favorite]"); if (favorite) { event.preventDefault(); toggleFavorite(favorite.dataset.favorite); }
     const startOption = event.target.closest("[data-start-option]"); if (startOption) { event.preventDefault(); const parts = startOption.dataset.startOption.split(":"); setStartAnswer(parts[0], parts[1]); }
     const startBack = event.target.closest("[data-start-back]"); if (startBack) { event.preventDefault(); goStartBack(); }
     const startOver = event.target.closest("[data-start-over]"); if (startOver) { event.preventDefault(); state.startHere.answers = {}; renderStartHere(); }
@@ -2087,7 +2424,7 @@ function bindEvents() {
     const renameCollectionButton = event.target.closest("[data-rename-collection]"); if (renameCollectionButton) { event.preventDefault(); openRenameCollectionDialog(renameCollectionButton.dataset.renameCollection); }
     const shareCollectionButton = event.target.closest("[data-share-collection]"); if (shareCollectionButton) { event.preventDefault(); const collection = collectionById(shareCollectionButton.dataset.shareCollection); if (collection) { copyText(sharedCollectionUrl(collection, window.location), "Share link copied"); } }
     const deleteCollectionButton = event.target.closest("[data-delete-collection]"); if (deleteCollectionButton) { event.preventDefault(); openDeleteCollectionDialog(deleteCollectionButton.dataset.deleteCollection); }
-    const sharedSave = event.target.closest("[data-shared-save]"); if (sharedSave) { event.preventDefault(); const shared = state.shared; if (shared) { const importer = importSharedCollection(state.collections.collections, shared.payload, new Set(state.toolById.keys())); if (!importer) { showToast("Nothing to save in this shared collection"); return; } state.collections.collections = importer.collections; saveCollections(); showToast("Collection saved"); location.hash = `#/collections/${encodeURIComponent(importer.collection.id)}`; } }
+    const sharedSave = event.target.closest("[data-shared-save]"); if (sharedSave) { event.preventDefault(); const shared = state.shared; if (shared) { const importer = importSharedCollection(state.collections.collections, shared.payload, knownToolIds(), knownDevIds()); if (!importer) { showToast("Nothing to save in this shared collection"); return; } state.collections.collections = importer.collections; saveCollections(); showToast("Collection saved"); location.hash = `#/collections/${encodeURIComponent(importer.collection.id)}`; } }
     const confirmDelete = event.target.closest("[data-confirm-delete]"); if (confirmDelete) { event.preventDefault(); const context = state.saveDialogContext; if (context?.collectionId) { state.collections.collections = deleteCollection(state.collections.collections, context.collectionId); saveCollections(); closeSavedDialog(); renderCatalog(); showToast("Collection deleted"); } }
     if (event.target.closest("[data-close-dialog]") && event.target.closest("#saved-dialog")) { event.preventDefault(); closeSavedDialog(); } const update = event.target.closest("[data-propose-update]"); if (update) { const tool = state.tools.find((item) => item.id === update.dataset.proposeUpdate); if (tool) startUpdateSubmission(tool); } const saveNote = event.target.closest("[data-note-save]"); if (saveNote) { savePersonalNote(saveNote.dataset.noteSave, $("#personal-note-input").value); renderDetail(saveNote.dataset.noteSave); showToast("Personal note saved"); } const deleteNote = event.target.closest("[data-note-delete]"); if (deleteNote) { savePersonalNote(deleteNote.dataset.noteDelete, ""); renderDetail(deleteNote.dataset.noteDelete); showToast("Personal note deleted"); }    const copy = event.target.closest("[data-copy]"); if (copy) copyText(copy.dataset.copy);
     const setupTab = event.target.closest("[data-setup-tab]"); if (setupTab) { event.preventDefault(); if (state.setup) state.setup.tab = setupTab.dataset.setupTab; renderCatalog(); }
@@ -2110,26 +2447,31 @@ async function init() {
   renderStaticIcons();
   bindEvents();
   try {
-    const [toolsResponse, schemaResponse, configResponse, useCasesResponse, startHereResponse, setupResponse] = await Promise.all([
+    const [toolsResponse, schemaResponse, configResponse, useCasesResponse, startHereResponse, setupResponse, devResourcesResponse] = await Promise.all([
       fetchJson("data/tools.json", { bust: true }),
       fetchJson("data/tool-schema.json"),
       fetchJson("data/site-config.json"),
       fetchJson("data/use-cases.json").catch(() => null),
       fetchJson(START_HERE_PATH).catch(() => null),
-      fetchJson(SETUP_RECIPES_PATH).catch(() => null)
+      fetchJson(SETUP_RECIPES_PATH).catch(() => null),
+      fetchJson("data/dev-resources.json").catch(() => null)
     ]);
     if (!requiredResponsesAreOk([toolsResponse, schemaResponse, configResponse])) throw new Error("Could not load catalog data");
     state.baseTools = await toolsResponse.json();
     state.schema = await schemaResponse.json();
     state.siteConfig = await configResponse.json();
-    const [useCasesSource, startHereSource, setupSource] = await Promise.all([
+    const [useCasesSource, startHereSource, setupSource, devSource] = await Promise.all([
       readOptionalJson(useCasesResponse),
       readOptionalJson(startHereResponse),
-      readOptionalJson(setupResponse)
+      readOptionalJson(setupResponse),
+      readOptionalJson(devResourcesResponse)
     ]);
     state.useCases = parseUseCases(useCasesSource);
     state.startHere.config = startHereSource ? parseStartHere(startHereSource, { platforms: schemaEnum("platforms"), pricing: schemaEnum("pricing") }) : { version: 1, steps: [] };
     state.setupRecipes = parseOptionalSetupRecipes(setupSource, new Set(state.baseTools.map((tool) => tool.id)));
+    state.devResources = parseDevResources(devSource);
+    state.devById = new Map(state.devResources.map((resource) => [resource.id, resource]));
+    state.devSearchEngine = createDevSearch(state.devResources);
     state.searchEngine = createCatalogSearch(state.baseTools);
     renderSchemaControls();
     updateAiPrompt();

@@ -11,6 +11,27 @@ test("route parser keeps exact stack matching and safely decodes valid routes", 
   assert.deepEqual(parseRouteHash("#/collections/my%20tools"), { type: "collection", id: "my tools" });
 });
 
+test("dev catalog routes are recognized and kept separate from tools", () => {
+  assert.deepEqual(parseRouteHash("#/dev"), { type: "dev" });
+  assert.deepEqual(parseRouteHash("#/dev/favorites"), { type: "dev-favorites" });
+  assert.deepEqual(parseRouteHash("#/dev/stack"), { type: "dev-stack" });
+  assert.deepEqual(parseRouteHash("#/dev/category/ui-components"), { type: "dev-category", id: "ui-components" });
+  assert.deepEqual(parseRouteHash("#/dev/resource/css-tricks"), { type: "dev-resource", id: "css-tricks" });
+  assert.deepEqual(parseRouteHash("#/dev/resource/my%20resource"), { type: "dev-resource", id: "my resource" });
+  // Not dev routes.
+  assert.equal(parseRouteHash("#/devfoo"), null);
+  assert.equal(parseRouteHash("#/dev/"), null);
+  assert.equal(parseRouteHash("#/dev/category"), null);
+  assert.equal(parseRouteHash("#/dev/resource"), null);
+  assert.equal(parseRouteHash("#/dev/favorites/x"), null);
+  assert.equal(parseRouteHash("#/dev/stack/x"), null);
+  // Existing routes unchanged.
+  assert.deepEqual(parseRouteHash("#/tools/cline"), { type: "tool", id: "cline" });
+  assert.deepEqual(parseRouteHash("#/category/coding-agents"), { type: "category", id: "coding-agents" });
+  assert.deepEqual(parseRouteHash("#/use-cases"), { type: "use-cases" });
+  assert.deepEqual(parseRouteHash("#/collections/x"), { type: "collection", id: "x" });
+});
+
 test("shared route is recognized and returns its token", () => {
   const token = "eyJ2IjoxLCJuYW1lIjoiQ29kaW5nIiwidG9vbElkcyI6W119";
   assert.deepEqual(parseRouteHash(`#/shared/${token}`), { type: "shared", token });

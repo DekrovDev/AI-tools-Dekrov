@@ -57,10 +57,16 @@
         <main class="main-content">
           <section class="hero" id="catalog-view">
             <div>
-              <h1>AI tools, organized.</h1>
-              <p>Keep the useful ones close. Discover the next one without the noise.</p>
+              <div class="catalog-switcher" id="catalog-switcher" role="tablist" aria-label="Catalog">
+                <button class="catalog-switch is-active" type="button" role="tab" aria-selected="true" data-kind-switch="tools">AI Tools</button>
+                <button class="catalog-switch" type="button" role="tab" aria-selected="false" data-kind-switch="dev">Dev Resources</button>
+              </div>
+              <h1 id="hero-title">AI tools, organized.</h1>
+              <p id="hero-subtitle">Keep the useful ones close. Discover the next one without the noise.</p>
             </div>
           </section>
+
+          <section class="shared-view" id="shared-view" hidden></section>
 
           <section class="toolbar" aria-label="Search and filters">
             <div class="toolbar-top">
@@ -69,6 +75,12 @@
                 <input id="search-input" type="search" placeholder="Search tools, tags, and notes..." autocomplete="off" />
               </label>
               <label class="sort-control" for="sort-select"><span>Sort by</span><select id="sort-select" aria-label="Sort catalog"><option value="recent">Recently added</option><option value="relevance" hidden>Relevance</option><option value="name">By name</option><option value="category">By category</option></select></label>
+            </div>
+            <div class="toolbar-dev-scope" id="dev-scope-chips" hidden aria-label="Saved dev resources">
+              <span class="filter-label">Saved</span>
+              <button class="chip" type="button" data-dev-scope="all">All resources</button>
+              <button class="chip" type="button" data-dev-scope="favorites">Favorites</button>
+              <button class="chip" type="button" data-dev-scope="stack">My Stack</button>
             </div>
             <div class="toolbar-filters">
               <span class="filter-label">Filter</span>
@@ -79,6 +91,9 @@
                 <div class="select-field"><label for="execution-filter">Execution</label><select id="execution-filter"><option value="">Execution: Any</option></select></div>
                 <label class="filter-toggle"><input id="no-signup-filter" type="checkbox" /><span>No signup</span></label>
                 <label class="filter-toggle"><input id="no-api-key-filter" type="checkbox" /><span>No API key</span></label>
+                <label class="filter-toggle dev-only-filter" hidden><input id="dev-open-source-filter" type="checkbox" /><span>Open source</span></label>
+                <label class="filter-toggle dev-only-filter" hidden><input id="dev-no-signup-filter" type="checkbox" /><span>No signup</span></label>
+                <label class="filter-toggle dev-only-filter" hidden><input id="dev-copyable-filter" type="checkbox" /><span>Copy code</span></label>
                 <button class="clear-button inline-clear-button" id="clear-filters" type="button" hidden>Clear</button>
               </div>
             </div>
@@ -100,8 +115,6 @@
               <button class="button button-secondary" id="missing-tool-action" type="button" aria-label="Suggest this tool through the existing submission flow">Suggest this tool</button>
             </div>
           </section>
-
-          <section class="shared-view" id="shared-view" hidden></section>
 
           <section class="collections-view" id="collections-view" hidden>
             <div class="collections-head">

@@ -16,6 +16,7 @@ import {
   isReservedName,
   normalizeCollectionName
 } from "./saved-library.js";
+import { entityRefParts, KIND_DEV, KIND_TOOLS } from "./entity-ids.js";
 
 export const SHARED_VERSION = 1;
 // How many tool IDs a single shared link may carry. The catalog currently has
@@ -34,8 +35,10 @@ const TOKEN_PATTERN = /^[A-Za-z0-9_-]+$/;
 const BASE64_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 const BASE64_LOOKUP = new Map([...BASE64_ALPHABET].map((char, index) => [char, index]));
 
-function isValidToolId(value) {
-  return typeof value === "string" && value.length > 0 && TOOL_ID_PATTERN.test(value);
+function isValidEntityRef(value) {
+  if (typeof value !== "string" || !value) return false;
+  const { kind, id } = entityRefParts(value);
+  return (kind === KIND_TOOLS || kind === KIND_DEV) && TOOL_ID_PATTERN.test(id);
 }
 
 function utf8Encode(text) {
@@ -90,7 +93,7 @@ function base64UrlToBytes(token) {
 export function createSharedCollectionPayload(collection) {
   const name = normalizeCollectionName(collection?.name);
   const ids = Array.isArray(collection?.toolIds)
-    ? dedupeStrings(collection.toolIds).filter(isValidToolId).slice(0, MAX_SHARED_IDS)
+    ? dedupeStrings(collection.toolIds).filter(isValidEntityRef).slice(0, MAX_SHARED_IDS)
     : [];
   return { v: SHARED_VERSION, name, toolIds: ids };
 }
@@ -116,7 +119,7 @@ export function normalizeSharedCollection(raw) {
   const seen = new Set();
   for (const value of raw.toolIds) {
     if (toolIds.length >= MAX_SHARED_IDS) break;
-    if (!isValidToolId(value) || seen.has(value)) continue;
+    if (!isValidEntityRef(value) || seen.has(value)) continue;
     seen.add(value);
     toolIds.push(value);
   }
@@ -158,6 +161,31 @@ export function resolveSharedToolIds(shared, knownIds) {
   return { knownIds: knownList, missingCount: Math.max(0, list.length - knownList.length) };
 }
 
+// Resolve both catalog kinds without changing the v1 payload shape. Bare ids
+// continue to mean AI tools; `dev:` ids are explicit Dev Resources.
+export function resolveSharedEntityRefs(shared, knownToolIds, knownDevIds) {
+  const tools = knownToolIds instanceof Set ? knownToolIds : new Set(knownToolIds || []);
+  const dev = knownDevIds instanceof Set ? knownDevIds : new Set(knownDevIds || []);
+  const list = Array.isArray(shared?.toolIds) ? shared.toolIds : [];
+  const knownRefs = [];
+  const knownToolRefs = [];
+  const knownDevRefs = [];
+  for (const ref of list) {
+    const { kind, id } = entityRefParts(ref);
+    if (kind === KIND_DEV ? dev.has(id) : tools.has(id)) {
+      knownRefs.push(ref);
+      if (kind === KIND_DEV) knownDevRefs.push(ref);
+      else knownToolRefs.push(ref);
+    }
+  }
+  return {
+    knownRefs,
+    knownToolRefs,
+    knownDevRefs,
+    missingCount: Math.max(0, list.length - knownRefs.length)
+  };
+}
+
 // Canonical, host-agnostic share URL built from any location-like object.
 export function sharedCollectionUrl(collection, locationLike) {
   const token = encodeSharedCollection(collection);
@@ -196,15 +224,15 @@ export function availableSharedName(localNames, sharedName) {
 // time. The local id and timestamps are freshly generated here (never reused
 // from storage). Returns null when there is nothing meaningful to save
 // (empty resolved set or an unresolvable duplicate-safe name).
-export function importSharedCollection(collections, shared, knownIds) {
+export function importSharedCollection(collections, shared, knownIds, knownDevIds = new Set()) {
   if (!shared || typeof shared !== "object") return null;
-  const resolved = resolveSharedToolIds(shared, knownIds);
-  if (resolved.knownIds.length === 0) return null;
+  const resolved = resolveSharedEntityRefs(shared, knownIds, knownDevIds);
+  if (resolved.knownRefs.length === 0) return null;
   const names = (Array.isArray(collections) ? collections : []).map((collection) => collection?.name || "");
   const name = availableSharedName(names, shared.name);
   if (!name) return null;
   const now = new Date().toISOString();
-  const collection = { id: generateCollectionId(), name, toolIds: resolved.knownIds, createdAt: now, updatedAt: now };
+  const collection = { id: generateCollectionId(), name, toolIds: resolved.knownRefs, createdAt: now, updatedAt: now };
   return { collection, collections: [...(Array.isArray(collections) ? collections : []), collection] };
 }
 
