@@ -157,6 +157,27 @@ test("Dev workflows preserve unrelated labels and approval has a preflight", asy
   assert.ok(apply.includes("validateDevResourceIssue"));
 });
 
+test("approved Dev Resource workflow exports RESULT_PATH in both create and resume modes", async () => {
+  const approved = await readFile(new URL("../.github/workflows/approved-dev-resource-submission.yml", import.meta.url), "utf8");
+  const stepStart = approved.indexOf("Create or resume pull request");
+  const step = approved.slice(stepStart, approved.indexOf("gh pr create") + "gh pr create".length);
+  const assignments = [...step.matchAll(/(?:^|\n)\s*(export )?RESULT_PATH="\$RUNNER_TEMP\/([^"]+)"/g)]
+    .map((match) => ({ exported: match[1] === "export ", file: match[2] }));
+  assert.equal(assignments.length, 2, "both the create and resume branches must assign RESULT_PATH");
+  assert.ok(assignments.every((assignment) => assignment.exported), "RESULT_PATH must be exported so the node step can read process.env.RESULT_PATH");
+  // Each mode must point at the result file that its own writer produced in the same workflow run.
+  const applyOutput = approved.match(/apply-dev-resource-submission\.mjs[^\n]*--output "\$RUNNER_TEMP\/([^"]+)"/)[1];
+  const preflightOutput = approved.match(/preflight-dev-resource-approval\.mjs[^\n]*--output "\$RUNNER_TEMP\/([^"]+)"/)[1];
+  assert.deepEqual(new Set(assignments.map((assignment) => assignment.file)), new Set([applyOutput, preflightOutput]));
+  const ifIndex = step.indexOf('if [ "$ACTION" = "create" ]');
+  const elseIndex = step.indexOf("\n          else\n");
+  const fiIndex = step.indexOf("\n          fi\n");
+  assert.ok(ifIndex > -1 && elseIndex > -1 && fiIndex > -1 && ifIndex < elseIndex && elseIndex < fiIndex);
+  const fileIn = (from, to) => step.slice(from, to).match(/export RESULT_PATH="\$RUNNER_TEMP\/([^"]+)"/)[1];
+  assert.equal(fileIn(ifIndex, elseIndex), applyOutput, "create mode reads the file the apply step wrote");
+  assert.equal(fileIn(elseIndex, fiIndex), preflightOutput, "resume mode reads the file the preflight step wrote");
+});
+
 test("The shared header button chooses the current catalog dialog without propagation suppression", async () => {
   const app = await readFile(new URL("../app.js", import.meta.url), "utf8");
   assert.ok(app.includes('if (isDevUiContext()) openDevResourceDialog("smart"); else openDialog("smart");'));
