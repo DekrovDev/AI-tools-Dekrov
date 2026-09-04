@@ -1,28 +1,4 @@
 {
   "version": 1,
-  "resources": [
-    {
-      "id": "animista",
-      "name": "Animista",
-      "category": "animations",
-      "description": "A library of ready-to-use CSS animations that can be customized and copied directly into projects. It provides a visual interface for selecting, tweaking, and generating animation code for web development.",
-      "url": "https://animista.net/",
-      "favicon": "",
-      "tags": [
-        "css-animations",
-        "animation-library",
-        "web-animations",
-        "keyframes",
-        "ui-effects"
-      ],
-      "tech": [
-        "CSS"
-      ],
-      "pricing": "free",
-      "openSource": false,
-      "noSignup": true,
-      "copyable": true,
-      "addedAt": "2026-09-04"
-    }
-  ]
+  "resources": []
 }
