@@ -50,7 +50,12 @@ jobs:
             export RESULT_PATH="$RUNNER_TEMP/dev-resource-preflight.json"
           fi
           node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync(process.env.RESULT_PATH)); fs.writeFileSync(process.env.RUNNER_TEMP + '/pr-title.txt', r.title); fs.writeFileSync(process.env.RUNNER_TEMP + '/pr-body.md', r.body);"
-          gh pr create --base "${{ github.event.repository.default_branch }}" --head "$branch" --title "$(cat \"$RUNNER_TEMP/pr-title.txt\")" --body-file "$RUNNER_TEMP/pr-body.md"
+          title="$(cat "$RUNNER_TEMP/pr-title.txt")"
+          gh pr create \
+            --base "${{ github.event.repository.default_branch }}" \
+            --head "$branch" \
+            --title "$title" \
+            --body-file "$RUNNER_TEMP/pr-body.md"
       - if: steps.preflight.outputs.action != 'skip'
         uses: actions/github-script@v7
         with:

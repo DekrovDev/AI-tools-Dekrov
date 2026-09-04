@@ -178,6 +178,17 @@ test("approved Dev Resource workflow exports RESULT_PATH in both create and resu
   assert.equal(fileIn(elseIndex, fiIndex), preflightOutput, "resume mode reads the file the preflight step wrote");
 });
 
+test("the Dev approval gh pr create command quotes the PR title substitution cleanly", async () => {
+  const approved = await readFile(new URL("../.github/workflows/approved-dev-resource-submission.yml", import.meta.url), "utf8");
+  // Backslash-escaped quotes inside a command substitution would make bash hand
+  // cat a filename that contains literal quote characters (ERR: No such file or directory).
+  assert.ok(!approved.includes('\\"$RUNNER_TEMP'), "no backslash-escaped quotes may wrap a $RUNNER_TEMP path");
+  assert.ok(!approved.includes('cat \\"'), "the pr-title.txt substitution must not escape its inner quotes");
+  assert.ok(approved.includes('title="$(cat "$RUNNER_TEMP/pr-title.txt")"'), "the PR title is read into a shell variable with plain quotes");
+  assert.ok(approved.includes('--title "$title"'), "gh pr create receives the title through the shell variable");
+  assert.ok(approved.includes('--body-file "$RUNNER_TEMP/pr-body.md"'), "the PR body file path stays plainly quoted");
+});
+
 test("The shared header button chooses the current catalog dialog without propagation suppression", async () => {
   const app = await readFile(new URL("../app.js", import.meta.url), "utf8");
   assert.ok(app.includes('if (isDevUiContext()) openDevResourceDialog("smart"); else openDialog("smart");'));
