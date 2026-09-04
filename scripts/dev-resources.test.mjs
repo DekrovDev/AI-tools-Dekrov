@@ -137,8 +137,11 @@ test("Dev Resource duplicates warn on id, canonical URL, and matching domain", (
 
 test("Dev Resource AI prompt is resource-specific and keeps unknown facts empty", () => {
   const prompt = buildDevResourcePrompt("https://example.com", "A component library");
-  assert.ok(prompt.includes("concrete developer website/resource"));
-  assert.ok(prompt.includes("Use empty strings, empty arrays, or false when unknown"));
+  assert.ok(prompt.includes("OFFICIAL WEBSITE:\nhttps://example.com"));
+  assert.ok(prompt.includes("OPTIONAL CONTEXT:\nA component library"));
+  assert.ok(prompt.includes("AI CLASSIFICATION RULE"));
+  assert.ok(prompt.includes("Use:\n- \"\" for unknown strings"));
   assert.ok(prompt.includes("ui-components"));
-  assert.ok(!prompt.includes("platforms"));
+  assert.ok(prompt.includes("Do NOT include:\n- domain\n- addedAt"));
+  assert.ok(!prompt.includes("\"platforms\""));
 });
