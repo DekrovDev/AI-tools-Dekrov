@@ -19,6 +19,7 @@ export function looksLikeDevResourceSmartAdd(title = "", body = "") {
 
 export const MAX_DEV_SUBMISSION_BODY_LENGTH = 30000;
 export const MAX_DEV_SUBMISSION_JSON_LENGTH = 20000;
+const DEV_RESOURCE_SUBMISSION_FIELDS = ["id", "name", "category", "description", "url", "favicon", "tags", "tech", "pricing", "openSource", "noSignup", "copyable"];
 
 // Used by both the validation and approval paths. No GitHub Issue Form
 // control is trusted as a server-side boundary.
@@ -46,13 +47,39 @@ export function validateDevResourceIssue(body = "", resources = []) {
   return { valid: errors.length === 0, errors, duplicates, submission, resource: checked.resource };
 }
 
+export function isTrustedDevResourceApprovalPull(pull, repository) {
+  const expectedRepository = String(repository || "").toLowerCase();
+  const headRepository = String(pull?.head?.repo?.full_name || "").toLowerCase();
+  return Boolean(expectedRepository && headRepository === expectedRepository && String(pull?.head?.ref || "").startsWith("dev-resource-submission/"));
+}
+
+export function branchContainsApprovedDevResource(resources, expectedResource) {
+  return Array.isArray(resources) && resources.some((entry) => {
+    if (!entry || typeof entry !== "object") return false;
+    const candidate = Object.fromEntries(DEV_RESOURCE_SUBMISSION_FIELDS.map((field) => [field, entry[field]]));
+    const checked = validateDevResourceSubmission(candidate);
+    return checked.errors.length === 0 && DEV_RESOURCE_SUBMISSION_FIELDS.every((field) => JSON.stringify(checked.resource[field]) === JSON.stringify(expectedResource[field]));
+  });
+}
+
+export function buildDevResourcePullRequest(issueNumber, resource) {
+  const diff = Object.keys(resource).map((key) => `+ ${key}: ${JSON.stringify(resource[key])}`).join("\n");
+  return { title: `Add Dev Resource: ${resource.name}`, body: `Closes #${issueNumber}\n\n\`\`\`diff\n${diff}\n\`\`\`` };
+}
+
 // Pending branches are treated as proposals against the catalog before their
 // PRs merge. This makes independent approvals for the same resource safe.
 export function decideDevResourceApproval({ issueNumber, resource, pendingPulls = [], existingBranches = [] }) {
   const branch = `dev-resource-submission/issue-${issueNumber}`;
-  const sameIssue = pendingPulls.find((pull) => pull.headRefName === branch) || (existingBranches.includes(branch) ? { headRefName: branch } : null);
-  if (sameIssue) return { action: "skip", reason: "An approval branch or PR already exists for this Issue.", branch, pull: sameIssue };
+  const sameIssue = pendingPulls.find((pull) => pull.headRefName === branch);
+  if (sameIssue) return { action: "skip", reason: "An approval PR already exists for this Issue.", branch, pull: sameIssue };
   const pendingDuplicates = pendingPulls.flatMap((pull) => findDevResourceDuplicates(resource, pull.resources || []).map((match) => ({ ...match, pull: pull.number })));
   if (pendingDuplicates.length) return { action: "reject", reason: `Possible duplicate already proposed in open PR #${pendingDuplicates[0].pull}: ${pendingDuplicates.map((match) => `${match.id} (${match.reasons.join(", ")})`).join("; ")}.`, branch, pendingDuplicates };
+  const existingBranch = existingBranches.find((item) => (typeof item === "string" ? item : item?.name) === branch);
+  if (existingBranch) {
+    const resources = typeof existingBranch === "string" ? [] : existingBranch.resources;
+    if (!branchContainsApprovedDevResource(resources, resource)) return { action: "reject", reason: "The existing approval branch does not contain the expected approved Dev Resource.", branch };
+    return { action: "resume", reason: "The approval branch exists without an open PR; create the missing PR.", branch };
+  }
   return { action: "create", branch };
 }

@@ -1,5 +1,5 @@
 // Pure Dev Resource submission helpers shared by the browser and Actions.
-import { DEV_CATEGORIES, canonicalDevResourceUrl, findDevResourceDuplicates, validateDevResourceSubmission } from "./dev-resources.js";
+import { DEV_CATEGORIES, findDevResourceDuplicates, validateDevResourceSubmission } from "./dev-resources.js";
 
 export { findDevResourceDuplicates, validateDevResourceSubmission };
 
@@ -10,7 +10,10 @@ export function devResourceIdFromName(value = "") {
 export function buildDevResourceCandidate({ name = "", category = "other", description = "", url = "", favicon = "", tags = [], tech = [], pricing = "", openSource = false, noSignup = false, copyable = false } = {}) {
   return {
     id: devResourceIdFromName(name), name: String(name).trim(), category, description: String(description).trim(),
-    url: canonicalDevResourceUrl(url), favicon: canonicalDevResourceUrl(favicon), tags, tech, pricing,
+    // Keep entered URLs intact until canonical validation runs. In particular,
+    // an invalid non-empty optional favicon must not be normalized to an empty
+    // value before the Manual form can show the contributor an error.
+    url: String(url).trim(), favicon: String(favicon).trim(), tags, tech, pricing,
     openSource: openSource === true, noSignup: noSignup === true, copyable: copyable === true
   };
 }

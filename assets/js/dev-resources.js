@@ -177,6 +177,12 @@ export function validateDevResourceSubmission(raw) {
   // Keep this result in the public submission shape. Derived `domain` and
   // maintainer-owned `addedAt` appear only after approval writes catalog data.
   const resource = normalized ? Object.fromEntries(fields.map((field) => [field, normalized[field]])) : null;
+  // Validate the raw values above, then canonicalize accepted URL identities
+  // for every browser and workflow caller.
+  if (resource) {
+    resource.url = canonicalDevResourceUrl(raw.url);
+    resource.favicon = raw.favicon ? canonicalDevResourceUrl(raw.favicon) : "";
+  }
   return { errors, resource: errors.length ? null : resource };
 }
 

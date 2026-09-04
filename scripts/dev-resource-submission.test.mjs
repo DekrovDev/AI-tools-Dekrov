@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { buildDevResourceCandidate, buildDevResourceSubmissionBody, validateDevResourceSubmission } from "../assets/js/dev-resource-submission.js";
-import { decideDevResourceApproval, looksLikeDevResourceSmartAdd, looksLikeDevResourceSubmission, parseDevResourceSubmission, validateDevResourceIssue } from "../.github/scripts/dev-resource-submission-lib.mjs";
+import { branchContainsApprovedDevResource, decideDevResourceApproval, isTrustedDevResourceApprovalPull, looksLikeDevResourceSmartAdd, looksLikeDevResourceSubmission, parseDevResourceSubmission, validateDevResourceIssue } from "../.github/scripts/dev-resource-submission-lib.mjs";
 import { looksLikeSubmission } from "../.github/scripts/submission-lib.mjs";
 import { buildDevResourceAnalysisComment, runDevResourceSmartAdd, safeDevResourceCommentText } from "./dev-resource-smart-add.mjs";
 
@@ -50,15 +50,68 @@ test("Manual, JSON Import, and Smart Add share the same canonical Dev payload", 
   assert.ok(!Object.hasOwn(smart.resource, "addedAt"));
 });
 
-test("Dev approval is idempotent and rejects duplicate pending IDs and domains", () => {
+test("Manual candidates validate raw website and favicon input before canonicalization", () => {
+  const base = { name: "Component Garden", category: "ui-components", description: "A public component gallery.", url: "https://components.example/", tags: [], tech: [], pricing: "", openSource: false, noSignup: false, copyable: false };
+  const emptyFavicon = validateDevResourceSubmission(buildDevResourceCandidate({ ...base, favicon: "" }));
+  const httpsFavicon = validateDevResourceSubmission(buildDevResourceCandidate({ ...base, favicon: "https://components.example/icon.svg" }));
+  const ftpCandidate = buildDevResourceCandidate({ ...base, favicon: "ftp://components.example/icon.svg" });
+  const ftpFavicon = validateDevResourceSubmission(ftpCandidate);
+  const malformedFavicon = validateDevResourceSubmission(buildDevResourceCandidate({ ...base, favicon: "not a URL" }));
+  const malformedWebsite = validateDevResourceSubmission(buildDevResourceCandidate({ ...base, url: "not a URL", favicon: "" }));
+  assert.deepEqual(emptyFavicon.errors, []);
+  assert.deepEqual(httpsFavicon.errors, []);
+  assert.equal(ftpCandidate.favicon, "ftp://components.example/icon.svg");
+  assert.ok(ftpFavicon.errors.some((error) => error.includes("favicon must be an http(s) URL")));
+  assert.ok(malformedFavicon.errors.some((error) => error.includes("favicon must be an http(s) URL")));
+  assert.ok(malformedWebsite.errors.some((error) => error.includes("url must be an http(s) URL")));
+});
+
+test("Dev Smart Add runs canonical validation before assigning pending", async () => {
+  const smartBody = "### Resource URL\nhttps://example.com/\n\n### Context\nPublic components\n";
+  const run = (html, pageUrl = "https://example.com/") => runDevResourceSmartAdd({ title: "[Dev Resource Smart Add] Components", body: smartBody, resources: [], fetchImpl: async () => ({ status: 200, contentType: "text/html", url: pageUrl, text: html }) });
+  const valid = await run("<title>Component Garden — UI</title><meta name=\"description\" content=\"Reusable public components\">");
+  const longTitle = await run(`<title>${"T".repeat(121)}</title>`);
+  const longDescription = await run(`<title>Component Garden</title><meta name=\"description\" content=\"${"D".repeat(501)}\">`);
+  const titleLess = await run("<meta name=\"description\" content=\"Reusable public components\">");
+  const malformedMetadata = await run("<title><b>Component Garden</b></title><meta name=\"description\">");
+  const duplicate = await run("<title>Component Garden</title>");
+  const duplicateResult = await runDevResourceSmartAdd({ title: "[Dev Resource Smart Add] Components", body: smartBody, resources: [resource], fetchImpl: async () => ({ status: 200, contentType: "text/html", url: "https://components.example/", text: "<title>Component Garden</title>" }) });
+  assert.deepEqual(valid.labels, ["dev-resource-submission", "pending"]);
+  assert.deepEqual(titleLess.labels, ["dev-resource-submission", "pending"]);
+  assert.equal(titleLess.resource.id, "example-com");
+  for (const result of [longTitle, longDescription]) {
+    assert.deepEqual(result.labels, ["dev-resource-submission", "needs-changes"]);
+    assert.ok(result.validationErrors.length > 0);
+    assert.ok(result.comment.includes("Needs changes before moderation"));
+  }
+  assert.deepEqual(malformedMetadata.labels, ["dev-resource-submission", "pending"]);
+  assert.equal(malformedMetadata.resource.description, "");
+  assert.deepEqual(duplicate.labels, ["dev-resource-submission", "pending"]);
+  assert.deepEqual(duplicateResult.labels, ["dev-resource-submission", "needs-changes"]);
+});
+
+test("Dev approval skips an open PR, resumes only an expected branch, and rejects duplicates", () => {
   const sameIssue = decideDevResourceApproval({ issueNumber: 17, resource, pendingPulls: [{ number: 44, headRefName: "dev-resource-submission/issue-17", resources: [resource] }] });
   assert.equal(sameIssue.action, "skip", "same Issue approved twice reuses its PR");
-  const existingBranch = decideDevResourceApproval({ issueNumber: 18, resource, existingBranches: ["dev-resource-submission/issue-18"] });
-  assert.equal(existingBranch.action, "skip", "an existing branch is idempotent even before PR creation");
+  const branchResource = { ...resource, domain: "components.example", addedAt: "2026-09-04" };
+  assert.equal(branchContainsApprovedDevResource([branchResource], resource), true);
+  const existingBranch = decideDevResourceApproval({ issueNumber: 18, resource, existingBranches: [{ name: "dev-resource-submission/issue-18", resources: [branchResource] }] });
+  assert.equal(existingBranch.action, "resume", "an expected branch without a PR resumes safely");
+  const wrongBranch = decideDevResourceApproval({ issueNumber: 18, resource, existingBranches: [{ name: "dev-resource-submission/issue-18", resources: [] }] });
+  assert.equal(wrongBranch.action, "reject", "a branch without the expected resource fails safely");
+  assert.equal(decideDevResourceApproval({ issueNumber: 18, resource }).action, "create", "no branch or PR creates normally");
   const sameId = decideDevResourceApproval({ issueNumber: 19, resource, pendingPulls: [{ number: 45, headRefName: "dev-resource-submission/issue-45", resources: [resource] }] });
   assert.equal(sameId.action, "reject");
   const sameDomain = decideDevResourceApproval({ issueNumber: 20, resource: { ...resource, id: "component-other", name: "Other components", url: "https://components.example/docs" }, pendingPulls: [{ number: 46, headRefName: "dev-resource-submission/issue-46", resources: [resource] }] });
   assert.equal(sameDomain.action, "reject");
+});
+
+test("Dev approval preflight includes only same-repository proposal branches", () => {
+  const repository = "DekrovDev/AI-tools-Dekrov";
+  assert.equal(isTrustedDevResourceApprovalPull({ head: { ref: "dev-resource-submission/issue-1", repo: { full_name: repository } } }, repository), true);
+  assert.equal(isTrustedDevResourceApprovalPull({ head: { ref: "dev-resource-submission/issue-1", repo: { full_name: "fork-owner/AI-tools-Dekrov" } } }, repository), false);
+  assert.equal(isTrustedDevResourceApprovalPull({ head: { ref: "feature/other", repo: { full_name: repository } } }, repository), false);
+  assert.equal(isTrustedDevResourceApprovalPull({ head: { ref: "dev-resource-submission/issue-1" } }, repository), false);
 });
 
 test("Manual validation errors have a visible Manual-panel surface", async () => {
@@ -97,7 +150,15 @@ test("Dev workflows preserve unrelated labels and approval has a preflight", asy
   assert.ok(!smart.includes("setLabels"));
   assert.ok(approved.includes("preflight-dev-resource-approval.mjs"));
   assert.ok(approved.includes("concurrency"));
+  assert.ok(approved.includes("steps.preflight.outputs.action == 'create'"));
+  assert.ok(approved.includes("Create or resume pull request"));
   assert.ok(approved.includes("git add data/dev-resources.json"));
   assert.ok(!approved.includes("data/tools.json"));
   assert.ok(apply.includes("validateDevResourceIssue"));
+});
+
+test("The shared header button chooses the current catalog dialog without propagation suppression", async () => {
+  const app = await readFile(new URL("../app.js", import.meta.url), "utf8");
+  assert.ok(app.includes('if (isDevUiContext()) openDevResourceDialog("smart"); else openDialog("smart");'));
+  assert.ok(!app.includes("stopImmediatePropagation"));
 });

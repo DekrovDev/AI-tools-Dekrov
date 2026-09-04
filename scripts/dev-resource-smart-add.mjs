@@ -4,8 +4,8 @@
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { firstMeta, firstTitle, safeFetch, slugify } from "./analyzer.mjs";
-import { buildDevResourceCandidate, buildDevResourceSubmissionBody } from "../assets/js/dev-resource-submission.js";
+import { firstMeta, firstTitle, safeFetch } from "./analyzer.mjs";
+import { buildDevResourceCandidate, buildDevResourceSubmissionBody, validateDevResourceSubmission } from "../assets/js/dev-resource-submission.js";
 import { findDevResourceDuplicates, looksLikeDevResourceSmartAdd } from "../.github/scripts/dev-resource-submission-lib.mjs";
 import { parseSmartAddSubmission } from "../.github/scripts/submission-lib.mjs";
 
@@ -28,13 +28,14 @@ export function safeDevResourceCommentText(value, maxLength = 500) {
     .slice(0, maxLength);
 }
 
-export function buildDevResourceAnalysisComment({ resource, duplicates, error = "" }) {
+export function buildDevResourceAnalysisComment({ resource, duplicates, validationErrors = [], error = "" }) {
   if (error) return ["### Dev Resource Smart Add", "", `The resource URL could not be analyzed: **${safeDevResourceCommentText(error, 240)}**`, "", "Check that it is a public official http(s) website. This issue was not converted."].join("\n");
   const safeResource = { ...resource, name: safeDevResourceCommentText(resource.name, 120), description: safeDevResourceCommentText(resource.description, 500) };
   return [
     "### Dev Resource Smart Add", "", `**${safeResource.name}**`, `Category: ${safeResource.category}`,
     `Website: ${safeResource.url}`, "", "Only page title and description were used. Unknown metadata was intentionally left blank.", "",
-    "Potential duplicates:", ...(duplicates.length ? duplicates.map((item) => `- ${item.id}: ${item.reasons.join(", ")}`) : ["- none"]), "",
+    "Potential duplicates:", ...(duplicates.length ? duplicates.map((item) => `- ${item.id}: ${item.reasons.join(", ")}`) : ["- none"]),
+    ...(validationErrors.length ? ["", "Needs changes before moderation:", ...validationErrors.map((item) => `- ${safeDevResourceCommentText(item, 240)}`)] : []), "",
     "```json", JSON.stringify(safeResource, null, 2), "```"
   ].join("\n");
 }
@@ -53,16 +54,18 @@ export async function runDevResourceSmartAdd({ title, body, resources = [], fetc
       url: page.url,
       tags: [], tech: [], pricing: "", openSource: false, noSignup: false, copyable: false
     });
-    // A title-less page still gets a deterministic domain-derived id; no LLM
-    // and no speculative classification is involved.
-    resource.id = slugify(name || domain);
-    const duplicates = findDevResourceDuplicates(resource, resources);
-    const hasIssues = !resource.id || duplicates.length > 0;
+    // The shared builder derives a deterministic, length-capped ID. Do not
+    // replace it with an unrestricted slug after canonical validation rules
+    // have been applied.
+    const checked = validateDevResourceSubmission(resource);
+    const canonicalResource = checked.resource || resource;
+    const duplicates = checked.resource ? findDevResourceDuplicates(checked.resource, resources) : [];
+    const hasIssues = checked.errors.length > 0 || duplicates.length > 0;
     return {
-      skip: false, convert: true, title: `[Dev Resource] ${resource.name}`,
+      skip: false, convert: true, title: `[Dev Resource] ${canonicalResource.name}`,
       labels: ["dev-resource-submission", hasIssues ? "needs-changes" : "pending"],
-      canonicalBody: buildDevResourceSubmissionBody(resource, context),
-      comment: buildDevResourceAnalysisComment({ resource, duplicates }), resource, duplicates
+      canonicalBody: buildDevResourceSubmissionBody(canonicalResource, context),
+      comment: buildDevResourceAnalysisComment({ resource: canonicalResource, duplicates, validationErrors: checked.errors }), resource: canonicalResource, duplicates, validationErrors: checked.errors
     };
   } catch (error) {
     return { skip: false, convert: false, labels: [], comment: buildDevResourceAnalysisComment({ error: error.message }) };

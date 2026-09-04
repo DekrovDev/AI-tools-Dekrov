@@ -26,27 +26,32 @@ jobs:
       - id: preflight
         run: |
           node .github/scripts/preflight-dev-resource-approval.mjs --event "$GITHUB_EVENT_PATH" --output "$RUNNER_TEMP/dev-resource-preflight.json"
-          node -e "const fs=require('fs'); const result=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + '/dev-resource-preflight.json')); fs.appendFileSync(process.env.GITHUB_OUTPUT, 'skip=' + String(result.action === 'skip') + '\\n');"
+          node -e "const fs=require('fs'); const result=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + '/dev-resource-preflight.json')); fs.appendFileSync(process.env.GITHUB_OUTPUT, 'action=' + result.action + '\\n');"
         env:
           GITHUB_TOKEN: ${{ github.token }}
-      - if: steps.preflight.outputs.skip != 'true'
+      - if: steps.preflight.outputs.action == 'create'
         run: node .github/scripts/apply-dev-resource-submission.mjs --event "$GITHUB_EVENT_PATH" --output "$RUNNER_TEMP/dev-resource-pr.json"
-      - name: Create branch and pull request
-        if: steps.preflight.outputs.skip != 'true'
+      - name: Create or resume pull request
+        if: steps.preflight.outputs.action != 'skip'
         env:
           GH_TOKEN: ${{ github.token }}
-          RESULT_PATH: ${{ runner.temp }}/dev-resource-pr.json
+          ACTION: ${{ steps.preflight.outputs.action }}
         run: |
-          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync(process.env.RESULT_PATH)); fs.writeFileSync(process.env.RUNNER_TEMP + '/pr-title.txt', r.title); fs.writeFileSync(process.env.RUNNER_TEMP + '/pr-body.md', r.body);"
           branch="dev-resource-submission/issue-${{ github.event.issue.number }}"
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -b "$branch"
-          git add data/dev-resources.json
-          git commit -m "${{ github.event.issue.number }}: apply approved Dev Resource submission"
-          git push origin "$branch"
+          if [ "$ACTION" = "create" ]; then
+            RESULT_PATH="$RUNNER_TEMP/dev-resource-pr.json"
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git checkout -b "$branch"
+            git add data/dev-resources.json
+            git commit -m "${{ github.event.issue.number }}: apply approved Dev Resource submission"
+            git push origin "$branch"
+          else
+            RESULT_PATH="$RUNNER_TEMP/dev-resource-preflight.json"
+          fi
+          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync(process.env.RESULT_PATH)); fs.writeFileSync(process.env.RUNNER_TEMP + '/pr-title.txt', r.title); fs.writeFileSync(process.env.RUNNER_TEMP + '/pr-body.md', r.body);"
           gh pr create --base "${{ github.event.repository.default_branch }}" --head "$branch" --title "$(cat \"$RUNNER_TEMP/pr-title.txt\")" --body-file "$RUNNER_TEMP/pr-body.md"
-      - if: steps.preflight.outputs.skip != 'true'
+      - if: steps.preflight.outputs.action != 'skip'
         uses: actions/github-script@v7
         with:
           script: |
