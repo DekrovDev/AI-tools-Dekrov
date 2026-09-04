@@ -1,0 +1,53 @@
+name: Create PR for approved Dev Resource submission
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  # Serializes approvals so a second Issue sees the first Issue's open PR.
+  group: dev-resource-submission-approval
+  cancel-in-progress: false
+
+jobs:
+  create-pr:
+    if: github.event.label.name == 'approved' && contains(github.event.issue.labels.*.name, 'dev-resource-submission')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - id: preflight
+        run: |
+          node .github/scripts/preflight-dev-resource-approval.mjs --event "$GITHUB_EVENT_PATH" --output "$RUNNER_TEMP/dev-resource-preflight.json"
+          node -e "const fs=require('fs'); const result=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + '/dev-resource-preflight.json')); fs.appendFileSync(process.env.GITHUB_OUTPUT, 'skip=' + String(result.action === 'skip') + '\\n');"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - if: steps.preflight.outputs.skip != 'true'
+        run: node .github/scripts/apply-dev-resource-submission.mjs --event "$GITHUB_EVENT_PATH" --output "$RUNNER_TEMP/dev-resource-pr.json"
+      - name: Create branch and pull request
+        if: steps.preflight.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RESULT_PATH: ${{ runner.temp }}/dev-resource-pr.json
+        run: |
+          node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync(process.env.RESULT_PATH)); fs.writeFileSync(process.env.RUNNER_TEMP + '/pr-title.txt', r.title); fs.writeFileSync(process.env.RUNNER_TEMP + '/pr-body.md', r.body);"
+          branch="dev-resource-submission/issue-${{ github.event.issue.number }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add data/dev-resources.json
+          git commit -m "${{ github.event.issue.number }}: apply approved Dev Resource submission"
+          git push origin "$branch"
+          gh pr create --base "${{ github.event.repository.default_branch }}" --head "$branch" --title "$(cat \"$RUNNER_TEMP/pr-title.txt\")" --body-file "$RUNNER_TEMP/pr-body.md"
+      - if: steps.preflight.outputs.skip != 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number, body: 'An approval PR was created. This resource will appear publicly only after that PR is manually merged.' });

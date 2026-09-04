@@ -8,6 +8,13 @@ body:
       value: |
         Thanks for contributing to AI-Dekrov. Submit factual information only. The JSON is checked automatically and is reviewed before it can appear in the public catalog.
   - type: dropdown
+    id: submission_kind
+    attributes:
+      label: Submission kind
+      options: [ai-tool]
+    validations:
+      required: true
+  - type: dropdown
     id: submission_type
     attributes:
       label: Submission type

@@ -42,6 +42,9 @@ export function parseArgs(argv) {
 export function buildCanonicalBody(tool, context) {
   const json = JSON.stringify(tool, null, 2);
   return [
+    "### Submission kind",
+    "ai-tool",
+    "",
     "### Submission type",
     "new",
     "",
@@ -52,7 +55,10 @@ export function buildCanonicalBody(tool, context) {
     json,
     "",
     "### Context",
-    context ? context : "_No response_"
+    context ? context : "_No response_",
+    "",
+    "### Confirmation",
+    "- [x] I confirm that the information is factual and the tool can be publicly listed."
   ].join("\n");
 }
 

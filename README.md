@@ -19,7 +19,7 @@ AI-Dekrov has two catalogs. The **AI Tools** catalog lists AI products; the **De
 
 Switch between the two with the **AI Tools | Dev Resources** switcher at the top of the catalog. Dev Resources keeps the same product experience: categories, search, filters (price, open source, no signup, copyable code), sorting, dedicated resource pages, favorites, My Stack, and collections.
 
-Resources live in `data/dev-resources.json` and are added the same way tools are — one structured entry per resource, with no UI code changes needed. Each entry carries an id, name, category, description, official URL, tags, technologies, pricing, and flags such as open source / no signup / copyable code. To add a resource, edit the file following the existing entries; validation keeps malformed entries out automatically.
+Resources live in `data/dev-resources.json` and are added the same way tools are — one structured entry per resource, with no UI code changes needed. Each entry carries an id, name, category, description, official URL, tags, technologies, pricing, and flags such as open source / no signup / copyable code. The context-aware **Add a resource** dialog offers Smart Add, Manual, and JSON Import paths; each produces the same strict `dev-resource` payload and opens a separate moderated GitHub submission, never direct browser publication. `addedAt` is deliberately omitted from public submissions and assigned only by the approval workflow. Maintainers can also edit the data file directly; validation keeps malformed entries out automatically.
 
 The catalog intentionally starts empty: entries are added manually over time and must meet the same quality bar as AI tools (real site, concrete resource, verifiable official URL).
 

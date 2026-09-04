@@ -1,0 +1,31 @@
+name: Dev Resource Smart Add
+description: Analyze an official developer-resource URL and prepare it for moderated review.
+title: "[Dev Resource Smart Add] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Paste an official public developer-resource website. AI-Dekrov will only collect verifiable page metadata and prepare a submission for moderator review. Nothing is published automatically.
+  - type: input
+    id: resource_url
+    attributes:
+      label: Resource URL
+      description: Official website URL for a concrete developer resource.
+      placeholder: https://example.com
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Optional context for moderators.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: I confirm this is a real public developer resource with an official website.
+          required: true

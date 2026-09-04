@@ -8,7 +8,8 @@ import { buildEnvTextForState, canCopyCommands, clearEnvState, commandSequenceRo
 import { decodeSharedCollection, importSharedCollection, resolveSharedEntityRefs, sharedCollectionUrl, sharedFailureMessage } from "./assets/js/shared-collections.js";
 import { INSTALL_FAILURE_TEMPLATE, INSTALL_FAILURE_LABEL, installFailureIssueUrl } from "./assets/js/install-failure.js";
 import { looksLikeOfficialUrlQuery, matchingToolsForUrl, missingToolPrefill, shouldOfferMissingToolSuggestion } from "./assets/js/missing-tool-suggestion.js";
-import { DEV_PRICING_VALUES, devCategoryMeta, filterDevResources, parseDevResources, sortDevResources } from "./assets/js/dev-resources.js";
+import { DEV_CATEGORIES, DEV_PRICING_VALUES, devCategoryMeta, filterDevResources, parseDevResources, sortDevResources } from "./assets/js/dev-resources.js";
+import { buildDevResourceCandidate, buildDevResourcePrompt, findDevResourceDuplicates, validateDevResourceSubmission } from "./assets/js/dev-resource-submission.js";
 import { createDevSearch } from "./assets/js/dev-search.js";
 import { KIND_DEV, KIND_TOOLS, entityRef, entityRefParts, isDevRef, refsOfKind, splitKnownRefs } from "./assets/js/entity-ids.js";
 
@@ -39,7 +40,7 @@ const REQUIREMENT_LABELS = { required: "Required", optional: "Optional", "not-re
 const FAVORITES_KEY = "ai-dekrov-favorites";
 const THEME_KEY = "ai-dekrov-theme";
 const PERSONAL_NOTES_KEY = "ai-dekrov-personal-notes";
-const DEFAULT_DESCRIPTION = document.querySelector('meta[name="description"]')?.content || "AI-Dekrov — a public catalog of AI tools";
+const DEFAULT_DESCRIPTION = document.querySelector('meta[name="description"]')?.content || "AI-Dekrov — public catalogs of AI tools and developer resources";
 const ICONS = {
   grid: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg>',
   star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg>',
@@ -209,7 +210,7 @@ function renderNavigation() {
   const mixedActive = contextKind === "mixed";
   const counts = state.tools.reduce((all, tool) => { all[tool.category] = (all[tool.category] || 0) + 1; return all; }, {});
   const categories = Object.keys(counts);
-  $("#all-count").textContent = state.tools.length; $("#favorites-count").textContent = devActive ? favoriteCountByKind(KIND_DEV) : favoriteCountByKind(KIND_TOOLS); $("#stack-count").textContent = devActive ? devStackCount() : stackCount(); $("#collections-count").textContent = state.collections.collections.length; $("[data-nav=favorites]").href = devActive ? "#/dev/favorites" : "#/favorites"; $("[data-nav=stack]").href = devActive ? "#/dev/stack" : "#/stack"; $("#category-navigation").hidden = categories.length === 0;
+  $("#all-label").textContent = devActive ? "All resources" : "All tools"; $("[data-nav=all]").href = devActive ? "#/dev" : "#/"; $("#all-count").textContent = devActive ? state.devResources.length : state.tools.length; $("#favorites-count").textContent = devActive ? favoriteCountByKind(KIND_DEV) : favoriteCountByKind(KIND_TOOLS); $("#stack-count").textContent = devActive ? devStackCount() : stackCount(); $("#collections-count").textContent = state.collections.collections.length; $("[data-nav=favorites]").href = devActive ? "#/dev/favorites" : "#/favorites"; $("[data-nav=stack]").href = devActive ? "#/dev/stack" : "#/stack"; $("#category-navigation").hidden = categories.length === 0;
   if (devActive) {
     const devCounts = state.devResources.reduce((all, resource) => { all[resource.category] = (all[resource.category] || 0) + 1; return all; }, {});
     const devCategories = Object.keys(devCounts);
@@ -457,6 +458,8 @@ function applyKindUi(kind = catalogContextKind()) {
   const subtitle = $("#hero-subtitle");
   if (title) title.textContent = dev ? "Dev resources, organized." : mixed ? "Collection, organized." : "AI tools, organized.";
   if (subtitle) subtitle.textContent = dev ? "Components, generators, and utilities to build faster." : mixed ? "Search across the tools and resources you saved together." : "Keep the useful ones close. Discover the next one without the noise.";
+  const addButton = $("#add-tool-button");
+  if (addButton) { const label = dev ? "Add a resource" : "Suggest a tool"; addButton.innerHTML = `${icon("plus")} ${label}`; addButton.setAttribute("aria-label", label); }
   $$("[data-kind-switch]").forEach((button) => {
     const activeKind = !mixed && button.dataset.kindSwitch === (dev ? "dev" : "tools");
     button.classList.toggle("is-active", activeKind);
@@ -919,6 +922,24 @@ function clearFilters() {
 
 let jsonCandidate = null;
 let submissionDraft = null;
+let devJsonCandidate = null;
+let devSubmissionDraft = null;
+
+function devList(value) { return String(value || "").split(",").map((item) => item.trim()).filter(Boolean); }
+function renderDevSubmissionOptions() { const select = $("#dev-resource-form [name=category]"); if (select) select.innerHTML = `<option value="">Select a category</option>${DEV_CATEGORIES.map((category) => `<option value="${escapeHtml(category.id)}">${escapeHtml(category.label)}</option>`).join("")}`; }
+function setDevAddMode(mode) { $$('[data-dev-add-mode]').forEach((tab) => { const active = tab.dataset.devAddMode === mode; tab.classList.toggle("is-active", active); tab.setAttribute("aria-selected", String(active)); }); $$('[data-dev-add-panel]').forEach((panel) => { panel.hidden = panel.dataset.devAddPanel !== mode; }); if (mode === "manual") $("#dev-resource-form [name=name]").focus(); if (mode === "smart") $("#dev-smart-url").focus(); if (mode === "json") updateDevPrompt(); }
+function resetDevAddDraft() { devJsonCandidate = null; devSubmissionDraft = null; $("#dev-smart-add-form").reset(); $("#dev-resource-form").reset(); $("#dev-json-import-form").reset(); setDevJsonErrors(); setDevManualErrors(); $("#dev-json-preview").hidden = true; $("#dev-json-import-confirm").hidden = true; $("#dev-json-edit-manual").hidden = true; $("#dev-submission-review").hidden = true; updateDevPrompt(); }
+function openDevResourceDialog(mode = "smart") { resetDevAddDraft(); if (!$("#dev-resource-dialog").open) $("#dev-resource-dialog").showModal(); setDevAddMode(mode); }
+function closeDevResourceDialog() { if ($("#dev-resource-dialog").open) $("#dev-resource-dialog").close(); }
+function updateDevPrompt() { const prompt = $("#dev-ai-prompt"); if (prompt) prompt.value = buildDevResourcePrompt($("#dev-prompt-url").value, $("#dev-prompt-context").value); }
+function fillDevManualForm(resource) { const form = $("#dev-resource-form"); ["name", "category", "description", "url", "favicon", "pricing"].forEach((key) => { if (form.elements[key]) form.elements[key].value = resource[key] || ""; }); form.elements.tags.value = (resource.tags || []).join(", "); form.elements.tech.value = (resource.tech || []).join(", "); ["openSource", "noSignup", "copyable"].forEach((key) => { form.elements[key].checked = resource[key] === true; }); }
+function devCandidateFromForm(form) { return buildDevResourceCandidate({ name: form.elements.name.value, category: form.elements.category.value, description: form.elements.description.value, url: form.elements.url.value, favicon: form.elements.favicon.value, tags: devList(form.elements.tags.value), tech: devList(form.elements.tech.value), pricing: form.elements.pricing.value, openSource: form.elements.openSource.checked, noSignup: form.elements.noSignup.checked, copyable: form.elements.copyable.checked }); }
+function setDevJsonErrors(errors = []) { const element = $("#dev-json-errors"); element.hidden = !errors.length; element.innerHTML = errors.length ? `<strong>Fix these issues</strong><ul>${errors.map((error) => `<li>${escapeHtml(error)}</li>`).join("")}</ul>` : ""; }
+function setDevManualErrors(errors = []) { const element = $("#dev-manual-errors"); element.hidden = !errors.length; element.innerHTML = errors.length ? `<strong>Fix these issues</strong><ul>${errors.map((error) => `<li>${escapeHtml(error)}</li>`).join("")}</ul>` : ""; }
+function renderDevJsonPreview(resource) { $("#dev-json-preview").textContent = JSON.stringify(resource, null, 2); $("#dev-json-preview").hidden = false; }
+function prepareDevSubmission(resource) { devSubmissionDraft = resource; const duplicates = findDevResourceDuplicates(resource, state.devResources); $("#dev-submission-preview").textContent = JSON.stringify(resource, null, 2); const warning = $("#dev-duplicate-warning"); warning.hidden = !duplicates.length; warning.innerHTML = duplicates.length ? `<strong>Potential duplicate in the catalog</strong><ul>${duplicates.map((item) => `<li>${escapeHtml(item.name)} (${escapeHtml(item.reasons.join(", "))})</li>`).join("")}</ul>` : ""; setDevAddMode("review"); }
+function handleDevSmartAdd(value) { const url = getHttpUrl(value); if (!url || !state.siteConfig?.githubRepository) { showToast(!url ? "Enter a valid official http(s) URL" : "Set the GitHub repository in data/site-config.json first"); return; } const params = new URLSearchParams({ template: state.siteConfig.devResourceSmartAddTemplate || "dev-resource-smart-add.yml", title: `[Dev Resource Smart Add] ${url.hostname}` }); params.set("resource_url", url.href); if ($("#dev-smart-context").value.trim()) params.set("context", $("#dev-smart-context").value.trim()); window.open(`https://github.com/${state.siteConfig.githubRepository}/issues/new?${params.toString()}`, "_blank", "noopener"); showToast("Dev Resource Smart Add form opened for moderated review"); }
+function openDevResourceIssue() { if (!devSubmissionDraft || !state.siteConfig?.githubRepository) { showToast("Set the GitHub repository in data/site-config.json first"); return; } const params = new URLSearchParams({ template: state.siteConfig.devResourceTemplate || "dev-resource-submission.yml", title: `[Dev Resource] ${devSubmissionDraft.name}` }); window.open(`https://github.com/${state.siteConfig.githubRepository}/issues/new?${params.toString()}`, "_blank", "noopener"); copyText(JSON.stringify(devSubmissionDraft, null, 2)); showToast("GitHub Issue Form opened — paste the copied JSON there"); }
 function setAddMode(mode) { $$("[data-add-mode]").forEach((tab) => { const active = tab.dataset.addMode === mode; tab.classList.toggle("is-active", active); tab.setAttribute("aria-selected", String(active)); }); $$("[data-add-panel]").forEach((panel) => { panel.hidden = panel.dataset.addPanel !== mode; }); if (mode === "manual") $("#tool-form [name=name]").focus(); if (mode === "smart") $("#smart-url").focus(); if (mode === "json") updateAiPrompt(); }
 function resetAddDraft() { submissionDraft = null; $("#smart-add-form").reset(); $("#tool-form").reset(); $("#tool-form").dataset.source = "manual"; delete $("#tool-form").dataset.existingId; resetJsonImport(); $("#submission-review").hidden = true; }
 function openDialog(mode = "smart") { resetAddDraft(); if (!$("#tool-dialog").open) $("#tool-dialog").showModal(); setAddMode(mode); }
@@ -2389,8 +2410,21 @@ function toggleFavorite(id) { if (state.favorites.has(id)) state.favorites.delet
 
 let searchInputTimer;
 function bindEvents() {
+  // Capture phase keeps the existing AI handler untouched while routing the
+  // shared header action to the Dev-specific dialog in Dev context.
+  $("#add-tool-button").addEventListener("click", (event) => { if (!isDevUiContext()) return; event.stopImmediatePropagation(); openDevResourceDialog("smart"); }, true);
   $("#back-to-top").addEventListener("click", scrollToTop); window.addEventListener("scroll", updateBackToTopVisibility, { passive: true });
   $("#theme-toggle").addEventListener("click", () => setTheme(state.theme === "dark" ? "light" : "dark")); $("#add-tool-button").addEventListener("click", () => openDialog("smart")); $("#info-button").addEventListener("click", () => $("#info-dialog").showModal()); $$('[data-add-mode]').forEach((button) => button.addEventListener("click", () => setAddMode(button.dataset.addMode))); $$("[data-close-dialog]").forEach((button) => button.addEventListener("click", closeDialog)); $$("[data-close-info]").forEach((button) => button.addEventListener("click", () => $("#info-dialog").close())); $("#tool-dialog").addEventListener("click", (event) => { if (event.target === event.currentTarget) closeDialog(); }); $("#tool-dialog").addEventListener("close", resetAddDraft); $("#info-dialog").addEventListener("click", (event) => { if (event.target === event.currentTarget) $("#info-dialog").close(); }); $("#smart-add-form").addEventListener("submit", (event) => { event.preventDefault(); handleSmartAdd($("#smart-url").value); }); $("#tool-form").addEventListener("submit", (event) => { event.preventDefault(); saveNewTool(event.currentTarget); }); $("#prompt-url").addEventListener("input", updateAiPrompt); $("#prompt-context").addEventListener("input", updateAiPrompt); $("#copy-ai-prompt").addEventListener("click", () => copyText($("#ai-prompt").value)); $("#reset-json-import").addEventListener("click", resetJsonImport); $("#json-validate").addEventListener("click", () => { try { const raw = JSON.parse($("#json-import-input").value); jsonCandidate = normalizeImportedTool(raw); $("#json-import-input").value = JSON.stringify(raw, null, 2); setJsonErrors(); renderJsonPreview(jsonCandidate); $("#json-import-confirm").hidden = false; $("#json-edit-manual").hidden = false; showToast("JSON validated"); } catch (error) { jsonCandidate = null; $("#json-preview").hidden = true; $("#json-import-confirm").hidden = true; $("#json-edit-manual").hidden = true; setJsonErrors(error.errors || [error.message || "Could not parse JSON."]); } }); $("#json-edit-manual").addEventListener("click", () => { if (!jsonCandidate) return; fillManualForm(jsonCandidate); setAddMode("manual"); showToast("You can edit the fields"); }); $("#json-import-confirm").addEventListener("click", () => { if (!jsonCandidate) return; prepareSubmission(jsonCandidate); }); $("#submission-edit").addEventListener("click", () => { if (!submissionDraft?.tool) return; fillManualForm(submissionDraft.tool); $("#tool-form").dataset.existingId = submissionDraft.existingToolId || ""; setAddMode("manual"); }); $("#submission-open-issue").addEventListener("click", openGitHubIssue);
+  $$('[data-dev-add-mode]').forEach((button) => button.addEventListener("click", () => setDevAddMode(button.dataset.devAddMode)));
+  $$('[data-close-dev-dialog]').forEach((button) => button.addEventListener("click", closeDevResourceDialog));
+  $("#dev-resource-dialog").addEventListener("click", (event) => { if (event.target === event.currentTarget) closeDevResourceDialog(); });
+  $("#dev-resource-dialog").addEventListener("close", resetDevAddDraft);
+  document.addEventListener("keydown", (event) => { if (event.key === "Escape" && $("#dev-resource-dialog").open) closeDevResourceDialog(); });
+  $("#dev-smart-add-form").addEventListener("submit", (event) => { event.preventDefault(); handleDevSmartAdd($("#dev-smart-url").value); });
+  $("#dev-resource-form").addEventListener("submit", (event) => { event.preventDefault(); const checked = validateDevResourceSubmission(devCandidateFromForm(event.currentTarget)); if (checked.errors.length) { setDevManualErrors(checked.errors); return; } setDevManualErrors(); prepareDevSubmission(checked.resource); });
+  $("#dev-prompt-url").addEventListener("input", updateDevPrompt); $("#dev-prompt-context").addEventListener("input", updateDevPrompt); $("#copy-dev-ai-prompt").addEventListener("click", () => copyText($("#dev-ai-prompt").value)); $("#reset-dev-json-import").addEventListener("click", resetDevAddDraft);
+  $("#dev-json-validate").addEventListener("click", () => { try { const raw = JSON.parse($("#dev-json-import-input").value); const checked = validateDevResourceSubmission(raw); if (checked.errors.length) throw Object.assign(new Error("Dev Resource JSON is invalid."), { errors: checked.errors }); devJsonCandidate = checked.resource; $("#dev-json-import-input").value = JSON.stringify(checked.resource, null, 2); setDevJsonErrors(); renderDevJsonPreview(checked.resource); $("#dev-json-import-confirm").hidden = false; $("#dev-json-edit-manual").hidden = false; showToast("Dev Resource JSON validated"); } catch (error) { devJsonCandidate = null; $("#dev-json-preview").hidden = true; $("#dev-json-import-confirm").hidden = true; $("#dev-json-edit-manual").hidden = true; setDevJsonErrors(error.errors || [error.message || "Could not parse JSON."]); } });
+  $("#dev-json-edit-manual").addEventListener("click", () => { if (devJsonCandidate) { fillDevManualForm(devJsonCandidate); setDevAddMode("manual"); } }); $("#dev-json-import-confirm").addEventListener("click", () => { if (devJsonCandidate) prepareDevSubmission(devJsonCandidate); }); $("#dev-submission-edit").addEventListener("click", () => { if (devSubmissionDraft) { fillDevManualForm(devSubmissionDraft); setDevAddMode("manual"); } }); $("#dev-submission-open-issue").addEventListener("click", openDevResourceIssue);
   $("#mobile-menu-toggle").addEventListener("click", () => setMobileDrawer(!$("#sidebar").classList.contains("is-open")));
   $("#drawer-backdrop").addEventListener("click", () => setMobileDrawer(false));
   $("#search-input").addEventListener("input", (event) => { if (isDevUiContext()) setDevSearchQuery(event.target.value); else setSearchQuery(event.target.value); clearTimeout(searchInputTimer); searchInputTimer = setTimeout(renderCatalog, 90); });
@@ -2404,7 +2438,7 @@ function bindEvents() {
   $("#dev-no-signup-filter").addEventListener("change", (event) => { devUi.noSignup = event.target.checked; renderCatalog(); });
   $("#dev-copyable-filter").addEventListener("change", (event) => { devUi.copyable = event.target.checked; renderCatalog(); });
   $("#clear-filters").addEventListener("click", clearFilters);
-  $("#empty-action").addEventListener("click", (event) => { const recovery = event.currentTarget.dataset.recovery; if (recovery === "clear") { clearFilters(); return; } if (recovery === "browse") { location.hash = isDevUiContext() ? "#/dev" : "#/"; return; } openDialog(); });
+  $("#empty-action").addEventListener("click", (event) => { const recovery = event.currentTarget.dataset.recovery; if (recovery === "clear") { clearFilters(); return; } if (recovery === "browse") { location.hash = isDevUiContext() ? "#/dev" : "#/"; return; } isDevUiContext() ? openDevResourceDialog() : openDialog(); });
   $$("[data-kind-switch]").forEach((button) => button.addEventListener("click", () => switchCatalog(button.dataset.kindSwitch)));
   $$("[data-dev-scope]").forEach((button) => button.addEventListener("click", () => { const scope = button.dataset.devScope; location.hash = scope === "favorites" ? "#/dev/favorites" : scope === "stack" ? "#/dev/stack" : "#/dev"; }));
   $("#missing-tool-action").addEventListener("click", (event) => { const button = event.currentTarget; const value = button.dataset.missingToolValue || ""; if (button.dataset.missingToolMode === "smart") openSuggestDialog({ mode: "smart", url: value }); else openSuggestDialog({ mode: "manual", name: value }); });
@@ -2472,6 +2506,7 @@ async function init() {
     state.devResources = parseDevResources(devSource);
     state.devById = new Map(state.devResources.map((resource) => [resource.id, resource]));
     state.devSearchEngine = createDevSearch(state.devResources);
+    renderDevSubmissionOptions();
     state.searchEngine = createCatalogSearch(state.baseTools);
     renderSchemaControls();
     updateAiPrompt();

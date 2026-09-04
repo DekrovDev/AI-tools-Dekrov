@@ -35,9 +35,16 @@ export function section(body = "", label) {
   return content.join("\n").trim();
 }
 export function emptyResponse(value) { return /^_?no response_?$/i.test(value.trim()) ? "" : value.trim(); }
+export function hasIssueSection(body = "", label) {
+  const header = `### ${label}`;
+  return String(body || "").replace(/\r\n/g, "\n").split("\n").some((line) => line.trim() === header);
+}
+export function confirmationChecked(body = "", heading = "Confirmation") {
+  return /^\s*-\s*\[[xX]\]\s+/.test(section(body, heading));
+}
 export function parseIssueSubmission(body) {
   const json = emptyResponse(section(body, "Tool JSON")).replace(/^```(?:json)?\s*|\s*```$/g, "").trim();
-  return { type: emptyResponse(section(body, "Submission type")).toLowerCase(), existingToolId: emptyResponse(section(body, "Existing tool ID")), json };
+  return { submissionKind: emptyResponse(section(body, "Submission kind")).toLowerCase(), type: emptyResponse(section(body, "Submission type")).toLowerCase(), existingToolId: emptyResponse(section(body, "Existing tool ID")), json };
 }
 // Parses a Smart Add issue (see smart-add.yml). Fields are rendered as
 // Markdown sections in the issue body using the same mechanism as the
@@ -58,7 +65,7 @@ export function looksLikeSmartAdd(title = "", body = "") {
 // Lets the validation workflow run on a fresh repository where the custom
 // labels may not exist yet (issue forms cannot apply missing labels).
 export function looksLikeSubmission(body = "") {
-  return /### Tool JSON/.test(body || "");
+  return hasIssueSection(body, "Tool JSON") || hasIssueSection(body, "Dev Resource JSON");
 }
 // Parses the optional machine-readable verification block that Smart Add
 // embeds so the approval step can carry lastVerifiedAt/sources forward.

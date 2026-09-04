@@ -1,12 +1,13 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { readFile, writeFile } from "node:fs/promises";
-import { readJson, parseIssueSubmission, verifiedMetadataFromComments, validateTool } from "./submission-lib.mjs";
+import { confirmationChecked, hasIssueSection, readJson, parseIssueSubmission, verifiedMetadataFromComments, validateTool } from "./submission-lib.mjs";
 import { applyApprovedSubmission } from "./apply-submission-lib.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const args = Object.fromEntries(process.argv.slice(2).reduce((pairs, value, index, values) => index % 2 === 0 ? [...pairs, [value.replace(/^--/, ""), values[index + 1]]] : pairs, []));
-const event = await readJson(args.event); const schema = await readJson(path.join(root, "data/tool-schema.json")); const toolsPath = path.join(root, "data/tools.json"); const tools = JSON.parse(await readFile(toolsPath, "utf8")); const submission = parseIssueSubmission(event.issue.body || "");
+const event = await readJson(args.event); const schema = await readJson(path.join(root, "data/tool-schema.json")); const toolsPath = path.join(root, "data/tools.json"); const tools = JSON.parse(await readFile(toolsPath, "utf8")); const body = event.issue.body || ""; const submission = parseIssueSubmission(body);
+if (submission.submissionKind !== "ai-tool" || !hasIssueSection(body, "Tool JSON") || hasIssueSection(body, "Dev Resource JSON") || !confirmationChecked(body)) throw new Error("Issue is not a valid canonical AI Tool submission.");
 if (!["new", "update"].includes(submission.type)) throw new Error("Invalid submission type.");
 const checked = validateTool(JSON.parse(submission.json), schema); if (checked.errors.length) throw new Error(checked.errors.join("\n"));
 // Verified metadata is read from the bot-created comment, never from the

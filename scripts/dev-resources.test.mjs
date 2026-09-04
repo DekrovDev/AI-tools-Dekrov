@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { DEV_CATEGORIES, DEV_PRICING_VALUES, devCategoryMeta, filterDevResources, isValidDevResourceId, normalizeDevResource, parseDevResources, sortDevResources, validateDevResourcesData } from "../assets/js/dev-resources.js";
+import { buildDevResourceCandidate, buildDevResourcePrompt, findDevResourceDuplicates, validateDevResourceSubmission } from "../assets/js/dev-resource-submission.js";
 
 function validResource(overrides = {}) {
   return {
@@ -105,13 +106,39 @@ test("the real data file is valid and keeps the intentional empty scaffold", asy
 
 test("maintainer validation reports actionable malformed-resource fields", () => {
   const errors = validateDevResourcesData({ resources: [
-    validResource({ id: "Bad ID", category: "unknown", url: "ftp://bad", pricing: "nope", openSource: "yes", tags: ["ok", 1], tech: "css", addedAt: "2026-02-30" }),
+    validResource({ id: "Bad ID", category: "unknown", url: "ftp://bad", description: 7, favicon: "ftp://bad", pricing: "nope", openSource: "yes", tags: ["ok", 1], tech: "css", addedAt: "2026-02-30" }),
     validResource({ id: "Bad ID", name: "", url: "" })
   ] });
   assert.ok(errors.some((error) => error.includes("resource 0 (Bad ID): id")));
   assert.ok(errors.some((error) => error.includes("resource 0 (Bad ID): category")));
   assert.ok(errors.some((error) => error.includes("resource 0 (Bad ID): url")));
+  assert.ok(errors.some((error) => error.includes("resource 0 (Bad ID): description")));
+  assert.ok(errors.some((error) => error.includes("resource 0 (Bad ID): favicon")));
   assert.ok(errors.some((error) => error.includes("resource 0 (Bad ID): openSource")));
   assert.ok(errors.some((error) => error.includes("resource 1 (Bad ID): name is required")));
   assert.ok(errors.some((error) => error.includes("resource 1 (Bad ID): id duplicates")));
+});
+
+test("Dev Resource submission normalizes a manual candidate and rejects unsupported fields", () => {
+  const candidate = buildDevResourceCandidate({ name: "CSS Tricks", category: "css", url: "https://css-tricks.com/?ref=home#intro", tags: ["css"], tech: ["CSS"], pricing: "free" });
+  const checked = validateDevResourceSubmission(candidate);
+  assert.deepEqual(checked.errors, []);
+  assert.equal(checked.resource.url, "https://css-tricks.com/");
+  assert.equal(Object.hasOwn(checked.resource, "addedAt"), false);
+  assert.ok(validateDevResourceSubmission({ ...candidate, domain: "should-not-be-submitted" }).errors.some((error) => error.includes("Unsupported field")));
+});
+
+test("Dev Resource duplicates warn on id, canonical URL, and matching domain", () => {
+  const candidate = buildDevResourceCandidate({ name: "CSS Tricks", category: "css", url: "https://css-tricks.com/guides" });
+  const duplicates = findDevResourceDuplicates(candidate, [validResource({ url: "https://css-tricks.com/", domain: "css-tricks.com" })]);
+  assert.ok(duplicates[0].reasons.includes("same domain"));
+  assert.ok(findDevResourceDuplicates(candidate, [validResource({ id: "other", name: "Other", url: "https://other.example/" })]).length === 0);
+});
+
+test("Dev Resource AI prompt is resource-specific and keeps unknown facts empty", () => {
+  const prompt = buildDevResourcePrompt("https://example.com", "A component library");
+  assert.ok(prompt.includes("concrete developer website/resource"));
+  assert.ok(prompt.includes("Use empty strings, empty arrays, or false when unknown"));
+  assert.ok(prompt.includes("ui-components"));
+  assert.ok(!prompt.includes("platforms"));
 });

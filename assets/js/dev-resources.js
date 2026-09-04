@@ -58,6 +58,18 @@ function httpUrl(value) {
   }
 }
 
+// Canonical identity is deliberately limited to the official http(s) URL.
+// Query strings and fragments do not describe a distinct catalog resource.
+export function canonicalDevResourceUrl(value) {
+  const url = httpUrl(value);
+  if (!url) return "";
+  url.hash = "";
+  url.search = "";
+  url.hostname = url.hostname.toLowerCase();
+  url.pathname = url.pathname.replace(/\/$/, "") || "/";
+  return url.href;
+}
+
 function validDate(value) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
   const [year, month, day] = value.split("-").map(Number);
@@ -89,6 +101,8 @@ export function validateDevResourcesData(raw) {
     if (id) seen.add(id);
     if (text(resource.category) && !DEV_CATEGORY_IDS.has(text(resource.category))) errors.push(`${label}: category is not in the Dev Resources taxonomy`);
     if (text(resource.url) && !httpUrl(resource.url)) errors.push(`${label}: url must be an http(s) URL`);
+    if (resource.description !== undefined && typeof resource.description !== "string") errors.push(`${label}: description must be a string`);
+    if (resource.favicon !== undefined && resource.favicon !== "" && (!text(resource.favicon) || !httpUrl(resource.favicon))) errors.push(`${label}: favicon must be an http(s) URL`);
     if (resource.pricing !== undefined && resource.pricing !== "" && !DEV_PRICING_VALUES.includes(resource.pricing)) errors.push(`${label}: pricing must be free, freemium, or paid`);
     for (const field of ["openSource", "noSignup", "copyable"]) {
       if (resource[field] !== undefined && typeof resource[field] !== "boolean") errors.push(`${label}: ${field} must be a boolean`);
@@ -132,6 +146,54 @@ export function normalizeDevResource(raw) {
     copyable: raw.copyable === true,
     addedAt: text(raw.addedAt) || ""
   };
+}
+
+// Submission validation is shared by the browser and GitHub workflows. It is
+// intentionally stricter than the defensive runtime parser: contributors get
+// precise errors instead of silently losing fields from their submission.
+export function validateDevResourceSubmission(raw) {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return { errors: ["Dev Resource JSON must be one object."], resource: null };
+  // This is the public submission contract, intentionally distinct from the
+  // checked-in catalog record. `addedAt` is owned by the approval workflow so
+  // a contributor cannot control catalog ordering.
+  const fields = ["id", "name", "category", "description", "url", "favicon", "tags", "tech", "pricing", "openSource", "noSignup", "copyable"];
+  const allowed = new Set(fields);
+  const errors = Object.keys(raw).filter((key) => !allowed.has(key)).map((key) => `Unsupported field: ${key}.`);
+  for (const field of fields) if (!Object.hasOwn(raw, field)) errors.push(`Missing required field: ${field}.`);
+  if (typeof raw.id === "string" && raw.id.length > 80) errors.push("id must be at most 80 characters.");
+  if (typeof raw.name === "string" && raw.name.length > 120) errors.push("name must be at most 120 characters.");
+  if (typeof raw.description === "string" && raw.description.length > 500) errors.push("description must be at most 500 characters.");
+  for (const field of ["url", "favicon"]) if (typeof raw[field] === "string" && raw[field].length > 2048) errors.push(`${field} must be at most 2048 characters.`);
+  for (const field of ["tags", "tech"]) {
+    if (Array.isArray(raw[field])) {
+      if (raw[field].length > 20) errors.push(`${field} must contain at most 20 values.`);
+      if (raw[field].some((item) => typeof item === "string" && item.length > 50)) errors.push(`${field} values must be at most 50 characters.`);
+    }
+  }
+  const dataErrors = validateDevResourcesData({ resources: [raw] }).map((error) => error.replace(/^resource 0(?: \([^)]*\))?: /, ""));
+  errors.push(...dataErrors);
+  const normalized = normalizeDevResource(raw);
+  if (!normalized && !errors.length) errors.push("Dev Resource JSON is invalid.");
+  // Keep this result in the public submission shape. Derived `domain` and
+  // maintainer-owned `addedAt` appear only after approval writes catalog data.
+  const resource = normalized ? Object.fromEntries(fields.map((field) => [field, normalized[field]])) : null;
+  return { errors, resource: errors.length ? null : resource };
+}
+
+export function findDevResourceDuplicates(resource, resources = [], excludeId = "") {
+  const canonical = canonicalDevResourceUrl(resource?.url);
+  const domain = text(resource?.domain) || (canonical ? new URL(canonical).hostname.replace(/^www\./, "") : "");
+  const name = text(resource?.name).toLowerCase();
+  return resources.filter((existing) => existing.id !== excludeId).flatMap((existing) => {
+    const reasons = [];
+    const existingCanonical = canonicalDevResourceUrl(existing.url);
+    const existingDomain = text(existing.domain) || (existingCanonical ? new URL(existingCanonical).hostname.replace(/^www\./, "") : "");
+    if (existing.id === resource.id) reasons.push("same id");
+    if (canonical && existingCanonical === canonical) reasons.push("same canonical URL");
+    if (domain && existingDomain.toLowerCase() === domain) reasons.push("same domain");
+    if (name && text(existing.name).toLowerCase() === name) reasons.push("same name");
+    return reasons.length ? [{ id: existing.id, name: existing.name, reasons }] : [];
+  });
 }
 
 // Parse a dev-resources source (parsed value or JSON string) into a safe array.

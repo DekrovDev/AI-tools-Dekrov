@@ -1,5 +1,6 @@
 [
   { "name": "tool-submission", "color": "0e8a16", "description": "Proposed tool change for validation and review." },
+  { "name": "dev-resource-submission", "color": "0e8a16", "description": "Proposed Dev Resource for validation and review." },
   { "name": "pending", "color": "fef2c0", "description": "Validated submission waiting for moderator review." },
   { "name": "needs-changes", "color": "fbca04", "description": "Submission needs changes before it can be approved." },
   { "name": "approved", "color": "0e8a16", "description": "Approved submission ready to create a pull request." },

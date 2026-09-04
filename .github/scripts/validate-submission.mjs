@@ -1,7 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { writeFile } from "node:fs/promises";
-import { readJson, parseIssueSubmission, looksLikeSubmission, validateTool, findDuplicates } from "./submission-lib.mjs";
+import { confirmationChecked, hasIssueSection, readJson, parseIssueSubmission, looksLikeSubmission, validateTool, findDuplicates } from "./submission-lib.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const args = Object.fromEntries(process.argv.slice(2).reduce((pairs, value, index, values) => index % 2 === 0 ? [...pairs, [value.replace(/^--/, ""), values[index + 1]]] : pairs, []));
@@ -18,6 +18,10 @@ if (!looksLikeSubmission(body)) {
 }
 const submission = parseIssueSubmission(body);
 const errors = [];
+if (submission.submissionKind !== "ai-tool") errors.push("Submission kind must be ai-tool.");
+if (!hasIssueSection(body, "Tool JSON")) errors.push("Tool JSON section is required.");
+if (hasIssueSection(body, "Dev Resource JSON")) errors.push("Dev Resource JSON is not allowed in an AI Tool submission.");
+if (!confirmationChecked(body)) errors.push("Confirmation must be checked.");
 if (!["new", "update"].includes(submission.type)) errors.push("Submission type must be new or update.");
 if (submission.type === "update" && !submission.existingToolId) errors.push("Existing tool ID is required for an update.");
 if (submission.type === "new" && submission.existingToolId) errors.push("Existing tool ID must be empty for a new submission.");

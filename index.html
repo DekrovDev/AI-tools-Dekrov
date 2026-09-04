@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0f1115" />
-    <meta name="description" content="AI-Dekrov — a public catalog of AI tools" />
+    <meta name="description" content="AI-Dekrov — public catalogs of AI tools and developer resources" />
     <title>AI-Dekrov</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -27,7 +27,7 @@
           <span>AI-Dekrov</span>
         </a>
         <div class="topbar-actions">
-          <button class="add-tool-button" id="add-tool-button" type="button"><span data-icon="plus"></span> Suggest a tool</button>
+          <button class="add-tool-button" id="add-tool-button" type="button" aria-label="Suggest a tool"><span data-icon="plus"></span> Suggest a tool</button>
           <button class="icon-button" id="info-button" type="button" aria-label="About the project" title="About the project"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 10.5v5M12 7.5h.01"/></svg></button>
           <button class="icon-button" id="theme-toggle" type="button" aria-label="Switch to light theme" title="Toggle theme"></button>
           <button class="mobile-menu-button icon-button" id="mobile-menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false"></button>
@@ -39,7 +39,7 @@
           <div class="sidebar-inner">
             <nav aria-label="Main navigation">
               <a class="nav-item" href="#/start" data-nav="start"><span class="nav-icon" data-icon="compass"></span><span>Start Here</span></a>
-              <a class="nav-item is-active" href="#/" data-nav="all"><span class="nav-icon" data-icon="grid"></span><span>All tools</span><span class="nav-count" id="all-count">0</span></a>
+              <a class="nav-item is-active" href="#/" data-nav="all"><span class="nav-icon" data-icon="grid"></span><span id="all-label">All tools</span><span class="nav-count" id="all-count">0</span></a>
               <a class="nav-item" href="#/favorites" data-nav="favorites"><span class="nav-icon" data-icon="star"></span><span>Favorites</span><span class="nav-count" id="favorites-count">0</span></a>
               <a class="nav-item" href="#/use-cases" data-nav="use-cases"><span class="nav-icon" data-icon="layers"></span><span>Use cases</span></a>
               <a class="nav-item" href="#/stack" data-nav="stack"><span class="nav-icon" data-icon="stack"></span><span>My Stack</span><span class="nav-count" id="stack-count">0</span></a>
@@ -218,11 +218,21 @@
         </section>
       </div>
     </dialog>
+    <dialog class="tool-dialog" id="dev-resource-dialog" aria-labelledby="dev-resource-dialog-title">
+      <div class="tool-form">
+        <div class="dialog-header"><div><p class="kicker">DEV RESOURCES</p><h2 id="dev-resource-dialog-title">Add a resource</h2></div><button class="icon-button" type="button" data-close-dev-dialog aria-label="Close">×</button></div>
+        <div class="add-mode-tabs" role="tablist" aria-label="Dev Resource addition method"><button class="add-mode-tab is-active" type="button" role="tab" aria-selected="true" data-dev-add-mode="smart">Smart Add</button><button class="add-mode-tab" type="button" role="tab" aria-selected="false" data-dev-add-mode="manual">Manual</button><button class="add-mode-tab" type="button" role="tab" aria-selected="false" data-dev-add-mode="json">JSON Import</button></div>
+        <form class="add-panel" id="dev-smart-add-form" data-dev-add-panel="smart"><p class="form-intro">Start from an official public website. Smart Add only collects verifiable page metadata and still requires moderation.</p><label class="form-field form-field-wide"><span>Official resource URL <b>*</b></span><input id="dev-smart-url" type="url" required placeholder="https://example.com" inputmode="url"></label><label class="form-field form-field-wide"><span>Context <em>optional</em></span><textarea id="dev-smart-context" rows="3" placeholder="What concrete developer resource is this?"></textarea></label><div class="dialog-actions"><button class="button button-primary" type="submit">Analyze official site</button></div></form>
+        <form class="add-panel" id="dev-resource-form" data-dev-add-panel="manual" hidden><p class="form-intro">Suggest one concrete public developer website or resource. It is submitted for moderator review, never published from this browser.</p><div class="validation-errors" id="dev-manual-errors" role="alert" hidden></div><div class="form-section-grid"><label class="form-field"><span>Name <b>*</b></span><input name="name" required maxlength="120" placeholder="Resource name"></label><label class="form-field"><span>Category <b>*</b></span><select name="category" required></select></label><label class="form-field form-field-wide"><span>Website URL <b>*</b></span><input name="url" type="url" required placeholder="https://example.com" inputmode="url"></label><label class="form-field form-field-wide"><span>Description <em>optional</em></span><textarea name="description" rows="3" maxlength="500" placeholder="What does this developer resource provide?"></textarea></label><label class="form-field"><span>Tags <em>optional</em></span><input name="tags" placeholder="css, components"></label><label class="form-field"><span>Technologies <em>optional</em></span><input name="tech" placeholder="CSS, React"></label><label class="form-field"><span>Pricing <em>optional</em></span><select name="pricing"><option value="">Unknown</option><option value="free">Free</option><option value="freemium">Freemium</option><option value="paid">Paid</option></select></label><label class="form-field"><span>Favicon URL <em>optional</em></span><input name="favicon" type="url" placeholder="https://example.com/icon.svg" inputmode="url"></label></div><div class="checkbox-row"><label><input name="openSource" type="checkbox"> Open source</label><label><input name="noSignup" type="checkbox"> No signup</label><label><input name="copyable" type="checkbox"> Copyable code</label></div><div class="dialog-actions"><button class="button button-primary" type="submit">Prepare submission</button></div></form>
+        <form class="add-panel" id="dev-json-import-form" data-dev-add-panel="json" hidden><section class="json-step prompt-builder"><div class="json-step-heading"><span>1</span><div><h3>Dev Resource AI prompt</h3><p>Optional helper. It requests factual Dev Resource fields only.</p></div></div><label class="form-field form-field-wide"><span>Official website URL</span><input id="dev-prompt-url" type="url" placeholder="https://example.com"></label><label class="form-field form-field-wide"><span>Context <em>optional</em></span><textarea id="dev-prompt-context" rows="2"></textarea></label><textarea id="dev-ai-prompt" readonly rows="10"></textarea><div class="prompt-actions"><button class="button button-secondary" id="copy-dev-ai-prompt" type="button">Copy AI prompt</button><button class="button button-secondary" id="reset-dev-json-import" type="button">Reset</button></div></section><section class="json-step json-input-step"><div class="json-step-heading"><span>2</span><div><h3>Paste &amp; validate JSON</h3><p>One Dev Resource object, submitted for moderation.</p></div></div><label class="form-field form-field-wide"><span>Dev Resource JSON</span><textarea id="dev-json-import-input" rows="12" spellcheck="false" placeholder='{ "id": "resource-name", "name": "Resource name", ... }'></textarea></label></section><div class="validation-errors" id="dev-json-errors" role="alert" hidden></div><div class="json-preview" id="dev-json-preview" hidden></div><div class="dialog-actions"><button class="button button-secondary" type="button" id="dev-json-validate">Validate JSON</button><button class="button button-secondary" type="button" id="dev-json-edit-manual" hidden>Edit</button><button class="button button-primary" type="button" id="dev-json-import-confirm" hidden>Prepare submission</button></div></form>
+        <section class="add-panel submission-review" id="dev-submission-review" data-dev-add-panel="review" hidden><div class="submission-review-heading"><p class="kicker">MODERATED SUBMISSION</p><p class="add-panel-copy">Check the proposal before opening GitHub. It is moderated before it can appear in the catalog.</p></div><div class="json-preview" id="dev-submission-preview"></div><div class="duplicate-warning" id="dev-duplicate-warning" hidden></div><div class="dialog-actions"><button class="button button-secondary" type="button" id="dev-submission-edit">Back to editing</button><button class="button button-primary" type="button" id="dev-submission-open-issue">Copy JSON and open GitHub Issue</button></div></section>
+      </div>
+    </dialog>
     <dialog class="tool-dialog info-dialog" id="info-dialog" aria-labelledby="info-dialog-title">
       <div class="tool-form">
         <div class="dialog-header"><div><p class="kicker">ABOUT</p><h2 id="info-dialog-title">AI-Dekrov</h2></div><button class="icon-button" type="button" data-close-info aria-label="Close">×</button></div>
         <div class="info-content">
-          <p>A public AI tools library: a place to discover and return to useful services, agents, models, and commands.</p>
+          <p>Public catalogs for useful AI tools and developer resources: a place to discover and return to services, agents, models, commands, and practical web resources.</p>
           <p>Suggest tools using the button in the header, save favorites, and use search and filters to find what you need.</p>
           <div class="info-links">
             <a class="button button-primary" href="https://dekrov.com" target="_blank" rel="noreferrer">dekrov.com <span aria-hidden="true">↗</span></a>

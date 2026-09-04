@@ -1,0 +1,45 @@
+name: Dev Resource submission
+description: Suggest a developer website or resource for the Dev Resources catalog.
+title: "[Dev Resource]: "
+labels: ["dev-resource-submission", "pending"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Submit factual information about a concrete public developer resource. Every submission is validated and moderated before it can appear in the catalog.
+  - type: dropdown
+    id: submission_kind
+    attributes:
+      label: Submission kind
+      options: [dev-resource]
+    validations:
+      required: true
+  - type: dropdown
+    id: submission_type
+    attributes:
+      label: Submission type
+      options: [new]
+    validations:
+      required: true
+  - type: textarea
+    id: dev_resource_json
+    attributes:
+      label: Dev Resource JSON
+      description: Paste the validated JSON from AI-Dekrov. Do not use Markdown code fences.
+      placeholder: '{ "id": "resource-name", "name": "Resource name", ... }'
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Optional source links or context for moderators.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: I confirm this is a factual public developer resource.
+          required: true
