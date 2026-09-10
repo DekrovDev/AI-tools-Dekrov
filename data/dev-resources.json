@@ -879,6 +879,3721 @@
       "noSignup": true,
       "copyable": true,
       "addedAt": "2026-09-10"
+    },
+    {
+      "id": "hyperui",
+      "name": "HyperUI",
+      "category": "ui-components",
+      "description": "Free open-source Tailwind CSS components for building responsive websites. Copy-paste ready blocks for marketing sections, forms, navigation, and e-commerce layouts.",
+      "url": "https://www.hyperui.dev/",
+      "favicon": "",
+      "tags": [
+        "tailwind-css",
+        "components",
+        "copy-paste",
+        "marketing-sections"
+      ],
+      "tech": [
+        "Tailwind CSS",
+        "HTML"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "flowbite",
+      "name": "Flowbite",
+      "category": "ui-components",
+      "description": "Tailwind CSS component library with interactive elements built on vanilla JavaScript. Free MIT-licensed components plus a paid Pro collection of blocks, templates, and Figma files.",
+      "url": "https://flowbite.com/",
+      "favicon": "",
+      "tags": [
+        "tailwind-css",
+        "components",
+        "javascript"
+      ],
+      "tech": [
+        "Tailwind CSS",
+        "JavaScript"
+      ],
+      "pricing": "freemium",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "daisyui",
+      "name": "daisyUI",
+      "category": "ui-components",
+      "description": "Tailwind CSS component library with semantic class names, built-in themes, and reusable UI blocks. Components are styled with pure CSS on top of Tailwind utilities.",
+      "url": "https://daisyui.com/",
+      "favicon": "https://img.daisyui.com/images/daisyui/daisyui-logo-512.png",
+      "tags": [
+        "tailwind-css",
+        "components",
+        "themes"
+      ],
+      "tech": [
+        "Tailwind CSS"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "preline-ui",
+      "name": "Preline UI",
+      "category": "ui-components",
+      "description": "Free open-source Tailwind CSS component library with JavaScript plugins, framework guides, templates, and Figma files. A paid Pro collection adds premium blocks and templates.",
+      "url": "https://preline.co/",
+      "favicon": "",
+      "tags": [
+        "tailwind-css",
+        "components",
+        "javascript",
+        "figma"
+      ],
+      "tech": [
+        "Tailwind CSS",
+        "JavaScript"
+      ],
+      "pricing": "freemium",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "mantine",
+      "name": "Mantine",
+      "category": "ui-components",
+      "description": "Fully featured React components library with over 120 customizable components, hooks, and utilities for building accessible web applications.",
+      "url": "https://mantine.dev/",
+      "favicon": "https://mantine.dev/favicon.svg",
+      "tags": [
+        "react",
+        "components",
+        "hooks",
+        "accessible"
+      ],
+      "tech": [
+        "React"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "chakra-ui",
+      "name": "Chakra UI",
+      "category": "ui-components",
+      "description": "Simple, modular, and accessible React component library for building web applications with style props and a theme system.",
+      "url": "https://chakra-ui.com/",
+      "favicon": "https://chakra-ui.com/favicon.ico",
+      "tags": [
+        "react",
+        "components",
+        "accessible"
+      ],
+      "tech": [
+        "React"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "radix-ui",
+      "name": "Radix UI",
+      "category": "ui-components",
+      "description": "Free open-source React primitives, icons, and colors for building high-quality accessible interfaces. Unstyled components plus a styled Themes layer.",
+      "url": "https://www.radix-ui.com/",
+      "favicon": "https://www.radix-ui.com/favicon-black.svg",
+      "tags": [
+        "react",
+        "components",
+        "accessible",
+        "headless"
+      ],
+      "tech": [
+        "React"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "headless-ui",
+      "name": "Headless UI",
+      "category": "ui-components",
+      "description": "Completely unstyled, fully accessible UI components for React and Vue, designed to integrate with Tailwind CSS. Bring your own styles and markup behavior.",
+      "url": "https://headlessui.com/",
+      "favicon": "https://headlessui.com/android-chrome-384x384.png",
+      "tags": [
+        "react",
+        "vue",
+        "components",
+        "accessible",
+        "headless",
+        "tailwind-css"
+      ],
+      "tech": [
+        "React",
+        "Vue"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "mui",
+      "name": "MUI",
+      "category": "ui-components",
+      "description": "React component library implementing Material Design with customizable components, theming, and production-ready building blocks. The core library is free and open source.",
+      "url": "https://mui.com/",
+      "favicon": "https://mui.com/static/icons/256x256.png",
+      "tags": [
+        "react",
+        "components",
+        "material-design"
+      ],
+      "tech": [
+        "React"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "ant-design",
+      "name": "Ant Design",
+      "category": "ui-components",
+      "description": "Enterprise-class React UI design language and component library with high-quality components for building business web applications.",
+      "url": "https://ant.design/",
+      "favicon": "",
+      "tags": [
+        "react",
+        "components",
+        "enterprise"
+      ],
+      "tech": [
+        "React"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "tremor",
+      "name": "Tremor",
+      "category": "ui-components",
+      "description": "Open-source copy-and-paste React UI components styled with Tailwind CSS for building charts and dashboards.",
+      "url": "https://www.tremor.so/",
+      "favicon": "",
+      "tags": [
+        "react",
+        "tailwind-css",
+        "charts",
+        "dashboards",
+        "copy-paste"
+      ],
+      "tech": [
+        "React",
+        "Tailwind CSS"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "float-ui",
+      "name": "Float UI",
+      "category": "ui-components",
+      "description": "Free open-source website templates and Tailwind CSS UI components for React, Vue, Svelte, and plain HTML.",
+      "url": "https://floatui.com/",
+      "favicon": "",
+      "tags": [
+        "tailwind-css",
+        "components",
+        "templates",
+        "react",
+        "vue"
+      ],
+      "tech": [
+        "Tailwind CSS",
+        "React",
+        "Vue",
+        "HTML"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "park-ui",
+      "name": "Park UI",
+      "category": "ui-components",
+      "description": "Component collection built with Ark UI and Panda CSS that works across major JavaScript frameworks. Copy-paste recipes styled with design tokens.",
+      "url": "https://park-ui.com/",
+      "favicon": "https://park-ui.com/icon-512.png",
+      "tags": [
+        "components",
+        "multi-framework",
+        "copy-paste",
+        "design-tokens"
+      ],
+      "tech": [
+        "Ark UI",
+        "Panda CSS"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "ark-ui",
+      "name": "Ark UI",
+      "category": "ui-components",
+      "description": "Headless UI component library with over 45 components for building reusable, scalable design systems across JavaScript frameworks.",
+      "url": "https://ark-ui.com/",
+      "favicon": "https://ark-ui.com/icon-512.png",
+      "tags": [
+        "headless",
+        "components",
+        "design-system",
+        "multi-framework"
+      ],
+      "tech": [
+        "JavaScript"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "heroui",
+      "name": "HeroUI",
+      "category": "ui-components",
+      "description": "Accessible React UI components built on React Aria and Tailwind CSS. Previously known as NextUI, version 3 targets production applications with customizable theming.",
+      "url": "https://www.heroui.com/",
+      "favicon": "https://heroui.com/icons/web-app-manifest-512x512.png",
+      "tags": [
+        "react",
+        "components",
+        "accessible",
+        "tailwind-css"
+      ],
+      "tech": [
+        "React",
+        "Tailwind CSS"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "react-aria",
+      "name": "React Aria",
+      "category": "ui-components",
+      "description": "Adobe library of unstyled, accessible React hooks and components for building design systems with custom styles and strong keyboard and screen-reader support.",
+      "url": "https://react-spectrum.adobe.com/react-aria/",
+      "favicon": "https://react-aria.adobe.com/server/react-aria-favicon.0d52b4c6.svg",
+      "tags": [
+        "react",
+        "accessibility",
+        "components",
+        "headless"
+      ],
+      "tech": [
+        "React"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "coss-ui",
+      "name": "Coss UI",
+      "category": "ui-components",
+      "description": "Modern React component library built on top of Base UI, formerly known as Origin UI. Open-source components for developers and AI-assisted workflows.",
+      "url": "https://coss.com/ui",
+      "favicon": "",
+      "tags": [
+        "react",
+        "components",
+        "base-ui"
+      ],
+      "tech": [
+        "React",
+        "Tailwind CSS",
+        "Next.js"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "eldora-ui",
+      "name": "Eldora UI",
+      "category": "ui-components",
+      "description": "Open-source collection of UI components and landing page templates for building marketing pages. Copy-paste blocks with modern styling.",
+      "url": "https://www.eldoraui.site/",
+      "favicon": "",
+      "tags": [
+        "components",
+        "landing-pages",
+        "templates",
+        "copy-paste"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "kokonut-ui",
+      "name": "Kokonut UI",
+      "category": "ui-components",
+      "description": "Collection of over 100 free open-source UI components built with Next.js, React, Tailwind CSS, and Motion. Copy-paste interactive elements for modern interfaces.",
+      "url": "https://kokonutui.com/",
+      "favicon": "https://kokonutui.com/icon.png",
+      "tags": [
+        "react",
+        "components",
+        "tailwind-css",
+        "copy-paste",
+        "nextjs"
+      ],
+      "tech": [
+        "React",
+        "Tailwind CSS",
+        "Next.js"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "html5-up",
+      "name": "HTML5 UP",
+      "category": "templates",
+      "description": "Responsive HTML5 and CSS3 site templates with modern designs. Free to download and use under a Creative Commons license for personal and commercial projects.",
+      "url": "https://html5up.net/",
+      "favicon": "https://html5up.net/assets/icons/apple-touch-icon-precomposed.png",
+      "tags": [
+        "templates",
+        "html",
+        "responsive",
+        "landing-pages"
+      ],
+      "tech": [
+        "HTML",
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "start-bootstrap",
+      "name": "Start Bootstrap",
+      "category": "templates",
+      "description": "Free open-source Bootstrap themes, templates, and snippets with guides and tutorials for designing and developing with Bootstrap.",
+      "url": "https://startbootstrap.com/",
+      "favicon": "https://startbootstrap.com/assets/icons/icon-384x384.png",
+      "tags": [
+        "templates",
+        "bootstrap",
+        "themes",
+        "snippets"
+      ],
+      "tech": [
+        "Bootstrap"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "cruip",
+      "name": "Cruip",
+      "category": "templates",
+      "description": "Tailwind CSS landing page templates, websites, and dashboard templates coded in HTML, React, Next.js, and Vue. Free templates plus a premium collection.",
+      "url": "https://cruip.com/",
+      "favicon": "https://cruip.com/favicon/web-app-manifest-512x512.png",
+      "tags": [
+        "templates",
+        "tailwind-css",
+        "landing-pages",
+        "dashboards"
+      ],
+      "tech": [
+        "Tailwind CSS",
+        "HTML",
+        "React",
+        "Vue"
+      ],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "windy-toolbox",
+      "name": "Windy Toolbox",
+      "category": "templates",
+      "description": "Curated collection of Tailwind CSS starter templates, UI components, generators, and tools. Formerly known as Tailwind Toolbox.",
+      "url": "https://windytoolbox.com/",
+      "favicon": "https://windytoolbox.com/android-chrome-512x512.png",
+      "tags": [
+        "templates",
+        "tailwind-css",
+        "components",
+        "directory"
+      ],
+      "tech": [
+        "Tailwind CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "tailawesome",
+      "name": "TailAwesome",
+      "category": "templates",
+      "description": "Curated directory of Tailwind templates and UI kits, covering free and paid resources to kickstart new designs.",
+      "url": "https://www.tailawesome.com/",
+      "favicon": "",
+      "tags": [
+        "templates",
+        "tailwind-css",
+        "directory",
+        "ui-kits"
+      ],
+      "tech": [
+        "Tailwind CSS"
+      ],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "themewagon",
+      "name": "ThemeWagon",
+      "category": "templates",
+      "description": "Marketplace with over 1000 hand-picked free and premium responsive Bootstrap themes and website templates.",
+      "url": "https://themewagon.com/",
+      "favicon": "https://themewagon.com/wp-content/uploads/2021/04/cropped-favicon-192x192.png",
+      "tags": [
+        "templates",
+        "bootstrap",
+        "themes",
+        "marketplace"
+      ],
+      "tech": [
+        "Bootstrap"
+      ],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "bootstrapmade",
+      "name": "BootstrapMade",
+      "category": "templates",
+      "description": "Collection of free and premium responsive Bootstrap templates and themes that are easy to customize for new projects.",
+      "url": "https://bootstrapmade.com/",
+      "favicon": "https://bootstrapmade.com/assets/img/apple-touch-icon.png",
+      "tags": [
+        "templates",
+        "bootstrap",
+        "themes"
+      ],
+      "tech": [
+        "Bootstrap"
+      ],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "creative-tim",
+      "name": "Creative Tim",
+      "category": "templates",
+      "description": "Platform offering UI kits, templates, automations, and AI agents for shipping web products faster. Free and premium Bootstrap and Tailwind resources.",
+      "url": "https://www.creative-tim.com/",
+      "favicon": "",
+      "tags": [
+        "templates",
+        "ui-kits",
+        "dashboard",
+        "marketplace"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "adminlte",
+      "name": "AdminLTE",
+      "category": "templates",
+      "description": "Popular open-source Bootstrap admin dashboard template with modular components. Free MIT-licensed core with an optional premium version.",
+      "url": "https://adminlte.io/",
+      "favicon": "",
+      "tags": [
+        "templates",
+        "bootstrap",
+        "admin",
+        "dashboard"
+      ],
+      "tech": [
+        "Bootstrap"
+      ],
+      "pricing": "freemium",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "tabler",
+      "name": "Tabler",
+      "category": "templates",
+      "description": "Free open-source HTML admin dashboard template with clean UI components. MIT-licensed starter for building responsive back-office interfaces.",
+      "url": "https://tabler.io/admin-template",
+      "favicon": "https://tabler.io/favicon.ico",
+      "tags": [
+        "templates",
+        "admin",
+        "dashboard",
+        "html"
+      ],
+      "tech": [
+        "HTML"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "vercel-templates",
+      "name": "Vercel Templates",
+      "category": "templates",
+      "description": "Gallery of pre-built application templates from Vercel and the community. Deploy or clone starters spanning frameworks, AI apps, commerce, and blogs.",
+      "url": "https://vercel.com/templates",
+      "favicon": "https://py8fhxnkzwtsqdo9.public.blob.vercel-storage.com/front/favicon/vercel/android-chrome-512x512.png",
+      "tags": [
+        "templates",
+        "starters",
+        "deployment",
+        "directory"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "astro-themes",
+      "name": "Astro Themes",
+      "category": "templates",
+      "description": "Official directory of Astro themes and starters for blogs, portfolios, documentation, and marketing sites, covering free and paid options.",
+      "url": "https://astro.build/themes/",
+      "favicon": "https://astro.build/favicon.svg",
+      "tags": [
+        "templates",
+        "astro",
+        "themes",
+        "starters",
+        "directory"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "gatsby-starters",
+      "name": "Gatsby Starters",
+      "category": "templates",
+      "description": "Official starters library with pre-made Gatsby templates to launch blogs, portfolios, documentation sites, and e-commerce projects.",
+      "url": "https://www.gatsbyjs.com/starters/",
+      "favicon": "https://www.gatsbyjs.com/icons/icon-256x256.png",
+      "tags": [
+        "templates",
+        "gatsby",
+        "starters",
+        "directory"
+      ],
+      "tech": [
+        "Gatsby"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "htmlrev",
+      "name": "HTMLrev",
+      "category": "templates",
+      "description": "Free HTML and CSS website templates and themes for landing pages, blogs, portfolios, e-commerce, and admin dashboards.",
+      "url": "https://htmlrev.com/",
+      "favicon": "",
+      "tags": [
+        "templates",
+        "html",
+        "landing-pages",
+        "free"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "css-gradient",
+      "name": "CSS Gradient",
+      "category": "css",
+      "description": "Free CSS gradient generator for creating colorful gradient backgrounds for websites, blogs, and social media profiles, with layered gradients and swatches.",
+      "url": "https://cssgradient.io/",
+      "favicon": "https://cssgradient.io/apple-icon.png",
+      "tags": [
+        "gradients",
+        "backgrounds",
+        "generator"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "gradient-magic",
+      "name": "Gradient Magic",
+      "category": "css",
+      "description": "Gallery of unique CSS gradients with ready-to-copy code. Browse fancy gradient patterns and copy the CSS directly into projects.",
+      "url": "https://www.gradientmagic.com/",
+      "favicon": "https://www.gradientmagic.com/favicon/android-chrome-512x512.png",
+      "tags": [
+        "gradients",
+        "backgrounds",
+        "gallery",
+        "copy-paste"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "neumorphism-io",
+      "name": "Neumorphism.io",
+      "category": "css",
+      "description": "CSS code generator for neumorphic design with controls for colors, gradients, shadows, blur, and border radius, outputting ready CSS.",
+      "url": "https://neumorphism.io/",
+      "favicon": "https://neumorphism.io/android-chrome-512x512.png",
+      "tags": [
+        "neumorphism",
+        "shadows",
+        "generator"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "glassmorphism-generator",
+      "name": "Glassmorphism Generator",
+      "category": "css",
+      "description": "Visual generator for frosted-glass CSS effects with blur, transparency, and border controls, producing copy-ready CSS code.",
+      "url": "https://hype4.academy/tools/glassmorphism-generator",
+      "favicon": "https://hype4.academy/favicon/apple-icon-180x180.png",
+      "tags": [
+        "glassmorphism",
+        "generator",
+        "css"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "css-scan",
+      "name": "CSS Scan",
+      "category": "css",
+      "description": "Curated galleries of free ready-to-use CSS buttons and box-shadows. Browse 90+ examples in each collection and click to copy the CSS.",
+      "url": "https://getcssscan.com/",
+      "favicon": "https://getcssscan.com/android-chrome-192x192.png",
+      "tags": [
+        "buttons",
+        "shadows",
+        "copy-paste",
+        "gallery"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "css-pattern",
+      "name": "CSS Pattern",
+      "category": "css",
+      "description": "Collection of over 100 fancy background patterns powered by CSS gradients and modern CSS, with copy-ready code for each pattern.",
+      "url": "https://css-pattern.com/",
+      "favicon": "https://css-pattern.com/fav.png",
+      "tags": [
+        "patterns",
+        "backgrounds",
+        "gradients",
+        "copy-paste"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "css-generators",
+      "name": "CSS Generators",
+      "category": "css",
+      "description": "Wide range of CSS generators for borders, shadows, gradients, filters, and layouts. Adjust settings visually and copy the resulting CSS.",
+      "url": "https://css-generators.com/",
+      "favicon": "https://css-generators.com/fav.png",
+      "tags": [
+        "generators",
+        "snippets",
+        "css"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "cubic-bezier",
+      "name": "Cubic Bezier",
+      "category": "css",
+      "description": "Interactive cubic-bezier easing editor with live preview and curve comparison. Copy timing-function values for CSS transitions and animations.",
+      "url": "https://cubic-bezier.com/",
+      "favicon": "",
+      "tags": [
+        "easing",
+        "bezier",
+        "animations",
+        "generator"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "css-portal",
+      "name": "CSS Portal",
+      "category": "css",
+      "description": "Collection of CSS and HTML examples, generators, and learning resources for website design, from snippets to full layout references.",
+      "url": "https://www.cssportal.com/",
+      "favicon": "",
+      "tags": [
+        "generators",
+        "references",
+        "snippets"
+      ],
+      "tech": [
+        "CSS",
+        "HTML"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "cssmatic",
+      "name": "CSSmatic",
+      "category": "css",
+      "description": "Interactive CSS lessons with quizzes plus free CSS generators with live preview, covering gradients, shadows, borders, and layouts.",
+      "url": "https://www.cssmatic.com/",
+      "favicon": "",
+      "tags": [
+        "generators",
+        "tutorials",
+        "css"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "fancy-border-radius",
+      "name": "Fancy Border Radius",
+      "category": "css",
+      "description": "Visual generator for organic blob shapes using the CSS border-radius property. Drag control points and copy the resulting values.",
+      "url": "https://9elements.github.io/fancy-border-radius/",
+      "favicon": "",
+      "tags": [
+        "border-radius",
+        "shapes",
+        "generator"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "css-doodle",
+      "name": "CSS Doodle",
+      "category": "css",
+      "description": "Web component for drawing generative patterns with CSS. Declarative custom element syntax for grids, shapes, and animations.",
+      "url": "https://css-doodle.com/",
+      "favicon": "",
+      "tags": [
+        "web-component",
+        "patterns",
+        "generative",
+        "css"
+      ],
+      "tech": [
+        "CSS",
+        "JavaScript"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "animate-css",
+      "name": "Animate.css",
+      "category": "animations",
+      "description": "Library of ready-to-use, cross-browser CSS animations for emphasis, home pages, sliders, and attention-guiding hints. Add a class to animate.",
+      "url": "https://animate.style/",
+      "favicon": "",
+      "tags": [
+        "css",
+        "animations",
+        "library"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "hover-css",
+      "name": "Hover.css",
+      "category": "animations",
+      "description": "Collection of CSS3-powered hover effects for links, buttons, logos, SVG, and images. Apply effects with a single class.",
+      "url": "https://ianlunn.github.io/Hover/",
+      "favicon": "",
+      "tags": [
+        "css",
+        "hover-effects",
+        "animations"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "animejs",
+      "name": "Anime.js",
+      "category": "animations",
+      "description": "Fast, multipurpose, lightweight JavaScript animation engine for CSS properties, SVG, DOM attributes, and JavaScript objects.",
+      "url": "https://animejs.com/",
+      "favicon": "",
+      "tags": [
+        "javascript",
+        "animations",
+        "library"
+      ],
+      "tech": [
+        "JavaScript"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "gsap",
+      "name": "GSAP",
+      "category": "animations",
+      "description": "Professional-grade JavaScript animation library for animating anything on the web, including ScrollTrigger, SVG, and canvas workflows. Free to use.",
+      "url": "https://gsap.com/",
+      "favicon": "https://gsap.com/apple-touch-icon.png",
+      "tags": [
+        "javascript",
+        "animations",
+        "library",
+        "scroll"
+      ],
+      "tech": [
+        "JavaScript"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "motion",
+      "name": "Motion",
+      "category": "animations",
+      "description": "Fast production-grade animation library for React, JavaScript, and Vue, formerly known as Framer Motion and Motion One. Open-source core with paid extras.",
+      "url": "https://motion.dev/",
+      "favicon": "https://motion.dev/favicon-192.png",
+      "tags": [
+        "javascript",
+        "react",
+        "vue",
+        "animations"
+      ],
+      "tech": [
+        "JavaScript",
+        "React",
+        "Vue"
+      ],
+      "pricing": "freemium",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "aos",
+      "name": "AOS",
+      "category": "animations",
+      "description": "Animate On Scroll library using CSS3 for scroll-triggered animations. Declarative data attributes control duration, easing, and offsets.",
+      "url": "https://michalsnik.github.io/aos/",
+      "favicon": "",
+      "tags": [
+        "css",
+        "scroll",
+        "animations",
+        "library"
+      ],
+      "tech": [
+        "CSS",
+        "JavaScript"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "lottiefiles",
+      "name": "LottieFiles",
+      "category": "animations",
+      "description": "Platform for lightweight Lottie animations with free and premium files, plus tools to create, edit, test, and ship motion graphics for web and apps.",
+      "url": "https://lottiefiles.com/",
+      "favicon": "https://lottiefiles.com/icons/apple-touch-icon.png",
+      "tags": [
+        "lottie",
+        "animations",
+        "motion-graphics"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": false,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "loading-io",
+      "name": "Loading.io",
+      "category": "animations",
+      "description": "Generator for Ajax loading icons, animated text, and spinners exported as SVG, CSS, GIF, PNG, or Lottie. Free options with paid licenses.",
+      "url": "https://loading.io/",
+      "favicon": "https://loading.io/assets/img/c/logo/128.png",
+      "tags": [
+        "loaders",
+        "spinners",
+        "svg",
+        "generator"
+      ],
+      "tech": [
+        "SVG",
+        "CSS"
+      ],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": false,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "spinkit",
+      "name": "SpinKit",
+      "category": "animations",
+      "description": "Simple CSS loading spinners with copy-paste snippets. Lightweight single-element indicators for async states.",
+      "url": "https://tobiasahlin.com/spinkit/",
+      "favicon": "https://tobiasahlin.com/images/touch-icon-ipad-retina.png",
+      "tags": [
+        "css",
+        "spinners",
+        "loaders",
+        "copy-paste"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "magic-animations",
+      "name": "Magic Animations",
+      "category": "animations",
+      "description": "Set of simple CSS3 animations to include in web or app projects, with blur, slide, perspective, and tin effects ready to drop in.",
+      "url": "https://www.minimamente.com/project/magic/",
+      "favicon": "",
+      "tags": [
+        "css",
+        "animations",
+        "library"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "css-loaders",
+      "name": "CSS Loaders",
+      "category": "animations",
+      "description": "Collection of more than 600 single-element CSS-only loading animations. Copy any loader with one click, no images or JavaScript needed.",
+      "url": "https://css-loaders.com/",
+      "favicon": "https://css-loaders.com/fav.png",
+      "tags": [
+        "css",
+        "loaders",
+        "spinners",
+        "copy-paste"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "hamburgers",
+      "name": "Hamburgers",
+      "category": "animations",
+      "description": "Tasty CSS-animated hamburger menu icons with many animation types. Sass-powered toggles for responsive navigation.",
+      "url": "https://jonsuh.com/hamburgers/",
+      "favicon": "",
+      "tags": [
+        "css",
+        "hamburger",
+        "menu",
+        "animations"
+      ],
+      "tech": [
+        "CSS",
+        "Sass"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "vivus",
+      "name": "Vivus",
+      "category": "animations",
+      "description": "JavaScript library for SVG drawing animations that progressively strokes vector paths, with timing and scenario controls.",
+      "url": "https://maxwellito.github.io/vivus/",
+      "favicon": "",
+      "tags": [
+        "svg",
+        "animations",
+        "drawing",
+        "javascript"
+      ],
+      "tech": [
+        "JavaScript",
+        "SVG"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "mojs",
+      "name": "mo.js",
+      "category": "animations",
+      "description": "Motion graphics library for the web with declarative API for tweens, timelines, shapes, and particle bursts.",
+      "url": "https://mojs.github.io/",
+      "favicon": "https://mojs.github.io/assets/favicons/android-chrome-512x512.png",
+      "tags": [
+        "javascript",
+        "animations",
+        "motion-graphics"
+      ],
+      "tech": [
+        "JavaScript"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "heroicons",
+      "name": "Heroicons",
+      "category": "icons-svg",
+      "description": "Beautiful hand-crafted SVG icons by the makers of Tailwind CSS. Free MIT-licensed outline and solid sets for interfaces.",
+      "url": "https://heroicons.com/",
+      "favicon": "",
+      "tags": [
+        "svg",
+        "icons",
+        "tailwind-css"
+      ],
+      "tech": [
+        "SVG"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "lucide",
+      "name": "Lucide",
+      "category": "icons-svg",
+      "description": "Beautiful and consistent community-driven icon toolkit. Open-source SVG icons with packages for major frameworks.",
+      "url": "https://lucide.dev/",
+      "favicon": "",
+      "tags": [
+        "svg",
+        "icons",
+        "community"
+      ],
+      "tech": [
+        "SVG"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "phosphor-icons",
+      "name": "Phosphor Icons",
+      "category": "icons-svg",
+      "description": "Flexible free icon family for interfaces, diagrams, and presentations with multiple weights and styles.",
+      "url": "https://phosphoricons.com/",
+      "favicon": "https://phosphoricons.com/favicon-512.png",
+      "tags": [
+        "svg",
+        "icons"
+      ],
+      "tech": [
+        "SVG"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "tabler-icons",
+      "name": "Tabler Icons",
+      "category": "icons-svg",
+      "description": "More than 6000 free open-source vector icons for web design. Customizable size, color, and stroke, with React, Vue, and Figma integrations.",
+      "url": "https://tabler.io/icons",
+      "favicon": "https://tabler.io/favicon.ico",
+      "tags": [
+        "svg",
+        "icons",
+        "react",
+        "vue"
+      ],
+      "tech": [
+        "SVG",
+        "React",
+        "Vue"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "iconoir",
+      "name": "Iconoir",
+      "category": "icons-svg",
+      "description": "Open-source icon library with a large selection of high-quality icons available for free download as SVG, without premium tiers or sign-up.",
+      "url": "https://iconoir.com/",
+      "favicon": "",
+      "tags": [
+        "svg",
+        "icons"
+      ],
+      "tech": [
+        "SVG"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "accessible-colors",
+      "name": "Accessible Colors",
+      "category": "design-resources",
+      "description": "WCAG 2.0 AA and AAA color contrast checker. Tests background and text contrast ratios and suggests the closest accessible colors.",
+      "url": "https://accessible-colors.com/",
+      "favicon": "",
+      "tags": [
+        "colors",
+        "contrast",
+        "accessibility",
+        "wcag"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "get-waves",
+      "name": "Get Waves",
+      "category": "generators",
+      "description": "Free SVG wave generator for unique website section dividers. Choose a curve style, adjust complexity, randomize, and export SVG.",
+      "url": "https://getwaves.io/",
+      "favicon": "https://getwaves.io/icons/icon-256x256.png",
+      "tags": [
+        "svg",
+        "waves",
+        "backgrounds",
+        "dividers",
+        "generator"
+      ],
+      "tech": [
+        "SVG"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "shape-divider",
+      "name": "Shape Divider",
+      "category": "generators",
+      "description": "Generator app for custom SVG shape dividers between website sections, with exportable code for direct use.",
+      "url": "https://www.shapedivider.app/",
+      "favicon": "",
+      "tags": [
+        "svg",
+        "dividers",
+        "shapes",
+        "generator"
+      ],
+      "tech": [
+        "SVG"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "svg-backgrounds",
+      "name": "SVG Backgrounds",
+      "category": "generators",
+      "description": "Copy-and-paste SVG backgrounds, patterns, and icons for projects. Customizable, tiny in file size, with free and premium licensing.",
+      "url": "https://www.svgbackgrounds.com/",
+      "favicon": "https://www.svgbackgrounds.com/android-chrome-512x512.png",
+      "tags": [
+        "svg",
+        "backgrounds",
+        "patterns"
+      ],
+      "tech": [
+        "SVG"
+      ],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "bgjar",
+      "name": "BGJar",
+      "category": "generators",
+      "description": "Free SVG background image generator for websites, blogs, and apps with customizable patterns and colors.",
+      "url": "https://bgjar.com/",
+      "favicon": "",
+      "tags": [
+        "svg",
+        "backgrounds",
+        "generator"
+      ],
+      "tech": [
+        "SVG"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "favicon-io",
+      "name": "Favicon.io",
+      "category": "generators",
+      "description": "Free favicon generator that creates favicon.ico and app icons from text, images, SVG, or emoji, downloadable as a complete icon set.",
+      "url": "https://favicon.io/",
+      "favicon": "https://favicon.io/android-chrome-512x512.png",
+      "tags": [
+        "favicon",
+        "icons",
+        "generator"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "realfavicongenerator",
+      "name": "RealFaviconGenerator",
+      "category": "generators",
+      "description": "Favicon generator for consistent icons across browsers and platforms, with per-platform design controls and an audit of existing setups.",
+      "url": "https://realfavicongenerator.net/",
+      "favicon": "https://realfavicongenerator.net/web-app-manifest-512x512.png",
+      "tags": [
+        "favicon",
+        "icons",
+        "generator"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "meta-tags",
+      "name": "Meta Tags",
+      "category": "generators",
+      "description": "Preview, edit, and generate meta tags by experimenting with content and seeing how pages look on Google, Facebook, X, and more.",
+      "url": "https://metatags.io/",
+      "favicon": "",
+      "tags": [
+        "meta-tags",
+        "seo",
+        "preview",
+        "generator"
+      ],
+      "tech": [
+        "HTML"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "lorem-picsum",
+      "name": "Lorem Picsum",
+      "category": "generators",
+      "description": "Placeholder image service providing random or fixed Lorem Picsum photos by URL size parameters. Free and open source.",
+      "url": "https://picsum.photos/",
+      "favicon": "",
+      "tags": [
+        "placeholder",
+        "images",
+        "api"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "dummyjson",
+      "name": "DummyJSON",
+      "category": "generators",
+      "description": "Free fake REST API serving placeholder JSON data for development, testing, and prototyping, with realistic products, users, and posts.",
+      "url": "https://dummyjson.com/",
+      "favicon": "",
+      "tags": [
+        "mock-data",
+        "json",
+        "api",
+        "testing"
+      ],
+      "tech": [
+        "REST",
+        "JSON"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "mockaroo",
+      "name": "Mockaroo",
+      "category": "generators",
+      "description": "Random data generator and API mocking tool for JSON, CSV, SQL, and Excel test data. Free tier with paid plans for higher limits.",
+      "url": "https://www.mockaroo.com/",
+      "favicon": "",
+      "tags": [
+        "mock-data",
+        "csv",
+        "json",
+        "sql",
+        "api"
+      ],
+      "tech": [
+        "JSON",
+        "CSV",
+        "SQL"
+      ],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "json-generator",
+      "name": "JSON Generator",
+      "category": "generators",
+      "description": "Tool for generating random JSON data with agile templates, with options to save generated sets on its servers for later use.",
+      "url": "https://www.json-generator.com/",
+      "favicon": "",
+      "tags": [
+        "mock-data",
+        "json",
+        "templates"
+      ],
+      "tech": [
+        "JSON"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "random-user-generator",
+      "name": "Random User Generator",
+      "category": "generators",
+      "description": "Free API generating placeholder user information with profile photos and names for testing and prototyping.",
+      "url": "https://randomuser.me/",
+      "favicon": "",
+      "tags": [
+        "mock-data",
+        "api",
+        "users",
+        "placeholder"
+      ],
+      "tech": [
+        "JSON"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "ui-colors",
+      "name": "UI Colors",
+      "category": "generators",
+      "description": "Tailwind CSS color shade generator. Generate, edit, save, and share palettes from a hexcode or HSL color.",
+      "url": "https://uicolors.app/generate",
+      "favicon": "",
+      "tags": [
+        "colors",
+        "tailwind-css",
+        "palette",
+        "generator"
+      ],
+      "tech": [
+        "Tailwind CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "svg-wave",
+      "name": "SVG Wave",
+      "category": "generators",
+      "description": "Free minimal gradient SVG wave generator with customization and layering. Export waves as PNG or SVG for websites.",
+      "url": "https://svgwave.in/",
+      "favicon": "https://svgwave.in/assets/apple-touch-icon-cb103bd2.png",
+      "tags": [
+        "svg",
+        "waves",
+        "gradients",
+        "generator"
+      ],
+      "tech": [
+        "SVG"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "mesh-gradient",
+      "name": "Mesh Gradient",
+      "category": "generators",
+      "description": "Generator for smooth mesh gradient backgrounds with adjustable colors and randomness, exporting ready CSS.",
+      "url": "https://meshgradient.com/",
+      "favicon": "",
+      "tags": [
+        "gradients",
+        "mesh",
+        "backgrounds",
+        "generator"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "30-seconds-of-code",
+      "name": "30 Seconds of Code",
+      "category": "snippets",
+      "description": "Browse hundreds of short coding articles and reusable snippets to level up coding skills across JavaScript, CSS, Python, and more.",
+      "url": "https://www.30secondsofcode.org/",
+      "favicon": "https://www.30secondsofcode.org/assets/icons/icon-512x512.png?v=305c210420234555",
+      "tags": [
+        "snippets",
+        "articles",
+        "javascript",
+        "learning"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "codemyui",
+      "name": "CodeMyUI",
+      "category": "snippets",
+      "description": "Handpicked collection of web design and UI inspiration with snippets and GIF previews. HTML and CSS copy-paste code for interface elements.",
+      "url": "https://codemyui.com/",
+      "favicon": "https://i0.wp.com/codemyui.com/wp-content/uploads/2017/02/cropped-logo-1.png?fit=192%2C192",
+      "tags": [
+        "snippets",
+        "inspiration",
+        "html",
+        "css"
+      ],
+      "tech": [
+        "HTML",
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "cssfx",
+      "name": "CSSFX",
+      "category": "snippets",
+      "description": "Carefully crafted collection of click-to-copy CSS effects: loaders, hover effects, and transitions designed for fluidity and simplicity.",
+      "url": "https://cssfx.netlify.app/",
+      "favicon": "https://cssfx.netlify.app/android-chrome-256x256.png",
+      "tags": [
+        "css",
+        "effects",
+        "loaders",
+        "copy-paste"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "hypercolor",
+      "name": "Hypercolor",
+      "category": "snippets",
+      "description": "Curated collection of Tailwind CSS gradients using the full color range. Copy class names or CSS, or save gradients as images.",
+      "url": "https://hypercolor.dev/",
+      "favicon": "",
+      "tags": [
+        "gradients",
+        "tailwind-css",
+        "copy-paste"
+      ],
+      "tech": [
+        "Tailwind CSS"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "tailwind-components-tw",
+      "name": "Tailwind Components",
+      "category": "snippets",
+      "description": "Free repository of open-source Tailwind CSS components and templates to bootstrap apps, projects, and landing sites.",
+      "url": "https://www.creative-tim.com/twcomponents/",
+      "favicon": "https://www.creative-tim.com/twcomponents/apple-touch-icon.png",
+      "tags": [
+        "tailwind-css",
+        "components",
+        "templates",
+        "copy-paste"
+      ],
+      "tech": [
+        "Tailwind CSS"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "flowrift",
+      "name": "Flowrift",
+      "category": "snippets",
+      "description": "Library of Tailwind CSS UI blocks, components, and templates. Browse, copy, and customize blocks inside an optimized catalog app.",
+      "url": "https://flowrift.com/",
+      "favicon": "https://flowrift.com/img/pwa512.png",
+      "tags": [
+        "tailwind-css",
+        "components",
+        "templates",
+        "copy-paste"
+      ],
+      "tech": [
+        "Tailwind CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "meraki-ui",
+      "name": "Meraki UI",
+      "category": "snippets",
+      "description": "Free Tailwind CSS components with RTL language support, responsive Flexbox and Grid layouts, and dark mode. Includes a premium collection.",
+      "url": "https://merakiui.com/",
+      "favicon": "https://merakiui.com/images/logo.svg",
+      "tags": [
+        "tailwind-css",
+        "components",
+        "rtl",
+        "dark-mode"
+      ],
+      "tech": [
+        "Tailwind CSS"
+      ],
+      "pricing": "freemium",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "tailblocks",
+      "name": "Tailblocks",
+      "category": "snippets",
+      "description": "Ready-to-use Tailwind CSS page blocks. Pick sections and copy the markup into projects.",
+      "url": "https://tailblocks.cc/",
+      "favicon": "",
+      "tags": [
+        "tailwind-css",
+        "blocks",
+        "copy-paste"
+      ],
+      "tech": [
+        "Tailwind CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "mamba-ui",
+      "name": "Mamba UI",
+      "category": "snippets",
+      "description": "UI kit with over 150 free Tailwind CSS components and templates. Copy-paste HTML or JSX into projects.",
+      "url": "https://mambaui.com/",
+      "favicon": "https://mambaui.com/assets/icons/icon-512x512.png",
+      "tags": [
+        "tailwind-css",
+        "components",
+        "templates",
+        "copy-paste"
+      ],
+      "tech": [
+        "Tailwind CSS",
+        "React"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "wicked-blocks",
+      "name": "Wicked Blocks",
+      "category": "snippets",
+      "description": "Collection of hundreds of fully responsive Tailwind blocks and components, ready to copy-paste into projects.",
+      "url": "https://www.wickedblocks.dev/",
+      "favicon": "https://www.wickedblocks.dev/favicon/apple-touch-icon.png",
+      "tags": [
+        "tailwind-css",
+        "blocks",
+        "copy-paste"
+      ],
+      "tech": [
+        "Tailwind CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "david-ui",
+      "name": "David UI",
+      "category": "ui-components",
+      "description": "Free library of Tailwind CSS and React components for building modern interfaces with flexibility.",
+      "url": "https://www.creative-tim.com/david-ui",
+      "favicon": "",
+      "tags": [
+        "tailwind-css",
+        "react",
+        "components"
+      ],
+      "tech": [
+        "Tailwind CSS",
+        "React"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "codyhouse",
+      "name": "CodyHouse",
+      "category": "snippets",
+      "description": "Library of customizable HTML, CSS, and JS web components compatible with the CodyHouse framework and Tailwind. Free components plus a Pro version.",
+      "url": "https://codyhouse.co/ds/components",
+      "favicon": "",
+      "tags": [
+        "components",
+        "html",
+        "css",
+        "javascript"
+      ],
+      "tech": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "copy-paste-css",
+      "name": "Copy Paste CSS",
+      "category": "snippets",
+      "description": "Curated list of simple CSS button design examples with inspiration. Copy and paste the CSS of every button element.",
+      "url": "https://copy-paste-css.com/",
+      "favicon": "",
+      "tags": [
+        "css",
+        "buttons",
+        "copy-paste"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "freefrontend",
+      "name": "FreeFrontend",
+      "category": "snippets",
+      "description": "Curated collection of practical front-end snippets in HTML, CSS, and JavaScript to save development time.",
+      "url": "https://freefrontend.com/",
+      "favicon": "",
+      "tags": [
+        "snippets",
+        "html",
+        "css",
+        "javascript"
+      ],
+      "tech": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "hoppscotch",
+      "name": "Hoppscotch",
+      "category": "api-tools",
+      "description": "Open-source API development ecosystem for creating and testing requests faster, with collections and collaborative workspaces.",
+      "url": "https://hoppscotch.io/",
+      "favicon": "https://hoppscotch.io/icons/pwa-1024x1024.png",
+      "tags": [
+        "api",
+        "rest",
+        "testing",
+        "client"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "bruno",
+      "name": "Bruno",
+      "category": "api-tools",
+      "description": "Git-native API client for REST, GraphQL, gRPC, and WebSocket. Local-first open-source Postman alternative with no cloud syncing, plus paid editions.",
+      "url": "https://www.usebruno.com/",
+      "favicon": "https://www.usebruno.com/favicon-48x48.png",
+      "tags": [
+        "api",
+        "rest",
+        "graphql",
+        "client",
+        "git"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "insomnia",
+      "name": "Insomnia",
+      "category": "api-tools",
+      "description": "Collaborative open-source API development platform for HTTP, REST, GraphQL, gRPC, SOAP, and WebSockets, with free and paid plans.",
+      "url": "https://insomnia.rest/",
+      "favicon": "",
+      "tags": [
+        "api",
+        "rest",
+        "graphql",
+        "client"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "postman",
+      "name": "Postman",
+      "category": "api-tools",
+      "description": "All-in-one API platform for designing, testing, documenting, and collaborating across the API lifecycle. Free tier with paid team plans; requires an account.",
+      "url": "https://www.postman.com/",
+      "favicon": "",
+      "tags": [
+        "api",
+        "rest",
+        "testing",
+        "collaboration"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": false,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "httpie",
+      "name": "HTTPie",
+      "category": "api-tools",
+      "description": "User-friendly API testing client with a terminal-first CLI and desktop app for building and debugging APIs.",
+      "url": "https://httpie.io/",
+      "favicon": "https://httpie.io/Brand/Favicons/Black/apple-icon-144x144.png",
+      "tags": [
+        "api",
+        "cli",
+        "testing",
+        "client"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "webhook-site",
+      "name": "webhook.site",
+      "category": "api-tools",
+      "description": "Instantly generate a free unique URL and email address to test, inspect, transform, and automate incoming HTTP requests and emails.",
+      "url": "https://webhook.site/",
+      "favicon": "https://webhook.site/assets/icons/apple-touch-icon.png",
+      "tags": [
+        "webhooks",
+        "testing",
+        "http",
+        "debugging"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "beeceptor",
+      "name": "Beeceptor",
+      "category": "api-tools",
+      "description": "Create mock REST and SOAP API servers in seconds with AI-generated realistic responses for development and QA. Free and paid tiers.",
+      "url": "https://beeceptor.com/",
+      "favicon": "",
+      "tags": [
+        "mock-api",
+        "rest",
+        "testing"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": false,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "mockoon",
+      "name": "Mockoon",
+      "category": "api-tools",
+      "description": "Easiest way to run mock REST API servers locally with no remote deployment and no account required. Free open-source desktop app plus cloud offering.",
+      "url": "https://mockoon.com/",
+      "favicon": "https://mockoon.com/web-app-manifest-512x512.png",
+      "tags": [
+        "mock-api",
+        "rest",
+        "testing",
+        "local"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "reqbin",
+      "name": "ReqBin",
+      "category": "api-tools",
+      "description": "Online API testing tool to send HTTP requests from the browser and inspect responses. Free Postman online alternative with no install or login, plus premium.",
+      "url": "https://reqbin.com/",
+      "favicon": "",
+      "tags": [
+        "api",
+        "testing",
+        "http",
+        "online"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "pipedream-requestbin",
+      "name": "Pipedream RequestBin",
+      "category": "api-tools",
+      "description": "Free request inspection tool that generates a URL to collect, view, and debug incoming HTTP webhook payloads.",
+      "url": "https://pipedream.com/requestbin",
+      "favicon": "",
+      "tags": [
+        "webhooks",
+        "testing",
+        "http",
+        "debugging"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "jsonplaceholder",
+      "name": "JSONPlaceholder",
+      "category": "api-tools",
+      "description": "Free fake REST API for testing and prototyping with placeholder posts, comments, users, and todos. No signup needed.",
+      "url": "https://jsonplaceholder.typicode.com/",
+      "favicon": "",
+      "tags": [
+        "mock-api",
+        "rest",
+        "json",
+        "testing"
+      ],
+      "tech": [
+        "REST",
+        "JSON"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "mockapi",
+      "name": "MockAPI",
+      "category": "api-tools",
+      "description": "Simple tool to mock APIs, generate custom data, and perform operations over a RESTful interface for prototyping, testing, and learning.",
+      "url": "https://mockapi.io/",
+      "favicon": "",
+      "tags": [
+        "mock-api",
+        "rest",
+        "testing"
+      ],
+      "tech": [
+        "REST",
+        "JSON"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": false,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "httpbin",
+      "name": "HTTPBin",
+      "category": "api-tools",
+      "description": "HTTP request and response testing service with endpoints for methods, status codes, redirects, auth, and delays.",
+      "url": "https://httpbin.org/",
+      "favicon": "https://httpbin.org/static/favicon.ico",
+      "tags": [
+        "http",
+        "testing",
+        "api",
+        "debugging"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "mocki",
+      "name": "Mocki",
+      "category": "api-tools",
+      "description": "Create, run, and deploy mock APIs in minutes to test independently of external services and remove backend dependencies. Free trial with paid plans.",
+      "url": "https://mocki.io/",
+      "favicon": "",
+      "tags": [
+        "mock-api",
+        "rest",
+        "testing"
+      ],
+      "tech": [
+        "REST",
+        "JSON"
+      ],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": false,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "resttesttest",
+      "name": "RestTestTest",
+      "category": "api-tools",
+      "description": "Minimal free online tool for sending test HTTP requests and inspecting responses directly in the browser.",
+      "url": "https://resttesttest.com/",
+      "favicon": "",
+      "tags": [
+        "api",
+        "testing",
+        "http",
+        "online"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "swagger-editor",
+      "name": "Swagger Editor",
+      "category": "api-tools",
+      "description": "Free open-source editor for designing OpenAPI definitions with live preview, validation, and code generation.",
+      "url": "https://editor.swagger.io/",
+      "favicon": "",
+      "tags": [
+        "openapi",
+        "swagger",
+        "editor",
+        "api-design"
+      ],
+      "tech": [
+        "OpenAPI"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "json-crack",
+      "name": "JSON Crack",
+      "category": "data-json",
+      "description": "Online JSON viewer that transforms data into interactive graphs. Visualize, analyze, edit, format, query, and validate JSON, CSV, YAML, and XML.",
+      "url": "https://jsoncrack.com/",
+      "favicon": "https://jsoncrack.com/assets/512.png",
+      "tags": [
+        "json",
+        "viewer",
+        "graphs",
+        "formatter"
+      ],
+      "tech": [
+        "JSON"
+      ],
+      "pricing": "freemium",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "jsonlint",
+      "name": "JSONLint",
+      "category": "data-json",
+      "description": "Free online JSON validator, formatter, and beautifier for the lightweight data-interchange format.",
+      "url": "https://jsonlint.com/",
+      "favicon": "https://jsonlint.com/images/android-chrome-512x512.png",
+      "tags": [
+        "json",
+        "validator",
+        "formatter"
+      ],
+      "tech": [
+        "JSON"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "json-formatter",
+      "name": "JSON Formatter",
+      "category": "data-json",
+      "description": "Online JSON formatter and validator that beautifies JSON data and converts between JSON, XML, and CSV, with save and share options.",
+      "url": "https://jsonformatter.org/",
+      "favicon": "",
+      "tags": [
+        "json",
+        "formatter",
+        "validator",
+        "converter"
+      ],
+      "tech": [
+        "JSON"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "json-hero",
+      "name": "JSON Hero",
+      "category": "data-json",
+      "description": "Beautiful JSON viewer for the web that makes reading and understanding JSON files easy with a clean UI and extra exploration features.",
+      "url": "https://jsonhero.io/",
+      "favicon": "",
+      "tags": [
+        "json",
+        "viewer"
+      ],
+      "tech": [
+        "JSON"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "jqplay",
+      "name": "jqPlay",
+      "category": "data-json",
+      "description": "Online playground for the jq JSON processor. Test filters against sample input with live output.",
+      "url": "https://jqplay.org/",
+      "favicon": "https://play.jqlang.org/web-app-manifest-512x512.png",
+      "tags": [
+        "jq",
+        "json",
+        "playground"
+      ],
+      "tech": [
+        "jq"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "csvjson",
+      "name": "CSVJSON",
+      "category": "data-json",
+      "description": "Convert CSV to JSON and JSON to CSV right in the browser with TSV, semicolon separators, quoted fields, and Unicode support. Nothing leaves the browser.",
+      "url": "https://csvjson.com/",
+      "favicon": "",
+      "tags": [
+        "csv",
+        "json",
+        "converter"
+      ],
+      "tech": [
+        "CSV",
+        "JSON"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "convertcsv",
+      "name": "ConvertCSV",
+      "category": "data-json",
+      "description": "Online tools for converting CSV and Excel data to JSON, XML, SQL, and other formats.",
+      "url": "https://www.convertcsv.com/",
+      "favicon": "",
+      "tags": [
+        "csv",
+        "converter",
+        "json",
+        "sql"
+      ],
+      "tech": [
+        "CSV",
+        "JSON",
+        "XML",
+        "SQL"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "quicktype",
+      "name": "Quicktype",
+      "category": "data-json",
+      "description": "Generate type-safe models, serializers, and validators in TypeScript, Python, Swift, C#, Go, Rust, and more from JSON, JSON Schema, and GraphQL.",
+      "url": "https://quicktype.io/",
+      "favicon": "https://quicktype.io/images/favicon-96.png",
+      "tags": [
+        "json",
+        "types",
+        "codegen",
+        "models"
+      ],
+      "tech": [
+        "JSON"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "transform-tools",
+      "name": "Transform.tools",
+      "category": "data-json",
+      "description": "Polyglot web converter between code and data formats: JSON, CSS, SVG, XML, YAML, and JavaScript objects with live bi-directional editing.",
+      "url": "https://transform.tools/",
+      "favicon": "",
+      "tags": [
+        "converter",
+        "json",
+        "css",
+        "svg"
+      ],
+      "tech": [
+        "JSON"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "yaml-to-json",
+      "name": "YAML to JSON",
+      "category": "data-json",
+      "description": "Simple online converter from YAML to JSON with instant results in the browser.",
+      "url": "https://www.convertjson.com/yaml-to-json.htm",
+      "favicon": "",
+      "tags": [
+        "yaml",
+        "json",
+        "converter"
+      ],
+      "tech": [
+        "YAML",
+        "JSON"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "json-path-finder",
+      "name": "JSON Path Finder",
+      "category": "data-json",
+      "description": "Paste JSON and click through its structure to get the matching JSONPath expressions for filtering and querying data.",
+      "url": "https://jsonpathfinder.com/",
+      "favicon": "",
+      "tags": [
+        "json",
+        "jsonpath",
+        "query"
+      ],
+      "tech": [
+        "JSON"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "json-editor-online",
+      "name": "JSON Editor Online",
+      "category": "data-json",
+      "description": "Full-featured online JSON editor to view, edit, format, repair, compare, query, transform, validate, and share JSON data.",
+      "url": "https://jsoneditoronline.org/",
+      "favicon": "",
+      "tags": [
+        "json",
+        "editor",
+        "formatter",
+        "validator"
+      ],
+      "tech": [
+        "JSON"
+      ],
+      "pricing": "",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "extendsclass-json",
+      "name": "ExtendsClass JSON Formatter",
+      "category": "data-json",
+      "description": "Online JSON formatter and validator from the ExtendsClass developer toolbox, with tree view and minify options.",
+      "url": "https://extendsclass.com/json-validator.html",
+      "favicon": "",
+      "tags": [
+        "json",
+        "formatter",
+        "validator"
+      ],
+      "tech": [
+        "JSON"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "tableconvert",
+      "name": "TableConvert",
+      "category": "data-json",
+      "description": "Free online table converter and data generator supporting 30+ formats including Excel, CSV, JSON, Markdown, LaTeX, and SQL.",
+      "url": "https://tableconvert.com/",
+      "favicon": "https://tableconvert.com/icons/icon-144x144.png",
+      "tags": [
+        "tables",
+        "converter",
+        "csv",
+        "markdown"
+      ],
+      "tech": [
+        "CSV",
+        "JSON",
+        "Markdown",
+        "SQL"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "generatedata",
+      "name": "GenerateData",
+      "category": "data-json",
+      "description": "Free random test data generator for databases, APIs, and forms with customizable datasets and export formats.",
+      "url": "https://generatedata.com/",
+      "favicon": "",
+      "tags": [
+        "mock-data",
+        "generator",
+        "testing"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "faker",
+      "name": "Faker",
+      "category": "data-json",
+      "description": "Generate massive amounts of fake but reasonable data for testing and development, from names and addresses to commerce and system values.",
+      "url": "https://fakerjs.dev/",
+      "favicon": "https://fakerjs.dev/favicon.svg",
+      "tags": [
+        "mock-data",
+        "faker",
+        "testing",
+        "javascript"
+      ],
+      "tech": [
+        "JavaScript"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "json-schema-validator",
+      "name": "JSON Schema Validator",
+      "category": "data-json",
+      "description": "Online interactive JSON Schema validator to check JSON documents against schemas in the browser.",
+      "url": "https://www.jsonschemavalidator.net/",
+      "favicon": "",
+      "tags": [
+        "json",
+        "schema",
+        "validator"
+      ],
+      "tech": [
+        "JSON"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "regex101",
+      "name": "Regex101",
+      "category": "developer-utilities",
+      "description": "Online regex tester and debugger with real-time highlighting, detailed explanations, substitutions, unit tests, and code generation for PCRE2, JavaScript, Python, Go, and more.",
+      "url": "https://regex101.com/",
+      "favicon": "https://regex101.com/static/assets/icons/manifest-icon-512.maskable.png",
+      "tags": [
+        "regex",
+        "tester",
+        "debugger",
+        "codegen"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "regexr",
+      "name": "RegExr",
+      "category": "developer-utilities",
+      "description": "Regular expression tester with syntax highlighting, contextual help, cheat sheet, and searchable community patterns. Supports JavaScript and PCRE.",
+      "url": "https://regexr.com/",
+      "favicon": "https://regexr.com/assets/icons/apple-touch-icon.png",
+      "tags": [
+        "regex",
+        "tester",
+        "cheatsheet"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "cyberchef",
+      "name": "CyberChef",
+      "category": "developer-utilities",
+      "description": "The Cyber Swiss Army Knife for data analysis: chain encoding, encryption, parsing, and forensic operations in the browser. Open source by GCHQ.",
+      "url": "https://gchq.github.io/CyberChef/",
+      "favicon": "",
+      "tags": [
+        "encoding",
+        "forensics",
+        "data",
+        "recipes"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "devtoys",
+      "name": "DevToys",
+      "category": "developer-utilities",
+      "description": "Cross-platform Swiss Army knife for developers: format JSON, compare text, test RegExp, encode data, and more in one offline-capable app companion site.",
+      "url": "https://devtoys.app/",
+      "favicon": "",
+      "tags": [
+        "toolbox",
+        "formatters",
+        "encoders"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "crontab-guru",
+      "name": "Crontab Guru",
+      "category": "developer-utilities",
+      "description": "Easy editor for cron schedule expressions with plain-language explanations of when jobs run.",
+      "url": "https://crontab.guru/",
+      "favicon": "",
+      "tags": [
+        "cron",
+        "scheduler",
+        "generator"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "caniuse",
+      "name": "Can I Use",
+      "category": "developer-utilities",
+      "description": "Up-to-date browser support tables for HTML, CSS, JavaScript, and API features on desktop and mobile browsers.",
+      "url": "https://caniuse.com/",
+      "favicon": "https://caniuse.com/img/favicon-128.png",
+      "tags": [
+        "compatibility",
+        "browsers",
+        "reference"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "bundlephobia",
+      "name": "Bundlephobia",
+      "category": "developer-utilities",
+      "description": "Find the performance cost of npm packages: bundle size, download time, and dependency weight before installing.",
+      "url": "https://bundlephobia.com/",
+      "favicon": "https://bundlephobia.com/android-chrome-256x256.png",
+      "tags": [
+        "npm",
+        "bundle-size",
+        "performance"
+      ],
+      "tech": [
+        "JavaScript"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "npm-trends",
+      "name": "npm trends",
+      "category": "developer-utilities",
+      "description": "Compare npm package downloads, bundle sizes, and GitHub stars to spot trends and pick the right dependency.",
+      "url": "https://npmtrends.com/",
+      "favicon": "",
+      "tags": [
+        "npm",
+        "downloads",
+        "comparison"
+      ],
+      "tech": [
+        "JavaScript"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "diffchecker",
+      "name": "Diffchecker",
+      "category": "developer-utilities",
+      "description": "Compare text, files, and code online for free to find differences, with a desktop app for private offline diffs and paid plans.",
+      "url": "https://www.diffchecker.com/",
+      "favicon": "",
+      "tags": [
+        "diff",
+        "comparison",
+        "text"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "explainshell",
+      "name": "ExplainShell",
+      "category": "developer-utilities",
+      "description": "Match command-line arguments to their help text. Paste a shell command to see what each flag does.",
+      "url": "https://explainshell.com/",
+      "favicon": "",
+      "tags": [
+        "shell",
+        "cli",
+        "reference"
+      ],
+      "tech": [
+        "Shell"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "shellcheck",
+      "name": "ShellCheck",
+      "category": "developer-utilities",
+      "description": "Static analysis tool that finds bugs in shell scripts, with an online playground for instant feedback on Bash and sh code.",
+      "url": "https://www.shellcheck.net/",
+      "favicon": "",
+      "tags": [
+        "shell",
+        "linter",
+        "static-analysis"
+      ],
+      "tech": [
+        "Shell"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "compiler-explorer",
+      "name": "Compiler Explorer",
+      "category": "developer-utilities",
+      "description": "Interactive online compiler showing assembly output for C++, Rust, Go, and many more languages with optimization and diff views.",
+      "url": "https://godbolt.org/",
+      "favicon": "",
+      "tags": [
+        "compiler",
+        "assembly",
+        "playground"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "ast-explorer",
+      "name": "AST Explorer",
+      "category": "developer-utilities",
+      "description": "Online explorer for JavaScript and CSS abstract syntax trees across parsers and transforms, with live code-to-tree mapping.",
+      "url": "https://astexplorer.net/",
+      "favicon": "",
+      "tags": [
+        "ast",
+        "parsers",
+        "javascript"
+      ],
+      "tech": [
+        "JavaScript"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "carbon",
+      "name": "Carbon",
+      "category": "developer-utilities",
+      "description": "Create and share beautiful images of source code with themes, fonts, window controls, and backgrounds.",
+      "url": "https://carbon.now.sh/",
+      "favicon": "https://carbon.now.sh/static/brand/desktop.png",
+      "tags": [
+        "code-images",
+        "sharing",
+        "screenshots"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "ray-so",
+      "name": "Ray.so",
+      "category": "developer-utilities",
+      "description": "Turn code into beautiful shareable images with syntax colors, background control, and dark or light window frames.",
+      "url": "https://ray.so/",
+      "favicon": "https://ray.so/favicon.ico",
+      "tags": [
+        "code-images",
+        "sharing",
+        "screenshots"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "code-beautify",
+      "name": "Code Beautify",
+      "category": "developer-utilities",
+      "description": "Free online collection of code beautifiers, formatters, editors, viewers, minifiers, validators, and converters for JSON, XML, CSS, JavaScript, SQL, and more.",
+      "url": "https://codebeautify.org/",
+      "favicon": "",
+      "tags": [
+        "formatter",
+        "beautifier",
+        "converters"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "devdocs",
+      "name": "DevDocs",
+      "category": "developer-utilities",
+      "description": "Fast offline-capable documentation browser combining 100+ API docs for HTML, CSS, JavaScript, Python, Go, and more in one searchable app.",
+      "url": "https://devdocs.io/",
+      "favicon": "https://devdocs.io/images/webapp-icon-256.png",
+      "tags": [
+        "docs",
+        "reference",
+        "offline"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "responsively",
+      "name": "Responsively",
+      "category": "developer-utilities",
+      "description": "Open-source dev-tool browser for faster precise responsive web development with synchronized mirrored devices and inspection.",
+      "url": "https://responsively.app/",
+      "favicon": "https://responsively.app/android-chrome-512x512.png",
+      "tags": [
+        "responsive",
+        "browser",
+        "testing"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "browserling",
+      "name": "Browserling",
+      "category": "developer-utilities",
+      "description": "Online cross-browser testing in real browsers including Internet Explorer, Edge, Chrome, Safari, Firefox, and Opera. Free trial with paid plans.",
+      "url": "https://www.browserling.com/",
+      "favicon": "",
+      "tags": [
+        "cross-browser",
+        "testing"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "keycode",
+      "name": "Keycode",
+      "category": "developer-utilities",
+      "description": "Press any key to instantly see the JavaScript KeyboardEvent key, code, and keyCode values with a full event reference.",
+      "url": "https://keycode.info/",
+      "favicon": "https://www.toptal.com/developers/keycode/apple-touch-icon.png",
+      "tags": [
+        "keyboard",
+        "javascript",
+        "reference"
+      ],
+      "tech": [
+        "JavaScript"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "url-encoder",
+      "name": "URL Encoder",
+      "category": "developer-utilities",
+      "description": "Encode to URL-encoded format or decode from it with advanced options in an easy online tool.",
+      "url": "https://www.urlencoder.org/",
+      "favicon": "https://www.urlencoder.org/assets/images/url-180.png",
+      "tags": [
+        "url",
+        "encoding",
+        "converter"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "epoch-converter",
+      "name": "Epoch Converter",
+      "category": "developer-utilities",
+      "description": "Unix timestamp converter tools with epoch explanations and conversion syntax examples in many programming languages.",
+      "url": "https://www.epochconverter.com/",
+      "favicon": "https://www.epochconverter.com/img/android-chrome-512x512.png",
+      "tags": [
+        "timestamp",
+        "unix-time",
+        "converter"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "uuid-generator",
+      "name": "UUID Generator",
+      "category": "developer-utilities",
+      "description": "Generate version 1 and version 4 UUIDs online in bulk with one click.",
+      "url": "https://www.uuidgenerator.net/",
+      "favicon": "https://www.uuidgenerator.net/android-chrome-512x512.png",
+      "tags": [
+        "uuid",
+        "generator",
+        "identifiers"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "base64-decode",
+      "name": "Base64 Decode",
+      "category": "developer-utilities",
+      "description": "Decode from Base64 format or encode into it with advanced options in an easy online tool.",
+      "url": "https://www.base64decode.org/",
+      "favicon": "https://www.base64decode.org/assets/images/b64-180.png",
+      "tags": [
+        "base64",
+        "encoding",
+        "converter"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "jwt-io",
+      "name": "JWT.io",
+      "category": "developer-utilities",
+      "description": "Debugger and reference for JSON Web Tokens: paste a token to inspect its encoded and decoded claims, with libraries and introduction docs.",
+      "url": "https://jwt.io/",
+      "favicon": "https://www.jwt.io/icon/512",
+      "tags": [
+        "jwt",
+        "tokens",
+        "debugger",
+        "auth"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "ssl-labs",
+      "name": "SSL Labs",
+      "category": "developer-utilities",
+      "description": "Comprehensive free SSL test for public web servers with detailed grades on certificate, protocol, and cipher configuration.",
+      "url": "https://www.ssllabs.com/ssltest/",
+      "favicon": "",
+      "tags": [
+        "ssl",
+        "tls",
+        "security",
+        "testing"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "security-headers",
+      "name": "Security Headers",
+      "category": "developer-utilities",
+      "description": "Quickly assess the security of HTTP response headers with grades and improvement recommendations.",
+      "url": "https://securityheaders.com/",
+      "favicon": "",
+      "tags": [
+        "security",
+        "headers",
+        "http",
+        "testing"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "mxtoolbox",
+      "name": "MXToolbox",
+      "category": "developer-utilities",
+      "description": "MX lookup and DNS diagnostics with free network tools, plus paid monitoring plans for mail and DNS health.",
+      "url": "https://mxtoolbox.com/",
+      "favicon": "https://mxtoolbox.com/public/favicon/mx-logo-icon-512.png",
+      "tags": [
+        "dns",
+        "mx",
+        "network",
+        "diagnostics"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "dns-checker",
+      "name": "DNS Checker",
+      "category": "developer-utilities",
+      "description": "Check DNS propagation worldwide with instant nameserver lookup across global locations.",
+      "url": "https://dnschecker.org/",
+      "favicon": "https://dnschecker.org/themes/common/images/general/favicon-192.png",
+      "tags": [
+        "dns",
+        "propagation",
+        "network"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "builtwith",
+      "name": "BuiltWith",
+      "category": "developer-utilities",
+      "description": "Web technology profiler that reveals what websites are built with, from frameworks and CMS to analytics and hosting. Free lookups with paid plans.",
+      "url": "https://builtwith.com/",
+      "favicon": "https://builtwith.com/img/android-chrome-256x256.png",
+      "tags": [
+        "tech-stack",
+        "lookup",
+        "analysis"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "squoosh",
+      "name": "Squoosh",
+      "category": "web-utilities",
+      "description": "Image optimizer that compresses and compares images across codecs right in the browser, with fine-grained quality controls.",
+      "url": "https://squoosh.app/",
+      "favicon": "https://squoosh.app/c/icon-large-cb438cac.png",
+      "tags": [
+        "images",
+        "compression",
+        "optimizer"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "svgomg",
+      "name": "SVGOMG",
+      "category": "web-utilities",
+      "description": "SVGO's missing GUI for minifying SVG files with live preview, plugin toggles, and paste or upload input.",
+      "url": "https://jakearchibald.github.io/svgomg/",
+      "favicon": "https://jakearchibald.github.io/svgomg/imgs/maskable.png",
+      "tags": [
+        "svg",
+        "minify",
+        "optimizer"
+      ],
+      "tech": [
+        "SVG"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "tinypng",
+      "name": "TinyPNG",
+      "category": "web-utilities",
+      "description": "Free online image optimizer that intelligently compresses WebP, PNG, and JPEG images while preserving quality. Free tier with Pro API.",
+      "url": "https://tinypng.com/",
+      "favicon": "https://tinypng.com/images/apple-touch-icon.png",
+      "tags": [
+        "images",
+        "compression",
+        "optimizer"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "pagespeed-insights",
+      "name": "PageSpeed Insights",
+      "category": "web-utilities",
+      "description": "Google tool reporting Core Web Vitals and performance opportunities for mobile and desktop pages with lab and field data.",
+      "url": "https://pagespeed.web.dev/",
+      "favicon": "https://www.gstatic.com/pagespeed/insights/ui/logo/favicon_48.png",
+      "tags": [
+        "performance",
+        "lighthouse",
+        "core-web-vitals"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "webpagetest",
+      "name": "WebPageTest",
+      "category": "web-utilities",
+      "description": "Run free real-browser web performance tests from locations worldwide. Open-source engine trusted by the performance community, with paid plans.",
+      "url": "https://www.webpagetest.org/",
+      "favicon": "https://cdn.prod.website-files.com/61027bb0bc31fc6cafefbc0c/63861b5c0f7dee7b00e4ee48_CATCHPOINT_FAVICON_256X256.png",
+      "tags": [
+        "performance",
+        "testing",
+        "monitoring"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": true,
+      "noSignup": false,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "gtmetrix",
+      "name": "GTmetrix",
+      "category": "web-utilities",
+      "description": "Free website performance testing and monitoring using Lighthouse scores with actionable optimization recommendations. Account required, premium plans available.",
+      "url": "https://gtmetrix.com/",
+      "favicon": "https://gtmetrix.com/favicon.svg",
+      "tags": [
+        "performance",
+        "lighthouse",
+        "monitoring"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": false,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "polypane",
+      "name": "Polypane",
+      "category": "web-utilities",
+      "description": "Standalone browser for web developers with synchronized multi-viewport previews plus responsive, accessibility, and SEO tooling. Paid with a free trial.",
+      "url": "https://polypane.app/",
+      "favicon": "https://polypane.app/icons/icon-256x256.png",
+      "tags": [
+        "browser",
+        "responsive",
+        "accessibility",
+        "testing"
+      ],
+      "tech": [],
+      "pricing": "paid",
+      "openSource": false,
+      "noSignup": false,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "browserstack",
+      "name": "BrowserStack",
+      "category": "web-utilities",
+      "description": "Cloud testing platform with instant access to thousands of real browsers and iOS/Android devices for cross-browser testing. Paid with free trial.",
+      "url": "https://www.browserstack.com/",
+      "favicon": "",
+      "tags": [
+        "cross-browser",
+        "testing",
+        "devices",
+        "cloud"
+      ],
+      "tech": [],
+      "pricing": "paid",
+      "openSource": false,
+      "noSignup": false,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "testmu-ai",
+      "name": "TestMu AI",
+      "category": "web-utilities",
+      "description": "AI-powered cloud testing platform for web and mobile apps, formerly known as LambdaTest. Run automated and live tests at scale with a free tier.",
+      "url": "https://www.testmuai.com/",
+      "favicon": "https://www.testmuai.com/favicon_white.svg",
+      "tags": [
+        "testing",
+        "automation",
+        "cloud",
+        "cross-browser"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": false,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "wappalyzer",
+      "name": "Wappalyzer",
+      "category": "web-utilities",
+      "description": "Identify the technologies websites are built with, from CMS and frameworks to analytics. Free lookups with paid technographic plans.",
+      "url": "https://www.wappalyzer.com/",
+      "favicon": "https://www.wappalyzer.com/apple-touch-icon.png",
+      "tags": [
+        "tech-stack",
+        "lookup",
+        "analysis"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "whatruns",
+      "name": "WhatRuns",
+      "category": "web-utilities",
+      "description": "Discover website technologies including CMS, frameworks, and plugins from any page.",
+      "url": "https://www.whatruns.com/",
+      "favicon": "",
+      "tags": [
+        "tech-stack",
+        "lookup",
+        "analysis"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "redirect-checker",
+      "name": "Redirect Checker",
+      "category": "web-utilities",
+      "description": "Check HTTP status codes, response headers, and redirect chains for any URL in the browser.",
+      "url": "https://httpstatus.io/",
+      "favicon": "https://httpstatus.io/images/icon-safari-dock.png",
+      "tags": [
+        "http",
+        "redirects",
+        "headers",
+        "debugging"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "rich-results-test",
+      "name": "Rich Results Test",
+      "category": "web-utilities",
+      "description": "Google Search Console tool to test structured data eligibility for rich results on pages and code snippets.",
+      "url": "https://search.google.com/test/rich-results",
+      "favicon": "",
+      "tags": [
+        "seo",
+        "structured-data",
+        "testing",
+        "google"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "schema-markup-validator",
+      "name": "Schema Markup Validator",
+      "category": "web-utilities",
+      "description": "Official validator for Schema.org structured data markup in JSON-LD, Microdata, and RDFa formats.",
+      "url": "https://validator.schema.org/",
+      "favicon": "",
+      "tags": [
+        "seo",
+        "structured-data",
+        "validator",
+        "schema-org"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "nu-html-checker",
+      "name": "Nu HTML Checker",
+      "category": "web-utilities",
+      "description": "W3C validator for HTML documents and fragments with precise error reporting for standards conformance.",
+      "url": "https://validator.w3.org/nu/",
+      "favicon": "",
+      "tags": [
+        "html",
+        "validator",
+        "w3c"
+      ],
+      "tech": [
+        "HTML"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "css-validator",
+      "name": "CSS Validator",
+      "category": "web-utilities",
+      "description": "W3C service checking Cascading Style Sheets in HTML documents or stylesheets for validity and errors.",
+      "url": "https://jigsaw.w3.org/css-validator/",
+      "favicon": "",
+      "tags": [
+        "css",
+        "validator",
+        "w3c"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "webhint",
+      "name": "Webhint",
+      "category": "web-utilities",
+      "description": "Linting engine for web best practices covering accessibility, performance, security, and PWA checks with an online scanner.",
+      "url": "https://webhint.io/",
+      "favicon": "https://webhint.io/static/images/manifest-icon-a3d1c16640.png",
+      "tags": [
+        "linting",
+        "best-practices",
+        "accessibility",
+        "performance"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "isitdownrightnow",
+      "name": "Is It Down Right Now",
+      "category": "web-utilities",
+      "description": "Check whether a website is down for everyone or just you, with outage history and user reports.",
+      "url": "https://www.isitdownrightnow.com/",
+      "favicon": "",
+      "tags": [
+        "uptime",
+        "monitoring",
+        "status"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "urlvoid",
+      "name": "URLVoid",
+      "category": "web-utilities",
+      "description": "Free website reputation checker scanning URLs against multiple blocklist services to identify malicious or scam sites. API plans available.",
+      "url": "https://www.urlvoid.com/",
+      "favicon": "",
+      "tags": [
+        "security",
+        "reputation",
+        "scanner"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
     }
   ]
 }
