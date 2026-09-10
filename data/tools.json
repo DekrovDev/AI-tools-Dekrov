@@ -2975,5 +2975,86 @@
       "https://brave.com/search/api",
       "https://api.search.brave.com/app/documentation/web-search/get-started"
     ]
+  },
+  {
+    "id": "yylo",
+    "name": "YYLO",
+    "category": "coding-agents",
+    "description": "An open-source command-line orchestrator for coding agents, repeatable workflows, and receipt-backed repository changes, with typed task, validation, merge, and release-readiness boundaries.",
+    "bestFor": [
+      "Developers who want a quick agent loop in the terminal",
+      "Project operators who need typed task, validation, merge, and release-readiness boundaries",
+      "Teams running multiple coding agents through one governed task and merge lifecycle"
+    ],
+    "strengths": [
+      "Orchestrates coding agents such as Pi and Codex as subagents",
+      "Typed task lifecycle freezes the protected target SHA and creates a dedicated branch and worktree per task",
+      "Risk-based merge queue: low risk has no semantic reviewer, normal risk at most one, high risk two sequential reviewers on one frozen candidate",
+      "Content-addressed validation evidence and observable watch receipts for agent runs",
+      "Kanban task management via the separate YYLO Ledger package (yy ledger, yy kanban alias)"
+    ],
+    "gettingStarted": [
+      "Requires Node.js 20.10 or newer, npm, and Git",
+      "Install globally: `npm install --global '@yylo/cli@latest'`",
+      "Verify the install: `yy --version` (commands `yylo` and `yy` are equivalent)",
+      "In a Git repository, run `yy init --task \"Document the onboarding path\" --subagent pi`",
+      "Run the no-model canary: `yy watch exec pwd`"
+    ],
+    "usageNotes": [
+      "Install and configure the coding agent you intend to use separately; provider credentials and model availability remain external",
+      "Task work happens in the worktree created by `yy task start TASK_ID`; controller metadata and the protected target are separate authorities",
+      "The merge queue is the sole review owner and stops as REVIEW_FINDINGS_EXHAUSTED after one repair candidate and one delta-review group instead of looping",
+      "Agent skills are versioned separately in the yylo-dev/yylo-skills repository and installed with `yy skills install`"
+    ],
+    "url": "https://yylo.dev/",
+    "domain": "yylo.dev",
+    "favicon": "https://www.yylo.dev/favicon.ico",
+    "platforms": [
+      "cli"
+    ],
+    "executionMode": "local",
+    "signupRequirement": "not-required",
+    "apiKeyRequirement": "depends",
+    "pricing": "free",
+    "priceDetails": "Open source (MIT); model usage is billed by the coding agents it orchestrates",
+    "tags": [
+      "cli",
+      "coding-agent",
+      "orchestration",
+      "open-source",
+      "terminal",
+      "agents",
+      "kanban",
+      "worktree",
+      "merge-queue",
+      "developer-tools"
+    ],
+    "install": "npm install --global '@yylo/cli@latest'",
+    "start": "yy",
+    "commands": [
+      {
+        "label": "Initialize a task workspace",
+        "command": "yy init --task \"Document the onboarding path\" --subagent pi"
+      },
+      {
+        "label": "Run the no-model canary",
+        "command": "yy watch exec pwd"
+      },
+      {
+        "label": "Start a typed task",
+        "command": "yy task start TASK_ID"
+      }
+    ],
+    "models": [],
+    "github": "https://github.com/yylo-dev/yylo",
+    "docs": "https://github.com/yylo-dev/yylo#readme",
+    "addedAt": "2026-09-10",
+    "updatedAt": "2026-09-10",
+    "lastVerifiedAt": "2026-09-10",
+    "sources": [
+      "https://yylo.dev/",
+      "https://github.com/yylo-dev/yylo",
+      "https://github.com/yylo-dev/yylo#readme"
+    ]
   }
 ]
