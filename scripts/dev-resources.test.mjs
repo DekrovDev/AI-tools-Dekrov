@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { DEV_CATEGORIES, DEV_PRICING_VALUES, devCategoryMeta, filterDevResources, isValidDevResourceId, normalizeDevResource, parseDevResources, rankRelatedDevResources, relatedDevResourceScore, sortDevResources, validateDevResourcesData } from "../assets/js/dev-resources.js";
+import { DEV_CATEGORIES, DEV_PRICING_VALUES, devCategoryMeta, faviconImgMarkup, filterDevResources, isValidDevResourceId, normalizeDevResource, parseDevResources, rankRelatedDevResources, relatedDevResourceScore, sortDevResources, validateDevResourcesData } from "../assets/js/dev-resources.js";
 import { buildDevResourceCandidate, buildDevResourcePrompt, findDevResourceDuplicates, validateDevResourceSubmission } from "../assets/js/dev-resource-submission.js";
 
 function validResource(overrides = {}) {
@@ -128,6 +128,23 @@ test("rankRelatedDevResources is deterministic, excludes self, dedupes, and limi
   assert.deepEqual(rankRelatedDevResources(current, [current, unrelated]), []);
   assert.deepEqual(rankRelatedDevResources(null, list), []);
   assert.deepEqual(rankRelatedDevResources(current, "not-a-list"), []);
+});
+
+test("faviconImgMarkup renders a loop-safe chain or nothing", () => {
+  assert.equal(faviconImgMarkup([]), "");
+  assert.equal(faviconImgMarkup(null), "");
+  const single = faviconImgMarkup(["https://example.com/favicon.ico"]);
+  assert.ok(single.includes('src="https://example.com/favicon.ico"'));
+  assert.ok(single.includes('onerror="this.remove()"'), "single candidate keeps the legacy handler");
+  assert.ok(!single.includes("data-fallback"));
+  const chained = faviconImgMarkup(["https://cdn.example.com/icon.svg", "https://example.com/favicon.ico"]);
+  assert.ok(chained.includes('src="https://cdn.example.com/icon.svg"'));
+  assert.ok(chained.includes('data-fallback="https://example.com/favicon.ico"'));
+  assert.equal(chained.match(/onerror=/g).length, 1, "exactly one error handler per image");
+  assert.ok(chained.includes("removeAttribute('data-fallback')"), "fallback is consumed, so no error loop is possible");
+  assert.ok(chained.includes("this.remove()"), "exhausted chain removes the node for the letter fallback");
+  const escaped = faviconImgMarkup(['https://example.com/a"b.png']);
+  assert.ok(!escaped.includes('"b.png'), "attribute values are escaped");
 });
 
 test("the real data file is valid and parses into a non-empty curated catalog", async () => {

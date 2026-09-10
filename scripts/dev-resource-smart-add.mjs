@@ -4,7 +4,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { firstMeta, firstTitle, safeFetch } from "./analyzer.mjs";
+import { firstMeta, firstTitle, manifestHref, manifestIconCandidates, pageIconCandidates, rankDisplayIconCandidates, safeFetch, safeFetchJson } from "./analyzer.mjs";
 import { buildDevResourceCandidate, buildDevResourceSubmissionBody, validateDevResourceSubmission } from "../assets/js/dev-resource-submission.js";
 import { findDevResourceDuplicates, looksLikeDevResourceSmartAdd } from "../.github/scripts/dev-resource-submission-lib.mjs";
 import { parseSmartAddSubmission } from "../.github/scripts/submission-lib.mjs";
@@ -14,6 +14,38 @@ const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 export function devResourceNameFromPage(title, domain) {
   const cleaned = String(title || "").split(/\s+[|—–-]\s+/)[0].trim();
   return cleaned || domain.replace(/^www\./, "");
+}
+
+// Best display icon discovery reuses the shared analyzer ranking (manifest,
+// Apple, rel=icon — never proxies or banners). Manifest fetch is optional and
+// failure-safe. An empty string is a valid outcome: the runtime logo chain
+// renders the letter fallback instead of a poor icon.
+export async function discoverBestDisplayIcon(html, pageUrl, fetchImpl) {
+  const text = String(html || "");
+  const base = String(pageUrl || "");
+  const candidates = pageIconCandidates(text, base);
+  const href = manifestHref(text, base);
+  if (href) {
+    try {
+      const manifest = await safeFetchJson(href, fetchImpl ? { fetchOnce: fetchImpl } : {});
+      candidates.push(...manifestIconCandidates(manifest.json, manifest.url));
+    } catch {
+      // A missing or malformed manifest never blocks the page candidates.
+    }
+  }
+  try {
+    return rankDisplayIconCandidates(candidates);
+  } catch {
+    return "";
+  }
+}
+
+export function discoverDevFavicon(html, pageUrl) {
+  try {
+    return rankDisplayIconCandidates(pageIconCandidates(String(html || ""), String(pageUrl || "")));
+  } catch {
+    return "";
+  }
 }
 
 // Page metadata is untrusted. Keep analysis comments readable plain text and
@@ -33,7 +65,7 @@ export function buildDevResourceAnalysisComment({ resource, duplicates, validati
   const safeResource = { ...resource, name: safeDevResourceCommentText(resource.name, 120), description: safeDevResourceCommentText(resource.description, 500) };
   return [
     "### Dev Resource Smart Add", "", `**${safeResource.name}**`, `Category: ${safeResource.category}`,
-    `Website: ${safeResource.url}`, "", "Only page title and description were used. Unknown metadata was intentionally left blank.", "",
+    `Website: ${safeResource.url}`, "", "Only page title, description, and display icon were used. Unknown metadata was intentionally left blank.", "",
     "Potential duplicates:", ...(duplicates.length ? duplicates.map((item) => `- ${item.id}: ${item.reasons.join(", ")}`) : ["- none"]),
     ...(validationErrors.length ? ["", "Needs changes before moderation:", ...validationErrors.map((item) => `- ${safeDevResourceCommentText(item, 240)}`)] : []), "",
     "```json", JSON.stringify(safeResource, null, 2), "```"
@@ -52,6 +84,7 @@ export async function runDevResourceSmartAdd({ title, body, resources = [], fetc
       category: "other",
       description: firstMeta(page.text, ["description", "og:description"]),
       url: page.url,
+      favicon: await discoverBestDisplayIcon(page.text, page.url, fetchImpl),
       tags: [], tech: [], pricing: "", openSource: false, noSignup: false, copyable: false
     });
     // The shared builder derives a deterministic, length-capped ID. Do not

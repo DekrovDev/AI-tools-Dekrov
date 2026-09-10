@@ -4,7 +4,7 @@ import test from "node:test";
 import { DEV_PROBLEM_TYPES, buildDevResourceCandidate, buildDevResourceSubmissionBody, devProblemReportBody, devProblemReportTitle, devProblemReportUrl, validateDevResourceSubmission } from "../assets/js/dev-resource-submission.js";
 import { applyApprovedDevResource, branchContainsApprovedDevResource, buildDevResourcePullRequest, decideDevResourceApproval, isTrustedDevResourceApprovalPull, looksLikeDevResourceSmartAdd, looksLikeDevResourceSubmission, parseDevResourceSubmission, validateDevResourceIssue } from "../.github/scripts/dev-resource-submission-lib.mjs";
 import { looksLikeSubmission } from "../.github/scripts/submission-lib.mjs";
-import { buildDevResourceAnalysisComment, runDevResourceSmartAdd, safeDevResourceCommentText } from "./dev-resource-smart-add.mjs";
+import { buildDevResourceAnalysisComment, discoverDevFavicon, runDevResourceSmartAdd, safeDevResourceCommentText } from "./dev-resource-smart-add.mjs";
 
 const resource = buildDevResourceCandidate({ name: "Component Garden", category: "ui-components", description: "A public gallery of reusable UI components.", url: "https://components.example/", favicon: "", tags: [], tech: [], pricing: "", openSource: false, noSignup: false, copyable: false });
 const body = buildDevResourceSubmissionBody(resource, "Official site");
@@ -251,6 +251,22 @@ test("Dev approval duplicate detection ignores the updated record itself", () =>
   assert.equal(withSelf.action, "create", "the updated record is not its own duplicate");
   const withoutSelf = decideDevResourceApproval({ issueNumber: 21, resource: updated, pendingPulls: pending });
   assert.equal(withoutSelf.action, "reject", "the same record still blocks a plain new submission");
+});
+
+test("Dev Smart Add discovers best display icons, manifest included", async () => {
+  assert.equal(discoverDevFavicon('<link rel="icon" type="image/svg+xml" href="/assets/icon.svg">', "https://example.com/"), "https://example.com/assets/icon.svg");
+  assert.equal(discoverDevFavicon('<link rel="icon" type="image/png" href="/i-16.png" sizes="16x16">', "https://example.com/"), "");
+  assert.equal(discoverDevFavicon("<title>No icons here</title>", "https://example.com/"), "");
+  assert.equal(discoverDevFavicon("", "not a url"), "");
+  const smartBody = "### Resource URL\nhttps://example.com/\n\n### Context\nPublic components\n";
+  const withIcon = await runDevResourceSmartAdd({ title: "[Dev Resource Smart Add] Components", body: smartBody, resources: [], fetchImpl: async () => ({ status: 200, contentType: "text/html", url: "https://example.com/", text: '<title>Component Garden</title><link rel="icon" type="image/png" href="/icon-64.png" sizes="64x64">' }) });
+  assert.equal(withIcon.resource.favicon, "https://example.com/icon-64.png");
+  const tinyOnly = await runDevResourceSmartAdd({ title: "[Dev Resource Smart Add] Components", body: smartBody, resources: [], fetchImpl: async () => ({ status: 200, contentType: "text/html", url: "https://example.com/", text: '<title>Component Garden</title><link rel="icon" href="/favicon-16x16.png" sizes="16x16">' }) });
+  assert.equal(tinyOnly.resource.favicon, "", "a lone tiny icon keeps the letter fallback");
+  const withManifest = await runDevResourceSmartAdd({ title: "[Dev Resource Smart Add] Components", body: smartBody, resources: [], fetchImpl: async (url) => String(url).endsWith(".webmanifest")
+    ? { status: 200, contentType: "application/manifest+json", text: JSON.stringify({ icons: [{ src: "/app-512.png", sizes: "512x512", type: "image/png" }] }) }
+    : { status: 200, contentType: "text/html", url: "https://example.com/", text: '<title>Component Garden</title><link rel="manifest" href="/app.webmanifest"><link rel="icon" href="/favicon-16x16.png" sizes="16x16">' } });
+  assert.equal(withManifest.resource.favicon, "https://example.com/app-512.png");
 });
 
 test("Dev problem report builds a prefilled plain issue URL without a template", () => {

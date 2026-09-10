@@ -174,6 +174,31 @@ export async function safeFetch(rawUrl, options = {}) {
   }
 }
 
+// Downloads a small JSON document (web app manifest) with the same strict
+// guards as safeFetch: public hosts only, bounded size/redirects, no HTML
+// requirement. Throws like safeFetch; callers treat failure as "no manifest".
+export async function safeFetchJson(rawUrl, options = {}) {
+  const timeout = options.timeout ?? DEFAULT_TIMEOUT_MS;
+  const maxBytes = options.maxBytes ?? 256 * 1024;
+  const userAgent = options.userAgent || DEFAULT_USER_AGENT;
+  const maxRedirects = options.maxRedirects ?? MAX_REDIRECTS;
+  const fetchOnce = options.fetchOnce ?? requestOnce;
+  let url = assertSafeRequestUrl(rawUrl);
+  let redirects = 0;
+  while (true) {
+    const page = await fetchOnce(url, { timeout, maxBytes, userAgent });
+    if ([301, 302, 303, 307, 308].includes(page.status)) {
+      if (redirects >= maxRedirects) throw new Error("Too many redirects.");
+      if (!page.location) throw new Error("Redirect without a Location header.");
+      url = assertSafeRequestUrl(new URL(page.location, url).href);
+      redirects += 1;
+      continue;
+    }
+    if (page.status < 200 || page.status >= 300) throw new Error(`HTTP status ${page.status}.`);
+    return { status: page.status, url: url.href, json: JSON.parse(page.text) };
+  }
+}
+
 // ---------------------------------------------------------------------------
 // HTML parsing helpers
 // ---------------------------------------------------------------------------
@@ -234,14 +259,156 @@ export function firstTitle(html) {
 }
 
 export function firstFavicon(html, base) {
+  // Preference order: <link rel="icon">, then shortcut icon, then
+  // apple-touch-icon. Manifest icons are deliberately out of scope: the
+  // analyzer never fetches secondary resources. Relative hrefs resolve
+  // against the analyzed page; /favicon.ico is the last candidate.
+  const buckets = [[], [], []];
   for (const match of html.matchAll(/<link\b[^>]*>/gi)) {
     const attrs = parseTagAttributes(match[0]);
-    if (/(^|\s)(shortcut )?icon(\s|$)|apple-touch-icon/i.test(attrs.rel || "") && attrs.href) {
+    if (!attrs.href) continue;
+    const rel = String(attrs.rel || "").toLowerCase();
+    const candidate = absoluteUrl(attrs.href, base);
+    if (!/^https?:/i.test(candidate)) continue;
+    if (/\bapple-touch-icon\b/.test(rel)) buckets[2].push(candidate);
+    else if (/\bshortcut\b/.test(rel) && /\bicon\b/.test(rel)) buckets[1].push(candidate);
+    else if (/\bicon\b/.test(rel)) buckets[0].push(candidate);
+  }
+  for (const bucket of buckets) if (bucket.length) return bucket[0];
+  return new URL("/favicon.ico", base).href;
+}
+
+// ---------------------------------------------------------------------------
+// Best display icon discovery (quality-first, deterministic, no proxies)
+// ---------------------------------------------------------------------------
+// Unlike firstFavicon (kept for the AI Tools flow), this collects every
+// officially declared icon candidate and ranks them by display quality.
+// A tiny tab favicon must never win over the letter fallback. Manifest,
+// Apple, and rel=icon sources only; mask-icon, safari-pinned-tab, og:image,
+// banners, and third-party proxies are never collected.
+
+export const MIN_DISPLAY_ICON_SCORE = 60;
+
+function parseIconSizes(value) {
+  if (/^\s*any\s*$/i.test(String(value || ""))) return { vector: true, sizes: [] };
+  const sizes = [];
+  for (const match of String(value || "").matchAll(/(\d+)\s*[x×]\s*(\d+)/gi)) {
+    const width = Number(match[1]);
+    const height = Number(match[2]);
+    if (width > 0 && height > 0 && width <= 4096 && height <= 4096) sizes.push([width, height]);
+  }
+  return { vector: false, sizes };
+}
+
+function iconFormat(url, mime) {
+  const cleanMime = String(mime || "").toLowerCase().split(";")[0].trim();
+  if (cleanMime === "image/svg+xml") return "svg";
+  if (/^image\/(png|webp|jpeg|gif|avif|bmp|x-icon|vnd\.microsoft\.icon)$/.test(cleanMime)) return "raster";
+  if (cleanMime) return "unsupported";
+  const extension = new URL(url).pathname.split(".").pop().toLowerCase();
+  if (extension === "svg" || extension === "svgz") return "svg";
+  if (["png", "webp", "jpg", "jpeg", "gif", "avif", "bmp", "ico"].includes(extension)) return "raster";
+  return "unknown";
+}
+
+export function manifestHref(html, base) {
+  for (const match of html.matchAll(/<link\b[^>]*>/gi)) {
+    const attrs = parseTagAttributes(match[0]);
+    if (/\bmanifest\b/.test(String(attrs.rel || "").toLowerCase()) && attrs.href) {
       const candidate = absoluteUrl(attrs.href, base);
       if (/^https?:/i.test(candidate)) return candidate;
     }
   }
-  return new URL("/favicon.ico", base).href;
+  return "";
+}
+
+export function manifestIconCandidates(manifest, manifestUrl) {
+  const entries = manifest && typeof manifest === "object" && Array.isArray(manifest.icons) ? manifest.icons : [];
+  const candidates = [];
+  for (const entry of entries.slice(0, 24)) {
+    if (!entry || typeof entry !== "object") continue;
+    const url = absoluteUrl(typeof entry.src === "string" ? entry.src : "", manifestUrl);
+    if (!/^https?:/i.test(url)) continue;
+    // A monochrome glyph is a pinned-tab asset, never an avatar.
+    if (String(entry.purpose || "any").toLowerCase().split(/\s+/).every((part) => part === "monochrome")) continue;
+    candidates.push({
+      url,
+      source: "manifest",
+      mime: String(entry.type || "").toLowerCase(),
+      ...parseIconSizes(entry.sizes),
+      purpose: String(entry.purpose || "any").toLowerCase()
+    });
+  }
+  return candidates;
+}
+
+// Collects officially declared display-icon candidates from page HTML:
+// Apple touch icons and rel=icon links (with declared type/sizes).
+// mask-icon, safari-pinned-tab, and social/banner images are excluded here.
+export function pageIconCandidates(html, base) {
+  const candidates = [];
+  for (const match of html.matchAll(/<link\b[^>]*>/gi)) {
+    const attrs = parseTagAttributes(match[0]);
+    if (!attrs.href) continue;
+    const rel = String(attrs.rel || "").toLowerCase();
+    if (/\bmask-icon\b/.test(rel)) continue;
+    if (/safari-pinned-tab/.test(rel)) continue;
+    const url = absoluteUrl(attrs.href, base);
+    if (!/^https?:/i.test(url)) continue;
+    if (/\bapple-touch-icon\b/.test(rel)) {
+      candidates.push({ url, source: "apple", mime: "", ...parseIconSizes(attrs.sizes), purpose: "any" });
+    } else if (/\bshortcut\b/.test(rel) && /\bicon\b/.test(rel)) {
+      candidates.push({ url, source: "icon", mime: String(attrs.type || "").toLowerCase(), ...parseIconSizes(attrs.sizes), purpose: "any" });
+    } else if (/\bicon\b/.test(rel)) {
+      candidates.push({ url, source: "icon", mime: String(attrs.type || "").toLowerCase(), ...parseIconSizes(attrs.sizes), purpose: "any" });
+    }
+  }
+  return candidates;
+}
+
+// Exported for audit tooling and tests; rankDisplayIconCandidates is the
+// normal entry point.
+export function displayIconScore(candidate) {
+  if (!candidate || typeof candidate.url !== "string") return -1;
+  if (candidate.source === "mask" || candidate.source === "pinned") return -1;
+  if (String(candidate.purpose || "any").toLowerCase().split(/\s+/).every((part) => part === "monochrome")) return -1;
+  let format = "unknown";
+  try {
+    format = iconFormat(candidate.url, candidate.mime);
+  } catch {
+    return -1;
+  }
+  if (format === "unsupported") return -1;
+  const maxSide = (candidate.sizes || []).reduce((max, [width, height]) => Math.max(max, width, height), 0);
+  // A raster that is explicitly tiny can never be a card avatar.
+  if (format === "raster" && maxSide > 0 && maxSide < 32) return -1;
+  let score = candidate.source === "manifest" ? 100 : candidate.source === "apple" ? 70 : candidate.source === "icon" ? 50 : 10;
+  if (format === "svg" || candidate.vector) score += 25;
+  if (maxSide >= 256) score += 30;
+  else if (maxSide >= 128) score += 20;
+  else if (maxSide >= 64) score += 10;
+  else if (maxSide >= 48) score += 5;
+  const square = (candidate.sizes || []).some(([width, height]) => width === height);
+  if (square) score += 5;
+  if (/\bmaskable\b/.test(String(candidate.purpose || "")) && !/\bany\b/.test(String(candidate.purpose || ""))) score -= 15;
+  return score;
+}
+
+// Deterministic best-pick over display-icon candidates. Returns the winning
+// URL, or "" when nothing reaches the quality threshold — a valid outcome
+// meaning the letter fallback stays.
+export function rankDisplayIconCandidates(candidates = []) {
+  const list = Array.isArray(candidates) ? candidates : [];
+  const seen = new Set();
+  const scored = [];
+  for (const candidate of list) {
+    if (!candidate || seen.has(candidate.url)) continue;
+    seen.add(candidate.url);
+    const score = displayIconScore(candidate);
+    if (score >= MIN_DISPLAY_ICON_SCORE) scored.push({ url: candidate.url, score });
+  }
+  scored.sort((a, b) => b.score - a.score || (a.url < b.url ? -1 : a.url > b.url ? 1 : 0));
+  return scored.length ? scored[0].url : "";
 }
 
 export function findLinks(html, base) {

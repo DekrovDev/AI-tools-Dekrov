@@ -10,6 +10,10 @@ import {
   firstMeta,
   firstTitle,
   firstFavicon,
+  manifestHref,
+  manifestIconCandidates,
+  pageIconCandidates,
+  rankDisplayIconCandidates,
   findLinks,
   extractCodeBlocks,
   detectPlatforms,
@@ -176,6 +180,105 @@ test("malformed HTML never throws", () => {
     assert.doesNotThrow(() => findLinks(html, "https://example.com/"));
     assert.doesNotThrow(() => extractCodeBlocks(html));
   }
+});
+
+test("firstFavicon prefers icon, then shortcut icon, then apple-touch-icon", () => {
+  const base = "https://example.com/docs/page";
+  const mixed = `<link rel="apple-touch-icon" href="/apple.png"><link rel="shortcut icon" href="/short.ico"><link rel="icon" href="/icon.svg">`;
+  assert.equal(firstFavicon(mixed, base), "https://example.com/icon.svg");
+  const noIcon = `<link rel="apple-touch-icon" href="/apple.png"><link rel="shortcut icon" href="/short.ico">`;
+  assert.equal(firstFavicon(noIcon, base), "https://example.com/short.ico");
+  const appleOnly = `<link rel="apple-touch-icon" href="assets/touch.png">`;
+  assert.equal(firstFavicon(appleOnly, base), "https://example.com/docs/assets/touch.png");
+  const absolute = `<link rel="icon" href="https://cdn.example.com/i.png">`;
+  assert.equal(firstFavicon(absolute, base), "https://cdn.example.com/i.png");
+  const nonHttp = `<link rel="icon" href="data:image/png;base64,AAA"><link rel="icon" href="/real.png">`;
+  assert.equal(firstFavicon(nonHttp, base), "https://example.com/real.png");
+  const none = `<link rel="stylesheet" href="/app.css">`;
+  assert.equal(firstFavicon(none, base), "https://example.com/favicon.ico");
+  assert.equal(firstFavicon("", base), "https://example.com/favicon.ico");
+});
+
+test("rankDisplayIconCandidates prefers manifest high-res over tiny favicons", () => {
+  const manifest = rankDisplayIconCandidates([
+    { url: "https://example.com/icon-16.png", source: "icon", mime: "image/png", sizes: [[16, 16]], purpose: "any" },
+    { url: "https://example.com/app-512.png", source: "manifest", mime: "image/png", sizes: [[512, 512]], purpose: "any" }
+  ]);
+  assert.equal(manifest, "https://example.com/app-512.png");
+});
+
+test("rankDisplayIconCandidates prefers SVG over small raster and rejects tiny icons", () => {
+  assert.equal(
+    rankDisplayIconCandidates([
+      { url: "https://example.com/a-32.png", source: "icon", mime: "image/png", sizes: [[32, 32]], purpose: "any" },
+      { url: "https://example.com/a.svg", source: "icon", mime: "image/svg+xml", sizes: [], purpose: "any" }
+    ]),
+    "https://example.com/a.svg"
+  );
+  assert.equal(
+    rankDisplayIconCandidates([{ url: "https://example.com/only-16.png", source: "icon", mime: "image/png", sizes: [[16, 16]], purpose: "any" }]),
+    ""
+  );
+  assert.equal(
+    rankDisplayIconCandidates([{ url: "https://example.com/only-32.png", source: "icon", mime: "image/png", sizes: [[32, 32]], purpose: "any" }]),
+    "",
+    "a lone 32px raster stays below the avatar quality threshold"
+  );
+});
+
+test("rankDisplayIconCandidates uses apple-touch-icon without a better manifest icon", () => {
+  assert.equal(
+    rankDisplayIconCandidates([
+      { url: "https://example.com/small.png", source: "icon", mime: "image/png", sizes: [[32, 32]], purpose: "any" },
+      { url: "https://example.com/apple-180.png", source: "apple", mime: "", sizes: [[180, 180]], purpose: "any" }
+    ]),
+    "https://example.com/apple-180.png"
+  );
+});
+
+test("rankDisplayIconCandidates rejects mask, pinned, monochrome, and non-image candidates", () => {
+  assert.equal(
+    rankDisplayIconCandidates([
+      { url: "https://example.com/mask.svg", source: "mask", mime: "image/svg+xml", sizes: [], purpose: "any" },
+      { url: "https://example.com/pinned.svg", source: "pinned", mime: "image/svg+xml", sizes: [], purpose: "any" }
+    ]),
+    ""
+  );
+  assert.equal(
+    rankDisplayIconCandidates([
+      { url: "https://example.com/mono-512.png", source: "manifest", mime: "image/png", sizes: [[512, 512]], purpose: "monochrome" },
+      { url: "https://example.com/normal-64.png", source: "manifest", mime: "image/png", sizes: [[64, 64]], purpose: "any" }
+    ]),
+    "https://example.com/normal-64.png"
+  );
+  assert.equal(
+    rankDisplayIconCandidates([{ url: "https://example.com/icon.png", source: "icon", mime: "text/html", sizes: [[128, 128]], purpose: "any" }]),
+    ""
+  );
+  assert.equal(rankDisplayIconCandidates([]), "");
+  assert.equal(rankDisplayIconCandidates(null), "");
+});
+
+test("rankDisplayIconCandidates is deterministic", () => {
+  const a = [
+    { url: "https://example.com/b-128.png", source: "icon", mime: "image/png", sizes: [[128, 128]], purpose: "any" },
+    { url: "https://example.com/a-128.png", source: "icon", mime: "image/png", sizes: [[128, 128]], purpose: "any" }
+  ];
+  const reversed = [...a].reverse();
+  assert.equal(rankDisplayIconCandidates(a), rankDisplayIconCandidates(reversed));
+  assert.equal(rankDisplayIconCandidates(a), "https://example.com/a-128.png");
+});
+
+test("pageIconCandidates collects declared icons and skips mask, pinned, and banners", () => {
+  const html = `<link rel="mask-icon" href="/mask.svg"><link rel="apple-touch-icon" href="/apple.png"><link rel="icon" type="image/png" href="/i-64.png" sizes="64x64"><link rel="safari-pinned-tab" href="/pinned.svg">`;
+  const found = pageIconCandidates(html, "https://example.com/");
+  assert.deepEqual(found.map((item) => item.url), ["https://example.com/apple.png", "https://example.com/i-64.png"]);
+  assert.equal(manifestHref('<link rel="manifest" href="/app.webmanifest">', "https://example.com/"), "https://example.com/app.webmanifest");
+  assert.deepEqual(
+    manifestIconCandidates({ icons: [{ src: "i-192.png", sizes: "192x192", type: "image/png" }, { src: "mono.svg", purpose: "monochrome" }] }, "https://example.com/app.webmanifest"),
+    [{ url: "https://example.com/i-192.png", source: "manifest", mime: "image/png", vector: false, sizes: [[192, 192]], purpose: "any" }]
+  );
+  assert.equal(rankDisplayIconCandidates(pageIconCandidates(html, "https://example.com/")), "https://example.com/apple.png");
 });
 
 // ---------------------------------------------------------------------------

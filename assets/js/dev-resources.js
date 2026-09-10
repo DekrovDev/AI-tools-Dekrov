@@ -281,6 +281,26 @@ export function rankRelatedDevResources(current, resources = [], limit = 4) {
   return scored.slice(0, max).map((entry) => entry.resource);
 }
 
+// ---- Display icon rendering (DOM-free, testable) ----
+
+function escapeAttr(value) {
+  return String(value ?? "").replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char]));
+}
+
+// Renders the <img> for vetted logo candidates with a loop-safe error chain:
+// each failure consumes data-fallback once and moves to the next URL; when
+// no candidates remain the node removes itself so the letter fallback shows
+// and the browser's broken-image icon never appears. Only explicitly stored
+// icons are ever loaded — a missing icon is a normal final state showing the
+// letter, never an automatic low-quality /favicon.ico guess.
+export function faviconImgMarkup(candidates = []) {
+  const urls = [...new Set((Array.isArray(candidates) ? candidates : []).filter((value) => typeof value === "string" && value))];
+  if (!urls.length) return "";
+  const [primary, ...rest] = urls;
+  if (!rest.length) return `<img class="tool-favicon" src="${escapeAttr(primary)}" alt="" onerror="this.remove()" />`;
+  return `<img class="tool-favicon" src="${escapeAttr(primary)}" alt="" data-fallback="${escapeAttr(rest[0])}" onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;this.removeAttribute('data-fallback');}else{this.remove();}" />`;
+}
+
 // ---- Pure catalog helpers (mirror the tool-catalog filter surface) ----
 
 function asSet(value) {
