@@ -85,6 +85,34 @@
       "noSignup": true,
       "copyable": true,
       "addedAt": "2026-09-10"
+    },
+    {
+      "id": "aceternity-ui",
+      "name": "Aceternity UI",
+      "category": "ui-components",
+      "description": "A library of copy-paste UI components and blocks built with Tailwind CSS and Motion for React. It provides animated and interactive elements like feature sections, hero sections, and cards that developers can quickly integrate into modern web projects.",
+      "url": "https://ui.aceternity.com/",
+      "favicon": "",
+      "tags": [
+        "react",
+        "tailwind-css",
+        "ui-components",
+        "copy-paste",
+        "animation",
+        "nextjs",
+        "framer-motion"
+      ],
+      "tech": [
+        "React",
+        "Tailwind CSS",
+        "Next.js",
+        "Motion"
+      ],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
     }
   ]
 }
