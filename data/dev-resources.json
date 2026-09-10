@@ -51,6 +51,40 @@
       "noSignup": true,
       "copyable": true,
       "addedAt": "2026-09-10"
+    },
+    {
+      "id": "uiverse",
+      "name": "Uiverse",
+      "category": "ui-components",
+      "description": "Community-driven library of open-source UI elements built with CSS and Tailwind CSS. Developers can browse, preview, and copy code for buttons, cards, forms, loaders, checkboxes, and other components. Elements can be exported to HTML/CSS, Tailwind, React, Vue, Svelte, Lit, or Figma for direct use in projects.",
+      "url": "https://uiverse.io/",
+      "favicon": "",
+      "tags": [
+        "ui-elements",
+        "components",
+        "css",
+        "tailwind-css",
+        "open-source",
+        "community-driven",
+        "figma",
+        "react",
+        "vue"
+      ],
+      "tech": [
+        "CSS",
+        "Tailwind CSS",
+        "React",
+        "Vue",
+        "Svelte",
+        "Lit",
+        "HTML",
+        "JavaScript"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
     }
   ]
 }
