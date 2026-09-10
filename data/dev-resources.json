@@ -113,6 +113,35 @@
       "noSignup": true,
       "copyable": true,
       "addedAt": "2026-09-10"
+    },
+    {
+      "id": "magic-ui",
+      "name": "Magic UI",
+      "category": "ui-components",
+      "description": "A UI library for design engineers that provides animated React components and effects. The components are designed to be copied and pasted directly into applications, and the library is free and open source.",
+      "url": "https://magicui.design/",
+      "favicon": "https://magicui.design/favicon.ico",
+      "tags": [
+        "react",
+        "components",
+        "ui-library",
+        "animated-components",
+        "tailwind-css",
+        "framer-motion",
+        "copy-paste",
+        "design-engineering"
+      ],
+      "tech": [
+        "React",
+        "Tailwind CSS",
+        "TypeScript",
+        "Framer Motion"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
     }
   ]
 }
