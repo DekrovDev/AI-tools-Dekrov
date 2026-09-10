@@ -14,9 +14,9 @@ const pendingPulls = await readPendingDevPulls();
 const branch = `dev-resource-submission/issue-${event.issue.number}`;
 const existingBranch = await readExistingDevBranch(branch);
 const existingBranches = existingBranch ? [existingBranch] : [];
-const decision = decideDevResourceApproval({ issueNumber: event.issue.number, resource: checked.resource, pendingPulls, existingBranches });
+const decision = decideDevResourceApproval({ issueNumber: event.issue.number, resource: checked.resource, pendingPulls, existingBranches, existingId: checked.submission.type === "update" ? checked.submission.existingResourceId : "" });
 if (decision.action === "reject") throw new Error(decision.reason);
-await writeFile(args.output, JSON.stringify({ ...decision, resource: checked.resource, ...buildDevResourcePullRequest(event.issue.number, checked.resource) }, null, 2));
+await writeFile(args.output, JSON.stringify({ ...decision, resource: checked.resource, ...buildDevResourcePullRequest(event.issue.number, checked.resource, checked.submission.type === "update" ? checked.existing : null) }, null, 2));
 
 async function githubJson(pathname) {
   const repository = process.env.GITHUB_REPOSITORY;

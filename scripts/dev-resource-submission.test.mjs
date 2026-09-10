@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { DEV_PROBLEM_TYPES, buildDevResourceCandidate, buildDevResourceSubmissionBody, devProblemReportBody, devProblemReportTitle, devProblemReportUrl, validateDevResourceSubmission } from "../assets/js/dev-resource-submission.js";
-import { branchContainsApprovedDevResource, decideDevResourceApproval, isTrustedDevResourceApprovalPull, looksLikeDevResourceSmartAdd, looksLikeDevResourceSubmission, parseDevResourceSubmission, validateDevResourceIssue } from "../.github/scripts/dev-resource-submission-lib.mjs";
+import { applyApprovedDevResource, branchContainsApprovedDevResource, buildDevResourcePullRequest, decideDevResourceApproval, isTrustedDevResourceApprovalPull, looksLikeDevResourceSmartAdd, looksLikeDevResourceSubmission, parseDevResourceSubmission, validateDevResourceIssue } from "../.github/scripts/dev-resource-submission-lib.mjs";
 import { looksLikeSubmission } from "../.github/scripts/submission-lib.mjs";
 import { buildDevResourceAnalysisComment, runDevResourceSmartAdd, safeDevResourceCommentText } from "./dev-resource-smart-add.mjs";
 
@@ -193,6 +193,64 @@ test("The shared header button chooses the current catalog dialog without propag
   const app = await readFile(new URL("../app.js", import.meta.url), "utf8");
   assert.ok(app.includes('if (isDevUiContext()) openDevResourceDialog("smart"); else openDialog("smart");'));
   assert.ok(!app.includes("stopImmediatePropagation"));
+});
+
+const updateCatalog = [
+  { id: "component-garden", name: "Component Garden", category: "ui-components", description: "A public gallery of reusable UI components.", url: "https://components.example/", domain: "components.example", favicon: "", tags: [], tech: [], pricing: "", openSource: false, noSignup: false, copyable: false, addedAt: "2026-09-01" }
+];
+
+test("Dev Resource update bodies carry the existing resource id and validate against it", () => {
+  const updated = { ...resource, description: "An updated public gallery of reusable UI components." };
+  const updateBody = buildDevResourceSubmissionBody(updated, "Fix description", "update", "component-garden");
+  const parsed = parseDevResourceSubmission(updateBody);
+  assert.equal(parsed.type, "update");
+  assert.equal(parsed.existingResourceId, "component-garden");
+  assert.deepEqual(JSON.parse(parsed.json), updated);
+  const checked = validateDevResourceIssue(updateBody, updateCatalog);
+  assert.deepEqual(checked.errors, [], "updating a resource is not a duplicate of itself");
+  assert.equal(checked.existing.id, "component-garden");
+});
+
+test("Dev backend rejects bad update references and misplaced existing ids", () => {
+  const updated = { ...resource, description: "Changed." };
+  const missingId = validateDevResourceIssue(buildDevResourceSubmissionBody(updated, "", "update", "component-garden").replace("### Existing resource ID\ncomponent-garden\n\n", ""), updateCatalog);
+  assert.ok(missingId.errors.some((error) => error.includes("Existing resource ID is required for an update")));
+  const unknownId = validateDevResourceIssue(buildDevResourceSubmissionBody(updated, "", "update", "no-such-resource"), updateCatalog);
+  assert.ok(unknownId.errors.some((error) => error.includes("Existing resource ID does not exist")));
+  const newWithId = validateDevResourceIssue(`${body}\n\n### Existing resource ID\ncomponent-garden`, updateCatalog);
+  assert.ok(newWithId.errors.some((error) => error.includes("Existing resource ID must be empty for a new submission")));
+  const badType = validateDevResourceIssue(body.replace("### Submission type\nnew", "### Submission type\ndelete"), updateCatalog);
+  assert.ok(badType.errors.some((error) => error.includes("Submission type must be new or update")));
+});
+
+test("Approved Dev Resource apply appends new records and replaces on update", () => {
+  const created = applyApprovedDevResource({ submission: { type: "new", existingResourceId: "" }, checkedResource: resource, resources: [], today: "2026-09-10" });
+  assert.equal(created.resources.length, 1);
+  assert.equal(created.record.addedAt, "2026-09-10");
+  const catalog = [...created.resources];
+  const updated = { ...resource, description: "Updated description" };
+  const applied = applyApprovedDevResource({ submission: { type: "update", existingResourceId: "component-garden" }, checkedResource: updated, resources: catalog, today: "2026-09-11" });
+  assert.equal(applied.resources.length, 1, "an update replaces the record instead of appending");
+  assert.equal(applied.record.description, "Updated description");
+  assert.equal(applied.record.addedAt, "2026-09-10", "an update preserves the original addedAt");
+  assert.equal(applied.record.id, "component-garden");
+  assert.throws(() => applyApprovedDevResource({ submission: { type: "update", existingResourceId: "missing" }, checkedResource: updated, resources: catalog, today: "2026-09-11" }), /not found/);
+  const updatePr = buildDevResourcePullRequest(7, applied.record, catalog[0]);
+  assert.ok(updatePr.title.startsWith("Update Dev Resource:"), "PR title marks an update");
+  assert.ok(updatePr.body.includes("Closes #7"));
+  assert.ok(updatePr.body.includes("`component-garden`"));
+  assert.ok(updatePr.body.includes("- description:"));
+  const addPr = buildDevResourcePullRequest(8, created.record, null);
+  assert.ok(addPr.title.startsWith("Add Dev Resource:"));
+});
+
+test("Dev approval duplicate detection ignores the updated record itself", () => {
+  const updated = { ...resource, description: "Changed." };
+  const pending = [{ number: 47, headRefName: "dev-resource-submission/issue-47", resources: updateCatalog }];
+  const withSelf = decideDevResourceApproval({ issueNumber: 21, resource: updated, existingId: "component-garden", pendingPulls: pending });
+  assert.equal(withSelf.action, "create", "the updated record is not its own duplicate");
+  const withoutSelf = decideDevResourceApproval({ issueNumber: 21, resource: updated, pendingPulls: pending });
+  assert.equal(withoutSelf.action, "reject", "the same record still blocks a plain new submission");
 });
 
 test("Dev problem report builds a prefilled plain issue URL without a template", () => {

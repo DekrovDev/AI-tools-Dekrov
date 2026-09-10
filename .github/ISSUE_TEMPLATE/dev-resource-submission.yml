@@ -18,9 +18,19 @@ body:
     id: submission_type
     attributes:
       label: Submission type
-      options: [new]
+      options:
+        - new
+        - update
     validations:
       required: true
+  - type: input
+    id: existing_resource_id
+    attributes:
+      label: Existing resource ID
+      description: Required for an update. Leave empty for a new resource.
+      placeholder: animista
+    validations:
+      required: false
   - type: textarea
     id: dev_resource_json
     attributes:

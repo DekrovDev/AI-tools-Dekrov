@@ -276,8 +276,11 @@ No code fence.
 No explanation before or after it.`;
 }
 
-export function buildDevResourceSubmissionBody(resource, context = "") {
-  return ["### Submission kind", "dev-resource", "", "### Submission type", "new", "", "### Dev Resource JSON", JSON.stringify(resource, null, 2), "", "### Context", context || "_No response_", "", "### Confirmation", "- [x] I confirm this is a factual public developer resource."].join("\n");
+export function buildDevResourceSubmissionBody(resource, context = "", type = "new", existingResourceId = "") {
+  const kind = type === "update" ? "update" : "new";
+  const head = ["### Submission kind", "dev-resource", "", "### Submission type", kind, ""];
+  if (kind === "update") head.push("### Existing resource ID", String(existingResourceId || resource?.id || ""), "");
+  return [...head, "### Dev Resource JSON", JSON.stringify(resource, null, 2), "", "### Context", context || "_No response_", "", "### Confirmation", "- [x] I confirm this is a factual public developer resource."].join("\n");
 }
 
 // Lightweight problem report: opens a plain GitHub Issue (no template, no
