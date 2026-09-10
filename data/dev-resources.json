@@ -7,7 +7,7 @@
       "category": "animations",
       "description": "A library of ready-to-use CSS animations that can be customized and copied directly into projects. It provides a visual interface for selecting, tweaking, and generating animation code for web development.",
       "url": "https://animista.net/",
-      "favicon": "",
+      "favicon": "https://animista.net/images/favicons/android-chrome-256x256.png",
       "tags": [
         "css-animations",
         "animation-library",
@@ -30,7 +30,7 @@
       "category": "ui-components",
       "description": "A collection of accessible, customizable React components distributed as source code. Unlike traditional component libraries, components are copied and pasted directly into your project, allowing full control over styling and behavior. Built with Tailwind CSS and Radix UI.",
       "url": "https://ui.shadcn.com/",
-      "favicon": "https://ui.shadcn.com/favicon.ico",
+      "favicon": "https://ui.shadcn.com/android-chrome-512x512.png",
       "tags": [
         "react",
         "components",
@@ -58,7 +58,7 @@
       "category": "ui-components",
       "description": "Community-driven library of open-source UI elements built with CSS and Tailwind CSS. Developers can browse, preview, and copy code for buttons, cards, forms, loaders, checkboxes, and other components. Elements can be exported to HTML/CSS, Tailwind, React, Vue, Svelte, Lit, or Figma for direct use in projects.",
       "url": "https://uiverse.io/",
-      "favicon": "",
+      "favicon": "https://uiverse.io/favicon.ico",
       "tags": [
         "ui-elements",
         "components",
@@ -92,7 +92,7 @@
       "category": "ui-components",
       "description": "A library of copy-paste UI components and blocks built with Tailwind CSS and Motion for React. It provides animated and interactive elements like feature sections, hero sections, and cards that developers can quickly integrate into modern web projects.",
       "url": "https://ui.aceternity.com/",
-      "favicon": "",
+      "favicon": "https://ui.aceternity.com/apple-icon.png",
       "tags": [
         "react",
         "tailwind-css",
@@ -139,6 +139,743 @@
       ],
       "pricing": "free",
       "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "remix-icon",
+      "name": "Remix Icon",
+      "category": "icons-svg",
+      "description": "A library of neutral-style system icons in outlined and filled variants on a 24px grid. Icons can be browsed, downloaded as SVG, or used via icon font, CDN, or npm for personal and commercial projects.",
+      "url": "https://remixicon.com/",
+      "favicon": "https://www.remixicon.com/img/remixicon-logo.svg",
+      "tags": [
+        "icons",
+        "svg",
+        "icon-library",
+        "ui-icons",
+        "webfont"
+      ],
+      "tech": [
+        "SVG",
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "simple-icons",
+      "name": "Simple Icons",
+      "category": "icons-svg",
+      "description": "A community-maintained collection of SVG icons for popular brands, released under CC0. Icons can be browsed, downloaded, or consumed via CDN and npm packages.",
+      "url": "https://simpleicons.org/",
+      "favicon": "",
+      "tags": [
+        "icons",
+        "svg",
+        "brand-icons",
+        "logos",
+        "open-source"
+      ],
+      "tech": [
+        "SVG"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "svg-repo",
+      "name": "SVG Repo",
+      "category": "icons-svg",
+      "description": "A searchable directory of over 460,000 open-licensed SVG vectors and icons for commercial and personal use. Vectors can be searched, edited in the browser, and downloaded as SVG.",
+      "url": "https://www.svgrepo.com/",
+      "favicon": "",
+      "tags": [
+        "icons",
+        "svg",
+        "vectors",
+        "clip-art",
+        "search"
+      ],
+      "tech": [
+        "SVG"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "iconify",
+      "name": "Iconify",
+      "category": "icons-svg",
+      "description": "An open-source universal icon framework (MIT) aggregating over 300,000 icons from more than 200 open icon sets. Icons can be browsed, embedded via web component or framework components, or served through the Iconify API.",
+      "url": "https://iconify.design/",
+      "favicon": "https://iconify.design/favicon.ico",
+      "tags": [
+        "icons",
+        "svg",
+        "icon-framework",
+        "api",
+        "react",
+        "vue",
+        "open-source"
+      ],
+      "tech": [
+        "SVG",
+        "JavaScript",
+        "React",
+        "Vue"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "feather-icons",
+      "name": "Feather Icons",
+      "category": "icons-svg",
+      "description": "A MIT-licensed collection of minimal 24px-grid open-source icons with an emphasis on simplicity and consistency. Icons can be downloaded as SVG or installed via npm.",
+      "url": "https://feathericons.com/",
+      "favicon": "",
+      "tags": [
+        "icons",
+        "svg",
+        "ui-icons",
+        "minimal",
+        "open-source"
+      ],
+      "tech": [
+        "SVG",
+        "JavaScript"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "bootstrap-icons",
+      "name": "Bootstrap Icons",
+      "category": "icons-svg",
+      "description": "The official MIT-licensed open-source SVG icon library for Bootstrap with over 2,000 icons. Icons can be copied as inline SVG or used via SVG sprite, web font, or npm.",
+      "url": "https://icons.getbootstrap.com/",
+      "favicon": "https://icons.getbootstrap.com/assets/img/favicons/android-chrome-512x512.png",
+      "tags": [
+        "icons",
+        "svg",
+        "ui-icons",
+        "bootstrap",
+        "webfont",
+        "open-source"
+      ],
+      "tech": [
+        "SVG",
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "font-awesome",
+      "name": "Font Awesome",
+      "category": "icons-svg",
+      "description": "An icon library and toolkit with a free open-source set and paid Pro plans adding more icons and styles. Free icons can be used via CDN, downloads, or npm, while Pro unlocks the full library and toolkit features.",
+      "url": "https://fontawesome.com/",
+      "favicon": "https://fontawesome.com/images/favicon/icon-512.png",
+      "tags": [
+        "icons",
+        "svg",
+        "icon-font",
+        "toolkit",
+        "ui-icons",
+        "freemium"
+      ],
+      "tech": [
+        "SVG",
+        "CSS",
+        "JavaScript"
+      ],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "radix-icons",
+      "name": "Radix Icons",
+      "category": "icons-svg",
+      "description": "A MIT-licensed set of 15x15 open-source UI icons from the Radix team. Icons can be downloaded as SVG, opened in Figma, or installed as React components via npm.",
+      "url": "https://www.radix-ui.com/icons",
+      "favicon": "https://www.radix-ui.com/favicon-black.svg",
+      "tags": [
+        "icons",
+        "svg",
+        "ui-icons",
+        "react",
+        "open-source"
+      ],
+      "tech": [
+        "SVG",
+        "React"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "devicon",
+      "name": "Devicon",
+      "category": "icons-svg",
+      "description": "A MIT-licensed set of icons for programming languages, frameworks, and development tools. Icons can be copied as SVG or used as a web font via CDN or local install.",
+      "url": "https://devicon.dev/",
+      "favicon": "https://devicon.dev/logos/android-chrome-144x144.png",
+      "tags": [
+        "icons",
+        "svg",
+        "programming",
+        "dev-tools",
+        "webfont",
+        "open-source"
+      ],
+      "tech": [
+        "SVG",
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "material-symbols",
+      "name": "Material Symbols",
+      "category": "icons-svg",
+      "description": "Google's variable icon font with over 2,500 symbols in three styles and adjustable fill, weight, grade, and optical size axes, under Apache 2.0. Icons can be browsed, downloaded, or embedded via Google Fonts or self-hosting.",
+      "url": "https://fonts.google.com/icons",
+      "favicon": "https://www.gstatic.com/images/branding/product/2x/google_fonts_64dp.png",
+      "tags": [
+        "icons",
+        "icon-font",
+        "svg",
+        "material-design",
+        "variable-font",
+        "open-source"
+      ],
+      "tech": [
+        "SVG",
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "eva-icons",
+      "name": "Eva Icons",
+      "category": "icons-svg",
+      "description": "A MIT-licensed pack of more than 480 open-source UI icons in fill and outline styles with optional animations. Icons are available as SVG, PNG, web font, or npm package.",
+      "url": "https://akveo.github.io/eva-icons/",
+      "favicon": "",
+      "tags": [
+        "icons",
+        "svg",
+        "ui-icons",
+        "animations",
+        "webfont",
+        "open-source"
+      ],
+      "tech": [
+        "SVG"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "css-gg",
+      "name": "CSS.gg",
+      "category": "icons-svg",
+      "description": "A library of more than 700 UI icons built in pure CSS with SVG and Figma variants, plus glyphs, patterns, and layouts. Icons can be copied as CSS or SVG, or installed via npm and CDN.",
+      "url": "https://css.gg/",
+      "favicon": "",
+      "tags": [
+        "icons",
+        "css",
+        "svg",
+        "ui-icons",
+        "figma",
+        "glyphs"
+      ],
+      "tech": [
+        "CSS",
+        "SVG"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "line-awesome",
+      "name": "Line Awesome",
+      "category": "icons-svg",
+      "description": "A free open-source line-icon font of more than 1,380 icons designed as a drop-in alternative to Font Awesome. Icons can be used via CDN link or ZIP download.",
+      "url": "https://icons8.com/line-awesome",
+      "favicon": "https://maxst.icons8.com/vue-static/landings/primary-landings/favs/apple-touch-icon.png",
+      "tags": [
+        "icons",
+        "icon-font",
+        "svg",
+        "font-awesome-alternative",
+        "open-source"
+      ],
+      "tech": [
+        "CSS",
+        "SVG"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "flaticon-uicons",
+      "name": "Flaticon UIcons",
+      "category": "icons-svg",
+      "description": "An interface icon library from Flaticon with a free tier requiring attribution and paid Premium plans unlocking SVG, EPS, and unlimited downloads. Icons can be browsed, edited, and used via web font, SVG, or npm.",
+      "url": "https://www.flaticon.com/uicons",
+      "favicon": "https://media.flaticon.com/dist/min/img/apple-icon-180x180.png",
+      "tags": [
+        "icons",
+        "svg",
+        "icon-font",
+        "ui-icons",
+        "interface"
+      ],
+      "tech": [
+        "SVG",
+        "CSS"
+      ],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": false,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "boxicons",
+      "name": "Boxicons",
+      "category": "icons-svg",
+      "description": "An icon library with more than 3,500 free icons and paid Pro plans adding tens of thousands of variations, styles, and weights. Icons can be browsed, customized, and exported as SVG, PNG, font, or framework packages.",
+      "url": "https://boxicons.com/",
+      "favicon": "https://boxicons.com/favicon.ico",
+      "tags": [
+        "icons",
+        "svg",
+        "ui-icons",
+        "webfont",
+        "figma",
+        "react",
+        "freemium"
+      ],
+      "tech": [
+        "SVG",
+        "CSS",
+        "JavaScript"
+      ],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "coolors",
+      "name": "Coolors",
+      "category": "design-resources",
+      "description": "A fast color-palette generator with palette exploration, image picking, contrast checking, and export options. Core generation is free, while a paid Pro plan unlocks unlimited saves, projects, and advanced features.",
+      "url": "https://coolors.co/",
+      "favicon": "",
+      "tags": [
+        "colors",
+        "palette-generator",
+        "color-schemes",
+        "contrast-checker",
+        "freemium"
+      ],
+      "tech": [],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "color-hunt",
+      "name": "Color Hunt",
+      "category": "design-resources",
+      "description": "A curated, community-driven gallery of hand-picked color palettes for designers and artists. Palettes can be browsed by theme and copied as hex values, with a Chrome extension available.",
+      "url": "https://colorhunt.co/",
+      "favicon": "https://colorhunt.co/img/color-hunt-icon-512.png",
+      "tags": [
+        "colors",
+        "palettes",
+        "color-schemes",
+        "inspiration"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "realtime-colors",
+      "name": "Realtime Colors",
+      "category": "design-resources",
+      "description": "A free tool for previewing color and font choices on a realistic website mockup with contrast checking. Palettes can be randomized and exported as CSS, Tailwind, SCSS, or downloadable files.",
+      "url": "https://www.realtimecolors.com/",
+      "favicon": "",
+      "tags": [
+        "colors",
+        "palette-generator",
+        "contrast-checker",
+        "typography-preview",
+        "export-css"
+      ],
+      "tech": [
+        "CSS",
+        "Tailwind CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "happy-hues",
+      "name": "Happy Hues",
+      "category": "design-resources",
+      "description": "A curated palette-inspiration site showing each palette applied to a real page design with labeled roles. Hex values can be clicked to copy, and the site also explains color terminology and psychology.",
+      "url": "https://www.happyhues.co/",
+      "favicon": "https://cdn.prod.website-files.com/5dd40aa8049df8748c72d0ee/5dd9b92056a2d6ed5e537c61_happy-hues-apple-icon.png",
+      "tags": [
+        "colors",
+        "palettes",
+        "color-schemes",
+        "inspiration"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "open-color",
+      "name": "Open Color",
+      "category": "design-resources",
+      "description": "A MIT-licensed open-source color scheme optimized for UI use, with 13 hues in 10 shades each. Swatches and palettes can be copied or downloaded for Adobe, Sketch, Figma, and VS Code.",
+      "url": "https://yeun.github.io/open-color/",
+      "favicon": "https://yeun.github.io/open-color/asset/favicon/apple-touch-icon-144x144.png",
+      "tags": [
+        "colors",
+        "color-scheme",
+        "swatches",
+        "ui-design",
+        "open-source"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "tailwind-colors",
+      "name": "Tailwind CSS Colors",
+      "category": "design-resources",
+      "description": "The official Tailwind CSS color palette reference documenting the default hues with 11 steps each and usage across utilities. Values can be copied as OKLCH or hex and customized via theme variables.",
+      "url": "https://tailwindcss.com/docs/colors",
+      "favicon": "https://tailwindcss.com/favicons/android-chrome-256x256.png",
+      "tags": [
+        "colors",
+        "tailwind-css",
+        "palette",
+        "design-tokens",
+        "open-source"
+      ],
+      "tech": [
+        "CSS",
+        "Tailwind CSS"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "google-fonts",
+      "name": "Google Fonts",
+      "category": "design-resources",
+      "description": "Google's catalog of free open-source fonts and icons for the web. Families can be previewed, downloaded, or embedded via the Google Fonts API with no account required.",
+      "url": "https://fonts.google.com/",
+      "favicon": "https://www.gstatic.com/images/branding/product/2x/google_fonts_64dp.png",
+      "tags": [
+        "fonts",
+        "typography",
+        "webfonts",
+        "icons",
+        "open-source"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "fontsource",
+      "name": "Fontsource",
+      "category": "design-resources",
+      "description": "An MIT-licensed directory and tooling for self-hosting more than 2,100 open-source fonts via versioned npm packages. Fonts can be installed from npm, downloaded directly, or served through configurable CDN URLs and a free API.",
+      "url": "https://fontsource.org/",
+      "favicon": "https://fontsource.org/android-chrome-512x512.png",
+      "tags": [
+        "fonts",
+        "self-hosting",
+        "npm",
+        "webfonts",
+        "cdn",
+        "open-source"
+      ],
+      "tech": [
+        "CSS",
+        "JavaScript"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "type-scale",
+      "name": "Typescale",
+      "category": "design-resources",
+      "description": "A visual type-scale calculator for building harmonious typographic hierarchies with live preview and boards. Basic use is free, while a paid Pro plan unlocks unlimited boards, responsive scales, and CSS export.",
+      "url": "https://typescale.com/",
+      "favicon": "",
+      "tags": [
+        "typography",
+        "type-scale",
+        "modular-scale",
+        "css",
+        "freemium"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "freemium",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "modular-scale",
+      "name": "Modular Scale",
+      "category": "design-resources",
+      "description": "A free calculator for building modular typographic scales from a base size and ratio, with Sass and JavaScript plugins. Scales can be referenced on the web or copied as plugin configuration.",
+      "url": "https://www.modularscale.com/",
+      "favicon": "https://www.modularscale.com/icon.png",
+      "tags": [
+        "typography",
+        "modular-scale",
+        "sass",
+        "javascript",
+        "open-source"
+      ],
+      "tech": [
+        "CSS",
+        "Sass",
+        "JavaScript"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "gridlover",
+      "name": "Gridlover",
+      "category": "design-resources",
+      "description": "A free browser tool for establishing a typographic system with modular scale and vertical rhythm via sliders. The generated system can be tried instantly with no signup, always free.",
+      "url": "https://www.gridlover.net/",
+      "favicon": "",
+      "tags": [
+        "typography",
+        "vertical-rhythm",
+        "modular-scale",
+        "css"
+      ],
+      "tech": [
+        "CSS"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "webaim-contrast-checker",
+      "name": "WebAIM Contrast Checker",
+      "category": "design-resources",
+      "description": "A free WebAIM tool for checking foreground and background color contrast against WCAG 2.x AA and AAA thresholds. Values can be entered as hex with an eyedropper, and a permalink, API, and bookmarklet are available.",
+      "url": "https://webaim.org/resources/contrastchecker/",
+      "favicon": "",
+      "tags": [
+        "accessibility",
+        "contrast-checker",
+        "wcag",
+        "colors"
+      ],
+      "tech": [],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": false,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "leonardo",
+      "name": "Leonardo",
+      "category": "design-resources",
+      "description": "Adobe's open-source tool for generating accessible color themes and scales from target contrast ratios. Themes can be previewed, downloaded as SVG, or exported as CSS custom properties, design tokens, and npm-driven adaptive themes.",
+      "url": "https://leonardocolor.io/",
+      "favicon": "",
+      "tags": [
+        "colors",
+        "design-tokens",
+        "contrast",
+        "accessibility",
+        "open-source",
+        "css"
+      ],
+      "tech": [
+        "CSS",
+        "JavaScript"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "colorbox",
+      "name": "ColorBox",
+      "category": "design-resources",
+      "description": "A free Lyft-originated tool for building accessible color systems with curve-controlled hue, saturation, and brightness steps. Palettes show contrast ratios and export to CSS, Tailwind, Swift, and shareable URLs.",
+      "url": "https://colorbox.io/",
+      "favicon": "https://colorbox.io/favicon.svg",
+      "tags": [
+        "colors",
+        "palette-generator",
+        "contrast",
+        "accessibility",
+        "tailwind-css",
+        "open-source"
+      ],
+      "tech": [
+        "CSS",
+        "Tailwind CSS"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "haikei",
+      "name": "Haikei",
+      "category": "generators",
+      "description": "A free web app for generating unique SVG backgrounds and design assets such as waves, blobs, gradients, grids, and more. Visuals can be customized and exported as SVG or PNG with no signup.",
+      "url": "https://haikei.app/",
+      "favicon": "",
+      "tags": [
+        "svg",
+        "generators",
+        "backgrounds",
+        "patterns",
+        "gradients"
+      ],
+      "tech": [
+        "SVG"
+      ],
+      "pricing": "free",
+      "openSource": false,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
+    },
+    {
+      "id": "blobmaker",
+      "name": "Blobmaker",
+      "category": "generators",
+      "description": "A free generative tool for creating random organic SVG blob shapes with adjustable complexity and contrast. Shapes can be downloaded as SVG or copied as code, and the tool is now part of Haikei.",
+      "url": "https://www.blobmaker.app/",
+      "favicon": "https://www.blobmaker.app/icons/icon-256x256.png",
+      "tags": [
+        "svg",
+        "generators",
+        "blobs",
+        "shapes",
+        "backgrounds"
+      ],
+      "tech": [
+        "SVG"
+      ],
+      "pricing": "free",
+      "openSource": false,
       "noSignup": true,
       "copyable": true,
       "addedAt": "2026-09-10"
