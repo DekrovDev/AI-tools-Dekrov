@@ -225,6 +225,62 @@ export function parseDevResources(raw) {
   return result;
 }
 
+// ---- Related resources (deterministic, DOM-free) ----
+
+// Score weights mirror the product priority: same category first, then shared
+// tech, then shared tags. Matching pricing and shared capability flags
+// (openSource/noSignup/copyable) are weak tie-break signals only.
+const RELATED_CATEGORY_SCORE = 4;
+const RELATED_TECH_SCORE = 2;
+const RELATED_TAG_SCORE = 1;
+const RELATED_PRICING_SCORE = 1;
+const RELATED_CAPABILITY_SCORE = 1;
+
+function normalizedTokenSet(values) {
+  return new Set(stringList(values).map((value) => value.toLowerCase()));
+}
+
+function overlapSize(first, second) {
+  let count = 0;
+  for (const value of first) if (second.has(value)) count += 1;
+  return count;
+}
+
+export function relatedDevResourceScore(current, candidate) {
+  if (!current || !candidate) return 0;
+  const currentTech = normalizedTokenSet(current.tech);
+  const candidateTech = normalizedTokenSet(candidate.tech);
+  const currentTags = normalizedTokenSet(current.tags);
+  const candidateTags = normalizedTokenSet(candidate.tags);
+  let score = 0;
+  if (current.category && current.category === candidate.category) score += RELATED_CATEGORY_SCORE;
+  score += RELATED_TECH_SCORE * overlapSize(currentTech, candidateTech);
+  score += RELATED_TAG_SCORE * overlapSize(currentTags, candidateTags);
+  if (current.pricing && current.pricing === candidate.pricing) score += RELATED_PRICING_SCORE;
+  for (const flag of ["openSource", "noSignup", "copyable"]) {
+    if (current[flag] === true && candidate[flag] === true) score += RELATED_CAPABILITY_SCORE;
+  }
+  return score;
+}
+
+// Rank other resources by similarity to `current`. Never includes `current`
+// itself, never returns duplicates, and is fully deterministic: score first,
+// then name, then id. Resources scoring zero are omitted.
+export function rankRelatedDevResources(current, resources = [], limit = 4) {
+  if (!current || !Array.isArray(resources)) return [];
+  const max = Number.isInteger(limit) && limit > 0 ? limit : 4;
+  const seen = new Set([current.id]);
+  const scored = [];
+  for (const candidate of resources) {
+    if (!candidate || seen.has(candidate.id)) continue;
+    seen.add(candidate.id);
+    const score = relatedDevResourceScore(current, candidate);
+    if (score > 0) scored.push({ resource: candidate, score });
+  }
+  scored.sort((a, b) => b.score - a.score || a.resource.name.localeCompare(b.resource.name) || a.resource.id.localeCompare(b.resource.id));
+  return scored.slice(0, max).map((entry) => entry.resource);
+}
+
 // ---- Pure catalog helpers (mirror the tool-catalog filter surface) ----
 
 function asSet(value) {

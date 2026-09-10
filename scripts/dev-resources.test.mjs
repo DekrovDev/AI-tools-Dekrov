@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { DEV_CATEGORIES, DEV_PRICING_VALUES, devCategoryMeta, filterDevResources, isValidDevResourceId, normalizeDevResource, parseDevResources, sortDevResources, validateDevResourcesData } from "../assets/js/dev-resources.js";
+import { DEV_CATEGORIES, DEV_PRICING_VALUES, devCategoryMeta, filterDevResources, isValidDevResourceId, normalizeDevResource, parseDevResources, rankRelatedDevResources, relatedDevResourceScore, sortDevResources, validateDevResourcesData } from "../assets/js/dev-resources.js";
 import { buildDevResourceCandidate, buildDevResourcePrompt, findDevResourceDuplicates, validateDevResourceSubmission } from "../assets/js/dev-resource-submission.js";
 
 function validResource(overrides = {}) {
@@ -95,13 +95,55 @@ test("sortDevResources supports recent, name, and category order", () => {
   assert.deepEqual(sortDevResources(list, "category").map((item) => item.id), ["aa", "bb"]);
 });
 
-test("the real data file is valid and keeps the intentional empty scaffold", async () => {
+test("relatedDevResourceScore prioritizes category, tech, tags, then weak signals", () => {
+  const current = normalizeDevResource(validResource({ id: "current", tech: ["CSS"] }));
+  const sameCategory = normalizeDevResource(validResource({ id: "same-cat", tags: ["other"], tech: ["JS"], pricing: "paid" }));
+  const techMatch = normalizeDevResource(validResource({ id: "tech", category: "icons-svg", tags: ["other"], tech: ["css"], pricing: "paid" }));
+  const tagMatch = normalizeDevResource(validResource({ id: "tag", category: "icons-svg", tags: ["hover"], tech: ["JS"], pricing: "paid" }));
+  const pricingOnly = normalizeDevResource(validResource({ id: "pricing", category: "icons-svg", tags: ["other"], tech: ["JS"], pricing: "free" }));
+  const unrelated = normalizeDevResource(validResource({ id: "nope", category: "icons-svg", tags: ["other"], tech: ["JS"], pricing: "paid" }));
+  assert.equal(relatedDevResourceScore(current, sameCategory), 4);
+  assert.equal(relatedDevResourceScore(current, techMatch), 2);
+  assert.equal(relatedDevResourceScore(current, tagMatch), 1);
+  assert.equal(relatedDevResourceScore(current, pricingOnly), 1);
+  assert.equal(relatedDevResourceScore(current, unrelated), 0);
+  assert.ok(relatedDevResourceScore(current, sameCategory) > relatedDevResourceScore(current, techMatch));
+  assert.ok(relatedDevResourceScore(current, techMatch) > relatedDevResourceScore(current, tagMatch));
+  assert.equal(relatedDevResourceScore(null, tagMatch), 0);
+});
+
+test("rankRelatedDevResources is deterministic, excludes self, dedupes, and limits", () => {
+  const current = normalizeDevResource(validResource({ id: "current", name: "Current" }));
+  const unrelated = normalizeDevResource(validResource({ id: "zzz", name: "ZZZ", category: "icons-svg", tags: ["zzz"], tech: ["ZZZ"], pricing: "paid" }));
+  const list = [
+    current,
+    normalizeDevResource(validResource({ id: "b", name: "Beta" })),
+    normalizeDevResource(validResource({ id: "a", name: "Alpha" })),
+    normalizeDevResource(validResource({ id: "a", name: "Alpha duplicate" })),
+    unrelated
+  ];
+  const ranked = rankRelatedDevResources(current, list);
+  assert.deepEqual(ranked.map((item) => item.id), ["a", "b"]);
+  assert.deepEqual(rankRelatedDevResources(current, list, 1).map((item) => item.id), ["a"]);
+  assert.deepEqual(rankRelatedDevResources(current, [current, unrelated]), []);
+  assert.deepEqual(rankRelatedDevResources(null, list), []);
+  assert.deepEqual(rankRelatedDevResources(current, "not-a-list"), []);
+});
+
+test("the real data file is valid and parses into a non-empty curated catalog", async () => {
   const raw = await readFile(new URL("../data/dev-resources.json", import.meta.url), "utf8");
   const source = JSON.parse(raw);
   assert.deepEqual(validateDevResourcesData(source), []);
   const parsed = parseDevResources(raw);
   assert.ok(Array.isArray(parsed));
-  assert.equal(parsed.length, 0, "starter catalog is intentionally empty; entries are added manually");
+  assert.ok(parsed.length > 0, "the Dev Resources catalog is curated and no longer an empty scaffold");
+  assert.deepEqual(new Set(parsed.map((item) => item.id)).size, parsed.length, "catalog ids are unique");
+  for (const resource of parsed) {
+    assert.ok(isValidDevResourceId(resource.id), `bad id: ${resource.id}`);
+    assert.ok(resource.name.length > 0, `missing name: ${resource.id}`);
+    assert.ok(DEV_CATEGORIES.some((category) => category.id === resource.category), `bad category: ${resource.id}`);
+    assert.ok(/^https?:\/\//.test(resource.url), `bad url: ${resource.id}`);
+  }
 });
 
 test("maintainer validation reports actionable malformed-resource fields", () => {

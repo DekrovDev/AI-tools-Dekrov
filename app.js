@@ -8,8 +8,8 @@ import { buildEnvTextForState, canCopyCommands, clearEnvState, commandSequenceRo
 import { decodeSharedCollection, importSharedCollection, resolveSharedEntityRefs, sharedCollectionUrl, sharedFailureMessage } from "./assets/js/shared-collections.js";
 import { INSTALL_FAILURE_TEMPLATE, INSTALL_FAILURE_LABEL, installFailureIssueUrl } from "./assets/js/install-failure.js";
 import { looksLikeOfficialUrlQuery, matchingToolsForUrl, missingToolPrefill, shouldOfferMissingToolSuggestion } from "./assets/js/missing-tool-suggestion.js";
-import { DEV_CATEGORIES, DEV_PRICING_VALUES, devCategoryMeta, filterDevResources, parseDevResources, sortDevResources } from "./assets/js/dev-resources.js";
-import { buildDevResourceCandidate, buildDevResourcePrompt, findDevResourceDuplicates, validateDevResourceSubmission } from "./assets/js/dev-resource-submission.js";
+import { DEV_CATEGORIES, DEV_PRICING_VALUES, devCategoryMeta, filterDevResources, parseDevResources, rankRelatedDevResources, sortDevResources } from "./assets/js/dev-resources.js";
+import { DEV_PROBLEM_TYPES, buildDevResourceCandidate, buildDevResourcePrompt, devProblemReportUrl, findDevResourceDuplicates, validateDevResourceSubmission } from "./assets/js/dev-resource-submission.js";
 import { createDevSearch } from "./assets/js/dev-search.js";
 import { KIND_DEV, KIND_TOOLS, entityRef, entityRefParts, isDevRef, refsOfKind, splitKnownRefs } from "./assets/js/entity-ids.js";
 
@@ -535,9 +535,47 @@ function renderDevCatalog() {
   $("#view-actions").innerHTML = "";
 }
 
+let devCompareIds = [];
+
+function devCompareColumns(resource) {
+  const others = devCompareIds.map(devResourceById).filter((item) => item && item.id !== resource.id).slice(0, 3);
+  return [resource, ...others];
+}
+
+function devCompareSectionMarkup(resource) {
+  const columns = devCompareColumns(resource);
+  const picked = new Set(columns.map((item) => item.id));
+  const options = state.devResources
+    .filter((item) => !picked.has(item.id))
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((item) => `<option value="${escapeHtml(item.id)}">${escapeHtml(item.name)}</option>`)
+    .join("");
+  const canAdd = columns.length < 4 && options;
+  const boolCell = (value) => value ? "Yes" : "—";
+  const listCell = (values) => (values || []).length ? escapeHtml(values.join(", ")) : "—";
+  const rows = [
+    ["Category", (item) => escapeHtml(devCategoryMeta(item.category).label)],
+    ["Price", (item) => escapeHtml(pricingLabel(item.pricing) || "Not specified")],
+    ["Open source", (item) => boolCell(item.openSource)],
+    ["No signup", (item) => boolCell(item.noSignup)],
+    ["Copyable code", (item) => boolCell(item.copyable)],
+    ["Tech", (item) => listCell(item.tech)],
+    ["Tags", (item) => listCell(item.tags)]
+  ];
+  const head = columns.map((item, index) => `<th scope="col"><a href="#/dev/resource/${encodeURIComponent(item.id)}">${escapeHtml(item.name)}</a>${index === 0 ? ' <span class="compare-this">this</span>' : ` <button class="compare-remove" type="button" data-dev-compare-remove="${escapeHtml(item.id)}" aria-label="Remove ${escapeHtml(item.name)} from comparison">×</button>`}</th>`).join("");
+  const body = rows.map(([label, get]) => `<tr><th scope="row">${escapeHtml(label)}</th>${columns.map((item) => `<td>${get(item)}</td>`).join("")}</tr>`).join("");
+  return `<section class="detail-section compare-section"><h2>Compare</h2><p class="detail-caption">Compare this resource with up to ${columns.length >= 4 ? "4" : "3 more"} Dev Resources side by side.</p><div class="compare-wrap"><table class="compare-table"><thead><tr><th scope="col"><span class="compare-corner">Field</span></th>${head}</tr></thead><tbody>${body}</tbody></table></div><div class="compare-actions">${canAdd ? `<label class="form-field compare-picker"><span>Add to comparison</span><select id="dev-compare-select">${options}</select></label><button class="button button-secondary" type="button" data-dev-compare-add>Add</button>` : ""}${columns.length > 1 ? `<button class="button button-secondary" type="button" data-dev-compare-clear>Clear comparison</button>` : ""}</div></section>`;
+}
+
+function devReportSectionMarkup() {
+  const buttons = DEV_PROBLEM_TYPES.map((type) => `<button class="button button-secondary" type="button" data-dev-report="${escapeHtml(type)}">${escapeHtml(type)}</button>`).join("");
+  return `<section class="detail-section report-section"><h2>Report a problem</h2><p class="detail-caption">Opens a public GitHub Issue with the resource details prefilled. Nothing changes automatically.</p><div class="report-actions">${buttons}</div></section>`;
+}
+
 function renderDevDetail(resourceId) {
   const resource = devResourceById(resourceId);
   if (!resource) { location.hash = "#/dev"; return; }
+  devCompareIds = devCompareIds.filter((id) => id !== resource.id && devResourceById(id)).slice(0, 3);
   const meta = devCategoryMeta(resource.category);
   const ref = devRef(resource.id);
   const favorite = state.favorites.has(ref);
@@ -558,8 +596,10 @@ function renderDevDetail(resourceId) {
     resource.addedAt ? `<div class="info-row info-row-reference"><dt>Added</dt><dd>${escapeHtml(formatDate(resource.addedAt))}</dd></div>` : ""
   ].filter(Boolean).join("");
   setDocumentMeta(`${resource.name} — Dev Resources — AI-Dekrov`, resource.description || DEFAULT_DESCRIPTION);
-  const main = `<section class="detail-section getting-started-section"><h2>What it provides</h2><p class="detail-caption">${escapeHtml(resource.description || "No description yet.")}</p>${flagsMarkup}</section>` + ((resource.tags || []).length || (resource.tech || []).length ? `<section class="detail-section personal-note-section"><h2>Tags &amp; technology</h2><div class="detail-tags">${tech}${tags}</div></section>` : "");
-  $("#detail-view").innerHTML = `<button class="back-link" type="button" data-back-catalog><span>${icon("arrowLeft")}</span> Back to resources</button><div class="detail-header"><div class="detail-identity">${logoMarkup(resource, meta, true)}<div class="detail-heading"><div class="tool-category">Dev resource · ${escapeHtml(meta.label)}</div><h1>${escapeHtml(resource.name)}</h1>${hasValue(resource.description) ? `<p>${escapeHtml(resource.description)}</p>` : ""}</div></div><div class="detail-actions">${hasValue(resource.url) ? `<a class="button button-primary" href="${escapeHtml(resource.url)}" target="_blank" rel="noreferrer">Open website ${icon("external")}</a>` : ""}<button class="button button-secondary" type="button" data-save-tool="${escapeHtml(ref)}">${icon("bookmark")} Save</button><button class="button button-secondary" type="button" data-favorite="${escapeHtml(ref)}">${icon("star")} ${favorite ? "Favorited" : "Add to favorites"}</button></div></div><div class="detail-grid"><div class="detail-main">${main}</div><aside class="detail-aside"><section class="detail-facts"><h2>Essential facts</h2><dl class="info-list">${facts}</dl></section>${hasValue(resource.url) ? `<a class="button button-secondary detail-website-link" href="${escapeHtml(resource.url)}" target="_blank" rel="noreferrer">Visit ${escapeHtml(sourceLabel(resource.url))} ${icon("external")}</a>` : ""}</aside></div>`;
+  const related = rankRelatedDevResources(resource, state.devResources, 4);
+  const relatedMarkup = related.length ? `<section class="detail-section related-section"><h2>Related resources</h2><div class="tools-grid related-grid">${related.map(devCard).join("")}</div></section>` : "";
+  const main = `<section class="detail-section getting-started-section"><h2>What it provides</h2><p class="detail-caption">${escapeHtml(resource.description || "No description yet.")}</p>${flagsMarkup}</section>` + ((resource.tags || []).length || (resource.tech || []).length ? `<section class="detail-section personal-note-section"><h2>Tags &amp; technology</h2><div class="detail-tags">${tech}${tags}</div></section>` : "") + devCompareSectionMarkup(resource) + relatedMarkup + devReportSectionMarkup();
+  $("#detail-view").innerHTML = `<button class="back-link" type="button" data-back-catalog><span>${icon("arrowLeft")}</span> Back to resources</button><div class="detail-header"><div class="detail-identity">${logoMarkup(resource, meta, true)}<div class="detail-heading"><div class="tool-category">Dev resource · ${escapeHtml(meta.label)}</div><h1>${escapeHtml(resource.name)}</h1>${hasValue(resource.description) ? `<p>${escapeHtml(resource.description)}</p>` : ""}</div></div><div class="detail-actions">${hasValue(resource.url) ? `<a class="button button-primary" href="${escapeHtml(resource.url)}" target="_blank" rel="noreferrer">Open website ${icon("external")}</a>` : ""}<button class="button button-secondary" type="button" data-save-tool="${escapeHtml(ref)}">${icon("bookmark")} Save</button><button class="button button-secondary" type="button" data-favorite="${escapeHtml(ref)}">${icon("star")} ${favorite ? "Favorited" : "Add to favorites"}</button><button class="button button-secondary" type="button" data-copy-dev-link="${escapeHtml(resource.id)}">${icon("copy")} Copy link</button></div></div><div class="detail-grid"><div class="detail-main">${main}</div><aside class="detail-aside"><section class="detail-facts"><h2>Essential facts</h2><dl class="info-list">${facts}</dl></section></aside></div>`;
 }
 
 function renderUseCasesView() {
@@ -2457,7 +2497,7 @@ function bindEvents() {
     const deleteCollectionButton = event.target.closest("[data-delete-collection]"); if (deleteCollectionButton) { event.preventDefault(); openDeleteCollectionDialog(deleteCollectionButton.dataset.deleteCollection); }
     const sharedSave = event.target.closest("[data-shared-save]"); if (sharedSave) { event.preventDefault(); const shared = state.shared; if (shared) { const importer = importSharedCollection(state.collections.collections, shared.payload, knownToolIds(), knownDevIds()); if (!importer) { showToast("Nothing to save in this shared collection"); return; } state.collections.collections = importer.collections; saveCollections(); showToast("Collection saved"); location.hash = `#/collections/${encodeURIComponent(importer.collection.id)}`; } }
     const confirmDelete = event.target.closest("[data-confirm-delete]"); if (confirmDelete) { event.preventDefault(); const context = state.saveDialogContext; if (context?.collectionId) { state.collections.collections = deleteCollection(state.collections.collections, context.collectionId); saveCollections(); closeSavedDialog(); renderCatalog(); showToast("Collection deleted"); } }
-    if (event.target.closest("[data-close-dialog]") && event.target.closest("#saved-dialog")) { event.preventDefault(); closeSavedDialog(); } const update = event.target.closest("[data-propose-update]"); if (update) { const tool = state.tools.find((item) => item.id === update.dataset.proposeUpdate); if (tool) startUpdateSubmission(tool); } const saveNote = event.target.closest("[data-note-save]"); if (saveNote) { savePersonalNote(saveNote.dataset.noteSave, $("#personal-note-input").value); renderDetail(saveNote.dataset.noteSave); showToast("Personal note saved"); } const deleteNote = event.target.closest("[data-note-delete]"); if (deleteNote) { savePersonalNote(deleteNote.dataset.noteDelete, ""); renderDetail(deleteNote.dataset.noteDelete); showToast("Personal note deleted"); }    const copy = event.target.closest("[data-copy]"); if (copy) copyText(copy.dataset.copy);
+    if (event.target.closest("[data-close-dialog]") && event.target.closest("#saved-dialog")) { event.preventDefault(); closeSavedDialog(); } const update = event.target.closest("[data-propose-update]"); if (update) { const tool = state.tools.find((item) => item.id === update.dataset.proposeUpdate); if (tool) startUpdateSubmission(tool); } const copyDevLink = event.target.closest("[data-copy-dev-link]"); if (copyDevLink) { event.preventDefault(); copyText(`${location.origin}${location.pathname}#/dev/resource/${encodeURIComponent(copyDevLink.dataset.copyDevLink)}`, "Link copied"); } const devReport = event.target.closest("[data-dev-report]"); if (devReport) { event.preventDefault(); const resource = devResourceById(getDevDetailId()); if (!resource) return; if (!state.siteConfig?.githubRepository) { showToast("Set the GitHub repository in data/site-config.json first"); return; } const url = devProblemReportUrl(resource, state.siteConfig.githubRepository, devReport.dataset.devReport, location.href); if (url) { window.open(url, "_blank", "noopener"); showToast("Problem report form opened — add details on GitHub"); } } const devCompareAdd = event.target.closest("[data-dev-compare-add]"); if (devCompareAdd) { event.preventDefault(); const select = $("#dev-compare-select"); const id = select?.value || ""; if (id && !devCompareIds.includes(id) && devCompareIds.length < 3 && devResourceById(id)) { devCompareIds.push(id); const y = window.scrollY; renderDevDetail(getDevDetailId()); window.scrollTo({ top: y }); } } const devCompareRemove = event.target.closest("[data-dev-compare-remove]"); if (devCompareRemove) { event.preventDefault(); devCompareIds = devCompareIds.filter((id) => id !== devCompareRemove.dataset.devCompareRemove); const y = window.scrollY; renderDevDetail(getDevDetailId()); window.scrollTo({ top: y }); } const devCompareClear = event.target.closest("[data-dev-compare-clear]"); if (devCompareClear) { event.preventDefault(); devCompareIds = []; const y = window.scrollY; renderDevDetail(getDevDetailId()); window.scrollTo({ top: y }); } const saveNote = event.target.closest("[data-note-save]"); if (saveNote) { savePersonalNote(saveNote.dataset.noteSave, $("#personal-note-input").value); renderDetail(saveNote.dataset.noteSave); showToast("Personal note saved"); } const deleteNote = event.target.closest("[data-note-delete]"); if (deleteNote) { savePersonalNote(deleteNote.dataset.noteDelete, ""); renderDetail(deleteNote.dataset.noteDelete); showToast("Personal note deleted"); }    const copy = event.target.closest("[data-copy]"); if (copy) copyText(copy.dataset.copy);
     const setupTab = event.target.closest("[data-setup-tab]"); if (setupTab) { event.preventDefault(); if (state.setup) state.setup.tab = setupTab.dataset.setupTab; renderCatalog(); }
     const envInclude = event.target.closest("[data-env-include]"); if (envInclude) { const current = currentDetailSetup(); const envVar = current?.setup.envVars?.find((entry) => entry.name === envInclude.dataset.envInclude); if (envVar && state.setup) { toggleEnvInclude(state.setup, envVar, envInclude.checked); renderCatalog(); } }
     const envReveal = event.target.closest("[data-env-reveal]"); if (envReveal) { event.preventDefault(); if (state.setup) { const name = envReveal.dataset.envReveal; if (state.setup.reveal.has(name)) state.setup.reveal.delete(name); else state.setup.reveal.add(name); renderCatalog(); } }

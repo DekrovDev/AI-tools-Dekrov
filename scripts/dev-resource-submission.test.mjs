@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { buildDevResourceCandidate, buildDevResourceSubmissionBody, validateDevResourceSubmission } from "../assets/js/dev-resource-submission.js";
+import { DEV_PROBLEM_TYPES, buildDevResourceCandidate, buildDevResourceSubmissionBody, devProblemReportBody, devProblemReportTitle, devProblemReportUrl, validateDevResourceSubmission } from "../assets/js/dev-resource-submission.js";
 import { branchContainsApprovedDevResource, decideDevResourceApproval, isTrustedDevResourceApprovalPull, looksLikeDevResourceSmartAdd, looksLikeDevResourceSubmission, parseDevResourceSubmission, validateDevResourceIssue } from "../.github/scripts/dev-resource-submission-lib.mjs";
 import { looksLikeSubmission } from "../.github/scripts/submission-lib.mjs";
 import { buildDevResourceAnalysisComment, runDevResourceSmartAdd, safeDevResourceCommentText } from "./dev-resource-smart-add.mjs";
@@ -193,4 +193,20 @@ test("The shared header button chooses the current catalog dialog without propag
   const app = await readFile(new URL("../app.js", import.meta.url), "utf8");
   assert.ok(app.includes('if (isDevUiContext()) openDevResourceDialog("smart"); else openDialog("smart");'));
   assert.ok(!app.includes("stopImmediatePropagation"));
+});
+
+test("Dev problem report builds a prefilled plain issue URL without a template", () => {
+  assert.deepEqual(DEV_PROBLEM_TYPES, ["Broken link", "Wrong information", "Resource unavailable", "Other"]);
+  const target = { id: "animista", name: "Animista", url: "https://animista.net/" };
+  assert.equal(devProblemReportTitle(target, "Broken link"), "[Dev Resource Problem][animista] Broken link");
+  assert.equal(devProblemReportTitle(target, "Bogus type"), "[Dev Resource Problem][animista] Other");
+  const reportBody = devProblemReportBody(target, "Broken link", "https://ai.dekrov.com/#/dev/resource/animista");
+  for (const fragment of ["Animista", "animista", "https://animista.net/", "Broken link", "#/dev/resource/animista"]) {
+    assert.ok(reportBody.includes(fragment), fragment);
+  }
+  const url = devProblemReportUrl(target, "DekrovDev/AI-tools-Dekrov", "Broken link", "https://ai.dekrov.com/#/dev/resource/animista");
+  assert.ok(url.startsWith("https://github.com/DekrovDev/AI-tools-Dekrov/issues/new?"));
+  assert.ok(!url.includes("template="), "no issue template is involved");
+  assert.equal(devProblemReportUrl(target, "", "Broken link"), "");
+  assert.equal(devProblemReportUrl({}, "R/R"), "");
 });

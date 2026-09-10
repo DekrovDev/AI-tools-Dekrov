@@ -279,3 +279,37 @@ No explanation before or after it.`;
 export function buildDevResourceSubmissionBody(resource, context = "") {
   return ["### Submission kind", "dev-resource", "", "### Submission type", "new", "", "### Dev Resource JSON", JSON.stringify(resource, null, 2), "", "### Context", context || "_No response_", "", "### Confirmation", "- [x] I confirm this is a factual public developer resource."].join("\n");
 }
+
+// Lightweight problem report: opens a plain GitHub Issue (no template, no
+// workflow). Nothing is ever applied to the catalog from such an issue.
+export const DEV_PROBLEM_TYPES = ["Broken link", "Wrong information", "Resource unavailable", "Other"];
+
+export function devProblemReportTitle(resource, problemType = "Other") {
+  const id = String(resource?.id || "").trim();
+  const type = DEV_PROBLEM_TYPES.includes(problemType) ? problemType : "Other";
+  return `[Dev Resource Problem][${id}] ${type}`;
+}
+
+export function devProblemReportBody(resource, problemType = "Other", detailUrl = "") {
+  const type = DEV_PROBLEM_TYPES.includes(problemType) ? problemType : "Other";
+  return [
+    `Resource: ${resource?.name || resource?.id || "unknown"}`,
+    `Resource ID: ${resource?.id || "unknown"}`,
+    `Catalog page: ${detailUrl || "unknown"}`,
+    `Official URL: ${resource?.url || "unknown"}`,
+    `Problem type: ${type}`,
+    "",
+    "Details:",
+    "<!-- Please describe what is wrong. Do not include API keys, tokens, passwords, or other secrets. -->"
+  ].join("\n");
+}
+
+export function devProblemReportUrl(resource, repository, problemType = "Other", detailUrl = "") {
+  const repo = String(repository || "").replace(/^\/+|\/+$/g, "");
+  if (!repo || !resource?.id) return "";
+  const params = new URLSearchParams({
+    title: devProblemReportTitle(resource, problemType),
+    body: devProblemReportBody(resource, problemType, detailUrl)
+  });
+  return `https://github.com/${repo}/issues/new?${params.toString()}`;
+}
