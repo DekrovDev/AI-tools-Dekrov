@@ -23,6 +23,34 @@
       "noSignup": true,
       "copyable": true,
       "addedAt": "2026-09-04"
+    },
+    {
+      "id": "shadcn-ui",
+      "name": "shadcn/ui",
+      "category": "ui-components",
+      "description": "A collection of accessible, customizable React components distributed as source code. Unlike traditional component libraries, components are copied and pasted directly into your project, allowing full control over styling and behavior. Built with Tailwind CSS and Radix UI.",
+      "url": "https://ui.shadcn.com/",
+      "favicon": "https://ui.shadcn.com/favicon.ico",
+      "tags": [
+        "react",
+        "components",
+        "tailwind-css",
+        "radix-ui",
+        "accessible",
+        "open-code",
+        "copy-paste"
+      ],
+      "tech": [
+        "React",
+        "Tailwind CSS",
+        "Radix UI",
+        "TypeScript"
+      ],
+      "pricing": "free",
+      "openSource": true,
+      "noSignup": true,
+      "copyable": true,
+      "addedAt": "2026-09-10"
     }
   ]
 }
