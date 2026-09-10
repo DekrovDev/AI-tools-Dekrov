@@ -1879,7 +1879,7 @@
       "Dependencies (e.g., DB connections) are injected via `RunContext` for type safety and testability",
       "Agents can be run as CLI, web chat, or realtime speech interfaces"
     ],
-    "url": "https://pydantic.dev/ai",
+    "url": "https://pydantic.dev/docs/ai/overview/",
     "domain": "pydantic.dev",
     "favicon": "https://pydantic.dev/favicon.ico",
     "platforms": [
@@ -1922,7 +1922,7 @@
     "updatedAt": "2026-08-30",
     "lastVerifiedAt": "2026-08-30",
     "sources": [
-      "https://pydantic.dev/ai",
+      "https://pydantic.dev/docs/ai/overview/",
       "https://github.com/pydantic/pydantic-ai",
       "https://ai.pydantic.dev"
     ]
