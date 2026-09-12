@@ -19,10 +19,12 @@ import {
 import { entityRefParts, KIND_DEV, KIND_TOOLS } from "./entity-ids.js";
 
 export const SHARED_VERSION = 1;
-// How many tool IDs a single shared link may carry. The catalog currently has
-// 29 tools and grows by a few per merge; 300 is comfortably forward-compatible
-// for years without letting a malicious link allocate an absurd amount of UI.
-export const MAX_SHARED_IDS = 300;
+// How many entity refs a single shared link may carry. The cap must stay above
+// the current catalog size so a shared "everything" collection can round-trip
+// without silent truncation, while still keeping a malicious link from
+// allocating an absurd amount of UI. MAX_TOKEN_LENGTH remains the real abuse
+// guard for oversized payloads.
+export const MAX_SHARED_IDS = 600;
 // Maximum encoded token length checked BEFORE decoding. A normal collection of
 // a few hundred IDs fits in well under this. We reject the rest cheaply so a
 // gigantic URL payload can never freeze or crash the page.
