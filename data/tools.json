@@ -6,7 +6,7 @@
     "description": "aider is AI pair programming in your terminal",
     "url": "https://aider.chat/",
     "domain": "aider.chat",
-    "favicon": "https://aider.chat/favicon.ico",
+    "favicon": "",
     "platforms": [
       "cli",
       "web"
@@ -46,9 +46,9 @@
   },
   {
     "id": "ai-coding-agent-for-building-ambitious-software",
-    "name": "AI Coding Agent for Building Ambitious Software",
+    "name": "Cursor",
     "category": "coding-agents",
-    "description": "Built to make you extraordinarily productive, agents turn ideas into code. Accelerate development by handing off tasks to Cursor.",
+    "description": "AI code editor and coding agent that writes, reviews, and refactors code across desktop, terminal, and web.",
     "bestFor": [
       "AI-assisted software development"
     ],
@@ -1042,7 +1042,7 @@
     ],
     "url": "https://replit.com/",
     "domain": "replit.com",
-    "favicon": "https://replit.com/favicon.ico",
+    "favicon": "https://replit.com/public/icons/favicon-prompt-192-rebrand.png",
     "platforms": [
       "web",
       "mobile"
@@ -1223,9 +1223,9 @@
       "Generated code often benefits from refinement before being used in a production codebase.",
       "The tool is primarily for React/Next.js and does not natively support other frameworks like Vue or Angular."
     ],
-    "url": "https://v0.dev/",
-    "domain": "v0.dev",
-    "favicon": "https://v0.dev/favicon.ico",
+    "url": "https://v0.app/",
+    "domain": "v0.app",
+    "favicon": "https://v0.app/assets/apple-icon.png",
     "platforms": [
       "web",
       "api"
@@ -1259,7 +1259,7 @@
     "updatedAt": "2026-08-30",
     "lastVerifiedAt": "2026-08-30",
     "sources": [
-      "https://v0.dev/",
+      "https://v0.app/",
       "https://v0.app/docs/api/v1/packages/ai-tools"
     ]
   },
@@ -1292,7 +1292,7 @@
     ],
     "url": "https://continue.dev/",
     "domain": "continue.dev",
-    "favicon": "https://continue.dev/favicon.ico",
+    "favicon": "https://continue.dev/favicon.png",
     "platforms": [
       "vscode",
       "desktop"
@@ -1716,9 +1716,9 @@
       "Session state and memory can be managed using various services like `InMemorySessionService` for development or `FirestoreSessionService` for production .",
       "Agents can be deployed to various environments, including Cloud Run, GKE, and Vertex AI Agent Engine ."
     ],
-    "url": "https://google.github.io/adk-docs",
-    "domain": "google.github.io",
-    "favicon": "https://google.github.io/adk-docs/favicon.ico",
+    "url": "https://adk.dev/",
+    "domain": "adk.dev",
+    "favicon": "https://adk.dev/assets/agent-development-kit.png",
     "platforms": [
       "cli",
       "api",
@@ -1759,14 +1759,13 @@
       "gemini-2.5-pro"
     ],
     "github": "https://github.com/google/adk-python",
-    "docs": "https://google.github.io/adk-docs/",
+    "docs": "https://adk.dev/",
     "addedAt": "2026-08-30",
     "updatedAt": "2026-08-30",
     "lastVerifiedAt": "2026-08-30",
     "sources": [
-      "https://google.github.io/adk-docs",
-      "https://github.com/google/adk-python",
-      "https://google.github.io/adk-docs/"
+      "https://adk.dev/",
+      "https://github.com/google/adk-python"
     ]
   },
   {
@@ -1959,7 +1958,7 @@
     ],
     "url": "https://mastra.ai/",
     "domain": "mastra.ai",
-    "favicon": "https://mastra.ai/favicon.ico",
+    "favicon": "https://mastra.ai/favicon/new-brand/icon.svg",
     "platforms": [
       "web",
       "cli",
@@ -2041,7 +2040,7 @@
     ],
     "url": "https://www.perplexity.ai/",
     "domain": "perplexity.ai",
-    "favicon": "https://www.perplexity.ai/favicon.ico",
+    "favicon": "https://www.perplexity.ai/favicon.svg",
     "platforms": [
       "web",
       "mobile",
@@ -2249,7 +2248,7 @@
     ],
     "url": "https://felo.ai/",
     "domain": "felo.ai",
-    "favicon": "https://felo.ai/favicon.ico",
+    "favicon": "https://felo.ai/icon.ico",
     "platforms": [
       "web",
       "mobile",
@@ -2446,7 +2445,7 @@
     ],
     "url": "https://notebooklm.google.com/",
     "domain": "notebooklm.google.com",
-    "favicon": "https://notebooklm.google.com/favicon.ico",
+    "favicon": "",
     "platforms": [
       "web",
       "mobile"
@@ -2570,7 +2569,7 @@
     ],
     "url": "https://www.researchrabbit.ai/",
     "domain": "researchrabbit.ai",
-    "favicon": "https://www.researchrabbit.ai/favicon.ico",
+    "favicon": "https://cdn.prod.website-files.com/68367775ca3b1655a71e1698/68f169d618fea3828326bbe2_RR_icon_256.png",
     "platforms": [
       "web"
     ],
@@ -3116,9 +3115,7 @@
       "General-purpose AI assistance"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A mobile app is available.",
@@ -3169,9 +3166,7 @@
       "General-purpose AI assistance"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A mobile app is available."
@@ -3217,9 +3212,7 @@
       "General-purpose AI assistance"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A mobile app is available."
@@ -3265,9 +3258,7 @@
       "General-purpose AI assistance"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A mobile app is available.",
@@ -3407,9 +3398,7 @@
       "General-purpose AI assistance"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A mobile app is available.",
@@ -3552,9 +3541,7 @@
       "General-purpose AI assistance"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A mobile app is available.",
@@ -3605,9 +3592,7 @@
       "Open-source",
       "Free to use"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -3652,9 +3637,7 @@
       "Developer tooling"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -3700,9 +3683,7 @@
       "Research and information work"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -3790,9 +3771,7 @@
     "strengths": [
       "Terminal workflow support"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "Use from a terminal or command-line workflow."
     ],
@@ -3840,9 +3819,7 @@
     "strengths": [
       "Terminal workflow support"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "Use from a terminal or command-line workflow.",
       "A web interface is available.",
@@ -3894,9 +3871,7 @@
       "AI-assisted software development"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -3942,9 +3917,7 @@
       "Building applications without managing infrastructure"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -3989,9 +3962,7 @@
       "Building applications without managing infrastructure"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -4036,9 +4007,7 @@
       "Developer tooling"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "Use from a terminal or command-line workflow."
@@ -4084,9 +4053,7 @@
       "Testing and code quality"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "Works inside VS Code.",
       "A web interface is available.",
@@ -4134,9 +4101,7 @@
       "AI-assisted software development"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "Works inside VS Code."
     ],
@@ -4183,9 +4148,7 @@
     "strengths": [
       "Terminal workflow support"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "Use from a terminal or command-line workflow.",
       "A desktop application is available."
@@ -4231,9 +4194,7 @@
       "AI-assisted software development"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A desktop application is available."
     ],
@@ -4280,9 +4241,7 @@
       "Open-source",
       "Free to use"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "Works inside VS Code."
     ],
@@ -4327,9 +4286,7 @@
       "AI-assisted software development"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "Works inside VS Code.",
       "A web interface is available."
@@ -4376,9 +4333,7 @@
     "strengths": [
       "Self-hostable"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "Works inside VS Code.",
       "Use from a terminal or command-line workflow."
@@ -4471,9 +4426,7 @@
     "strengths": [
       "Open-source"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A desktop application is available."
     ],
@@ -4520,9 +4473,7 @@
     "strengths": [
       "Terminal workflow support"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "Works inside VS Code.",
       "Use from a terminal or command-line workflow."
@@ -4568,9 +4519,7 @@
       "AI-assisted software development"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "Works inside VS Code."
     ],
@@ -4618,9 +4567,7 @@
       "Terminal workflow support",
       "Free to use"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "Use from a terminal or command-line workflow."
     ],
@@ -4664,9 +4611,7 @@
       "Developer tooling"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -4712,9 +4657,7 @@
     "strengths": [
       "Terminal workflow support"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "Use from a terminal or command-line workflow.",
       "A web interface is available."
@@ -4755,14 +4698,12 @@
     "id": "vertex-ai",
     "name": "Vertex AI",
     "category": "hosting",
-    "description": "Google Cloud platform for training, tuning, and serving models through managed APIs.",
+    "description": "Google Cloud platform for building, running, and governing AI agents and models, formerly named Vertex AI.",
     "bestFor": [
       "Running model and GPU workloads"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -4790,13 +4731,13 @@
     "commands": [],
     "models": [],
     "github": "",
-    "docs": "https://cloud.google.com/vertex-ai/docs",
+    "docs": "https://docs.cloud.google.com/gemini-enterprise-agent-platform",
     "addedAt": "2026-09-12",
     "updatedAt": "2026-09-12",
     "lastVerifiedAt": "2026-09-12",
     "sources": [
       "https://cloud.google.com/products/gemini-enterprise-agent-platform",
-      "https://cloud.google.com/vertex-ai/docs"
+      "https://docs.cloud.google.com/gemini-enterprise-agent-platform"
     ]
   },
   {
@@ -4808,9 +4749,7 @@
       "Running model and GPU workloads"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -4856,9 +4795,7 @@
       "Running model and GPU workloads"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -4947,9 +4884,7 @@
       "Automating repetitive business workflows"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -4993,9 +4928,7 @@
       "Automating repetitive business workflows"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -5038,9 +4971,7 @@
       "Automating repetitive business workflows"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -5083,9 +5014,7 @@
       "Automating repetitive business workflows"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -5132,9 +5061,7 @@
       "Open-source",
       "Self-hostable"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -5181,9 +5108,7 @@
       "Automating repetitive business workflows"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -5312,9 +5237,7 @@
       "Automating repetitive business workflows"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -5363,9 +5286,7 @@
       "Open-source",
       "Self-hostable"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -5413,9 +5334,7 @@
     "strengths": [
       "Open-source"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -5465,9 +5384,7 @@
     "strengths": [
       "Open-source"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -5517,9 +5434,7 @@
       "Open-source",
       "Free to use"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -5566,9 +5481,7 @@
       "Building and orchestrating LLM or agent workflows"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -5614,9 +5527,7 @@
       "Automating repetitive business workflows"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -5660,9 +5571,7 @@
       "Automating repetitive business workflows"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -5707,9 +5616,7 @@
       "Developer tooling"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -5752,9 +5659,7 @@
       "Developer tooling"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -5797,9 +5702,7 @@
       "Handling customer support conversations"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -5884,9 +5787,7 @@
       "Automating tasks in a real browser"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -5935,9 +5836,7 @@
       "Open-source",
       "Free to use"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -5985,9 +5884,7 @@
     "strengths": [
       "Open-source"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -6036,9 +5933,7 @@
     "strengths": [
       "Open-source"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -6087,9 +5982,7 @@
     "strengths": [
       "Open-source"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -6135,9 +6028,7 @@
       "Automating tasks in a real browser"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -6230,9 +6121,7 @@
       "Meeting notes and follow-ups"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A mobile app is available.",
@@ -6325,9 +6214,7 @@
       "Meeting notes and follow-ups"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A desktop application is available.",
       "A mobile app is available."
@@ -6417,9 +6304,7 @@
       "Meeting notes and follow-ups"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A mobile app is available."
@@ -6465,9 +6350,7 @@
       "Meeting notes and follow-ups"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A mobile app is available."
@@ -6861,9 +6744,7 @@
       "Meeting notes and follow-ups"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A mobile app is available."
@@ -6953,9 +6834,7 @@
       "Drafting and editing written work"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A browser extension is available.",
       "A web interface is available.",
@@ -7139,9 +7018,7 @@
       "Marketing content and campaigns"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -7186,9 +7063,7 @@
       "Drafting and editing written work"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -7234,9 +7109,7 @@
       "Everyday knowledge work"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A desktop application is available.",
@@ -7284,9 +7157,7 @@
       "Drafting and editing written work"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -7329,9 +7200,7 @@
       "Marketing content and campaigns"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -7420,9 +7289,7 @@
       "Marketing content and campaigns"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -7681,9 +7548,7 @@
     "strengths": [
       "Open-source"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A browser extension is available.",
       "A web interface is available.",
@@ -7774,9 +7639,7 @@
       "Creating slide decks"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -7861,9 +7724,7 @@
       "Creating slide decks"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A desktop application is available."
@@ -8202,9 +8063,7 @@
       "Creating and editing images"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A mobile app is available.",
@@ -8251,9 +8110,7 @@
       "Creating and editing images"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -8298,9 +8155,7 @@
       "Creating and editing images"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -8345,9 +8200,7 @@
       "Creating and editing images"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -8391,9 +8244,7 @@
       "Creating and editing images"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -8486,9 +8337,9 @@
       "A web interface is available.",
       "An API is available for integration."
     ],
-    "url": "https://www.magnific.com/ai",
-    "domain": "magnific.com",
-    "favicon": "https://media.magnific.com/magnific-favicons/apple-touch-icon.png",
+    "url": "https://www.freepik.com/ai",
+    "domain": "freepik.com",
+    "favicon": "https://www.freepik.com/favicon.ico",
     "platforms": [
       "web",
       "api"
@@ -8513,7 +8364,7 @@
     "updatedAt": "2026-09-12",
     "lastVerifiedAt": "2026-09-12",
     "sources": [
-      "https://www.magnific.com/ai"
+      "https://www.freepik.com/ai"
     ]
   },
   {
@@ -8525,9 +8376,7 @@
       "Creating and editing images"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A mobile app is available.",
@@ -8620,9 +8469,7 @@
     "strengths": [
       "Open-source"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -8755,9 +8602,7 @@
       "Design and interface work"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A desktop application is available."
@@ -8803,9 +8648,7 @@
       "Design and interface work"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -8848,9 +8691,7 @@
       "Design and interface work"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -9019,9 +8860,7 @@
       "Creating and editing video"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -9066,9 +8905,7 @@
       "Creating and editing video"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A mobile app is available.",
@@ -9157,9 +8994,7 @@
       "Creating and editing video"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -9203,9 +9038,7 @@
       "Creating and editing video"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -9251,9 +9084,7 @@
       "Creating and editing video"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -9427,9 +9258,7 @@
       "Creating and editing video"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -9515,16 +9344,14 @@
       "Creating and editing video"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A mobile app is available."
     ],
     "url": "https://invideo.io/",
     "domain": "invideo.io",
-    "favicon": "https://invideo.io/favicon.ico",
+    "favicon": "https://web-assets.invideo.io/favicons/prod/black_favicon.ico",
     "platforms": [
       "web",
       "mobile"
@@ -9607,9 +9434,7 @@
       "Creating and editing video"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -9652,9 +9477,7 @@
       "Creating and editing video"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -9698,9 +9521,7 @@
       "Creating and editing video"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -9745,9 +9566,7 @@
       "Speech synthesis, transcription, and voice agents"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -9793,9 +9612,7 @@
       "Speech synthesis, transcription, and voice agents"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -9930,9 +9747,7 @@
       "Speech synthesis, transcription, and voice agents"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -9977,9 +9792,7 @@
       "Editing and processing audio"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A desktop application is available."
@@ -10024,9 +9837,7 @@
       "Speech synthesis, transcription, and voice agents"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -10071,9 +9882,7 @@
       "Speech synthesis, transcription, and voice agents"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -10118,9 +9927,7 @@
       "Speech synthesis, transcription, and voice agents"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -10165,9 +9972,7 @@
       "Speech synthesis, transcription, and voice agents"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -10212,9 +10017,7 @@
       "Speech synthesis, transcription, and voice agents"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -10258,9 +10061,7 @@
       "Speech synthesis, transcription, and voice agents"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -10305,9 +10106,7 @@
       "Speech synthesis, transcription, and voice agents"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -10351,9 +10150,7 @@
       "Speech synthesis, transcription, and voice agents"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -10398,9 +10195,7 @@
       "Speech synthesis, transcription, and voice agents"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -10658,9 +10453,7 @@
       "Editing and processing audio"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -10751,9 +10544,7 @@
       "Terminal workflow support",
       "Free to use"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "Use from a terminal or command-line workflow.",
       "A desktop application is available.",
@@ -10852,9 +10643,7 @@
       "Open-source",
       "Free to use"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A desktop application is available."
     ],
@@ -10902,9 +10691,7 @@
       "Open-source",
       "Free to use"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A desktop application is available."
     ],
@@ -10952,9 +10739,7 @@
       "Open-source",
       "Free to use"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A desktop application is available.",
       "A web interface is available."
@@ -11005,9 +10790,7 @@
       "Self-hostable",
       "Free to use"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -11052,9 +10835,7 @@
       "Running models locally instead of in the cloud"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A desktop application is available."
     ],
@@ -11100,9 +10881,7 @@
       "Open-source",
       "Free to use"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A desktop application is available."
     ],
@@ -11151,9 +10930,7 @@
       "Self-hostable",
       "Free to use"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration."
     ],
@@ -11202,9 +10979,7 @@
       "Self-hostable",
       "Free to use"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -11249,9 +11024,7 @@
       "Running models locally instead of in the cloud"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A desktop application is available."
     ],
@@ -11299,9 +11072,7 @@
       "Terminal workflow support",
       "Free to use"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "Use from a terminal or command-line workflow.",
       "A desktop application is available."
@@ -11350,9 +11121,7 @@
       "Open-source",
       "Free to use"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "Use from a terminal or command-line workflow.",
       "An API is available for integration."
@@ -11401,9 +11170,7 @@
       "Open-source",
       "Free to use"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration."
     ],
@@ -11448,9 +11215,7 @@
       "Serving models through an API"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -11495,9 +11260,7 @@
       "Serving models through an API"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -11543,9 +11306,7 @@
       "Serving models through an API"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -11592,9 +11353,7 @@
       "Serving models through an API"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -11640,9 +11399,7 @@
       "Serving models through an API"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -11688,9 +11445,7 @@
       "Serving models through an API"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -11737,9 +11492,7 @@
       "Serving models through an API"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -11784,9 +11537,7 @@
       "Serving models through an API"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -11831,9 +11582,7 @@
       "Serving models through an API"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -11878,9 +11627,7 @@
       "Serving models through an API"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -11925,9 +11672,7 @@
       "Serving models through an API"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -11972,9 +11717,7 @@
       "Serving models through an API"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -12019,9 +11762,7 @@
       "Serving models through an API"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -12066,9 +11807,7 @@
       "Running model and GPU workloads"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available.",
@@ -12115,9 +11854,7 @@
       "Running model and GPU workloads"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available.",
@@ -12163,9 +11900,7 @@
       "Running model and GPU workloads"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available.",
@@ -12213,9 +11948,7 @@
       "Serving models through an API"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -12261,9 +11994,7 @@
       "Running model and GPU workloads"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -12309,9 +12040,7 @@
       "Storing and searching embeddings or vectors"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -12359,9 +12088,7 @@
     "strengths": [
       "Open-source"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -12410,9 +12137,7 @@
     "strengths": [
       "Open-source"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -12509,9 +12234,7 @@
     "strengths": [
       "Open-source"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -12558,9 +12281,7 @@
       "Monitoring and evaluating AI features"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -12608,9 +12329,7 @@
     "strengths": [
       "Open-source"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -12659,9 +12378,7 @@
     "strengths": [
       "Open-source"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -12708,9 +12425,7 @@
       "Monitoring and evaluating AI features"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -12755,9 +12470,7 @@
       "Monitoring and evaluating AI features"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -12803,9 +12516,7 @@
       "Monitoring and evaluating AI features"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -12851,9 +12562,7 @@
       "Monitoring and evaluating AI features"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -12898,9 +12607,7 @@
       "Monitoring and evaluating AI features"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -12945,9 +12652,7 @@
       "Giving models access to your own data"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -12993,9 +12698,7 @@
       "Giving models access to your own data"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -13040,9 +12743,7 @@
       "Giving models access to your own data"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -13090,9 +12791,7 @@
     "strengths": [
       "Open-source"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -13142,9 +12841,7 @@
       "Open-source",
       "Free to use"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -13234,9 +12931,7 @@
       "Analyzing business data"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -13371,9 +13066,7 @@
     "strengths": [
       "Open-source"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -13413,25 +13106,23 @@
   },
   {
     "id": "mindsdb",
-    "name": "MindsDB",
+    "name": "MindsHub",
     "category": "data-analysis",
-    "description": "Platform that runs predictions and AI queries across connected databases.",
+    "description": "Platform for running open-source AI agents and querying connected data sources; formerly MindsDB.",
     "bestFor": [
       "Analyzing business data"
     ],
     "strengths": [
       "Open-source"
     ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
     ],
     "url": "https://mindshub.ai/",
     "domain": "mindshub.ai",
-    "favicon": "",
+    "favicon": "https://mindshub.ai/favicon.svg",
     "platforms": [
       "web",
       "api"
@@ -13470,9 +13161,7 @@
       "Analyzing business data"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -13518,9 +13207,7 @@
       "Analyzing business data"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -13609,9 +13296,7 @@
       "Everyday knowledge work"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -13740,9 +13425,7 @@
       "Handling customer support conversations"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -13785,9 +13468,7 @@
       "Handling customer support conversations"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -13913,9 +13594,7 @@
       "Handling customer support conversations"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -13960,9 +13639,7 @@
       "Handling customer support conversations"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -14089,9 +13766,7 @@
       "Handling customer support conversations"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -14134,9 +13809,7 @@
       "Prospecting, outreach, and deal work"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -14182,9 +13855,7 @@
       "Marketing content and campaigns"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -14227,9 +13898,7 @@
       "Prospecting, outreach, and deal work"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -14316,9 +13985,7 @@
       "Prospecting, outreach, and deal work"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -14532,9 +14199,7 @@
       "Prospecting, outreach, and deal work"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -14787,9 +14452,7 @@
       "Extracting data from documents"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -14879,9 +14542,7 @@
       "Extracting data from documents"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -14927,9 +14588,7 @@
       "Extracting data from documents"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "An API is available for integration.",
       "A web interface is available."
@@ -15062,9 +14721,7 @@
       "Extracting data from documents"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -15153,9 +14810,7 @@
       "Translation and localization"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A mobile app is available.",
@@ -15331,9 +14986,7 @@
       "Translation and localization"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -15378,9 +15031,7 @@
       "Translation and localization"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration.",
@@ -15427,9 +15078,7 @@
       "Translation and localization"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -15474,9 +15123,7 @@
       "Creating 3D assets"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -15565,9 +15212,7 @@
       "Creating 3D assets"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "A desktop application is available."
@@ -15654,9 +15299,7 @@
       "Creating 3D assets"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available.",
       "An API is available for integration."
@@ -15911,9 +15554,7 @@
       "Legal research, drafting, and contract work"
     ],
     "strengths": [],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
+    "gettingStarted": [],
     "usageNotes": [
       "A web interface is available."
     ],
@@ -16751,55 +16392,6 @@
     "lastVerifiedAt": "2026-09-12",
     "sources": [
       "https://www.questionai.com/"
-    ]
-  },
-  {
-    "id": "socratic",
-    "name": "Socratic",
-    "category": "education",
-    "description": "Google's homework help app that explains concepts from text, voice, and photos.",
-    "bestFor": [
-      "Teaching and studying"
-    ],
-    "strengths": [
-      "Free to use"
-    ],
-    "gettingStarted": [
-      "Open the official documentation for verified next steps."
-    ],
-    "usageNotes": [
-      "A mobile app is available.",
-      "A web interface is available."
-    ],
-    "url": "https://lens.google/",
-    "domain": "lens.google",
-    "favicon": "https://lh3.googleusercontent.com/H65Hxq0ooUCcwhoRGU-fwoXqrGS58mwa2vtr2ZfhGgJzMU0uYybOrZVBs8jydtR22TRC1k9XwDMD2xHB5BBU4IyXW7oH8PyCsq46uX6A42CmXP5GDZ2d",
-    "platforms": [
-      "mobile",
-      "web"
-    ],
-    "executionMode": "cloud",
-    "signupRequirement": "required",
-    "apiKeyRequirement": "not-required",
-    "pricing": "free",
-    "priceDetails": "",
-    "tags": [
-      "homework",
-      "google",
-      "study"
-    ],
-    "install": "",
-    "start": "",
-    "commands": [],
-    "models": [],
-    "github": "",
-    "docs": "https://support.google.com/socratic",
-    "addedAt": "2026-09-12",
-    "updatedAt": "2026-09-12",
-    "lastVerifiedAt": "2026-09-12",
-    "sources": [
-      "https://lens.google/",
-      "https://support.google.com/socratic"
     ]
   }
 ]
