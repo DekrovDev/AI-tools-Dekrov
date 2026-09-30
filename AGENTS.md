@@ -4,12 +4,28 @@ This is a static catalog. Public tool data lives in `data/tools.json`; optional
 setup sources live in `data/setup-recipes.json`. Install with `npm ci`; validate
 with `npm test`. Do not change unrelated frontend code while maintaining links.
 
-## Automated source repair (GitHub Issues / MCP)
+## Source repair (GitHub Issues / Codex Cloud)
 
 Read **[docs/source-repair.md](docs/source-repair.md)** before acting on any
-`source-recheck` Issue. The repository contains the checker and a guarded repair
-CLI; the external operator provides Codex scheduling, GitHub/MCP access and git/PR
-credentials. Do not invent an event subscription or assume MCP alone runs you.
+`source-recheck` Issue. For a manual Codex Cloud task, also read
+[docs/codex-cloud.md](docs/codex-cloud.md),
+[docs/codex-source-resolver-task.md](docs/codex-source-resolver-task.md), and
+[docs/codex-automation-handoff.md](docs/codex-automation-handoff.md). The
+repository contains the checker and guarded repair CLI; the external operator
+provides task invocation, authenticated GitHub access, and trusted report
+handoff. Do not invent an event subscription or assume an Issue or MCP event
+automatically starts Codex.
+
+For the manual Cloud flow, read the current Issue and obtain the matching
+`source-recheck-report-v2` artifact from a completed successful
+`source-recheck.yml` run on this repository's default branch through an
+authenticated GitHub/operator layer. Arbitrary JSON, including AI-generated
+JSON, is not a trusted report. Verify its provenance before passing it to the
+CLI; the CLI checks structure and Issue/report consistency but does not
+authenticate to GitHub or establish artifact provenance. Fail closed if the
+trusted artifact, current Issue, required access, or exact finding match is
+missing. An external trigger is not repository logic and is intentionally not
+implemented here.
 
 Safety and completion requirements:
 

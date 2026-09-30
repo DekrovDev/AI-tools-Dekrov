@@ -145,9 +145,13 @@ No PAT or paid service is needed. Enable Actions/schedules in a fork and push th
 workflow to its default branch; GitHub can disable schedules on inactive repos.
 Existing upstream Issues are not copied into a fork.
 
-A separate future branch/PR resolver will need `contents: write`,
-`pull-requests: write`, an explicitly configured AI-provider credential or GitHub
-App as appropriate, bounded retries/budget, branch protection and required tests.
-If PRs created by `GITHUB_TOKEN` need to trigger further workflows, use an
-appropriately scoped GitHub App token or an explicit trusted validation workflow.
-Keep these permissions out of the read-only source checker.
+A separately invoked Codex Cloud resolver needs repository-scoped read access,
+Issues read, Actions runs/artifacts read, PR read, write access to its generated
+repair branch, and PR create/update permission; Issue comment permission is
+optional. See [the manual Cloud handoff](codex-automation-handoff.md). These
+permissions belong to the connected GitHub account/integration or external
+operator, not this read-only checker. The repository does not require an
+OpenAI API key or implement the external task trigger. Keep resolver write
+permissions out of the source-check workflow. If a future trigger uses a
+`GITHUB_TOKEN` and needs to start further workflows, design that separately with
+an appropriately scoped GitHub App token or explicit trusted validation.

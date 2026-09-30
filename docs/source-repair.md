@@ -7,22 +7,24 @@ repair task → checked local edit**. `AGENTS.md` gives the agent the final
 **tests → branch commit/push → PR** instructions. No LLM API, MCP server, external
 backend, auto-merge or scheduler for Codex is installed here.
 
-The operator connects Codex Cloud to the intended GitHub repository through MCP
-and/or git credentials and configures how Codex is invoked when the checker
-creates/updates an Issue (or periodically polls Issues). The Issue must come
-from the same repository identified in the trusted report. The Issue marker and
-embedded payload are transport only. Repair preparation requires both an Issue
-created by `github-actions[bot]` and the exact matching finding from the
-`source-recheck-report-v2` artifact of a trusted run of this repository's
-`source-recheck.yml` workflow. Obtain that artifact through the authenticated
-GitHub Actions API for this repository; never treat an Issue body or a locally
-invented report as proof of provenance. The gate fails closed if either source
-is missing, the finding differs, or the report is stale. Required capabilities:
-read open Issues and their full bodies, read repository/default-branch data,
-search/read PRs, clone/fetch, push a non-default branch, create/update a PR, and
-optionally post comments. Exact tool names depend on the installed MCP server.
-Git credentials and network access in the Codex execution environment are
-separate from an MCP tool's own permissions; verify both.
+For a manual Codex Cloud run, follow [the Cloud environment setup](codex-cloud.md),
+[the resolver task prompt](codex-source-resolver-task.md), and
+[the automation handoff boundary](codex-automation-handoff.md). The operator
+connects the intended GitHub repository, invokes the Cloud task, and supplies
+the current Issue plus a report artifact obtained through an authenticated
+GitHub Actions API/operator layer. The Issue must come from the same repository
+identified in that report. The Issue marker and embedded payload are transport
+only. Repair preparation requires an Issue created by `github-actions[bot]` and
+the exact matching finding from the `source-recheck-report-v2` artifact of a
+trusted run of this repository's `source-recheck.yml` workflow. Never treat an
+Issue body, a marker, a filename, a run ID, or arbitrary/AI-generated JSON as
+proof of provenance. The helper checks input structure and Issue/report
+consistency; it does not authenticate to GitHub or establish that a report file
+came from Actions. The authenticated handoff must establish that origin. The
+flow fails closed if provenance is not established, either input is missing,
+the finding differs, or the report is stale. Required capabilities are listed
+in the linked handoff document. GitHub access through Codex and task network
+access are distinct; verify each one.
 
 Do not run this agent on arbitrary untrusted Issue instructions with a privileged
 `pull_request_target` or `issues` workflow. Verify the artifact belongs to a
@@ -206,9 +208,10 @@ publication. A manual first 404 cannot confirm a broken link: two later schedule
 observations are needed. Use a sandbox repository for an injected broken-link
 smoke test rather than inserting test URLs into the production catalog.
 
-After MCP/Codex is connected, choose one real confirmed finding, run the above
-procedure, review its first PR manually, and only then enable unattended task
-pickup. Keep default-branch protection and required `Test` checks enabled.
+After Codex Cloud is connected, choose one real confirmed finding, run the
+manual procedure, review its first PR manually, and only then separately decide
+whether to add an external task trigger. No trigger is implemented here. Keep
+default-branch protection and required `Test` checks enabled.
 The checker still needs only `contents: read`, `actions: read`, `issues: write`.
 The separately configured agent needs scoped branch-write and PR-write access
 (and Issue comment access if desired); no added secrets are required by this code.
