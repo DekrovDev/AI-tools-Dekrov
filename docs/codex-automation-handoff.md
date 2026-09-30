@@ -42,9 +42,9 @@ reviewed.
 The resolver needs the current open Issue from `DekrovDev/AI-tools-Dekrov`,
 including its authenticated author and repository identity, and the exact
 finding from the trusted `source-recheck-report-v2` artifact. The artifact must
-come from a completed successful `source-recheck.yml` run on the repository's
-default branch and be obtained through an authenticated GitHub Actions API or
-operator layer.
+come from the latest completed successful `source-recheck.yml` run on the
+repository's default branch and be obtained through an authenticated GitHub
+Actions API or operator layer.
 
 The operator passes the Issue JSON, the report artifact file, and the run/artifact
 identity to Codex Cloud. Arbitrary JSON generated or edited by an AI is never a
