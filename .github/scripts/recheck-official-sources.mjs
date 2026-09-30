@@ -122,7 +122,7 @@ export async function mapBounded(values, limit, work) {
   return results;
 }
 
-export async function buildSourceRecheckReport({ tools, setupRecipes = emptySetupRecipes(), toolId = "", now = new Date(), check = checkDeclaredUrl, concurrency = CHECK_CONCURRENCY, state: inputState, event = "workflow_dispatch", runId = "local" } = {}) {
+export async function buildSourceRecheckReport({ tools, setupRecipes = emptySetupRecipes(), toolId = "", now = new Date(), check = checkDeclaredUrl, concurrency = CHECK_CONCURRENCY, state: inputState, event = "workflow_dispatch", runId = "local", repository = process.env.GITHUB_REPOSITORY || "" } = {}) {
   if (!Array.isArray(tools)) throw new Error("data/tools.json must contain an array.");
   const selectedId = clean(toolId);
   const selected = selectedId ? tools.filter((tool) => tool?.id === selectedId) : tools;
@@ -159,7 +159,7 @@ export async function buildSourceRecheckReport({ tools, setupRecipes = emptySetu
   const staleTools = reportTools.filter((tool) => tool.actionable.some((finding) => finding.type === "verification")).length;
   return {
     schemaVersion: 2,
-    run: { event, runId },
+    run: { event, runId, repository },
     state,
     findings: reportTools.flatMap((tool) => tool.actionable),
     checkedAt: now.toISOString(),

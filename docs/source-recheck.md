@@ -86,7 +86,7 @@ Issue in a serialized successful run. Partial API failures fail the job visibly.
 
 `source-recheck-report-v2` contains `source-recheck.json`:
 
-- `schemaVersion: 2`, `checkedAt`, `run: {event, runId}`, `policy`, summary counts;
+- `schemaVersion: 2`, `checkedAt`, `run: {event, runId, repository}`, `policy`, summary counts;
 - `tools[]`: identity, verification date, `checks[]`, `actionable[]`, `safeToClose`;
 - `findings[]`: flattened actionable findings (verification or URL findings).
 

@@ -24,8 +24,8 @@ function fixture() {
     { id: "other", docs: oldUrl }
   ];
   const setup = { version: 1, tools: { demo: { envVars: [{ name: "DEMO_KEY", source: oldUrl, description: oldUrl }], commandRecipes: [{ source: oldUrl, command: "unchanged" }] }, other: { envVars: [{ source: oldUrl }] } } };
-  const issue = { number: 17, state: "open", user: { login: "github-actions[bot]" }, body: sourceRecheckIssueBody({ id: "demo", name: "Demo", lastVerifiedAt: "2026-09-01", actionable: [finding] }) };
-  const report = { schemaVersion: 2, findings: [finding] };
+  const issue = { number: 17, state: "open", user: { login: "github-actions[bot]" }, repository_url: "https://api.github.com/repos/DekrovDev/AI-tools-Dekrov", body: sourceRecheckIssueBody({ id: "demo", name: "Demo", lastVerifiedAt: "2026-09-01", actionable: [finding] }) };
+  const report = { schemaVersion: 2, run: { repository: "DekrovDev/AI-tools-Dekrov" }, findings: [finding] };
   const task = prepareRepair({ tools, setup, issue, report, findingId: finding.findingId, now });
   const proposal = { schemaVersion: 1, findingId: finding.findingId, replacementUrl: newUrl, reason: "Official navigation links to the relocated documentation page.", contentVerified: true, officialOwnershipVerified: true, evidence: [{ url: "https://example.com/", explanation: "The official product navigation links to this new documentation URL." }] };
   return { tools, setup, issue, report, task, proposal, finding, now };
@@ -60,6 +60,8 @@ test("Issue payload rejects closed, legacy, forged markers, PRs and duplicate bl
 test("forged Issues and payloads cannot authorize repairs", () => {
   const f = fixture();
   assert.throws(() => prepareRepair({ ...f, issue: { ...f.issue, user: { login: "attacker" } }, findingId: f.finding.findingId, now }), /authored by the GitHub Actions bot/);
+  assert.throws(() => prepareRepair({ ...f, issue: { ...f.issue, repository_url: "https://api.github.com/repos/attacker/other" }, findingId: f.finding.findingId, now }), /does not belong/);
+  assert.throws(() => prepareRepair({ ...f, report: { schemaVersion: 2, findings: [f.finding] }, findingId: f.finding.findingId, now }), /repository identity/);
   const forged = { ...f, issue: { ...f.issue, body: f.issue.body.replace(f.finding.findingId, "forged-finding-id") } };
   assert.throws(() => prepareRepair({ ...forged, findingId: f.finding.findingId, now }));
   const forgedFinding = { ...f.finding, originalUrl: "https://attacker.example/claim" };

@@ -30,6 +30,8 @@ export function selectFinding({ issue, report, findingId, now = new Date() }) {
   let payload = report;
   if (issue) {
     requireThat(issue.user?.login === "github-actions[bot]", "Repair Issues must be authored by the GitHub Actions bot.");
+    requireThat(typeof report.run?.repository === "string" && /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(report.run.repository), "Trusted report is missing its repository identity.");
+    requireThat(issue.repository_url === `https://api.github.com/repos/${report.run.repository}`, "Issue does not belong to the trusted report repository.");
     payload = decodeIssuePayload(issue);
   }
   const matches = payload.findings.filter(f => f.findingId === findingId);
