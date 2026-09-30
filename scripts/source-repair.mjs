@@ -102,9 +102,9 @@ export async function runRepairCli(argv = process.argv.slice(2)) {
   }
   let result;
   if (args.command === "prepare") {
-    if (!args.output || !args.finding || Boolean(args.issue) === Boolean(args.report)) throw new Error("Prepare requires --finding, --output and exactly one --issue/--report.");
+    if (!args.output || !args.finding || !args.report) throw new Error("Prepare requires --finding, --output and --report <trusted source-recheck artifact>; --issue is optional.");
     const input = await readInputs(ROOT);
-    result = prepareRepair({ ...input, findingId: args.finding, issue: args.issue ? await jsonFile(args.issue) : undefined, report: args.report ? await jsonFile(args.report) : undefined });
+    result = prepareRepair({ ...input, findingId: args.finding, issue: args.issue ? await jsonFile(args.issue) : undefined, report: await jsonFile(args.report) });
   } else {
     result = await applyRepairFiles({ task: await jsonFile(args.task), proposal: await jsonFile(args.proposal), write: args.write === true });
   }

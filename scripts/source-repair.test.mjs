@@ -24,10 +24,11 @@ function fixture() {
     { id: "other", docs: oldUrl }
   ];
   const setup = { version: 1, tools: { demo: { envVars: [{ name: "DEMO_KEY", source: oldUrl, description: oldUrl }], commandRecipes: [{ source: oldUrl, command: "unchanged" }] }, other: { envVars: [{ source: oldUrl }] } } };
-  const issue = { number: 17, state: "open", body: sourceRecheckIssueBody({ id: "demo", name: "Demo", lastVerifiedAt: "2026-09-01", actionable: [finding] }) };
-  const task = prepareRepair({ tools, setup, issue, findingId: finding.findingId, now });
+  const issue = { number: 17, state: "open", user: { login: "github-actions[bot]" }, body: sourceRecheckIssueBody({ id: "demo", name: "Demo", lastVerifiedAt: "2026-09-01", actionable: [finding] }) };
+  const report = { schemaVersion: 2, findings: [finding] };
+  const task = prepareRepair({ tools, setup, issue, report, findingId: finding.findingId, now });
   const proposal = { schemaVersion: 1, findingId: finding.findingId, replacementUrl: newUrl, reason: "Official navigation links to the relocated documentation page.", contentVerified: true, officialOwnershipVerified: true, evidence: [{ url: "https://example.com/", explanation: "The official product navigation links to this new documentation URL." }] };
-  return { tools, setup, issue, task, proposal, finding, now };
+  return { tools, setup, issue, report, task, proposal, finding, now };
 }
 const healthy = url => ({ classification: "healthy", finalStatus: 200, finalUrl: url, redirects: 0 });
 const network = async ({ url }) => url === oldUrl ? { classification: "hard-broken", finalStatus: 404, finalUrl: url } : healthy(url);
@@ -54,6 +55,18 @@ test("Issue payload rejects closed, legacy, forged markers, PRs and duplicate bl
   ]) assert.throws(() => decodeIssuePayload(issue));
   assert.throws(() => prepareRepair({ ...f, findingId: "missing" }));
   assert.throws(() => prepareRepair({ ...f, issue: undefined, report: { schemaVersion: 9, findings: [f.finding] }, findingId: f.finding.findingId }));
+});
+
+test("forged Issues and payloads cannot authorize repairs", () => {
+  const f = fixture();
+  assert.throws(() => prepareRepair({ ...f, issue: { ...f.issue, user: { login: "attacker" } }, findingId: f.finding.findingId, now }), /authored by the GitHub Actions bot/);
+  const forged = { ...f, issue: { ...f.issue, body: f.issue.body.replace(f.finding.findingId, "forged-finding-id") } };
+  assert.throws(() => prepareRepair({ ...forged, findingId: f.finding.findingId, now }));
+  const forgedFinding = { ...f.finding, originalUrl: "https://attacker.example/claim" };
+  const forgedReport = { schemaVersion: 2, findings: [forgedFinding] };
+  assert.throws(() => prepareRepair({ ...f, report: forgedReport, findingId: f.finding.findingId, now }));
+  assert.throws(() => prepareRepair({ ...f, report: { schemaVersion: 2, findings: [] }, findingId: f.finding.findingId, now }));
+  assert.throws(() => prepareRepair({ ...f, report: undefined, findingId: f.finding.findingId, now }), /trusted source-recheck report artifact/);
 });
 
 test("payload encoding escapes markdown/HTML and enforces bounded size", () => {

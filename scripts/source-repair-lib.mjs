@@ -25,12 +25,21 @@ export function validateFinding(finding, now = new Date()) {
 }
 
 export function selectFinding({ issue, report, findingId, now = new Date() }) {
-  requireThat(Boolean(issue) !== Boolean(report), "Supply exactly one Issue or report.");
-  const payload = issue ? decodeIssuePayload(issue) : report;
-  if (report) requireThat(report.schemaVersion === 2 && Array.isArray(report.findings), "Expected a source-recheck v2 report.");
+  requireThat(Boolean(report), "A trusted source-recheck report artifact is required.");
+  requireThat(report.schemaVersion === 2 && Array.isArray(report.findings), "Expected a source-recheck v2 report.");
+  let payload = report;
+  if (issue) {
+    requireThat(issue.user?.login === "github-actions[bot]", "Repair Issues must be authored by the GitHub Actions bot.");
+    payload = decodeIssuePayload(issue);
+  }
   const matches = payload.findings.filter(f => f.findingId === findingId);
   requireThat(matches.length === 1, "Finding must appear exactly once in the current payload.");
-  return validateFinding(matches[0], now);
+  const finding = validateFinding(matches[0], now);
+  if (issue) {
+    const trustedMatches = report.findings.filter(f => f.findingId === findingId);
+    requireThat(trustedMatches.length === 1 && same(trustedMatches[0], finding), "Issue finding does not match the trusted source-recheck report artifact.");
+  }
+  return finding;
 }
 
 function toolContext(tools, setup, toolId) {
