@@ -2107,7 +2107,7 @@
     "sources": [
       "https://ai.pydantic.dev/",
       "https://github.com/pydantic/pydantic-ai",
-      "https://ai.pydantic.dev/api/agents/",
+      "https://pydantic.dev/docs/ai/api/pydantic-ai/agent/",
       "https://ai.pydantic.dev/tools/",
       "https://ai.pydantic.dev/graph/beta/decisions/"
     ]
