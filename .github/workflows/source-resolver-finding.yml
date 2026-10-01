@@ -1,0 +1,153 @@
+name: Guarded source resolver finding
+
+on:
+  workflow_call:
+    inputs:
+      item:
+        required: true
+        type: string
+    secrets:
+      resolver-api-key:
+        required: true
+
+permissions: {}
+
+jobs:
+  research:
+    if: >-
+      github.repository == 'DekrovDev/AI-tools-Dekrov' &&
+      github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
+      (github.event_name == 'workflow_run' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    outputs:
+      result: ${{ steps.codex.outputs.final-message }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          ref: ${{ fromJSON(inputs.item).provenance.baseSha }}
+          persist-credentials: false
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: 24
+      - name: Prepare data-only prompt and isolated bounded API gate
+        id: gate
+        env:
+          RESOLVER_ITEM: ${{ inputs.item }}
+          RESOLVER_RUNTIME: ${{ runner.temp }}
+          API_KEY: ${{ secrets.resolver-api-key }}
+        run: |
+          set -euo pipefail
+          test -n "$API_KEY"
+          node scripts/source-resolver.mjs prompt
+          mkdir -p "$RUNNER_TEMP/resolver-codex-home"
+          cat > "$RUNNER_TEMP/resolver-codex-home/config.toml" <<'TOML'
+          default_permissions = "research"
+          web_search = "disabled"
+          [features]
+          network_proxy = true
+          [permissions.research]
+          extends = ":read-only"
+          [permissions.research.network]
+          enabled = true
+          allow_local_binding = false
+          [permissions.research.network.domains]
+          "*" = "allow"
+          "127.0.0.1" = "allow"
+          "api.openai.com" = "deny"
+          TOML
+          gate_token="$(node -e 'console.log(require("crypto").randomBytes(32).toString("hex"))')"
+          echo "::add-mask::$gate_token"
+          echo "token=$gate_token" >> "$GITHUB_OUTPUT"
+          sudo mkdir /opt/source-resolver-budget
+          sudo cp -R scripts .github /opt/source-resolver-budget/
+          printf '%s' "$gate_token" | sudo tee /opt/source-resolver-budget/gate-token >/dev/null
+          sudo chown -R root:root /opt/source-resolver-budget
+          sudo chmod -R go-w /opt/source-resolver-budget
+          sudo chmod 600 /opt/source-resolver-budget/gate-token
+          node scripts/source-resolver-gate-start.mjs
+          for attempt in {1..10}; do
+            if curl --silent --output /dev/null http://127.0.0.1:8201/; then break; fi
+            sleep 1
+          done
+          curl --silent --output /dev/null http://127.0.0.1:8201/
+      # MUST be the last step. The model cannot modify upload/publisher actions.
+      # No real OpenAI key reaches Codex or the official Action: disposable local
+      # gate auth is the proxy input. The gate owns the actual key as root.
+      - name: Research official content; emit proposal or skip
+        id: codex
+        uses: openai/codex-action@86365089eb2b84e0a8fb0717b304f8bdcb13b20e # v1
+        with:
+          openai-api-key: ${{ steps.gate.outputs.token }}
+          responses-api-endpoint: http://127.0.0.1:8201/v1/responses
+          codex-version: 0.159.3
+          codex-home: ${{ runner.temp }}/resolver-codex-home
+          prompt-file: ${{ runner.temp }}/prompt.txt
+          output-schema-file: .github/source-resolver/result.schema.json
+          model: gpt-6.1-sol
+          effort: high
+          permission-profile: research
+          safety-strategy: drop-sudo
+          codex-args: '["--ephemeral"]'
+          allow-bots: true
+
+  validate:
+    needs: research
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+      issues: read
+      pull-requests: read
+    outputs:
+      validated: ${{ steps.validate.outputs.validated }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          ref: ${{ fromJSON(inputs.item).provenance.baseSha }}
+          persist-credentials: false
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: 24
+      - name: Reauthenticate; prepare, dry-run, apply, test and inspect exact diff
+        id: validate
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          RESOLVER_ITEM: ${{ inputs.item }}
+          RESOLVER_RESULT: ${{ needs.research.outputs.result }}
+        run: node scripts/source-resolver.mjs validate
+      - name: Preserve structured proposal/skip/validation audit
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: source-resolver-result-${{ fromJSON(inputs.item).findingId }}
+          path: ${{ runner.temp }}/research-result.json
+          retention-days: 30
+          if-no-files-found: error
+
+  publish:
+    needs: validate
+    if: needs.validate.outputs.validated != '' && needs.validate.outputs.validated != 'null'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      actions: write
+      issues: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          ref: ${{ fromJSON(inputs.item).provenance.baseSha }}
+          persist-credentials: false
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: 24
+      - name: Independently revalidate, guarded apply and atomic create-only branch/PR
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          RESOLVER_VALIDATED: ${{ needs.validate.outputs.validated }}
+        run: node scripts/source-resolver.mjs publish

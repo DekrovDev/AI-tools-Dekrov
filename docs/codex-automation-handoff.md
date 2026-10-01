@@ -31,11 +31,13 @@ new confirmed finding
   → repair branch + PR
 ```
 
-The automatic trigger is intentionally **not implemented**. This repository
-does not subscribe to Issue events, invoke Codex Cloud, or assume
-`GitHub Issue → MCP Event → Codex Cloud` works automatically. A trigger must be
-designed and authorized separately after the manual end-to-end repair has been
-reviewed.
+The manual Cloud handoff remains available. The separately authorized
+[unattended resolver](source-resolver-automation.md) adds an authenticated
+Actions `workflow_run` dispatcher, API-funded Codex Action research, and an
+independent guarded publisher. It is disabled by default, does not invoke this
+consumer Cloud environment, and does not assume
+`GitHub Issue → MCP Event → Codex Cloud` works automatically. Read its capability
+matrix, account boundary and staged rollout before enabling paid work.
 
 ## Trusted handoff contract
 
@@ -81,11 +83,12 @@ merge, enable auto-merge, or close the maintenance Issue. Authentication and
 the available scopes depend on the connected GitHub integration; the task must
 verify access rather than assume a shell credential or `gh` login is present.
 
-## Manual acceptance before choosing a trigger
+## Manual acceptance and unattended rollout
 
 After merge and Cloud Environment publication, select one real finding that is
 already `confirmed-broken` and `repairEligible: true`. Provide its Issue and
 trusted report through the authenticated handoff, run
 [the resolver task](codex-source-resolver-task.md), and manually review the
-resulting PR. Do not configure unattended pickup until this manual flow has
-completed successfully and the trigger is approved separately.
+resulting PR. The manual flow has been validated with real repairs. Unattended
+pickup still needs its own reviewed rollout and one paid canary; follow
+[the automation rollout](source-resolver-automation.md#rollout-and-exact-account-boundary).
