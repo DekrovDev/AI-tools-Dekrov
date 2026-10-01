@@ -1954,7 +1954,7 @@
     "sources": [
       "https://github.com/google/adk-docs",
       "https://github.com/google/adk-python",
-      "https://github.com/google/adk-docs/blob/main/docs/tools-custom/mcp-tools.md",
+      "https://github.com/google/adk-docs/blob/main/docs/tools-custom/mcp-tools/index.md",
       "https://github.com/google/adk-docs/blob/main/docs/live/get-started/streaming-python.md",
       "https://github.com/google/adk-docs/blob/main/docs/deploy/cloud-run.md"
     ]
