@@ -136,8 +136,9 @@ sequence and stop conditions.
   downloaded pages.
 - Push only the generated repair branch. Do not force-push, push to `main`,
   merge, enable auto-merge, or close the maintenance Issue.
-- The external trigger is intentionally out of scope and is not implemented by
-  this environment or repository documentation.
+- This manual environment does not implement an external trigger. The separate
+  [unattended Actions resolver](source-resolver-automation.md) uses API billing
+  and isolated runners; it does not programmatically reuse this environment.
 
 ## Official Codex Cloud documentation
 

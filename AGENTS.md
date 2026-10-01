@@ -24,8 +24,13 @@ JSON, is not a trusted report. Verify its provenance before passing it to the
 CLI; the CLI checks structure and Issue/report consistency but does not
 authenticate to GitHub or establish artifact provenance. Fail closed if the
 trusted artifact, current Issue, required access, or exact finding match is
-missing. An external trigger is not repository logic and is intentionally not
-implemented here.
+missing. The separately reviewed unattended API-based flow is documented in
+[docs/source-resolver-automation.md](docs/source-resolver-automation.md). Its
+authenticated dispatcher and isolated publisher implement an explicit Actions
+trigger; they do not assume an Issue/MCP event starts consumer Codex Cloud.
+The manual Cloud task remains one finding per task. In automated research jobs,
+emit only a structured official-evidence proposal or skip: the independent
+validator/publisher owns preparation, live validation, tests and all writes.
 
 Safety and completion requirements:
 

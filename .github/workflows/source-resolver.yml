@@ -1,0 +1,108 @@
+name: Resolve official sources
+
+on:
+  workflow_run:
+    workflows: ["Re-check official sources"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+# Covers ALL lanes until PR publication; no parallel dispatcher can reserve the
+# same finding. GitHub may replace a pending run; newest report wins safely.
+concurrency:
+  group: source-resolver-transactions
+  cancel-in-progress: false
+
+jobs:
+  dispatch:
+    if: >-
+      github.repository == 'DekrovDev/AI-tools-Dekrov' &&
+      github.ref == 'refs/heads/main' && github.run_attempt == 1 &&
+      (github.event_name == 'workflow_dispatch' ||
+       (github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.event == 'schedule' &&
+        github.event.workflow_run.head_repository.full_name == github.repository))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read
+      issues: read
+      pull-requests: read
+    outputs:
+      lane0: ${{ steps.plan.outputs.lane0 }}
+      lane1: ${{ steps.plan.outputs.lane1 }}
+      lane2: ${{ steps.plan.outputs.lane2 }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: 24
+      - name: Authenticate provenance and reserve bounded work
+        id: plan
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          RESOLVER_STAGE: ${{ vars.SOURCE_RESOLVER_API_ENABLED == 'true' && vars.SOURCE_RESOLVER_STAGE || '0' }}
+          RESOLVER_FINDING: ${{ vars.SOURCE_RESOLVER_FINDING }}
+          RESOLVER_RUNTIME: ${{ runner.temp }}
+        run: node scripts/source-resolver.mjs dispatch
+      - name: Persist reservations BEFORE AI (required for later runs)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: source-resolver-ledger-v1
+          path: ${{ runner.temp }}/ledger.json
+          retention-days: 90
+          if-no-files-found: error
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: source-resolver-dispatch-v1
+          path: ${{ runner.temp }}/dispatch.json
+          retention-days: 30
+          if-no-files-found: error
+
+  lane0:
+    needs: dispatch
+    if: needs.dispatch.outputs.lane0 != '' && needs.dispatch.outputs.lane0 != 'null'
+    uses: ./.github/workflows/source-resolver-finding.yml
+    with:
+      item: ${{ needs.dispatch.outputs.lane0 }}
+    secrets:
+      resolver-api-key: ${{ secrets.SOURCE_RESOLVER_OPENAI_API_KEY }}
+    permissions:
+      contents: write
+      actions: write
+      issues: read
+      pull-requests: write
+
+  lane1:
+    needs: [dispatch, lane0]
+    if: always() && needs.dispatch.result == 'success' && needs.dispatch.outputs.lane1 != '' && needs.dispatch.outputs.lane1 != 'null'
+    uses: ./.github/workflows/source-resolver-finding.yml
+    with:
+      item: ${{ needs.dispatch.outputs.lane1 }}
+    secrets:
+      resolver-api-key: ${{ secrets.SOURCE_RESOLVER_OPENAI_API_KEY }}
+    permissions:
+      contents: write
+      actions: write
+      issues: read
+      pull-requests: write
+
+  lane2:
+    needs: [dispatch, lane1]
+    if: always() && needs.dispatch.result == 'success' && needs.dispatch.outputs.lane2 != '' && needs.dispatch.outputs.lane2 != 'null'
+    uses: ./.github/workflows/source-resolver-finding.yml
+    with:
+      item: ${{ needs.dispatch.outputs.lane2 }}
+    secrets:
+      resolver-api-key: ${{ secrets.SOURCE_RESOLVER_OPENAI_API_KEY }}
+    permissions:
+      contents: write
+      actions: write
+      issues: read
+      pull-requests: write
