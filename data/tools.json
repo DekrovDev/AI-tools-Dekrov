@@ -9009,10 +9009,10 @@
     "updatedAt": "2026-09-14",
     "lastVerifiedAt": "2026-09-14",
     "sources": [
-      "https://developer.grammarly.com/your-first-api-request",
-      "https://developer.grammarly.com/oauth-credentials",
-      "https://developer.grammarly.com/writing-score-api",
-      "https://developer.grammarly.com/plagiarism-detection-api",
+      "https://developer.grammarly.com/your-first-api-request.html",
+      "https://developer.grammarly.com/oauth-credentials.html",
+      "https://developer.grammarly.com/writing-score-api.html",
+      "https://developer.grammarly.com/plagiarism-detection-api.html",
       "https://www.grammarly.com/"
     ]
   },
@@ -11012,7 +11012,7 @@
       "https://docs.ideogram.ai/",
       "https://docs.ideogram.ai/plans-and-pricing/available-plans",
       "https://docs.ideogram.ai/using-ideogram/getting-started/signup-and-registration",
-      "https://docs.ideogram.ai/using-ideogram/getting-started/generating-images",
+      "https://docs.ideogram.ai/create/create",
       "https://docs.ideogram.ai/canvas-and-editing/editor",
       "https://docs.ideogram.ai/plans-and-pricing/ideogram-api",
       "https://docs.ideogram.ai/canvas-and-editing/canvas/canvas-overview"
@@ -11796,7 +11796,7 @@
     "sources": [
       "https://designer.microsoft.com/",
       "https://support.microsoft.com/en-US/designer/frequently-asked-questions-about-microsoft-designer",
-      "https://support.microsoft.com/en-US/designer/frequently-asked-questions",
+      "https://support.microsoft.com/en-us/designer/frequently-asked-questions-about-microsoft-designer",
       "https://support.microsoft.com/en-us/windows/ai/ai-apps/edit-images-with-designer",
       "https://www.microsoft.com/en-us/microsoft-365/ai-productivity-solutions",
       "https://support.microsoft.com/en-us/topic/welcome-to-microsoft-designer-6cd168f3-1cf0-478e-bd75-31d6526d2504"
@@ -12072,7 +12072,7 @@
     "commands": [],
     "models": [],
     "github": "",
-    "docs": "https://resources.relume.io/resources/docs",
+    "docs": "https://resources.relume.io/resources",
     "addedAt": "2026-09-12",
     "updatedAt": "2026-09-14",
     "lastVerifiedAt": "2026-09-14",
@@ -12472,8 +12472,8 @@
     "sources": [
       "https://lumalabs.ai/dream-machine",
       "https://github.com/lumalabs/luma-agents-python",
-      "https://github.com/lumalabs/luma-agents-python/blob/main/_autodocs/00-START-HERE.md",
-      "https://github.com/lumalabs/luma-agents-python/blob/main/_autodocs/api-reference/generations.md"
+      "https://docs.agents.lumalabs.ai/api/python/",
+      "https://docs.agents.lumalabs.ai/api/python/resources/generations/"
     ]
   },
   {
@@ -12810,7 +12810,7 @@
       "https://pixverse.ai/en",
       "https://pixverse.ai/en/product/text-to-video",
       "https://pixverse.ai/en/model/pixverse-v6",
-      "https://docs.platform.pixverse.ai/pricing-796039m0",
+      "https://docs.platform.pixverse.ai/pixverse-api-pricing-2394995m0",
       "https://pixverse.ai/en/developers",
       "https://pixverse.ai/en/blog/pixverse-cli-generate-ai-videos-images-from-terminal"
     ]
@@ -18019,7 +18019,7 @@
       "https://docs.unstructured.io/open-source/ingestion/overview",
       "https://docs.unstructured.io/open-source/ingestion/python-ingest",
       "https://docs.unstructured.io/api-reference/workflow/overview",
-      "https://github.com/unstructured-io/docs/blob/main/open-source/how-to/examples.mdx",
+      "https://docs.unstructured.io/concepts/examples",
       "https://github.com/unstructured-io/unstructured"
     ]
   },
@@ -18082,7 +18082,7 @@
     "sources": [
       "https://docs.cloud.llamaindex.ai/",
       "https://developers.llamaindex.ai/python/cloud/llamaparse/",
-      "https://github.com/run-llama/llama-parse-py/blob/main/_autodocs/INDEX.md",
+      "https://github.com/run-llama/llama-parse-py/blob/main/README.md",
       "https://github.com/run-llama/llama-parse-py/blob/main/_autodocs/configuration.md",
       "https://github.com/run-llama/llama-parse-py/blob/main/_autodocs/api-reference/batches.md",
       "https://github.com/run-llama/llama-parse-py"
@@ -21148,7 +21148,7 @@
       "https://rossum.ai/",
       "https://rossum.ai/pricing/",
       "https://rossum.app/api/docs/openapi/guides/getting-started/",
-      "https://rossum.ai/products/",
+      "https://rossum.ai/platform/",
       "https://knowledge-base.rossum.ai/docs/rossum-api-documentation"
     ]
   },
