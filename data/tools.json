@@ -1281,7 +1281,7 @@
       "https://support.bolt.new/best-practices/prompting-effectively",
       "https://support.bolt.new/building/using-bolt/projects-files",
       "https://support.bolt.new/building/using-bolt/sharing",
-      "https://stackblitz.com/docs/webcontainers"
+      "https://webcontainers.io/guides/introduction"
     ]
   },
   {
@@ -2040,7 +2040,7 @@
     "sources": [
       "https://openai.github.io/openai-agents-python/",
       "https://github.com/openai/openai-agents-python",
-      "https://platform.openai.com/docs/quickstart/make-your-first-api-request",
+      "https://developers.openai.com/api/docs",
       "https://platform.openai.com/docs/models/default-usage-policies-by-endpoint"
     ]
   },
@@ -5043,9 +5043,9 @@
     "lastVerifiedAt": "2026-09-14",
     "sources": [
       "https://docs.roocode.com/getting-started/installing",
-      "https://docs.roocode.com/features/settings-management.md",
+      "https://roocodeinc.github.io/Roo-Code/features/settings-management/",
       "https://roocodeinc.github.io/Roo-Code/features/custom-modes/",
-      "https://docs.roocode.com/features/mcp/recommended-mcp-servers.md",
+      "https://roocodeinc.github.io/Roo-Code/features/mcp/recommended-mcp-servers/",
       "https://github.com/RooCodeInc/Roo-Code"
     ]
   },
@@ -5788,7 +5788,7 @@
     "sources": [
       "https://learn.microsoft.com/azure/ai-foundry/",
       "https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview",
-      "https://learn.microsoft.com/azure/ai-foundry/how-to/develop/quickstart",
+      "https://learn.microsoft.com/en-us/azure/foundry/quickstarts/get-started-code",
       "https://learn.microsoft.com/azure/ai-foundry/concepts/evaluation-interoperability",
       "https://azure.microsoft.com/pricing/details/ai-foundry/"
     ]
@@ -6980,7 +6980,7 @@
       "https://learn.microsoft.com/en-us/microsoft-copilot-studio/guidance/sec-gov-phase2",
       "https://learn.microsoft.com/en-us/microsoft-copilot-studio/guidance/plan-agent-model-lifecycle",
       "https://learn.microsoft.com/en-us/microsoft-copilot-studio/visual-studio-code-extension-edit-agent-components",
-      "https://www.microsoft.com/en-us/microsoft-365-copilot/microsoft-copilot-studio/pricing"
+      "https://www.microsoft.com/en-us/copilot/pricing/copilot-studio"
     ]
   },
   {
@@ -12408,9 +12408,9 @@
     "lastVerifiedAt": "2026-09-14",
     "sources": [
       "https://pika.art/",
-      "https://mcp.pika.art/models/quick-start",
+      "https://dev.pika.art/models/quick-start",
       "https://dev.pika.art/models/pika/pikaframes/image-to-video",
-      "https://mcp.pika.art/models/pika/pikadditions/video-to-video",
+      "https://dev.pika.art/models/pika/pikadditions/video-to-video",
       "https://dev.pika.art/llms.txt"
     ]
   },
@@ -13566,7 +13566,7 @@
     "commands": [],
     "models": [],
     "github": "",
-    "docs": "https://speechify.com/docs/",
+    "docs": "https://docs.speechify.ai/build/guides/welcome",
     "addedAt": "2026-09-12",
     "updatedAt": "2026-09-14",
     "lastVerifiedAt": "2026-09-14",
@@ -13772,7 +13772,7 @@
     "commands": [],
     "models": [],
     "github": "",
-    "docs": "https://dev.hume.ai/docs",
+    "docs": "https://dev.hume.ai/voice/intro",
     "addedAt": "2026-09-12",
     "updatedAt": "2026-09-14",
     "lastVerifiedAt": "2026-09-14",
@@ -17869,7 +17869,7 @@
       "RAG"
     ],
     "github": "",
-    "docs": "https://v2docs.galileo.ai/",
+    "docs": "https://docs.galileo.ai/what-is-galileo",
     "addedAt": "2026-09-12",
     "updatedAt": "2026-09-14",
     "lastVerifiedAt": "2026-09-14",
@@ -17878,7 +17878,7 @@
       "https://v2docs.galileo.ai/sdk-api/python/reference/traces",
       "https://v2docs.galileo.ai/sdk-api/python/reference/scorers",
       "https://v2docs.galileo.ai/api-reference/log_stream/create-log-stream",
-      "https://v2docs.galileo.ai/"
+      "https://docs.galileo.ai/what-is-galileo"
     ]
   },
   {
