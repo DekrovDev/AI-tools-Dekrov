@@ -4713,7 +4713,7 @@
       "https://docs.coderabbit.ai/",
       "https://docs.coderabbit.ai/getting-started/yaml-configuration",
       "https://docs.coderabbit.ai/configuration/path-instructions",
-      "https://docs.coderabbit.ai/platforms/github",
+      "https://docs.coderabbit.ai/platforms/github-com",
       "https://docs.coderabbit.ai/platforms/github-enterprise-server",
       "https://github.com/coderabbitai/ai-pr-reviewer"
     ]
@@ -7116,9 +7116,9 @@
       "https://docs.superblocks.com/",
       "https://docs.superblocks.com/generative-ai/ai-apps",
       "https://docs.superblocks.com/generative-ai/generate-code",
-      "https://docs.superblocks.com/development-lifecycle/source-control/deploy",
+      "https://docs.superblocks.com/development-lifecycle/version-control/superblocks-sdlc",
       "https://docs.superblocks.com/development-lifecycle/build/local-dev",
-      "https://docs.superblocks.com/on-premise-agent/deployment/agent_variants"
+      "https://docs.superblocks.com/enterprise/hybrid-architecture/deployment"
     ]
   },
   {
@@ -7397,7 +7397,7 @@
       "https://docs.browserbase.com/",
       "https://docs.browserbase.com/reference/sdk/python",
       "https://docs.browserbase.com/platform/identity/authentication",
-      "https://docs.browserbase.com/platform/browser/getting-started/deploying-browser-session",
+      "https://docs.browserbase.com/platform/browser/getting-started/create-browser-session",
       "https://www.browserbase.com/pricing"
     ]
   },
