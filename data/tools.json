@@ -3846,7 +3846,7 @@
     "sources": [
       "https://chat.mistral.ai/",
       "https://docs.mistral.ai/",
-      "https://github.com/mistralai/platform-docs-public/blob/main/public/llms-full.txt",
+      "https://docs.mistral.ai/llms-full.txt",
       "https://docs.mistral.ai/capabilities/agents/",
       "https://help.mistral.ai/"
     ]
@@ -4108,16 +4108,16 @@
     "commands": [],
     "models": [],
     "github": "https://github.com/huggingface/chat-ui",
-    "docs": "https://huggingface.co/docs/hub/en/chat",
+    "docs": "https://huggingface.co/docs/chat-ui/index",
     "addedAt": "2026-09-12",
     "updatedAt": "2026-09-14",
     "lastVerifiedAt": "2026-09-14",
     "sources": [
       "https://huggingface.co/chat",
       "https://github.com/huggingface/chat-ui",
-      "https://huggingface.co/docs/hub/en/chat",
+      "https://huggingface.co/docs/chat-ui/index",
       "https://huggingface.co/privacy",
-      "https://huggingface.co/spaces/huggingchat/chat-ui/blob/main/PRIVACY.md"
+      "https://github.com/huggingface/chat-ui/blob/main/PRIVACY.md"
     ]
   },
   {
@@ -5649,7 +5649,7 @@
       "https://support.atlassian.com/rovo/docs/work-with-rovo-dev-agents/",
       "https://github.com/atlassian-labs/rovo-dev-action",
       "https://github.com/atlassian-labs/rovo-dev-action/blob/main/README.md",
-      "https://developer.atlassian.com/cloud/rovo/",
+      "https://developer.atlassian.com/platform/forge/manifest-reference/modules/rovo-index/",
       "https://support.atlassian.com/security-and-access-policies/docs/understand-data-residency/"
     ]
   },
