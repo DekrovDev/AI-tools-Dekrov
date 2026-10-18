@@ -1,0 +1,55 @@
+name: Link Fix Guard
+
+on:
+  pull_request:
+    paths:
+      - 'data/tools.json'
+      - 'data/dev-resources.json'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-link-fixes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          path: pr_repo
+          fetch-depth: 0
+
+      - name: Checkout Base
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.base_ref }}
+          path: base_repo
+          fetch-depth: 0
+
+      - name: Run Link Fix Validator
+        run: |
+          script_path="base_repo/scripts/link-fix-validator.py"
+          if [ ! -f "$script_path" ]; then
+            echo "Validator script not found in base branch. We will not run untrusted PR code."
+            echo "LINK_FIX_ELIGIBLE=false" >> $GITHUB_ENV
+          else
+            cd pr_repo
+            python3 ../$script_path \
+              ../base_repo/data/tools.json \
+              data/tools.json \
+              ../base_repo/data/dev-resources.json \
+              data/dev-resources.json
+
+            if [ -f "eligibility.txt" ]; then
+              eligibility=$(cat eligibility.txt)
+              echo "LINK_FIX_ELIGIBLE=$eligibility" >> $GITHUB_ENV
+              echo "Link Fix Eligibility: $eligibility"
+            else
+              echo "LINK_FIX_ELIGIBLE=false" >> $GITHUB_ENV
+            fi
+          fi
+
+      - name: Report Eligibility
+        if: always()
+        run: |
+          echo "Automated link fix eligibility: ${{ env.LINK_FIX_ELIGIBLE }}"
