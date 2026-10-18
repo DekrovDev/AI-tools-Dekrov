@@ -5641,16 +5641,16 @@
     ],
     "models": [],
     "github": "",
-    "docs": "https://support.atlassian.com/rovo/docs/rovo-dev/",
+    "docs": "https://support.atlassian.com/rovo/docs/work-with-rovo-dev-agents/",
     "addedAt": "2026-09-12",
     "updatedAt": "2026-09-14",
     "lastVerifiedAt": "2026-09-14",
     "sources": [
-      "https://support.atlassian.com/rovo/docs/rovo-dev/",
+      "https://support.atlassian.com/rovo/docs/work-with-rovo-dev-agents/",
       "https://github.com/atlassian-labs/rovo-dev-action",
       "https://github.com/atlassian-labs/rovo-dev-action/blob/main/README.md",
       "https://developer.atlassian.com/cloud/rovo/",
-      "https://support.atlassian.com/security-and-access-policies/docs/data-residency/"
+      "https://support.atlassian.com/security-and-access-policies/docs/understand-data-residency/"
     ]
   },
   {
