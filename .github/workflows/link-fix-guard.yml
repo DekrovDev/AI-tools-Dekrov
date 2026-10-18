@@ -1,0 +1,73 @@
+name: Link Fix Guard
+
+on:
+  pull_request:
+    paths:
+      - 'data/tools.json'
+      - 'data/dev-resources.json'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-link-fixes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          path: pr_repo
+          fetch-depth: 0
+
+      - name: Checkout Base
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.base_ref }}
+          path: base_repo
+          fetch-depth: 0
+
+      - name: Check for unauthorized file changes
+        run: |
+          cd pr_repo
+          git fetch origin ${{ github.base_ref }}
+          changed_files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+
+          for file in $changed_files; do
+            if [[ "$file" != "data/tools.json" && "$file" != "data/dev-resources.json" ]]; then
+              echo "Error: PR modifies unauthorized file: $file"
+              exit 1
+            fi
+          done
+          echo "Only allowed catalog files were modified."
+
+      - name: Run Link Fix Validator
+        run: |
+          # Use pr_repo script during testing if base_repo doesn't have it yet. In production, this should run from base_repo.
+          script_path="base_repo/scripts/link-fix-validator.py"
+          if [ ! -f "$script_path" ]; then
+            script_path="pr_repo/scripts/link-fix-validator.py"
+          fi
+
+          python3 $script_path \
+            base_repo/data/tools.json \
+            pr_repo/data/tools.json \
+            base_repo/data/dev-resources.json \
+            pr_repo/data/dev-resources.json
+
+      - name: Run Validator Tests
+        run: |
+          # Same fallback logic for tests
+          test_path="base_repo/scripts/test_link_fix_validator.py"
+          if [ ! -f "$test_path" ]; then
+            cd pr_repo
+            python3 -m unittest scripts/test_link_fix_validator.py
+          else
+            cd base_repo
+            python3 -m unittest scripts/test_link_fix_validator.py
+          fi
+
+      - name: Run NPM Tests
+        run: |
+          cd pr_repo
+          npm ci
+          npm test
