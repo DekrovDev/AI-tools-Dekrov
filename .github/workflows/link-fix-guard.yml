@@ -2,9 +2,6 @@ name: Link Fix Guard
 
 on:
   pull_request:
-    paths:
-      - 'data/tools.json'
-      - 'data/dev-resources.json'
 
 permissions:
   contents: read
@@ -26,24 +23,94 @@ jobs:
           path: base_repo
           fetch-depth: 0
 
+      - name: Run Tests
+        run: |
+          cd pr_repo
+          npm ci
+          npm test
+          if [ -f "scripts/test_link_fix_validator.py" ]; then
+            python3 -m unittest scripts/test_link_fix_validator.py
+          fi
+
+      - name: Validate Changed Files
+        id: file_check
+        run: |
+          cd pr_repo
+          git fetch origin ${{ github.base_ref }}
+          changed_files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+
+          is_catalog_only="true"
+          for file in $changed_files; do
+            if [[ "$file" != "data/tools.json" && "$file" != "data/dev-resources.json" ]]; then
+              is_catalog_only="false"
+              break
+            fi
+          done
+
+          if [ "$is_catalog_only" = "false" ]; then
+            echo "LINK_FIX_ELIGIBLE=false" >> $GITHUB_ENV
+            echo "SKIP_VALIDATION=true" >> $GITHUB_ENV
+          else
+            echo "Only catalog files modified. Proceeding with validation."
+            echo "SKIP_VALIDATION=false" >> $GITHUB_ENV
+          fi
+
+      - name: Locate trusted evidence
+        if: env.SKIP_VALIDATION == 'false'
+        id: evidence
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runs = await github.paginate(github.rest.actions.listWorkflowRuns, {
+              ...context.repo, workflow_id: 'source-recheck.yml',
+              branch: context.payload.repository.default_branch, status: 'completed', per_page: 100
+            });
+            const previous = runs.filter(r => ['schedule', 'workflow_dispatch'].includes(r.event) &&
+              r.repository.id === context.payload.repository.id).sort((a,b) => b.id - a.id)[0];
+            if (!previous) return;
+            const { data } = await github.rest.actions.listWorkflowRunArtifacts({
+              ...context.repo, run_id: previous.id
+            });
+            const artifact = data.artifacts.find(a => a.name === 'source-recheck-state-v1' && !a.expired);
+            if (artifact) core.setOutput('run', String(previous.id));
+
+      - name: Download trusted evidence
+        if: env.SKIP_VALIDATION == 'false' && steps.evidence.outputs.run != ''
+        uses: actions/download-artifact@v4
+        with:
+          name: source-recheck-state-v1
+          path: base_repo/state
+          github-token: ${{ github.token }}
+          run-id: ${{ steps.evidence.outputs.run }}
+
       - name: Run Link Fix Validator
+        if: env.SKIP_VALIDATION == 'false'
         run: |
           script_path="base_repo/scripts/link-fix-validator.py"
           if [ ! -f "$script_path" ]; then
             echo "Validator script not found in base branch. We will not run untrusted PR code."
             echo "LINK_FIX_ELIGIBLE=false" >> $GITHUB_ENV
           else
+            evidence_file="base_repo/state/source-recheck-state.json"
+            if [ ! -f "$evidence_file" ]; then
+              echo "Trusted evidence not found."
+              mkdir -p base_repo/state
+              echo "{}" > "$evidence_file"
+            fi
+
             cd pr_repo
-            python3 ../$script_path \
+            # Python script exits 0 if ELIGIBLE (it is a valid automated link-fix).
+            # Python script exits 1 if INELIGIBLE (meaning it is either a normal PR, or a failed link fix attempt).
+            # We do NOT fail the job. Ineligible automated fixes will simply not be auto-merged by later systems,
+            # while ordinary PRs must continue through normal CI (and they will, because we just exit 0 here).
+            if python3 ../$script_path \
               ../base_repo/data/tools.json \
               data/tools.json \
               ../base_repo/data/dev-resources.json \
-              data/dev-resources.json
+              data/dev-resources.json \
+              ../$evidence_file; then
 
-            if [ -f "eligibility.txt" ]; then
-              eligibility=$(cat eligibility.txt)
-              echo "LINK_FIX_ELIGIBLE=$eligibility" >> $GITHUB_ENV
-              echo "Link Fix Eligibility: $eligibility"
+              echo "LINK_FIX_ELIGIBLE=true" >> $GITHUB_ENV
             else
               echo "LINK_FIX_ELIGIBLE=false" >> $GITHUB_ENV
             fi
