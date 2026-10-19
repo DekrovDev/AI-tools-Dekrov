@@ -6907,9 +6907,9 @@
     "lastVerifiedAt": "2026-09-14",
     "sources": [
       "https://docs.stackai.com/",
-      "https://docs.stackai.com/stack-ai/workflow-builder/whats-the-workflow-builder",
+      "https://docs.stackai.com/guides-and-quickstarts/workflow-builder.md",
       "https://docs.stackai.com/guides-and-quickstarts/overview.md",
-      "https://docs.stackai.com/workflow-builder/apps/stackai",
+      "https://docs.stackai.com/integrations/catalog/stackai",
       "https://www.stack-ai.com/solutions/api-management"
     ]
   },
@@ -17874,10 +17874,10 @@
     "updatedAt": "2026-09-14",
     "lastVerifiedAt": "2026-09-14",
     "sources": [
-      "https://v2docs.galileo.ai/how-to-guides/conversational-ai/basic-example",
-      "https://v2docs.galileo.ai/sdk-api/python/reference/traces",
-      "https://v2docs.galileo.ai/sdk-api/python/reference/scorers",
-      "https://v2docs.galileo.ai/api-reference/log_stream/create-log-stream",
+      "https://docs.galileo.ai/how-to-guides/basics/basic-example",
+      "https://docs.galileo.ai/sdk-api/python/reference/traces",
+      "https://docs.galileo.ai/sdk-api/python/reference/scorers",
+      "https://docs.galileo.ai/api-reference/log_stream/create-log-stream",
       "https://docs.galileo.ai/what-is-galileo"
     ]
   },
