@@ -7049,7 +7049,7 @@
       "https://docs.dust.tt/docs/developer-platform/core-concepts/datasources",
       "https://docs.dust.tt/reference/openapi",
       "https://docs.dust.tt/api-reference/apps/create-an-app-run",
-      "https://docs.dust.tt/docs/admin/security"
+      "https://docs.dust.tt/docs/user-documentation/admins/admin-governance/workspace-governance-roles-groups-and-permissions"
     ]
   },
   {
@@ -16081,7 +16081,7 @@
     "sources": [
       "https://fal.ai/docs/documentation/development/calling-your-endpoints",
       "https://fal.ai/docs/model-apis/model-endpoints",
-      "https://fal.ai/docs/platform-apis/v1/compute/instances/create",
+      "https://fal.ai/docs/documentation/compute/quickstart",
       "https://fal.ai/docs/model-api-reference/image-generation-api/flux.1-redux",
       "https://github.com/fal-ai/fal-js"
     ]
@@ -19187,7 +19187,7 @@
       "https://www.polymersearch.com/ai-dashboard-generator",
       "https://www.polymersearch.com/landers/ai-generated-boards",
       "https://www.polymersearch.com/pricing",
-      "https://www.polymersearch.com/product",
+      "https://www.polymersearch.com/",
       "https://www.polymersearch.com/landers/data-visualization"
     ]
   },
