@@ -5378,8 +5378,8 @@
     "sources": [
       "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html",
       "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/getting-started-builderid",
-      "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/command-line-built-in-tools",
-      "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/security-scans",
+      "https://aws.github.io/amazon-q-developer-cli/built-in-tools.html",
+      "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/code-reviews.html",
       "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/transform-CLI"
     ]
   },
@@ -6908,7 +6908,7 @@
     "sources": [
       "https://docs.stackai.com/",
       "https://docs.stackai.com/stack-ai/workflow-builder/whats-the-workflow-builder",
-      "https://docs.stackai.com/platform-overview",
+      "https://docs.stackai.com/guides-and-quickstarts/overview.md",
       "https://docs.stackai.com/workflow-builder/apps/stackai",
       "https://www.stack-ai.com/solutions/api-management"
     ]
@@ -18084,7 +18084,7 @@
       "https://developers.llamaindex.ai/python/cloud/llamaparse/",
       "https://github.com/run-llama/llama-parse-py/blob/main/README.md",
       "https://github.com/run-llama/llama-parse-py/blob/main/_autodocs/configuration.md",
-      "https://github.com/run-llama/llama-parse-py/blob/main/_autodocs/api-reference/batches.md",
+      "https://developers.llamaindex.ai/llamaparse/batches/getting_started/",
       "https://github.com/run-llama/llama-parse-py"
     ]
   },
