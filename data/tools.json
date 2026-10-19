@@ -3004,7 +3004,6 @@
     "lastVerifiedAt": "2026-09-14",
     "sources": [
       "https://marketplace.visualstudio.com/items?itemName=phind.phind",
-      "https://github.com/Phind-App",
       "https://phind.com/"
     ]
   },
@@ -4312,7 +4311,7 @@
       "https://docs.komo.ai/welcome",
       "https://docs.komo.ai/quickstart",
       "https://komo.ai/",
-      "https://docs.komo.ai/product/structured-research"
+      "https://docs.komo.ai/product/new-task"
     ]
   },
   {
@@ -4715,7 +4714,7 @@
       "https://docs.coderabbit.ai/configuration/path-instructions",
       "https://docs.coderabbit.ai/platforms/github-com",
       "https://docs.coderabbit.ai/platforms/github-enterprise-server",
-      "https://github.com/coderabbitai/ai-pr-reviewer"
+      "https://github.com/coderabbitai"
     ]
   },
   {
@@ -5789,7 +5788,7 @@
       "https://learn.microsoft.com/azure/ai-foundry/",
       "https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview",
       "https://learn.microsoft.com/en-us/azure/foundry/quickstarts/get-started-code",
-      "https://learn.microsoft.com/azure/ai-foundry/concepts/evaluation-interoperability",
+      "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-overview",
       "https://azure.microsoft.com/pricing/details/ai-foundry/"
     ]
   },
@@ -8936,7 +8935,7 @@
       "https://www.supernormal.com/meeting-notetaker",
       "https://www.supernormal.com/integrations",
       "https://help.supernormal.com/en/articles/7208035-is-there-an-api-available",
-      "https://docs.supernormal.com/api-reference/posts/get-a-post",
+      "https://docs.supernormal.com/api-reference/recordings/get-a-recording",
       "https://www.supernormal.com/subprocessors"
     ]
   },
@@ -13988,7 +13987,7 @@
     "lastVerifiedAt": "2026-09-14",
     "sources": [
       "https://www.gladia.io/",
-      "https://docs.gladia.io/chapters/audio-intelligence/pages/moderation",
+      "https://docs.gladia.io/chapters/audio-intelligence",
       "https://docs.gladia.io/chapters/live-stt/features",
       "https://docs.gladia.io/chapters/live-stt/quickstart",
       "https://docs.gladia.io/chapters/pre-recorded-stt/features/index",
@@ -18083,7 +18082,7 @@
       "https://docs.cloud.llamaindex.ai/",
       "https://developers.llamaindex.ai/python/cloud/llamaparse/",
       "https://github.com/run-llama/llama-parse-py/blob/main/README.md",
-      "https://github.com/run-llama/llama-parse-py/blob/main/_autodocs/configuration.md",
+      "https://developers.llamaindex.ai/llamaparse/parse/guides/configuring-parse/",
       "https://developers.llamaindex.ai/llamaparse/batches/getting_started/",
       "https://github.com/run-llama/llama-parse-py"
     ]
