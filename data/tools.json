@@ -596,13 +596,13 @@
     ],
     "models": [],
     "github": "",
-    "docs": "https://antigravity.google/docs/cli/getting-started.md",
+    "docs": "https://antigravity.google/docs/getting-started?tab=cli",
     "addedAt": "2026-08-29",
     "updatedAt": "2026-09-14",
     "lastVerifiedAt": "2026-09-14",
     "sources": [
-      "https://antigravity.google/docs/cli/getting-started.md",
-      "https://antigravity.google/docs/cli/tutorial.md",
+      "https://antigravity.google/docs/getting-started?tab=cli",
+      "https://antigravity.google/docs/cli/reference/",
       "https://antigravity.google/docs/cli/commands/permissions.md",
       "https://antigravity.google/docs/cli/commands/agents/"
     ]
