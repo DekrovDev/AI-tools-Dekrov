@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "productionEnabled": false,
+  "repository": "DekrovDev/AI-tools-Dekrov",
+  "sourceWorkflow": "source-recheck.yml",
+  "resolverWorkflow": "source-resolver.yml",
+  "reportArtifact": "source-recheck-report-v2",
+  "ledgerArtifact": "source-resolver-ledger-v1",
+  "maxPerRun": 3,
+  "maxPerDay": 3,
+  "maxRequestsPerFinding": 8,
+  "maxRequestBytes": 80000,
+  "maxOutputTokens": 4096,
+  "maxReservedTokensPerFinding": 250000,
+  "model": "gpt-6.1-sol",
+  "effort": "high"
+}
