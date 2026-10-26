@@ -4904,16 +4904,16 @@
     "commands": [],
     "models": [],
     "github": "",
-    "docs": "https://junie.labs.jb.gg/docs/junie-ide-plugin.html",
+    "docs": "https://junie.jetbrains.com/docs/junie-ide-plugin.html",
     "addedAt": "2026-09-12",
     "updatedAt": "2026-09-14",
     "lastVerifiedAt": "2026-09-14",
     "sources": [
       "https://junie.jetbrains.com/",
-      "https://junie.labs.jb.gg/docs/junie-ide-plugin.html",
-      "https://junie.labs.jb.gg/docs/junie-cli.html",
-      "https://junie.labs.jb.gg/docs/action-allowlist-junie-cli.html",
-      "https://junie.labs.jb.gg/docs/junie-on-github.html"
+      "https://junie.jetbrains.com/docs/junie-ide-plugin.html",
+      "https://junie.jetbrains.com/docs/junie-cli.html",
+      "https://junie.jetbrains.com/docs/action-allowlist-junie-cli.html",
+      "https://junie.jetbrains.com/docs/junie-on-github.html"
     ]
   },
   {
@@ -10245,7 +10245,7 @@
       "https://www.typeface.ai/product/trust-and-safety",
       "https://www.typeface.ai/product/connect",
       "https://www.typeface.ai/partners/ecosystem",
-      "https://www.typeface.ai/use-cases/it-teams/index.html",
+      "https://www.typeface.ai/solutions/it-teams",
       "https://www.typeface.ai/company"
     ]
   },
@@ -15317,16 +15317,16 @@
       "Mistral"
     ],
     "github": "https://github.com/CherryHQ/cherry-studio",
-    "docs": "https://docs.cherry-ai.com/cherry-studio-wen-dang/en-us/",
+    "docs": "https://docs.cherryai.com.cn/docs/en-us",
     "addedAt": "2026-09-12",
     "updatedAt": "2026-09-14",
     "lastVerifiedAt": "2026-09-14",
     "sources": [
-      "https://docs.cherry-ai.com/cherry-studio-wen-dang/en-us/",
-      "https://docs.cherry-ai.com/cherry-studio-wen-dang/en-us/cherrystudio/download",
-      "https://docs.cherry-ai.com/cherry-studio-wen-dang/en-us/knowledge-base/knowledge-base-tutorial",
-      "https://docs.cherry-ai.com/cherry-studio-wen-dang/en-us/knowledge-base/knowledge-base-data",
-      "https://docs.cherry-ai.com/cherry-studio-wen-dang/en-us/advanced-basic/mcp/config"
+      "https://docs.cherryai.com.cn/docs/en-us",
+      "https://docs.cherryai.com.cn/docs/en-us/cherry-studio/installation",
+      "https://docs.cherryai.com.cn/docs/en-us/knowledge-base/knowledge-base",
+      "https://docs.cherryai.com.cn/docs/en-us/knowledge-base/data",
+      "https://docs.cherryai.com.cn/docs/en-us/advanced-basic/extensions/mcp"
     ]
   },
   {
@@ -16563,8 +16563,8 @@
       "https://hyperbolic.xyz/",
       "https://hyperbolic.xyz/pricing",
       "https://app.hyperbolic.xyz/models",
-      "https://app.hyperbolic.xyz/models/deepseek-v3/api",
-      "https://app.hyperbolic.xyz/models/qwen2-5-vl-7b-instruct"
+      "https://www.hyperbolic.ai/docs/inference/text-apis",
+      "https://www.hyperbolic.ai/docs/inference/overview"
     ]
   },
   {
@@ -18516,7 +18516,7 @@
       "https://rows.com/docs/using-the-rows-ai-analyst",
       "https://rows.com/docs/category/ai",
       "https://rows.com/docs/category/rows-connectors",
-      "https://developers.rows.com/",
+      "https://rows.com/docs/category/rows-api",
       "https://rows.com/product",
       "https://rows.com/pricing"
     ]
@@ -20999,7 +20999,7 @@
     "lastVerifiedAt": "2026-09-14",
     "sources": [
       "https://www.mutinyhq.com/",
-      "https://www.mutinyhq.com/products/beautiful-assets",
+      "https://www.mutinyhq.com/products/smart-assets",
       "https://www.mutinyhq.com/pricing",
       "https://www.mutinyhq.com/automation/meeting-prep",
       "https://www.mutinyhq.com/faqs/what-is-mutiny"
@@ -22632,7 +22632,7 @@
     ],
     "url": "https://www.luminance.com/",
     "domain": "luminance.com",
-    "favicon": "https://www.luminance.com/wp-content/uploads/2025/07/cropped-luminance-icon2-192x192.png",
+    "favicon": "https://framerusercontent.com/images/4aeMDkNNMMROr651sNr7iF6Ur5Y.png",
     "platforms": [
       "web"
     ],
@@ -23161,7 +23161,7 @@
     ],
     "url": "https://www.koyfin.com/",
     "domain": "koyfin.com",
-    "favicon": "https://cdn-ildbolb.nitrocdn.com/UezRGMkmQsEFWqGJixAgmLduluxMTcEV/assets/images/optimized/rev-281b66e/www.koyfin.com/wp-content/uploads/2023/05/favicon.svg",
+    "favicon": "https://www.koyfin.com/wp-content/uploads/2023/05/favicon.svg",
     "platforms": [
       "web"
     ],
